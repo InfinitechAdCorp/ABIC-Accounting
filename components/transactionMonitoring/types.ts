@@ -2,7 +2,7 @@ export type FormattedAccount = {
     id: string;
     name: string;
     balance: number;
-    transactions: FormattedTransaction[];
+    transactions: number;
 }
   
 export type FormattedTransaction = {

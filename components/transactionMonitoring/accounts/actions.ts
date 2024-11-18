@@ -3,7 +3,6 @@
 import prisma from "@/lib/db";
 import {
   FormattedAccount,
-  FormattedTransaction,
   ActionResponse,
 } from "@/components/transactionMonitoring/types";
 import { Prisma } from "@prisma/client";
@@ -29,16 +28,9 @@ export async function getAccounts() {
   const formattedAccounts: FormattedAccount[] = [];
   accounts.map((account) => {
     let balance = account.balance.toNumber();
-    const formattedTransactions: FormattedTransaction[] = [];
-    account.transactions.map((transaction) => {
+    const transactions = account.transactions;
+    transactions.map((transaction) => {
       const amount = transaction.amount.toNumber();
-      const formattedTransaction = {
-        ...transaction,
-        account_id: transaction.account_id as string,
-        amount: amount,
-      };
-      formattedTransactions.push(formattedTransaction);
-
       if (transaction.type == "Credit") {
         balance += amount;
       } else {
@@ -49,7 +41,7 @@ export async function getAccounts() {
     const formattedAccount = {
       ...account,
       balance: balance,
-      transactions: formattedTransactions,
+      transactions: transactions.length,
     };
     formattedAccounts.push(formattedAccount);
   });
