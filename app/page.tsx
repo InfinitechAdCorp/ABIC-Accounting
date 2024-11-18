@@ -1,5 +1,12 @@
-export default function Home() {
+import React from 'react'
+import {Button} from '@nextui-org/button';
+
+const Home = () => {
   return (
-    <div>Page</div>
-  );
+    <Button>
+      Click
+    </Button>
+  )
 }
+
+export default Home
