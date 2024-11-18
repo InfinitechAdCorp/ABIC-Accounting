@@ -1,12 +1,8 @@
-import React from 'react'
-import {Button} from '@nextui-org/button';
+import React from "react";
+import { Button } from "@nextui-org/button";
 
 const Home = () => {
-  return (
-    <Button>
-      Click
-    </Button>
-  )
-}
+  return <Button>Click</Button>;
+};
 
-export default Home
+export default Home;
