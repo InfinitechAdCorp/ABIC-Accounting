@@ -20,6 +20,13 @@ type Props = {
 };
 
 const AccountsTable = ({ columns, accounts }: Props) => {
+  const formatNumber = (number: number) => {
+    const formattedNumber = new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 2,
+    }).format(number);
+    return formattedNumber;
+  };
+
   return (
     <Table>
       <TableHeader columns={columns}>
@@ -29,7 +36,7 @@ const AccountsTable = ({ columns, accounts }: Props) => {
         {(account) => (
           <TableRow key={account.id}>
             <TableCell>{account.name}</TableCell>
-            <TableCell>{account.balance}</TableCell>
+            <TableCell>{formatNumber(account.balance)}</TableCell>
             <TableCell>{account.transactions}</TableCell>
             <TableCell>No Action</TableCell>
           </TableRow>
