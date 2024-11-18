@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Montserrat } from "next/font/google";
 import { Providers } from "./providers";
 import "@/styles/globals.css";
 import { ToastContainer } from "react-toastify";
@@ -9,6 +9,14 @@ import Navbar from "@/components/navbar";
 export const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+});
+
+const montserrat = Montserrat({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+  display: "swap",
+  fallback: ["Arial", "sans-serif"],
+  variable: "--font-montserrat",
 });
 
 export const metadata: Metadata = {
@@ -25,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.className} data-theme="light">
+    <html lang="en" className={montserrat.className} data-theme="light">
       <body>
         <Providers>
           <Navbar />
