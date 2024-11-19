@@ -1,10 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
-import {
-  FormattedAccount,
-  ActionResponse,
-} from "@/components/transactionMonitoring/types";
+import { ActionResponse } from "@/components/transactionMonitoring/types";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import * as Yup from "yup";
@@ -25,31 +22,10 @@ export async function getAccounts() {
     return response;
   }
 
-  const formattedAccounts: FormattedAccount[] = [];
-  accounts.map((account) => {
-    let balance = account.balance.toNumber();
-    const transactions = account.transactions;
-    transactions.map((transaction) => {
-      const amount = transaction.amount.toNumber();
-      if (transaction.type == "Credit") {
-        balance += amount;
-      } else {
-        balance -= amount;
-      }
-    });
-
-    const formattedAccount = {
-      ...account,
-      balance: balance,
-      transactions: transactions.length,
-    };
-    formattedAccounts.push(formattedAccount);
-  });
-
   const response = {
     code: 200,
     message: "Fetched Accounts",
-    accounts: formattedAccounts,
+    accounts: accounts,
   };
   return response;
 }

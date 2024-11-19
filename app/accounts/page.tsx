@@ -1,5 +1,6 @@
 import React from "react";
 import { getAccounts } from "@/components/transactionMonitoring/accounts/actions";
+import { FormattedAccount, AccountWithTransactions } from "@/components/transactionMonitoring/types";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import HeaderButtons from "@/components/transactionMonitoring/accounts/headerButtons";
 import AccountsTable from "@/components/transactionMonitoring/accounts/accountsTable";
@@ -13,19 +14,44 @@ const Accounts = async () => {
   ];
 
   const { accounts } = await getAccounts();
+  const formattedAccounts: FormattedAccount[] = [];
+
+  const formatData = (accounts: AccountWithTransactions[]) => {
+    accounts.map((account) => {
+      let balance = account.balance.toNumber();
+      const transactions = account.transactions;
+      transactions.map((transaction) => {
+        const amount = transaction.amount.toNumber();
+        if (transaction.type == "Credit") {
+          balance += amount;
+        } else {
+          balance -= amount;
+        }
+      });
+
+      const formattedAccount = {
+        ...account,
+        balance: balance,
+        transactions: transactions.length,
+      };
+      formattedAccounts.push(formattedAccount);
+    });
+  };
+
+  formatData(accounts);
 
   return (
     <>
       <div className="flex justify-center">
         <Card className="my-5 p-3">
           <CardHeader>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center w-full">
               <h1 className="font-bold">Accounts</h1>
-                <HeaderButtons />
+              <HeaderButtons />
             </div>
           </CardHeader>
           <CardBody>
-            <AccountsTable columns={columns} accounts={accounts} />
+            <AccountsTable columns={columns} accounts={formattedAccounts} />
           </CardBody>
         </Card>
       </div>
