@@ -1,8 +1,10 @@
+import { Prisma } from "@prisma/client";
+
 export type FormattedClient = {
   id: string;
   name: string;
   contracts: number;
-}
+};
 
 export type FormattedContract = {
   id: string;
@@ -19,7 +21,13 @@ export type FormattedContract = {
   abic_income?: number;
   due_date: Date;
   payments: number;
-}
+};
+
+export type ClientWithContracts = Prisma.ClientGetPayload<{
+  include: {
+    contracts: true;
+  };
+}>;
 
 export type ActionResponse = {
   code: number;
@@ -27,4 +35,4 @@ export type ActionResponse = {
   errors?: {
     [key: string]: string;
   };
-}
+};
