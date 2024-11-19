@@ -7,15 +7,17 @@ import { ActionResponse } from "@/components/transactionMonitoring/types";
 
 const HeaderButtons = () => {
   const handleSubmit = (
+    action: (formData: FormData) => Promise<ActionResponse>,
     formData: FormData,
-    action: (formData: FormData) => Promise<ActionResponse>
+    onClose: () => void,
   ) => {
-    action(formData).then((response) => handlePostSubmit(response));
+    action(formData).then((response) => handlePostSubmit(response, onClose));
   };
 
-  const handlePostSubmit = (response: ActionResponse) => {
+  const handlePostSubmit = (response: ActionResponse, onClose: () => void) => {
     if (response.code == 200) {
       toast.success(response.message);
+      onClose()
     } else {
       if (response.code == 429) {
         console.log(response.errors);

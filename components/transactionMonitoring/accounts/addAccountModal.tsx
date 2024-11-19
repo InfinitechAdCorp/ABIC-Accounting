@@ -14,8 +14,9 @@ import { addAccount } from "./actions";
 
 interface Props {
   onSubmit: (
+    action: (formData: FormData) => Promise<ActionResponse>,
     formData: FormData,
-    action: (formData: FormData) => Promise<ActionResponse>
+    onClose: () => void
   ) => void;
 }
 
@@ -31,21 +32,20 @@ const AddAccountModal = ({ onSubmit }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <form action={(formData) => onSubmit(formData, addAccount)}>
+              <form
+                action={(formData) => onSubmit(addAccount, formData, onClose)}
+              >
                 <ModalHeader>Add Account</ModalHeader>
                 <ModalBody>
                   <Input
                     type="text"
                     label="Name"
-                    placeholder="Enter Name"
                     name="name"
-                    className="mb-3"
                     variant="bordered"
                   />
                   <Input
                     type="number"
                     label="Starting Balance"
-                    placeholder="Enter Starting Balance"
                     name="balance"
                     variant="bordered"
                   />
