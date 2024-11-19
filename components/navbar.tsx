@@ -7,7 +7,6 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-  Button,
 } from "@nextui-org/react";
 
 const Navbar = () => {
@@ -18,20 +17,18 @@ const Navbar = () => {
           <h3 className="text-white font-semibold">Dashboard</h3>
         </Link>
 
-        <Dropdown>
+        <Dropdown
+          classNames={{
+            content: "min-w-0",
+          }}
+        >
           <DropdownTrigger>
-            <Button
-              disableRipple
-              className="p-0 bg-transparent data-[hover=true]:bg-transparent"
-              variant="light"
-            >
-              <h3 className="text-white font-semibold text-base">
-                Transaction Monitoring
-              </h3>
-            </Button>
+            <h3 className="text-white font-semibold cursor-pointer">
+              Transaction Monitoring
+            </h3>
           </DropdownTrigger>
 
-          <DropdownMenu className="text-center">
+          <DropdownMenu>
             <DropdownItem>
               <Link href="/accounts">
                 <h3 className="font-semibold">Accounts</h3>
@@ -45,19 +42,17 @@ const Navbar = () => {
           </DropdownMenu>
         </Dropdown>
 
-        <Dropdown>
+        <Dropdown
+          classNames={{
+            content: "min-w-0",
+          }}
+        >
           <DropdownTrigger>
-            <Button
-              disableRipple
-              className="p-0 bg-transparent data-[hover=true]:bg-transparent"
-              variant="light"
-            >
-              <h3 className="text-white font-semibold text-base">
-                Contract Monitoring
-              </h3>
-            </Button>
+            <h3 className="text-white font-semibold cursor-pointer">
+              Contract Monitoring
+            </h3>
           </DropdownTrigger>
-          <DropdownMenu className="text-center">
+          <DropdownMenu>
             <DropdownItem>
               <Link href="/accounts">
                 <h3 className="font-semibold">Clients</h3>

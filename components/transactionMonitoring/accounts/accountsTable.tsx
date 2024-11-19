@@ -8,7 +8,12 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
 } from "@nextui-org/react";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import { FormattedAccount } from "@/components/transactionMonitoring/types";
 
 type Props = {
@@ -38,7 +43,26 @@ const AccountsTable = ({ columns, accounts }: Props) => {
             <TableCell>{account.name}</TableCell>
             <TableCell>{formatNumber(account.balance)}</TableCell>
             <TableCell>{account.transactions}</TableCell>
-            <TableCell>No Action</TableCell>
+            <TableCell>
+              <Dropdown
+                classNames={{
+                  content: "min-w-0",
+                }}
+              >
+                <DropdownTrigger>
+                  <BsThreeDotsVertical className="cursor-pointer" />
+                </DropdownTrigger>
+
+                <DropdownMenu>
+                  <DropdownItem>
+                    <h3 className="font-semibold">Edit</h3>
+                  </DropdownItem>
+                  <DropdownItem>
+                    <h3 className="font-semibold">Delete</h3>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </TableCell>
           </TableRow>
         )}
       </TableBody>
