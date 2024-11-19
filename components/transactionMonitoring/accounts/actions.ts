@@ -44,13 +44,7 @@ export async function addAccount(formData: FormData) {
   try {
     await schema.validate(request, { abortEarly: false });
   } catch (errors) {
-    const formattedErrors: { [key: string]: string } = {};
-
-    (errors as Yup.ValidationError).inner.forEach((error) => {
-      if (error.path) {
-        formattedErrors[error.path] = error.message;
-      }
-    });
+    const formattedErrors = formatErrors(errors);
 
     const response: ActionResponse = {
       code: 429,
@@ -88,13 +82,7 @@ export async function updateAccount(formData: FormData) {
   try {
     await schema.validate(request, { abortEarly: false });
   } catch (errors) {
-    const formattedErrors: { [key: string]: string } = {};
-
-    (errors as Yup.ValidationError).inner.forEach((error) => {
-      if (error.path) {
-        formattedErrors[error.path] = error.message;
-      }
-    });
+    const formattedErrors = formatErrors(errors);
 
     const response: ActionResponse = {
       code: 429,
@@ -136,13 +124,7 @@ export async function deleteAccount(formData: FormData) {
   try {
     await schema.validate(request, { abortEarly: false });
   } catch (errors) {
-    const formattedErrors: { [key: string]: string } = {};
-
-    (errors as Yup.ValidationError).inner.forEach((error) => {
-      if (error.path) {
-        formattedErrors[error.path] = error.message;
-      }
-    });
+    const formattedErrors = formatErrors(errors);
 
     const response: ActionResponse = {
       code: 429,
@@ -168,3 +150,13 @@ export async function deleteAccount(formData: FormData) {
   };
   return response;
 }
+
+const formatErrors = (errors: Yup.ValidationError) => {
+  const formattedErrors: { [key: string]: string } = {};
+  errors.inner.forEach((error) => {
+    if (error.path) {
+      formattedErrors[error.path] = error.message;
+    }
+  });
+  return formattedErrors;
+};

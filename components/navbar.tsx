@@ -54,7 +54,7 @@ const Navbar = () => {
           </DropdownTrigger>
           <DropdownMenu>
             <DropdownItem>
-              <Link href="/accounts">
+              <Link href="/clients">
                 <h3 className="font-semibold">Clients</h3>
               </Link>
             </DropdownItem>
