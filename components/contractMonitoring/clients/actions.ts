@@ -3,9 +3,28 @@
 import prisma from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { Client, ActionResponse } from "@/components/contractMonitoring/types";
-import { differenceInMonths } from "date-fns";
+import { ActionResponse } from "@/components/contractMonitoring/types";
 import * as Yup from "yup";
+
+export async function getClients() {
+  let clients = [];
+
+  try {
+    clients = await prisma.client.findMany({
+      include: { contracts: true },
+    });
+  } catch {
+    const response = {
+      code: 500,
+      message: "Server Error",
+      clients: [],
+    };
+    return response;
+  }
+
+  const response = { code: 200, message: "Fetched Clients", clients: clients };
+  return response;
+}
 
 export async function addClient(formData: FormData) {
   const schema = Yup.object().shape({
@@ -19,13 +38,7 @@ export async function addClient(formData: FormData) {
   try {
     await schema.validate(request, { abortEarly: false });
   } catch (errors) {
-    const formattedErrors: { [key: string]: string } = {};
-
-    (errors as Yup.ValidationError).inner.forEach((error) => {
-      if (error.path) {
-        formattedErrors[error.path] = error.message;
-      }
-    });
+    const formattedErrors = formatErrors(errors as Yup.ValidationError);
 
     const response: ActionResponse = {
       code: 429,
@@ -47,84 +60,6 @@ export async function addClient(formData: FormData) {
   return response;
 }
 
-export async function getClients() {
-  let clients: Client[] = [];
-
-  try {
-    clients = await prisma.client.findMany({
-      include: { contracts: true },
-    });
-  } catch {
-    const response = {
-      code: 500,
-      message: "Server Error",
-      clients: clients,
-    };
-    return response;
-  }
-
-  clients.map((client) => {
-    client.contracts.map((contract) => {
-      contract.tenant_price = (
-        contract.tenant_price as Prisma.Decimal
-      ).toNumber();
-      contract.owner_income = (
-        contract.owner_income as Prisma.Decimal
-      ).toNumber();
-      contract.abic_income = (
-        contract.abic_income as Prisma.Decimal
-      ).toNumber();
-      contract.payments_count =
-        differenceInMonths(contract.due_date, contract.start) - 1;
-    });
-  });
-
-  const response = { code: 200, message: "Fetched Clients", clients: clients };
-  return response;
-}
-
-export async function deleteClient(formData: FormData) {
-  const schema = Yup.object().shape({
-    id: Yup.string().required(),
-  });
-
-  const request = {
-    id: formData.get("id") as string,
-  };
-
-  try {
-    await schema.validate(request, { abortEarly: false });
-  } catch (errors) {
-    const formattedErrors: { [key: string]: string } = {};
-
-    (errors as Yup.ValidationError).inner.forEach((error) => {
-      if (error.path) {
-        formattedErrors[error.path] = error.message;
-      }
-    });
-
-    const response: ActionResponse = {
-      code: 429,
-      message: "Validation Error",
-      errors: formattedErrors,
-    };
-    return response;
-  }
-
-  try {
-    await prisma.client.delete({
-      where: { id: request.id },
-    });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
-    return response;
-  }
-
-  revalidatePath("/clients");
-  const response: ActionResponse = { code: 200, message: "Deleted Client" };
-  return response;
-}
-
 export async function updateClient(formData: FormData) {
   const schema = Yup.object().shape({
     id: Yup.string().required(),
@@ -139,13 +74,7 @@ export async function updateClient(formData: FormData) {
   try {
     await schema.validate(request, { abortEarly: false });
   } catch (errors) {
-    const formattedErrors: { [key: string]: string } = {};
-
-    (errors as Yup.ValidationError).inner.forEach((error) => {
-      if (error.path) {
-        formattedErrors[error.path] = error.message;
-      }
-    });
+    const formattedErrors = formatErrors(errors as Yup.ValidationError);
 
     const response: ActionResponse = {
       code: 429,
@@ -173,3 +102,49 @@ export async function updateClient(formData: FormData) {
   const response: ActionResponse = { code: 200, message: "Updated Client" };
   return response;
 }
+
+export async function deleteClient(formData: FormData) {
+  const schema = Yup.object().shape({
+    id: Yup.string().required(),
+  });
+
+  const request = {
+    id: formData.get("id") as string,
+  };
+
+  try {
+    await schema.validate(request, { abortEarly: false });
+  } catch (errors) {
+    const formattedErrors = formatErrors(errors as Yup.ValidationError);
+
+    const response: ActionResponse = {
+      code: 429,
+      message: "Validation Error",
+      errors: formattedErrors,
+    };
+    return response;
+  }
+
+  try {
+    await prisma.client.delete({
+      where: { id: request.id },
+    });
+  } catch {
+    const response: ActionResponse = { code: 500, message: "Server Error" };
+    return response;
+  }
+
+  revalidatePath("/clients");
+  const response: ActionResponse = { code: 200, message: "Deleted Client" };
+  return response;
+}
+
+const formatErrors = (errors: Yup.ValidationError) => {
+  const formattedErrors: { [key: string]: string } = {};
+  errors.inner.forEach((error) => {
+    if (error.path) {
+      formattedErrors[error.path] = error.message;
+    }
+  });
+  return formattedErrors;
+};

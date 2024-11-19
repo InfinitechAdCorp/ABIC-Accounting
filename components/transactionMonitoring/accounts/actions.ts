@@ -44,7 +44,7 @@ export async function addAccount(formData: FormData) {
   try {
     await schema.validate(request, { abortEarly: false });
   } catch (errors) {
-    const formattedErrors = formatErrors(errors);
+    const formattedErrors = formatErrors(errors as Yup.ValidationError);
 
     const response: ActionResponse = {
       code: 429,
@@ -82,7 +82,7 @@ export async function updateAccount(formData: FormData) {
   try {
     await schema.validate(request, { abortEarly: false });
   } catch (errors) {
-    const formattedErrors = formatErrors(errors);
+    const formattedErrors = formatErrors(errors as Yup.ValidationError);
 
     const response: ActionResponse = {
       code: 429,
@@ -124,7 +124,7 @@ export async function deleteAccount(formData: FormData) {
   try {
     await schema.validate(request, { abortEarly: false });
   } catch (errors) {
-    const formattedErrors = formatErrors(errors);
+    const formattedErrors = formatErrors(errors as Yup.ValidationError);
 
     const response: ActionResponse = {
       code: 429,
