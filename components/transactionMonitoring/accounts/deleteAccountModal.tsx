@@ -7,10 +7,9 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Input,
 } from "@nextui-org/react";
 import { ActionResponse } from "@/components/transactionMonitoring/types";
-import { addAccount } from "./actions";
+import { deleteAccount } from "./actions";
 
 interface Props {
   onSubmit: (
@@ -18,45 +17,37 @@ interface Props {
     formData: FormData,
     onClose: () => void
   ) => void;
+  id: string;
 }
 
-const AddAccountModal = ({ onSubmit }: Props) => {
+const DeleteAccountModal = ({ onSubmit, id }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
   return (
     <>
-      <Button color="primary" onPress={onOpen}>
-        Add Account
-      </Button>
-      
+      <h1 className="cursor-pointer font-semibold" onClick={onOpen}>
+        Delete
+      </h1>
+
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
               <form
-                action={(formData) => onSubmit(addAccount, formData, onClose)}
+                action={(formData) =>
+                  onSubmit(deleteAccount, formData, onClose)
+                }
               >
-                <ModalHeader>Add Account</ModalHeader>
+                <ModalHeader>Delete Account</ModalHeader>
                 <ModalBody>
-                  <Input
-                    type="text"
-                    label="Name"
-                    name="name"
-                    variant="bordered"
-                  />
-                  <Input
-                    type="number"
-                    label="Starting Balance"
-                    name="balance"
-                    variant="bordered"
-                  />
+                  <input type="hidden" value={id} name="id" />
+                  <h6>Are you sure that you want to delete this account?</h6>
                 </ModalBody>
                 <ModalFooter>
                   <Button color="primary" type="submit">
-                    Save
+                    Yes
                   </Button>
                   <Button color="danger" onPress={onClose}>
-                    Cancel
+                    No
                   </Button>
                 </ModalFooter>
               </form>
@@ -68,4 +59,4 @@ const AddAccountModal = ({ onSubmit }: Props) => {
   );
 };
 
-export default AddAccountModal;
+export default DeleteAccountModal;

@@ -11,10 +11,14 @@ import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
+  DropdownSection,
   DropdownItem,
 } from "@nextui-org/react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FormattedAccount } from "@/components/transactionMonitoring/types";
+import { toast } from "react-toastify";
+import { ActionResponse } from "@/components/transactionMonitoring/types";
+import DeleteAccountModal from "@/components/transactionMonitoring/accounts/deleteAccountModal";
 
 type Props = {
   columns: {
@@ -30,6 +34,26 @@ const AccountsTable = ({ columns, accounts }: Props) => {
       minimumFractionDigits: 2,
     }).format(number);
     return formattedNumber;
+  };
+
+  const handleSubmit = (
+    action: (formData: FormData) => Promise<ActionResponse>,
+    formData: FormData,
+    onClose: () => void
+  ) => {
+    action(formData).then((response) => handlePostSubmit(response, onClose));
+  };
+
+  const handlePostSubmit = (response: ActionResponse, onClose: () => void) => {
+    if (response.code == 200) {
+      toast.success(response.message);
+      onClose();
+    } else {
+      if (response.code == 429) {
+        console.log(response.errors);
+      }
+      toast.error(response.message);
+    }
   };
 
   return (
@@ -54,12 +78,17 @@ const AccountsTable = ({ columns, accounts }: Props) => {
                 </DropdownTrigger>
 
                 <DropdownMenu>
-                  <DropdownItem>
-                    <h3 className="font-semibold">Edit</h3>
-                  </DropdownItem>
-                  <DropdownItem>
-                    <h3 className="font-semibold">Delete</h3>
-                  </DropdownItem>
+                  <DropdownSection>
+                    <DropdownItem isReadOnly>
+                      <h3 className="font-semibold">Edit</h3>
+                    </DropdownItem>
+                    <DropdownItem isReadOnly>
+                      <DeleteAccountModal
+                        onSubmit={handleSubmit}
+                        id={account.id}
+                      />
+                    </DropdownItem>
+                  </DropdownSection>
                 </DropdownMenu>
               </Dropdown>
             </TableCell>

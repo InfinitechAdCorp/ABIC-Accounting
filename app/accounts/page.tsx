@@ -17,10 +17,10 @@ const Accounts = async () => {
   const formattedAccounts: FormattedAccount[] = [];
 
   const formatData = (accounts: AccountWithTransactions[]) => {
-    accounts.map((account) => {
+    accounts.forEach((account) => {
       let balance = account.balance.toNumber();
       const transactions = account.transactions;
-      transactions.map((transaction) => {
+      transactions.forEach((transaction) => {
         const amount = transaction.amount.toNumber();
         if (transaction.type == "Credit") {
           balance += amount;
