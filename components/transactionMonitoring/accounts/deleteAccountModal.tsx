@@ -24,9 +24,9 @@ const DeleteAccountModal = ({ onSubmit, id }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
-      <h1 className="cursor-pointer font-semibold" onClick={onOpen}>
+      <Button size="sm" color="danger" onPress={onOpen}>
         Delete
-      </h1>
+      </Button>
 
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>

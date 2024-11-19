@@ -43,12 +43,14 @@ const AddAccountModal = ({ onSubmit }: Props) => {
                     label="Name"
                     name="name"
                     variant="bordered"
+                    size="sm"
                   />
                   <Input
                     type="number"
                     label="Starting Balance"
                     name="balance"
                     variant="bordered"
+                    size="sm"
                   />
                 </ModalBody>
                 <ModalFooter>

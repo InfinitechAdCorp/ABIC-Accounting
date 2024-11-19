@@ -8,16 +8,9 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownSection,
-  DropdownItem,
 } from "@nextui-org/react";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { FormattedAccount } from "@/components/transactionMonitoring/types";
+import { FormattedAccount, ActionResponse } from "@/components/transactionMonitoring/types";
 import { toast } from "react-toastify";
-import { ActionResponse } from "@/components/transactionMonitoring/types";
 import DeleteAccountModal from "@/components/transactionMonitoring/accounts/deleteAccountModal";
 
 type Props = {
@@ -68,29 +61,7 @@ const AccountsTable = ({ columns, accounts }: Props) => {
             <TableCell>{formatNumber(account.balance)}</TableCell>
             <TableCell>{account.transactions}</TableCell>
             <TableCell>
-              <Dropdown
-                classNames={{
-                  content: "min-w-0",
-                }}
-              >
-                <DropdownTrigger>
-                  <BsThreeDotsVertical className="cursor-pointer" />
-                </DropdownTrigger>
-
-                <DropdownMenu>
-                  <DropdownSection>
-                    <DropdownItem isReadOnly>
-                      <h3 className="font-semibold">Edit</h3>
-                    </DropdownItem>
-                    <DropdownItem isReadOnly>
-                      <DeleteAccountModal
-                        onSubmit={handleSubmit}
-                        id={account.id}
-                      />
-                    </DropdownItem>
-                  </DropdownSection>
-                </DropdownMenu>
-              </Dropdown>
+              <DeleteAccountModal onSubmit={handleSubmit} id={account.id} />
             </TableCell>
           </TableRow>
         )}
