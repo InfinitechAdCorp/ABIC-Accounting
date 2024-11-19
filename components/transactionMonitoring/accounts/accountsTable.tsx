@@ -28,7 +28,7 @@ const AccountsTable = ({ columns, accounts }: Props) => {
   };
 
   return (
-    <Table>
+    <Table aria-label="Accounts Table">
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
       </TableHeader>

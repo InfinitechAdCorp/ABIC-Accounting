@@ -21,9 +21,7 @@ const Accounts = async () => {
           <CardHeader>
             <div className="flex justify-between items-center">
               <h1 className="font-bold">Accounts</h1>
-              <div className="flex gap-3">
                 <HeaderButtons />
-              </div>
             </div>
           </CardHeader>
           <CardBody>
