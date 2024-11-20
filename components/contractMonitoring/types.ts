@@ -3,7 +3,7 @@ import { Prisma } from "@prisma/client";
 export type FormattedClient = {
   id: string;
   name: string;
-  contracts: number;
+  contracts?: number;
 };
 
 export type FormattedContract = {

@@ -17,7 +17,7 @@ import {
 import { toast } from "react-toastify";
 import { differenceInDays } from "date-fns";
 // import EditContractModal from "@/components/contractMonitoring/contracts/editContractModal";
-// import DeleteContractModal from "@/components/contractMonitoring/contracts/deleteContractModal";
+import DeleteContractModal from "@/components/contractMonitoring/contracts/deleteContractModal";
 
 type Props = {
   columns: {
@@ -96,25 +96,27 @@ const ContractsTable = ({ columns, contracts, clients }: Props) => {
             <TableCell>{formatDate(contract.end)}</TableCell>
             <TableCell>{contract.advance}</TableCell>
             <TableCell>{contract.deposit}</TableCell>
-            <TableCell>{formatNumber(contract.tenant_price as number)}</TableCell>
-            <TableCell>{formatNumber(contract.owner_income as number)}</TableCell>
-            <TableCell>{formatNumber(contract.abic_income as number)}</TableCell>
+            <TableCell>
+              {formatNumber(contract.tenant_price as number)}
+            </TableCell>
+            <TableCell>
+              {formatNumber(contract.owner_income as number)}
+            </TableCell>
+            <TableCell>
+              {formatNumber(contract.abic_income as number)}
+            </TableCell>
             <TableCell>{formatDate(contract.due_date)}</TableCell>
             <TableCell>{contract.payments}</TableCell>
             <TableCell>{getStatus(contract.due_date)}</TableCell>
             <TableCell>
-                Action
-              {/* <div className="flex gap-2">
-                <EditTransactionModal
+              <div className="flex gap-2">
+                {/* <EditTransactionModal
                   onSubmit={handleSubmit}
                   transaction={transaction}
                   accounts={accounts}
-                />
-                <DeleteTransactionModal
-                  onSubmit={handleSubmit}
-                  id={transaction.id}
-                />
-              </div> */}
+                /> */}
+                <DeleteContractModal onSubmit={handleSubmit} id={contract.id} />
+              </div>
             </TableCell>
           </TableRow>
         )}
