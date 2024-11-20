@@ -29,6 +29,12 @@ export type ClientWithContracts = Prisma.ClientGetPayload<{
   };
 }>;
 
+export type ContractWithClient = Prisma.ContractGetPayload<{
+  include: {
+    client: true;
+  };
+}>;
+
 export type ActionResponse = {
   code: number;
   message: string;
