@@ -1,70 +1,10 @@
 "use server";
 
 import prisma from "@/lib/db";
-import { Prisma } from "@prisma/client";
 import { ActionResponse } from "@/components/transactionMonitoring/types";
 import { revalidatePath } from "next/cache";
 import * as Yup from "yup";
 
-export async function getAccounts() {
-  let accounts = [];
-
-  try {
-    accounts = await prisma.account.findMany({
-      include: { transactions: true },
-    });
-  } catch {
-    const response = {
-      code: 500,
-      message: "Server Error",
-      accounts: [],
-    };
-    return response;
-  }
-
-  const response = {
-    code: 200,
-    message: "Fetched Accounts",
-    accounts: accounts,
-  };
-  return response;
-}
-
-export async function addAccount(formData: FormData) {
-  const schema = Yup.object().shape({
-    name: Yup.string().required(),
-    balance: Yup.number().moreThan(-1),
-  });
-
-  const request: Prisma.AccountCreateInput = {
-    name: formData.get("name") as string,
-    balance: formData.get("balance") as string,
-  };
-
-  try {
-    await schema.validate(request, { abortEarly: false });
-  } catch (errors) {
-    const formattedErrors = formatErrors(errors as Yup.ValidationError);
-
-    const response: ActionResponse = {
-      code: 429,
-      message: "Validation Error",
-      errors: formattedErrors,
-    };
-    return response;
-  }
-
-  try {
-    await prisma.account.create({ data: { ...request } });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
-    return response;
-  }
-
-  revalidatePath("/transactions");
-  const response: ActionResponse = { code: 200, message: "Added Account" };
-  return response;
-}
 
 export async function getTransactions() {
   let transactions = [];

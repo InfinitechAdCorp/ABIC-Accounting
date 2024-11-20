@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -12,12 +12,15 @@ import {
   Select,
   SelectItem,
   Textarea,
+  DateValue,
 } from "@nextui-org/react";
-import { addTransaction } from "@/components/transactionMonitoring/transactions/actions";
+import { updateTransaction } from "@/components/transactionMonitoring/transactions/actions";
 import {
+  FormattedTransaction,
   FormattedAccount,
   ActionResponse,
 } from "@/components/transactionMonitoring/types";
+import { parseDate } from "@internationalized/date";
 
 interface Props {
   onSubmit: (
@@ -25,16 +28,46 @@ interface Props {
     formData: FormData,
     onClose: () => void
   ) => void;
+  transaction: FormattedTransaction;
   accounts: FormattedAccount[];
 }
 
-const AddTransactionModal = ({ onSubmit, accounts }: Props) => {
+const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const [transactionData, setTransactionData] = useState(transaction);
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setTransactionData({ ...transactionData, [name]: value });
+  };
+
+  const handleDateChange = (dateValue: DateValue) => {
+    const formattedDate = new Date(
+      new Date(
+        `${dateValue.year}-${dateValue.month}-${dateValue.day}`
+      ).setHours(0, 0, 0, 0)
+    );
+    setTransactionData({ ...transactionData, date: formattedDate });
+  };
+
+  const formatDate = (date: Date) => {
+    if (date) {
+      const localeDate = date.toLocaleDateString("en-CA");
+      const formattedDate = parseDate(localeDate);
+      return formattedDate;
+    }
+  };
 
   return (
     <>
-      <Button color="primary" onPress={onOpen}>
-        Add Transaction
+      <Button size="sm" color="primary" onPress={onOpen}>
+        Edit
       </Button>
 
       <Modal size="lg" isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -43,16 +76,20 @@ const AddTransactionModal = ({ onSubmit, accounts }: Props) => {
             <>
               <form
                 action={(formData) =>
-                  onSubmit(addTransaction, formData, onClose)
+                  onSubmit(updateTransaction, formData, onClose)
                 }
               >
-                <ModalHeader>Add Transaction</ModalHeader>
+                <ModalHeader>Edit Transaction</ModalHeader>
                 <ModalBody>
+                  <input type="hidden" value={transactionData.id} name="id" />
+
                   <DatePicker
                     size="sm"
                     variant="bordered"
                     label="Voucher Date"
                     name="date"
+                    defaultValue={formatDate(transactionData.date)}
+                    onChange={(dateValue) => handleDateChange(dateValue)}
                   />
 
                   <div className="grid grid-cols-2 gap-3">
@@ -62,6 +99,8 @@ const AddTransactionModal = ({ onSubmit, accounts }: Props) => {
                       variant="bordered"
                       label="Voucher Number"
                       name="voucher"
+                      value={transactionData.voucher}
+                      onChange={(e) => handleChange(e)}
                     />
 
                     <Input
@@ -70,6 +109,8 @@ const AddTransactionModal = ({ onSubmit, accounts }: Props) => {
                       variant="bordered"
                       label="Check Number"
                       name="check"
+                      value={transactionData.check}
+                      onChange={(e) => handleChange(e)}
                     />
                   </div>
 
@@ -79,11 +120,11 @@ const AddTransactionModal = ({ onSubmit, accounts }: Props) => {
                     label="Account"
                     name="account_id"
                     items={accounts}
+                    defaultSelectedKeys={[transactionData.account_id as string]}
+                    onChange={(e) => handleChange(e)}
                   >
                     {(account) => (
-                      <SelectItem key={account.id}>
-                        {account.name}
-                      </SelectItem>
+                      <SelectItem key={account.id}>{account.name}</SelectItem>
                     )}
                   </Select>
 
@@ -92,6 +133,8 @@ const AddTransactionModal = ({ onSubmit, accounts }: Props) => {
                     variant="bordered"
                     label="Particulars"
                     name="particulars"
+                    value={transactionData.particulars}
+                    onChange={(e) => handleChange(e)}
                   />
 
                   <div className="grid grid-cols-2 gap-3">
@@ -100,6 +143,8 @@ const AddTransactionModal = ({ onSubmit, accounts }: Props) => {
                       variant="bordered"
                       label="Type"
                       name="type"
+                      defaultSelectedKeys={[transactionData.type as string]}
+                      onChange={(e) => handleChange(e)}
                     >
                       <SelectItem key="Credit">Credit</SelectItem>
                       <SelectItem key="Debit">Debit</SelectItem>
@@ -111,6 +156,8 @@ const AddTransactionModal = ({ onSubmit, accounts }: Props) => {
                       variant="bordered"
                       label="Amount"
                       name="amount"
+                      value={transactionData.amount.toString()}
+                      onChange={(e) => handleChange(e)}
                     />
                   </div>
                 </ModalBody>
@@ -131,4 +178,4 @@ const AddTransactionModal = ({ onSubmit, accounts }: Props) => {
   );
 };
 
-export default AddTransactionModal;
+export default EditTransactionModal;

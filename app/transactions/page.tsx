@@ -1,5 +1,6 @@
 import React from "react";
-import { getTransactions, getAccounts } from "@/components/transactionMonitoring/transactions/actions";
+import { getTransactions } from "@/components/transactionMonitoring/transactions/actions";
+import { getAccounts } from "@/components/transactionMonitoring/accounts/actions";
 import {
   FormattedTransaction,
   TransactionWithAccount,
@@ -83,12 +84,16 @@ const Transactions = async () => {
             <div className="flex justify-between items-center w-full">
               <h1 className="font-bold">Transactions</h1>
               <div className="flex gap-2">
-              <HeaderButtons accounts={formattedAccounts} />
+                <HeaderButtons accounts={formattedAccounts} />
               </div>
             </div>
           </CardHeader>
           <CardBody>
-            <TransactionsTable columns={columns} transactions={formattedTransactions} />
+            <TransactionsTable
+              columns={columns}
+              transactions={formattedTransactions}
+              accounts={formattedAccounts}
+            />
           </CardBody>
         </Card>
       </div>

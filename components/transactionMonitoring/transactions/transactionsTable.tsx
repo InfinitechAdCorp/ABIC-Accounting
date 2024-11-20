@@ -12,10 +12,11 @@ import {
 import {
   FormattedTransaction,
   ActionResponse,
+  FormattedAccount,
 } from "@/components/transactionMonitoring/types";
 import { toast } from "react-toastify";
-// import EditTransactionModal from "@/components/transactionMonitoring/transactions/editTransactionModal";
-// import DeleteTransactionModal from "@/components/transactionMonitoring/transactions/deleteTransactionModal";
+import EditTransactionModal from "@/components/transactionMonitoring/transactions/editTransactionModal";
+import DeleteTransactionModal from "@/components/transactionMonitoring/transactions/deleteTransactionModal";
 
 type Props = {
   columns: {
@@ -23,9 +24,10 @@ type Props = {
     label: string;
   }[];
   transactions: FormattedTransaction[];
+  accounts: FormattedAccount[];
 };
 
-const TransactionsTable = ({ columns, transactions }: Props) => {
+const TransactionsTable = ({ columns, transactions, accounts }: Props) => {
   const formatNumber = (number: number) => {
     const formattedNumber = new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 2,
@@ -83,13 +85,12 @@ const TransactionsTable = ({ columns, transactions }: Props) => {
               {transaction.type == "Debit" &&
                 formatNumber(transaction.amount as number)}
             </TableCell>
-            <TableCell>Action</TableCell>
-            {/* <TableCell>
+            <TableCell>
               <div className="flex gap-2">
-                <EditTransactionModal onSubmit={handleSubmit} transaction={transaction} />
+                <EditTransactionModal onSubmit={handleSubmit} transaction={transaction} accounts={accounts} />
                 <DeleteTransactionModal onSubmit={handleSubmit} id={transaction.id} />
               </div>
-            </TableCell> */}
+            </TableCell>
           </TableRow>
         )}
       </TableBody>
