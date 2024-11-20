@@ -11,8 +11,8 @@ import {
 } from "@nextui-org/react";
 import {
   FormattedTransaction,
-  ActionResponse,
   FormattedAccount,
+  ActionResponse,
 } from "@/components/transactionMonitoring/types";
 import { toast } from "react-toastify";
 import EditTransactionModal from "@/components/transactionMonitoring/transactions/editTransactionModal";

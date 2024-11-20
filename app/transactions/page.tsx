@@ -26,7 +26,7 @@ const Transactions = async () => {
   const { transactions } = await getTransactions();
   const formattedTransactions: FormattedTransaction[] = [];
 
-  const formatTransactionsData = (transactions: TransactionWithAccount[]) => {
+  const formatTransactions = (transactions: TransactionWithAccount[]) => {
     transactions.forEach((transaction) => {
       const account = transaction.account;
       const balance = account?.balance.toNumber();
@@ -47,12 +47,12 @@ const Transactions = async () => {
     });
   };
 
-  formatTransactionsData(transactions);
+  formatTransactions(transactions);
 
   const { accounts } = await getAccounts();
   const formattedAccounts: FormattedAccount[] = [];
 
-  const formatAccountsData = (accounts: AccountWithTransactions[]) => {
+  const formatAccounts = (accounts: AccountWithTransactions[]) => {
     accounts.forEach((account) => {
       let balance = account.balance.toNumber();
       const transactions = account.transactions;
@@ -74,7 +74,7 @@ const Transactions = async () => {
     });
   };
 
-  formatAccountsData(accounts);
+  formatAccounts(accounts);
 
   return (
     <>
