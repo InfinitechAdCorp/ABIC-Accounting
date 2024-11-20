@@ -1,6 +1,9 @@
 import React from "react";
 import { getAccounts } from "@/components/transactionMonitoring/accounts/actions";
-import { FormattedAccount, AccountWithTransactions } from "@/components/transactionMonitoring/types";
+import {
+  FormattedAccount,
+  AccountWithTransactions,
+} from "@/components/transactionMonitoring/types";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import HeaderButtons from "@/components/transactionMonitoring/accounts/headerButtons";
 import AccountsTable from "@/components/transactionMonitoring/accounts/accountsTable";

@@ -4,7 +4,7 @@ export type FormattedAccount = {
   id: string;
   name: string;
   balance: number;
-  transactions: number;
+  transactions?: number;
 };
 
 export type FormattedTransaction = {
@@ -22,6 +22,12 @@ export type FormattedTransaction = {
 export type AccountWithTransactions = Prisma.AccountGetPayload<{
   include: {
     transactions: true;
+  };
+}>;
+
+export type TransactionWithAccount = Prisma.TransactionGetPayload<{
+  include: {
+    account: true;
   };
 }>;
 

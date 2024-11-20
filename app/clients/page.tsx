@@ -20,9 +20,10 @@ const Clients = async () => {
 
   const formatData = (clients: ClientWithContracts[]) => {
     clients.forEach((client) => {
+      const contracts = client.contracts.length
       const formattedClient = {
         ...client,
-        contracts: client.contracts.length,
+        contracts: contracts,
       };
       formattedClients.push(formattedClient);
     });

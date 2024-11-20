@@ -69,7 +69,9 @@ export async function getTransactions() {
 
   try {
     transactions = await prisma.transaction.findMany({
-      include: { account: true },
+      include: {
+        account: true,
+      },
     });
   } catch {
     const response = {
