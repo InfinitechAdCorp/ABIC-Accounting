@@ -5,10 +5,21 @@ import {
   TransactionWithAccount,
 } from "@/components/transactionMonitoring/types";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
+import TransactionsTable from "@/components/transactionMonitoring/transactions/transactionsTable";
 
 const Transactions = async () => {
+  const columns = [
+    { key: "date", label: "Voucher Date" },
+    { key: "voucher", label: "Voucher Number" },
+    { key: "check", label: "Check Number" },
+    { key: "account.name", label: "Account" },
+    { key: "particulars", label: "Particulars" },
+    { key: "credit", label: "Credit" },
+    { key: "debit", label: "Debit" },
+    { key: "action", label: "Action" },
+  ];
+
   const { transactions } = await getTransactions();
-  console.log("🚀 ~ Transactions ~ transactions:", transactions);
   const formattedTransactions: FormattedTransaction[] = [];
 
   const formatData = (transactions: TransactionWithAccount[]) => {
@@ -47,7 +58,7 @@ const Transactions = async () => {
             </div>
           </CardHeader>
           <CardBody>
-            {/* <AccountsTable columns={columns} accounts={formattedAccounts} /> */}
+            <TransactionsTable columns={columns} transactions={formattedTransactions} />
           </CardBody>
         </Card>
       </div>
