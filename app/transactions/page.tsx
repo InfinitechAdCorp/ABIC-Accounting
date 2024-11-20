@@ -1,11 +1,14 @@
 import React from "react";
-import { getTransactions } from "@/components/transactionMonitoring/transactions/actions";
+import { getTransactions, getAccounts } from "@/components/transactionMonitoring/transactions/actions";
 import {
   FormattedTransaction,
   TransactionWithAccount,
+  FormattedAccount,
+  AccountWithTransactions,
 } from "@/components/transactionMonitoring/types";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import TransactionsTable from "@/components/transactionMonitoring/transactions/transactionsTable";
+import HeaderButtons from "@/components/transactionMonitoring/transactions/headerButtons";
 
 const Transactions = async () => {
   const columns = [
@@ -22,7 +25,7 @@ const Transactions = async () => {
   const { transactions } = await getTransactions();
   const formattedTransactions: FormattedTransaction[] = [];
 
-  const formatData = (transactions: TransactionWithAccount[]) => {
+  const formatTransactionsData = (transactions: TransactionWithAccount[]) => {
     transactions.forEach((transaction) => {
       const account = transaction.account;
       const balance = account?.balance.toNumber();
@@ -43,9 +46,34 @@ const Transactions = async () => {
     });
   };
 
-  formatData(transactions);
+  formatTransactionsData(transactions);
 
-  console.log(formattedTransactions);
+  const { accounts } = await getAccounts();
+  const formattedAccounts: FormattedAccount[] = [];
+
+  const formatAccountsData = (accounts: AccountWithTransactions[]) => {
+    accounts.forEach((account) => {
+      let balance = account.balance.toNumber();
+      const transactions = account.transactions;
+      transactions.forEach((transaction) => {
+        const amount = transaction.amount.toNumber();
+        if (transaction.type == "Credit") {
+          balance += amount;
+        } else {
+          balance -= amount;
+        }
+      });
+
+      const formattedAccount = {
+        ...account,
+        balance: balance,
+        transactions: transactions.length,
+      };
+      formattedAccounts.push(formattedAccount);
+    });
+  };
+
+  formatAccountsData(accounts);
 
   return (
     <>
@@ -54,7 +82,9 @@ const Transactions = async () => {
           <CardHeader>
             <div className="flex justify-between items-center w-full">
               <h1 className="font-bold">Transactions</h1>
-              {/* <HeaderButtons /> */}
+              <div className="flex gap-2">
+              <HeaderButtons accounts={formattedAccounts} />
+              </div>
             </div>
           </CardHeader>
           <CardBody>

@@ -10,7 +10,9 @@ export async function getAccounts() {
   let accounts = [];
 
   try {
-    accounts = await prisma.account.findMany();
+    accounts = await prisma.account.findMany({
+      include: { transactions: true },
+    });
   } catch {
     const response = {
       code: 500,
