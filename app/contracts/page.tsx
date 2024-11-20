@@ -10,9 +10,21 @@ import {
 import { differenceInMonths } from "date-fns";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import ContractsTable from "@/components/contractMonitoring/contracts/contractsTable";
-// import HeaderButtons from "@/components/contractMonitoring/contracts/headerButtons";
+import HeaderButtons from "@/components/contractMonitoring/contracts/headerButtons";
 
 const Contracts = async () => {
+  const locations = [
+    { key: "All", name: "All" },
+    { key: "Bacoor", name: "Bacoor" },
+    { key: "Makati", name: "Makati" },
+    { key: "BGC", name: "BGC" },
+    { key: "Pasay", name: "Pasay" },
+    { key: "Mandaluyong", name: "Mandaluyong" },
+    { key: "QC", name: "QC" },
+    { key: "Pasig", name: "Pasig" },
+    { key: "Paranaque", name: "Paranaque" },
+  ];
+
   const columns = [
     { key: "client.name", label: "Client" },
     { key: "property", label: "Property" },
@@ -54,8 +66,6 @@ const Contracts = async () => {
 
   formatContracts(contracts);
 
-  console.log(formattedContracts)
-
   const { clients } = await getClients();
   const formattedClients: FormattedClient[] = [];
 
@@ -81,7 +91,10 @@ const Contracts = async () => {
             <div className="flex justify-between items-center w-full">
               <h1 className="font-bold">Contracts</h1>
               <div className="flex gap-2">
-                {/* <HeaderButtons contracts={formattedContracts} /> */}
+                <HeaderButtons
+                  clients={formattedClients}
+                  locations={locations}
+                />
               </div>
             </div>
           </CardHeader>
