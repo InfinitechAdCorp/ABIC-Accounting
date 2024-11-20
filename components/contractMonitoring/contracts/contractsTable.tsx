@@ -16,7 +16,7 @@ import {
 } from "@/components/contractMonitoring/types";
 import { toast } from "react-toastify";
 import { differenceInDays } from "date-fns";
-// import EditContractModal from "@/components/contractMonitoring/contracts/editContractModal";
+import EditContractModal from "@/components/contractMonitoring/contracts/editContractModal";
 import DeleteContractModal from "@/components/contractMonitoring/contracts/deleteContractModal";
 
 type Props = {
@@ -26,9 +26,13 @@ type Props = {
   }[];
   contracts: FormattedContract[];
   clients: FormattedClient[];
+  locations: {
+    key: string;
+    name: string;
+  }[];
 };
 
-const ContractsTable = ({ columns, contracts, clients }: Props) => {
+const ContractsTable = ({ columns, contracts, clients, locations }: Props) => {
   const formatNumber = (number: number) => {
     const formattedNumber = new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 2,
@@ -110,11 +114,12 @@ const ContractsTable = ({ columns, contracts, clients }: Props) => {
             <TableCell>{getStatus(contract.due_date)}</TableCell>
             <TableCell>
               <div className="flex gap-2">
-                {/* <EditTransactionModal
+                <EditContractModal
                   onSubmit={handleSubmit}
-                  transaction={transaction}
-                  accounts={accounts}
-                /> */}
+                  contract={contract}
+                  clients={clients}
+                  locations={locations}
+                />
                 <DeleteContractModal onSubmit={handleSubmit} id={contract.id} />
               </div>
             </TableCell>

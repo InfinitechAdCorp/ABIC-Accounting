@@ -11,7 +11,6 @@ import { differenceInMonths } from "date-fns";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import ContractsTable from "@/components/contractMonitoring/contracts/contractsTable";
 import HeaderButtons from "@/components/contractMonitoring/contracts/headerButtons";
-import { string } from "yup";
 
 const Contracts = async () => {
   const locations = [
@@ -104,6 +103,7 @@ const Contracts = async () => {
               columns={columns}
               contracts={formattedContracts}
               clients={formattedClients}
+              locations={locations}
             />
           </CardBody>
         </Card>
