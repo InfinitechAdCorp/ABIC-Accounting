@@ -13,11 +13,10 @@ import {
   FormattedTransaction,
   FormattedAccount,
 } from "@/components/transactionMonitoring/types";
-import { ActionResponse } from "@/components/globals/types";
-import { toast } from "react-toastify";
 import EditTransactionModal from "@/components/transactionMonitoring/transactions/editTransactionModal";
 import DeleteModal from "@/components/globals/deleteModal";
 import { deleteTransaction } from "./actions";
+import { handleSubmit, formatNumber, formatDate } from "@/components/globals/utils";
 
 type Props = {
   columns: {
@@ -29,42 +28,6 @@ type Props = {
 };
 
 const TransactionsTable = ({ columns, transactions, accounts }: Props) => {
-  const formatNumber = (number: number) => {
-    const formattedNumber = new Intl.NumberFormat("en-US", {
-      minimumFractionDigits: 2,
-    }).format(number);
-    return formattedNumber;
-  };
-
-  const formatDate = (date: Date) => {
-    const formattedDate = date.toLocaleDateString("default", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-    return formattedDate;
-  };
-
-  const handleSubmit = (
-    action: (formData: FormData) => Promise<ActionResponse>,
-    formData: FormData,
-    onClose: () => void
-  ) => {
-    action(formData).then((response) => handlePostSubmit(response, onClose));
-  };
-
-  const handlePostSubmit = (response: ActionResponse, onClose: () => void) => {
-    if (response.code == 200) {
-      toast.success(response.message);
-      onClose();
-    } else {
-      if (response.code == 429) {
-        console.log(response.errors);
-      }
-      toast.error(response.message);
-    }
-  };
-
   return (
     <Table aria-label="Accounts Table">
       <TableHeader columns={columns}>

@@ -163,7 +163,7 @@ const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
                 </ModalBody>
                 <ModalFooter>
                   <Button color="primary" type="submit">
-                    Save
+                    Update
                   </Button>
                   <Button color="danger" onPress={onClose}>
                     Cancel

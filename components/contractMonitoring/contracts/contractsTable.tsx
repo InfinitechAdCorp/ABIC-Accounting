@@ -13,12 +13,11 @@ import {
   FormattedContract,
   FormattedClient,
 } from "@/components/contractMonitoring/types";
-import { ActionResponse } from "@/components/globals/types";
-import { toast } from "react-toastify";
 import { differenceInDays } from "date-fns";
 import EditContractModal from "@/components/contractMonitoring/contracts/editContractModal";
 import DeleteModal from "@/components/globals/deleteModal";
 import { deleteContract } from "./actions";
+import { handleSubmit, formatNumber, formatDate } from "@/components/globals/utils";
 
 type Props = {
   columns: {
@@ -34,22 +33,6 @@ type Props = {
 };
 
 const ContractsTable = ({ columns, contracts, clients, locations }: Props) => {
-  const formatNumber = (number: number) => {
-    const formattedNumber = new Intl.NumberFormat("en-US", {
-      minimumFractionDigits: 2,
-    }).format(number);
-    return formattedNumber;
-  };
-
-  const formatDate = (date: Date) => {
-    const formattedDate = date.toLocaleDateString("default", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-    return formattedDate;
-  };
-
   const getStatus = (due_date: Date) => {
     const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
     const difference = differenceInDays(due_date, today);
@@ -64,26 +47,6 @@ const ContractsTable = ({ columns, contracts, clients, locations }: Props) => {
     }
 
     return status;
-  };
-
-  const handleSubmit = (
-    action: (formData: FormData) => Promise<ActionResponse>,
-    formData: FormData,
-    onClose: () => void
-  ) => {
-    action(formData).then((response) => handlePostSubmit(response, onClose));
-  };
-
-  const handlePostSubmit = (response: ActionResponse, onClose: () => void) => {
-    if (response.code == 200) {
-      toast.success(response.message);
-      onClose();
-    } else {
-      if (response.code == 429) {
-        console.log(response.errors);
-      }
-      toast.error(response.message);
-    }
   };
 
   return (

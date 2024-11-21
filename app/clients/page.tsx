@@ -5,8 +5,15 @@ import Header from "@/components/globals/header";
 import AddClientModal from "@/components/contractMonitoring/clients/addClientModal";
 import { formatClients } from "@/components/globals/utils";
 import DataTable from "@/components/globals/dataTable";
+import ClientsTable from "@/components/contractMonitoring/clients/clientsTable";
 
 const Clients = async () => {
+  const oldColumns = [
+    { key: "name", label: "Name" },
+    { key: "contracts", label: "Contracts" },
+    { key: "action", label: "Action" },
+  ];
+
   const columns = [
     { name: "NAME", key: "name", sortable: true },
     { name: "CONTRACTS", key: "contracts", sortable: true },
@@ -17,17 +24,24 @@ const Clients = async () => {
 
   const { clients } = await getClients();
   const formattedClients = formatClients(clients);
-  console.log("🚀 ~ Clients ~ formattedClients:", formattedClients)
 
   return (
     <>
       <div className="flex justify-center">
         <Card className="my-5 p-3">
-          {/* <CardHeader>
+          <CardHeader>
             <Header title="Clients">
               <AddClientModal />
             </Header>
-          </CardHeader> */}
+          </CardHeader>
+          <CardBody>
+            <ClientsTable columns={oldColumns} clients={formattedClients} />
+          </CardBody>
+        </Card>
+      </div>
+
+      <div className="flex justify-center">
+        <Card>
           <CardBody>
             <DataTable
               model="clients"

@@ -5,8 +5,16 @@ import Header from "@/components/globals/header";
 import AddAccountModal from "@/components/transactionMonitoring/accounts/addAccountModal";
 import { formatAccounts } from "@/components/globals/utils";
 import DataTable from "@/components/globals/dataTable";
+import AccountsTable from "@/components/transactionMonitoring/accounts/accountsTable";
 
 const Accounts = async () => {
+  const oldColumns = [
+    { key: "name", label: "Name" },
+    { key: "balance", label: "Balance" },
+    { key: "transactions", label: "Transactions" },
+    { key: "action", label: "Action" },
+  ];
+
   const columns = [
     { name: "NAME", key: "name", sortable: true },
     { name: "BALANCE", key: "balance", sortable: true },
@@ -23,11 +31,19 @@ const Accounts = async () => {
     <>
       <div className="flex justify-center">
         <Card className="my-5 p-3">
-          {/* <CardHeader>
-            <Header title="Accounts">
+          <CardHeader>
+            <Header title="Clients">
               <AddAccountModal />
             </Header>
-          </CardHeader> */}
+          </CardHeader>
+          <CardBody>
+            <AccountsTable columns={oldColumns} accounts={formattedAccounts} />
+          </CardBody>
+        </Card>
+      </div>
+
+      <div className="flex justify-center">
+        <Card>
           <CardBody>
             <DataTable
               model="accounts"

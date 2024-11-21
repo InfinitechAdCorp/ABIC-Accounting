@@ -10,11 +10,10 @@ import {
   TableCell,
 } from "@nextui-org/react";
 import { FormattedAccount } from "@/components/transactionMonitoring/types";
-import { ActionResponse } from "@/components/globals/types";
-import { toast } from "react-toastify";
 import EditAccountModal from "@/components/transactionMonitoring/accounts/editAccountModal";
 import DeleteModal from "@/components/globals/deleteModal";
 import { deleteAccount } from "./actions";
+import { handleSubmit, formatNumber } from "@/components/globals/utils";
 
 type Props = {
   columns: {
@@ -25,33 +24,6 @@ type Props = {
 };
 
 const AccountsTable = ({ columns, accounts }: Props) => {
-  const formatNumber = (number: number) => {
-    const formattedNumber = new Intl.NumberFormat("en-US", {
-      minimumFractionDigits: 2,
-    }).format(number);
-    return formattedNumber;
-  };
-
-  const handleSubmit = (
-    action: (formData: FormData) => Promise<ActionResponse>,
-    formData: FormData,
-    onClose: () => void
-  ) => {
-    action(formData).then((response) => handlePostSubmit(response, onClose));
-  };
-
-  const handlePostSubmit = (response: ActionResponse, onClose: () => void) => {
-    if (response.code == 200) {
-      toast.success(response.message);
-      onClose();
-    } else {
-      if (response.code == 429) {
-        console.log(response.errors);
-      }
-      toast.error(response.message);
-    }
-  };
-
   return (
     <Table aria-label="Accounts Table">
       <TableHeader columns={columns}>

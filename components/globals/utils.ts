@@ -139,7 +139,23 @@ export const formatContracts = (contracts: ContractWithClient[]) => {
 
 // Formatters
 
-export function capitalize(str: string) {
-  const capitalized = str.charAt(0).toUpperCase() + str.slice(1)
+export function capitalize(string: string) {
+  const capitalized = string.charAt(0).toUpperCase() + string.slice(1)
   return capitalized;
 }
+
+export const formatNumber = (number: number) => {
+  const formattedNumber = new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 2,
+  }).format(number);
+  return formattedNumber;
+};
+
+export const formatDate = (date: Date) => {
+  const formattedDate = date.toLocaleDateString("default", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  return formattedDate;
+};
