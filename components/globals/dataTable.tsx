@@ -24,17 +24,27 @@ import {
   Selection,
   SortDescriptor,
 } from "@nextui-org/react";
-import { columns, rows } from "./data";
 import { capitalize } from "@/components/globals/utils";
 
-const INITIAL_VISIBLE_COLUMNS = ["id", "name", "contracts", "actions"];
+type column = {
+  name: string,
+  key: string, 
+  sortable?: boolean,
+}
+
+type Props = {
+  model: string,
+  columns: column[]
+  rows: unknown,
+  initialVisibleColumns: string[],
+}
 
 type Row = (typeof rows)[0];
 
-const DataTable = () => {
+const DataTable = ({ model, columns, rows, initialVisibleColumns }: Props) => {
   const [filterValue, setFilterValue] = React.useState("");
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
-    new Set(INITIAL_VISIBLE_COLUMNS)
+    new Set(initialVisibleColumns)
   );
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
@@ -52,7 +62,7 @@ const DataTable = () => {
     return columns.filter((column) =>
       Array.from(visibleColumns).includes(column.key)
     );
-  }, [visibleColumns]);
+  }, [columns, visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
     let filteredRows = [...rows];
@@ -64,7 +74,7 @@ const DataTable = () => {
     }
 
     return filteredRows;
-  }, [filterValue, hasSearchFilter]);
+  }, [rows, filterValue, hasSearchFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -190,7 +200,7 @@ const DataTable = () => {
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Total {rows.length} clients
+            Total {rows.length} {model}
           </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
@@ -212,6 +222,9 @@ const DataTable = () => {
     onSearchChange,
     onRowsPerPageChange,
     onClear,
+    columns,
+    model,
+    rows.length,
   ]);
 
   const bottomContent = React.useMemo(() => {
@@ -274,7 +287,7 @@ const DataTable = () => {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No clients found"} items={sortedItems}>
+        <TableBody emptyContent={`No ${model} found`} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

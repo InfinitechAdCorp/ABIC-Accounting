@@ -1,17 +1,19 @@
 import React from "react";
 import { getClients } from "@/components/contractMonitoring/clients/actions";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
-import ClientsTable from "@/components/contractMonitoring/clients/clientsTable";
 import Header from "@/components/globals/header";
 import AddClientModal from "@/components/contractMonitoring/clients/addClientModal";
 import { formatClients } from "@/components/globals/utils";
+import DataTable from "@/components/globals/dataTable";
 
 const Clients = async () => {
   const columns = [
-    { key: "name", label: "Name" },
-    { key: "contracts", label: "Contracts" },
-    { key: "action", label: "Action" },
+    { name: "NAME", key: "name", sortable: true },
+    { name: "CONTRACTS", key: "contracts", sortable: true },
+    { name: "ACTIONS", key: "actions" },
   ];
+
+  const initialVisibleColumns = ["name", "contracts", "actions"];
 
   const { clients } = await getClients();
   const formattedClients = formatClients(clients);
@@ -26,7 +28,12 @@ const Clients = async () => {
             </Header>
           </CardHeader>
           <CardBody>
-            <ClientsTable columns={columns} clients={formattedClients} />
+            <DataTable
+              model="clients"
+              columns={columns}
+              rows={formattedClients}
+              initialVisibleColumns={initialVisibleColumns}
+            />
           </CardBody>
         </Card>
       </div>
