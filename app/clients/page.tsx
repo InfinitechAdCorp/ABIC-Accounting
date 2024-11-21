@@ -17,6 +17,7 @@ const Clients = async () => {
 
   const { clients } = await getClients();
   const formattedClients = formatClients(clients);
+  console.log("🚀 ~ Clients ~ formattedClients:", formattedClients)
 
   return (
     <>
