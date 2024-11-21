@@ -6,7 +6,7 @@ import TransactionsTable from "@/components/transactionMonitoring/transactions/t
 import Header from "@/components/globals/header";
 import AddAccountModal from "@/components/transactionMonitoring/accounts/addAccountModal";
 import AddTransactionModal from "@/components/transactionMonitoring/transactions/addTransactionModal";
-import { formatAccounts, formatTransactions } from "@/components/globals/functions";
+import { formatAccounts, formatTransactions } from "@/components/globals/utils";
 
 const Transactions = async () => {
   const columns = [

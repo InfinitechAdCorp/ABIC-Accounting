@@ -11,7 +11,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { ActionResponse } from "@/components/globals/types";
-import { handleSubmit } from "./functions";
+import { handleSubmit } from "./utils";
 // import { deleteClient } from "./actions";
 
 interface Props {

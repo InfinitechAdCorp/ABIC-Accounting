@@ -4,7 +4,7 @@ import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import AccountsTable from "@/components/transactionMonitoring/accounts/accountsTable";
 import Header from "@/components/globals/header";
 import AddAccountModal from "@/components/transactionMonitoring/accounts/addAccountModal";
-import { formatAccounts } from "@/components/globals/functions";
+import { formatAccounts } from "@/components/globals/utils";
 
 const Accounts = async () => {
   const columns = [

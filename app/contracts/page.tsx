@@ -6,7 +6,7 @@ import ContractsTable from "@/components/contractMonitoring/contracts/contractsT
 import Header from "@/components/globals/header";
 import AddClientModal from "@/components/contractMonitoring/clients/addClientModal";
 import AddContractModal from "@/components/contractMonitoring/contracts/addContractModal";
-import { formatClients, formatContracts } from "@/components/globals/functions";
+import { formatClients, formatContracts } from "@/components/globals/utils";
 
 const Contracts = async () => {
   const locations = [

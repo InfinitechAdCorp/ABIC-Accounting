@@ -14,8 +14,6 @@ import {
 } from "@/components/contractMonitoring/types";
 import { differenceInMonths } from "date-fns";
 
-
-
 // Event Handlers
 
 export const handleSubmit = (
@@ -138,3 +136,10 @@ export const formatContracts = (contracts: ContractWithClient[]) => {
 
   return formattedContracts;
 };
+
+// Formatters
+
+export function capitalize(str: string) {
+  const capitalized = str.charAt(0).toUpperCase() + str.slice(1)
+  return capitalized;
+}

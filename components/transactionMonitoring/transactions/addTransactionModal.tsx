@@ -17,7 +17,7 @@ import {
 } from "@nextui-org/react";
 import { addTransaction } from "@/components/transactionMonitoring/transactions/actions";
 import { FormattedAccount } from "@/components/transactionMonitoring/types";
-import { handleSubmit } from "@/components/globals/functions";
+import { handleSubmit } from "@/components/globals/utils";
 
 interface Props {
   accounts: FormattedAccount[];

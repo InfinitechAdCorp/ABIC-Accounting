@@ -16,7 +16,7 @@ import {
 } from "@nextui-org/react";
 import { addContract } from "@/components/contractMonitoring/contracts/actions";
 import { FormattedClient } from "@/components/contractMonitoring/types";
-import { handleSubmit } from "@/components/globals/functions";
+import { handleSubmit } from "@/components/globals/utils";
 
 interface Props {
   clients: FormattedClient[];

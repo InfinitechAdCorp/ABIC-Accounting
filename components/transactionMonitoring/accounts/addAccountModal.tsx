@@ -12,7 +12,7 @@ import {
   Input,
 } from "@nextui-org/react";
 import { addAccount } from "./actions";
-import { handleSubmit } from "@/components/globals/functions";
+import { handleSubmit } from "@/components/globals/utils";
 
 const AddAccountModal = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -22,13 +22,15 @@ const AddAccountModal = () => {
       <Button color="primary" onPress={onOpen}>
         Add Account
       </Button>
-      
+
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
               <form
-                action={(formData) => handleSubmit(addAccount, formData, onClose)}
+                action={(formData) =>
+                  handleSubmit(addAccount, formData, onClose)
+                }
               >
                 <ModalHeader>Add Account</ModalHeader>
                 <ModalBody>

@@ -4,7 +4,7 @@ import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import ClientsTable from "@/components/contractMonitoring/clients/clientsTable";
 import Header from "@/components/globals/header";
 import AddClientModal from "@/components/contractMonitoring/clients/addClientModal";
-import { formatClients } from "@/components/globals/functions";
+import { formatClients } from "@/components/globals/utils";
 
 const Clients = async () => {
   const columns = [

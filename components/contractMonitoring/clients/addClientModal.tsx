@@ -12,7 +12,7 @@ import {
   Input,
 } from "@nextui-org/react";
 import { addClient } from "./actions";
-import { handleSubmit } from "@/components/globals/functions";
+import { handleSubmit } from "@/components/globals/utils";
 
 const AddClientModal = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
