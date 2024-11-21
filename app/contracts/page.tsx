@@ -43,10 +43,12 @@ const Contracts = async () => {
   ];
 
   const { contracts } = await getContracts();
-  const formattedContracts: FormattedContract[] = [];
 
   const formatContracts = (contracts: ContractWithClient[]) => {
+    const formattedContracts: FormattedContract[] = [];
+
     contracts.forEach((contract) => {
+      const client = contract.client;
       const tenant_price = contract.tenant_price?.toNumber();
       const owner_income = contract.owner_income?.toNumber();
       const abic_income = contract.abic_income?.toNumber();
@@ -55,6 +57,12 @@ const Contracts = async () => {
 
       const formattedContract = {
         ...contract,
+        client: {
+          ...client,
+          id: client?.id as string,
+          name: client?.name as string,
+        },
+        client_id: contract.client_id as string,
         tenant_price: tenant_price,
         owner_income: owner_income,
         abic_income: abic_income,
@@ -62,26 +70,31 @@ const Contracts = async () => {
       };
       formattedContracts.push(formattedContract);
     });
+
+    return formattedContracts;
   };
 
-  formatContracts(contracts);
+  const formattedContracts = formatContracts(contracts);
 
   const { clients } = await getClients();
-  const formattedClients: FormattedClient[] = [];
 
   const formatClients = (clients: ClientWithContracts[]) => {
+    const formattedClients: FormattedClient[] = [];
+
     clients.forEach((client) => {
-      const contracts = client.contracts;
+      const contracts = client.contracts.length;
 
       const formattedClient = {
         ...client,
-        contracts: contracts.length,
+        contracts: contracts,
       };
       formattedClients.push(formattedClient);
     });
+
+    return formattedClients;
   };
 
-  formatClients(clients);
+  const formattedClients = formatClients(clients);
 
   return (
     <>

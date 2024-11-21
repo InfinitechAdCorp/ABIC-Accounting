@@ -16,21 +16,23 @@ const Clients = async () => {
   ];
 
   const { clients } = await getClients();
-  const formattedClients: FormattedClient[] = [];
 
   const formatData = (clients: ClientWithContracts[]) => {
+    const formattedClients: FormattedClient[] = [];
+
     clients.forEach((client) => {
-      const contracts = client.contracts.length
+      const contracts = client.contracts.length;
       const formattedClient = {
         ...client,
         contracts: contracts,
       };
       formattedClients.push(formattedClient);
     });
+
+    return formattedClients;
   };
 
-  formatData(clients);
-  console.log(formattedClients);
+  const formattedClients = formatData(clients);
 
   return (
     <>

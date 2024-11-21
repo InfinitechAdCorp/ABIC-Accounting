@@ -17,9 +17,10 @@ const Accounts = async () => {
   ];
 
   const { accounts } = await getAccounts();
-  const formattedAccounts: FormattedAccount[] = [];
 
   const formatData = (accounts: AccountWithTransactions[]) => {
+    const formattedAccounts: FormattedAccount[] = [];
+
     accounts.forEach((account) => {
       let balance = account.balance.toNumber();
       const transactions = account.transactions;
@@ -39,9 +40,11 @@ const Accounts = async () => {
       };
       formattedAccounts.push(formattedAccount);
     });
+
+    return formattedAccounts;
   };
 
-  formatData(accounts);
+  const formattedAccounts = formatData(accounts);
 
   return (
     <>
