@@ -1,13 +1,10 @@
 import React from "react";
 import { getClients } from "@/components/contractMonitoring/clients/actions";
-import {
-  FormattedClient,
-  ClientWithContracts,
-} from "@/components/contractMonitoring/types";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import ClientsTable from "@/components/contractMonitoring/clients/clientsTable";
 import Header from "@/components/globals/header";
 import AddClientModal from "@/components/contractMonitoring/clients/addClientModal";
+import { formatClients } from "@/components/globals/functions";
 
 const Clients = async () => {
   const columns = [
@@ -17,23 +14,7 @@ const Clients = async () => {
   ];
 
   const { clients } = await getClients();
-
-  const formatData = (clients: ClientWithContracts[]) => {
-    const formattedClients: FormattedClient[] = [];
-
-    clients.forEach((client) => {
-      const contracts = client.contracts.length;
-      const formattedClient = {
-        ...client,
-        contracts: contracts,
-      };
-      formattedClients.push(formattedClient);
-    });
-
-    return formattedClients;
-  };
-
-  const formattedClients = formatData(clients);
+  const formattedClients = formatClients(clients);
 
   return (
     <>

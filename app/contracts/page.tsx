@@ -1,18 +1,12 @@
 import React from "react";
 import { getContracts } from "@/components/contractMonitoring/contracts/actions";
 import { getClients } from "@/components/contractMonitoring/clients/actions";
-import {
-  FormattedContract,
-  ContractWithClient,
-  FormattedClient,
-  ClientWithContracts,
-} from "@/components/contractMonitoring/types";
-import { differenceInMonths } from "date-fns";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import ContractsTable from "@/components/contractMonitoring/contracts/contractsTable";
 import Header from "@/components/globals/header";
 import AddClientModal from "@/components/contractMonitoring/clients/addClientModal";
 import AddContractModal from "@/components/contractMonitoring/contracts/addContractModal";
+import { formatClients, formatContracts } from "@/components/globals/functions";
 
 const Contracts = async () => {
   const locations = [
@@ -45,57 +39,9 @@ const Contracts = async () => {
   ];
 
   const { contracts } = await getContracts();
-
-  const formatContracts = (contracts: ContractWithClient[]) => {
-    const formattedContracts: FormattedContract[] = [];
-
-    contracts.forEach((contract) => {
-      const client = contract.client;
-      const tenant_price = contract.tenant_price?.toNumber();
-      const owner_income = contract.owner_income?.toNumber();
-      const abic_income = contract.abic_income?.toNumber();
-      const payments =
-        differenceInMonths(contract.due_date, contract.start) - 1;
-
-      const formattedContract = {
-        ...contract,
-        client: {
-          ...client,
-          id: client?.id as string,
-          name: client?.name as string,
-        },
-        client_id: contract.client_id as string,
-        tenant_price: tenant_price,
-        owner_income: owner_income,
-        abic_income: abic_income,
-        payments: payments,
-      };
-      formattedContracts.push(formattedContract);
-    });
-
-    return formattedContracts;
-  };
-
   const formattedContracts = formatContracts(contracts);
 
   const { clients } = await getClients();
-
-  const formatClients = (clients: ClientWithContracts[]) => {
-    const formattedClients: FormattedClient[] = [];
-
-    clients.forEach((client) => {
-      const contracts = client.contracts.length;
-
-      const formattedClient = {
-        ...client,
-        contracts: contracts,
-      };
-      formattedClients.push(formattedClient);
-    });
-
-    return formattedClients;
-  };
-
   const formattedClients = formatClients(clients);
 
   return (

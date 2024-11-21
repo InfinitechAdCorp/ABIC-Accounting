@@ -1,17 +1,12 @@
 import React from "react";
 import { getTransactions } from "@/components/transactionMonitoring/transactions/actions";
 import { getAccounts } from "@/components/transactionMonitoring/accounts/actions";
-import {
-  FormattedTransaction,
-  TransactionWithAccount,
-  FormattedAccount,
-  AccountWithTransactions,
-} from "@/components/transactionMonitoring/types";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import TransactionsTable from "@/components/transactionMonitoring/transactions/transactionsTable";
 import Header from "@/components/globals/header";
 import AddAccountModal from "@/components/transactionMonitoring/accounts/addAccountModal";
 import AddTransactionModal from "@/components/transactionMonitoring/transactions/addTransactionModal";
+import { formatAccounts, formatTransactions } from "@/components/globals/functions";
 
 const Transactions = async () => {
   const columns = [
@@ -26,62 +21,9 @@ const Transactions = async () => {
   ];
 
   const { transactions } = await getTransactions();
-
-  const formatTransactions = (transactions: TransactionWithAccount[]) => {
-    const formattedTransactions: FormattedTransaction[] = [];
-
-    transactions.forEach((transaction) => {
-      const account = transaction.account;
-      const balance = account?.balance.toNumber();
-      const amount = transaction.amount.toNumber();
-
-      const formattedTransaction = {
-        ...transaction,
-        account: {
-          ...account,
-          id: account?.id as string,
-          name: account?.name as string,
-          balance: balance as number,
-        },
-        account_id: transaction.account_id as string,
-        amount: amount,
-      };
-      formattedTransactions.push(formattedTransaction);
-    });
-
-    return formattedTransactions;
-  };
-
   const formattedTransactions = formatTransactions(transactions);
 
   const { accounts } = await getAccounts();
-
-  const formatAccounts = (accounts: AccountWithTransactions[]) => {
-    const formattedAccounts: FormattedAccount[] = [];
-
-    accounts.forEach((account) => {
-      let balance = account.balance.toNumber();
-      const transactions = account.transactions;
-      transactions.forEach((transaction) => {
-        const amount = transaction.amount.toNumber();
-        if (transaction.type == "Credit") {
-          balance += amount;
-        } else {
-          balance -= amount;
-        }
-      });
-
-      const formattedAccount = {
-        ...account,
-        balance: balance,
-        transactions: transactions.length,
-      };
-      formattedAccounts.push(formattedAccount);
-    });
-
-    return formattedAccounts;
-  };
-
   const formattedAccounts = formatAccounts(accounts);
 
   return (
