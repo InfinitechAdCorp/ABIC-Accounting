@@ -9,13 +9,12 @@ import {
   TableRow,
   TableCell,
 } from "@nextui-org/react";
-import {
-  FormattedClient,
-  ActionResponse,
-} from "@/components/contractMonitoring/types";
+import { FormattedClient } from "@/components/contractMonitoring/types";
+import { ActionResponse } from "@/components/globals/types";
 import { toast } from "react-toastify";
 import EditClientModal from "@/components/contractMonitoring/clients/editClientModal";
-import DeleteClientModal from "@/components/contractMonitoring/clients/deleteClientModal";
+import DeleteModal from "@/components/globals/deleteModal";
+import { deleteClient } from "./actions";
 
 type Props = {
   columns: {
@@ -59,7 +58,11 @@ const ClientsTable = ({ columns, clients }: Props) => {
             <TableCell>
               <div className="flex gap-2">
                 <EditClientModal onSubmit={handleSubmit} client={client} />
-                <DeleteClientModal onSubmit={handleSubmit} id={client.id} />
+                <DeleteModal
+                  title="Client"
+                  action={deleteClient}
+                  id={client.id}
+                />
               </div>
             </TableCell>
           </TableRow>

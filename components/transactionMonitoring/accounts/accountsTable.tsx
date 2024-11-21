@@ -9,13 +9,12 @@ import {
   TableRow,
   TableCell,
 } from "@nextui-org/react";
-import {
-  FormattedAccount,
-  ActionResponse,
-} from "@/components/transactionMonitoring/types";
+import { FormattedAccount } from "@/components/transactionMonitoring/types";
+import { ActionResponse } from "@/components/globals/types";
 import { toast } from "react-toastify";
 import EditAccountModal from "@/components/transactionMonitoring/accounts/editAccountModal";
-import DeleteAccountModal from "@/components/transactionMonitoring/accounts/deleteAccountModal";
+import DeleteModal from "@/components/globals/deleteModal";
+import { deleteAccount } from "./actions";
 
 type Props = {
   columns: {
@@ -67,7 +66,11 @@ const AccountsTable = ({ columns, accounts }: Props) => {
             <TableCell>
               <div className="flex gap-2">
                 <EditAccountModal onSubmit={handleSubmit} account={account} />
-                <DeleteAccountModal onSubmit={handleSubmit} id={account.id} />
+                <DeleteModal
+                  title="Account"
+                  action={deleteAccount}
+                  id={account.id}
+                />
               </div>
             </TableCell>
           </TableRow>

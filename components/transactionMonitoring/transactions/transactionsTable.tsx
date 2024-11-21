@@ -12,11 +12,12 @@ import {
 import {
   FormattedTransaction,
   FormattedAccount,
-  ActionResponse,
 } from "@/components/transactionMonitoring/types";
+import { ActionResponse } from "@/components/globals/types";
 import { toast } from "react-toastify";
 import EditTransactionModal from "@/components/transactionMonitoring/transactions/editTransactionModal";
-import DeleteTransactionModal from "@/components/transactionMonitoring/transactions/deleteTransactionModal";
+import DeleteModal from "@/components/globals/deleteModal";
+import { deleteTransaction } from "./actions";
 
 type Props = {
   columns: {
@@ -87,8 +88,16 @@ const TransactionsTable = ({ columns, transactions, accounts }: Props) => {
             </TableCell>
             <TableCell>
               <div className="flex gap-2">
-                <EditTransactionModal onSubmit={handleSubmit} transaction={transaction} accounts={accounts} />
-                <DeleteTransactionModal onSubmit={handleSubmit} id={transaction.id} />
+                <EditTransactionModal
+                  onSubmit={handleSubmit}
+                  transaction={transaction}
+                  accounts={accounts}
+                />
+                <DeleteModal
+                  title="Transaction"
+                  action={deleteTransaction}
+                  id={transaction.id}
+                />
               </div>
             </TableCell>
           </TableRow>

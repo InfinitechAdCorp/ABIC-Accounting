@@ -10,7 +10,6 @@ const Header = ({ title, children }: Props) => {
     <>
       <div className="flex justify-between items-center w-full">
         <h1 className="font-bold">{title}</h1>
-
         {children}
       </div>
     </>

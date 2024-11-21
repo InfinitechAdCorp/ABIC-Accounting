@@ -12,12 +12,13 @@ import {
 import {
   FormattedContract,
   FormattedClient,
-  ActionResponse,
 } from "@/components/contractMonitoring/types";
+import { ActionResponse } from "@/components/globals/types";
 import { toast } from "react-toastify";
 import { differenceInDays } from "date-fns";
 import EditContractModal from "@/components/contractMonitoring/contracts/editContractModal";
-import DeleteContractModal from "@/components/contractMonitoring/contracts/deleteContractModal";
+import DeleteModal from "@/components/globals/deleteModal";
+import { deleteContract } from "./actions";
 
 type Props = {
   columns: {
@@ -120,7 +121,11 @@ const ContractsTable = ({ columns, contracts, clients, locations }: Props) => {
                   clients={clients}
                   locations={locations}
                 />
-                <DeleteContractModal onSubmit={handleSubmit} id={contract.id} />
+                <DeleteModal
+                  title="Contract"
+                  action={deleteContract}
+                  id={contract.id}
+                />
               </div>
             </TableCell>
           </TableRow>

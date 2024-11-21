@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   Modal,
@@ -9,18 +11,16 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { ActionResponse } from "@/components/globals/types";
-import { deleteAccount } from "./actions";
+import { handleSubmit } from "./functions";
+// import { deleteClient } from "./actions";
 
 interface Props {
-  onSubmit: (
-    action: (formData: FormData) => Promise<ActionResponse>,
-    formData: FormData,
-    onClose: () => void
-  ) => void;
+  title: string;
+  action: (formData: FormData) => Promise<ActionResponse>;
   id: string;
 }
 
-const DeleteAccountModal = ({ onSubmit, id }: Props) => {
+const DeleteModal = ({ title, action, id }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
@@ -33,14 +33,12 @@ const DeleteAccountModal = ({ onSubmit, id }: Props) => {
           {(onClose) => (
             <>
               <form
-                action={(formData) =>
-                  onSubmit(deleteAccount, formData, onClose)
-                }
+                action={(formData) => handleSubmit(action, formData, onClose)}
               >
-                <ModalHeader>Delete Account</ModalHeader>
+                <ModalHeader>Delete {title}</ModalHeader>
                 <ModalBody>
                   <input type="hidden" value={id} name="id" />
-                  <h6>Are you sure that you want to delete this account?</h6>
+                  <h6>Are you sure that you want to delete this {title}?</h6>
                 </ModalBody>
                 <ModalFooter>
                   <Button color="primary" type="submit">
@@ -59,4 +57,4 @@ const DeleteAccountModal = ({ onSubmit, id }: Props) => {
   );
 };
 
-export default DeleteAccountModal;
+export default DeleteModal;
