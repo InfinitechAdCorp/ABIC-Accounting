@@ -7,11 +7,11 @@ const Table = () => {
   return (
     <>
       <div className="flex justify-center gap-5">
-        <Card className="my-5 p-3">
+        {/* <Card className="my-5 p-3">
           <CardBody>
             <DataTable />
           </CardBody>
-        </Card>
+        </Card> */}
 
         <Card className="my-5 p-3">
           <CardBody>

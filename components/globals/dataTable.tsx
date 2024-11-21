@@ -20,25 +20,16 @@ import {
   Dropdown,
   DropdownMenu,
   DropdownItem,
-  Chip,
-  User,
   Pagination,
   Selection,
-  ChipProps,
   SortDescriptor,
 } from "@nextui-org/react";
-import { columns, users } from "./data";
+import { columns, rows } from "./data";
 import { capitalize } from "./utils";
 
-const statusColorMap: Record<string, ChipProps["color"]> = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
+const INITIAL_VISIBLE_COLUMNS = ["id", "name", "contracts"];
 
-const INITIAL_VISIBLE_COLUMNS = ["age", "team", "email", "status", "actions"];
-
-type User = (typeof users)[0];
+type Row = (typeof rows)[0];
 
 const DataTable = () => {
   const [filterValue, setFilterValue] = React.useState("");
@@ -47,7 +38,7 @@ const DataTable = () => {
   );
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "age",
+    column: "name",
     direction: "ascending",
   });
 
@@ -64,16 +55,16 @@ const DataTable = () => {
   }, [visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredRows = [...rows];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredRows = filteredRows.filter((row) =>
+        row.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
-    return filteredUsers;
-  }, [users, filterValue]);
+    return filteredRows;
+  }, [rows, filterValue]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -85,49 +76,19 @@ const DataTable = () => {
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: User, b: User) => {
-      const first = a[sortDescriptor.column as keyof User] as number;
-      const second = b[sortDescriptor.column as keyof User] as number;
+    return [...items].sort((a: Row, b: Row) => {
+      const first = a[sortDescriptor.column as keyof Row] as number;
+      const second = b[sortDescriptor.column as keyof Row] as number;
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((user: User, columnKey: React.Key) => {
-    const cellValue = user[columnKey as keyof User];
+  const renderCell = React.useCallback((row: Row, columnKey: React.Key) => {
+    const cellValue = row[columnKey as keyof Row];
 
     switch (columnKey) {
-      case "name":
-        return (
-          <User
-            avatarProps={{ radius: "lg", src: user.avatar }}
-            description={user.email}
-            name={cellValue}
-          >
-            {user.email}
-          </User>
-        );
-      case "role":
-        return (
-          <div className="flex flex-col">
-            <p className="text-bold text-small capitalize">{cellValue}</p>
-            <p className="text-bold text-tiny capitalize text-default-400">
-              {user.team}
-            </p>
-          </div>
-        );
-      case "status":
-        return (
-          <Chip
-            className="capitalize"
-            color={statusColorMap[user.status]}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue}
-          </Chip>
-        );
       case "actions":
         return (
           <div className="relative flex justify-end items-center gap-2">
@@ -191,7 +152,7 @@ const DataTable = () => {
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
-            placeholder="Search by name..."
+            placeholder="Search"
             startContent={<SearchIcon />}
             value={filterValue}
             onClear={() => onClear()}
@@ -229,7 +190,7 @@ const DataTable = () => {
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Total {users.length} users
+            Total {rows.length} clients
           </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
@@ -250,7 +211,7 @@ const DataTable = () => {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    users.length,
+    rows.length,
     hasSearchFilter,
   ]);
 
@@ -296,7 +257,7 @@ const DataTable = () => {
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
         classNames={{
-          wrapper: "max-h-[382px]",
+          wrapper: "max-h-[400px]",
         }}
         sortDescriptor={sortDescriptor}
         topContent={topContent}
@@ -314,7 +275,7 @@ const DataTable = () => {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={"No users found"} items={sortedItems}>
+        <TableBody emptyContent={"No clients found"} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
