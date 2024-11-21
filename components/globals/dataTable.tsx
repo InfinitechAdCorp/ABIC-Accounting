@@ -27,21 +27,28 @@ import {
 import { capitalize } from "@/components/globals/utils";
 
 type column = {
-  name: string,
-  key: string, 
-  sortable?: boolean,
-}
+  name: string;
+  key: string;
+  sortable?: boolean;
+};
 
 type Props = {
-  model: string,
-  columns: column[]
-  rows: unknown,
-  initialVisibleColumns: string[],
-}
+  model: string;
+  columns: column[];
+  rows: unknown;
+  initialVisibleColumns: string[];
+  sortKey: string;
+};
 
 type Row = (typeof rows)[0];
 
-const DataTable = ({ model, columns, rows, initialVisibleColumns }: Props) => {
+const DataTable = ({
+  model,
+  columns,
+  rows,
+  initialVisibleColumns,
+  sortKey,
+}: Props) => {
   const [filterValue, setFilterValue] = React.useState("");
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
     new Set(initialVisibleColumns)
@@ -56,36 +63,36 @@ const DataTable = ({ model, columns, rows, initialVisibleColumns }: Props) => {
 
   const hasSearchFilter = Boolean(filterValue);
 
-  const headerColumns = React.useMemo(() => {
+  const headerColumns = () => {
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
       Array.from(visibleColumns).includes(column.key)
     );
-  }, [columns, visibleColumns]);
+  };
 
-  const filteredItems = React.useMemo(() => {
+  const filteredItems = () => {
     let filteredRows = [...rows];
 
     if (hasSearchFilter) {
       filteredRows = filteredRows.filter((row) =>
-        row.name.toLowerCase().includes(filterValue.toLowerCase())
+        row[sortKey].toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
     return filteredRows;
-  }, [rows, filterValue, hasSearchFilter]);
+  };
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
-  const items = React.useMemo(() => {
+  const items = () => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
     return filteredItems.slice(start, end);
-  }, [page, filteredItems, rowsPerPage]);
+  };
 
-  const sortedItems = React.useMemo(() => {
+  const sortedItems = () => {
     return [...items].sort((a: Row, b: Row) => {
       const first = a[sortDescriptor.column as keyof Row] as number;
       const second = b[sortDescriptor.column as keyof Row] as number;
@@ -93,9 +100,9 @@ const DataTable = ({ model, columns, rows, initialVisibleColumns }: Props) => {
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
-  }, [sortDescriptor, items]);
+  };
 
-  const renderCell = React.useCallback((row: Row, columnKey: React.Key) => {
+  const renderCell = (row: Row, columnKey: React.Key) => {
     const cellValue = row[columnKey as keyof Row];
 
     switch (columnKey) {
@@ -119,43 +126,40 @@ const DataTable = ({ model, columns, rows, initialVisibleColumns }: Props) => {
       default:
         return cellValue;
     }
-  }, []);
+  };
 
-  const onNextPage = React.useCallback(() => {
+  const onNextPage = () => {
     if (page < pages) {
       setPage(page + 1);
     }
-  }, [page, pages]);
+  };
 
-  const onPreviousPage = React.useCallback(() => {
+  const onPreviousPage = () => {
     if (page > 1) {
       setPage(page - 1);
     }
-  }, [page]);
+  };
 
-  const onRowsPerPageChange = React.useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      setRowsPerPage(Number(e.target.value));
-      setPage(1);
-    },
-    []
-  );
+  const onRowsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setRowsPerPage(Number(e.target.value));
+    setPage(1);
+  };
 
-  const onSearchChange = React.useCallback((value?: string) => {
+  const onSearchChange = (value?: string) => {
     if (value) {
       setFilterValue(value);
       setPage(1);
     } else {
       setFilterValue("");
     }
-  }, []);
+  };
 
-  const onClear = React.useCallback(() => {
+  const onClear = () => {
     setFilterValue("");
     setPage(1);
-  }, []);
+  };
 
-  const topContent = React.useMemo(() => {
+  const topContent = () => {
     return (
       <div className="flex flex-col gap-4">
         <div className="flex justify-between gap-3 items-end">
@@ -216,18 +220,9 @@ const DataTable = ({ model, columns, rows, initialVisibleColumns }: Props) => {
         </div>
       </div>
     );
-  }, [
-    filterValue,
-    visibleColumns,
-    onSearchChange,
-    onRowsPerPageChange,
-    onClear,
-    columns,
-    model,
-    rows.length,
-  ]);
+  };
 
-  const bottomContent = React.useMemo(() => {
+  const bottomContent = () => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
         <Pagination
@@ -259,7 +254,7 @@ const DataTable = ({ model, columns, rows, initialVisibleColumns }: Props) => {
         </div>
       </div>
     );
-  }, [page, pages, onNextPage, onPreviousPage]);
+  };
 
   return (
     <>

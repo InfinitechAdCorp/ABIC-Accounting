@@ -22,17 +22,18 @@ const Clients = async () => {
     <>
       <div className="flex justify-center">
         <Card className="my-5 p-3">
-          <CardHeader>
+          {/* <CardHeader>
             <Header title="Clients">
               <AddClientModal />
             </Header>
-          </CardHeader>
+          </CardHeader> */}
           <CardBody>
             <DataTable
               model="clients"
               columns={columns}
               rows={formattedClients}
               initialVisibleColumns={initialVisibleColumns}
+              sortKey="name"
             />
           </CardBody>
         </Card>

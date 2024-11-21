@@ -22,6 +22,7 @@ const Transactions = async () => {
 
   const { transactions } = await getTransactions();
   const formattedTransactions = formatTransactions(transactions);
+  console.log("🚀 ~ Transactions ~ formattedTransactions:", formattedTransactions)
 
   const { accounts } = await getAccounts();
   const formattedAccounts = formatAccounts(accounts);
