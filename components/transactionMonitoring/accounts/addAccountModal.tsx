@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   Modal,
@@ -9,18 +11,10 @@ import {
   useDisclosure,
   Input,
 } from "@nextui-org/react";
-import { ActionResponse } from "@/components/transactionMonitoring/types";
 import { addAccount } from "./actions";
+import { handleSubmit } from "@/components/globals/functions";
 
-interface Props {
-  onSubmit: (
-    action: (formData: FormData) => Promise<ActionResponse>,
-    formData: FormData,
-    onClose: () => void
-  ) => void;
-}
-
-const AddAccountModal = ({ onSubmit }: Props) => {
+const AddAccountModal = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
@@ -34,7 +28,7 @@ const AddAccountModal = ({ onSubmit }: Props) => {
           {(onClose) => (
             <>
               <form
-                action={(formData) => onSubmit(addAccount, formData, onClose)}
+                action={(formData) => handleSubmit(addAccount, formData, onClose)}
               >
                 <ModalHeader>Add Account</ModalHeader>
                 <ModalBody>

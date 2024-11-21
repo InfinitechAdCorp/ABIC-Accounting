@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
-import { ActionResponse } from "@/components/transactionMonitoring/types";
+import { ActionResponse } from "@/components/globals/types";
 import { revalidatePath } from "next/cache";
 import * as Yup from "yup";
 

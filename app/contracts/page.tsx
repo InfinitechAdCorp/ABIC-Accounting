@@ -10,7 +10,9 @@ import {
 import { differenceInMonths } from "date-fns";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import ContractsTable from "@/components/contractMonitoring/contracts/contractsTable";
-import HeaderButtons from "@/components/contractMonitoring/contracts/headerButtons";
+import Header from "@/components/globals/header";
+import AddClientModal from "@/components/contractMonitoring/clients/addClientModal";
+import AddContractModal from "@/components/contractMonitoring/contracts/addContractModal";
 
 const Contracts = async () => {
   const locations = [
@@ -101,15 +103,15 @@ const Contracts = async () => {
       <div className="flex justify-center">
         <Card className="my-5 p-3">
           <CardHeader>
-            <div className="flex justify-between items-center w-full">
-              <h1 className="font-bold">Contracts</h1>
+            <Header title="Contracts">
               <div className="flex gap-2">
-                <HeaderButtons
+                <AddClientModal />
+                <AddContractModal
                   clients={formattedClients}
                   locations={locations}
                 />
               </div>
-            </div>
+            </Header>
           </CardHeader>
           <CardBody>
             <ContractsTable

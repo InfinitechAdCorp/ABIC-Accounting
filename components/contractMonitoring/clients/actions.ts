@@ -3,7 +3,7 @@
 import prisma from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { ActionResponse } from "@/components/contractMonitoring/types";
+import { ActionResponse } from "@/components/globals/types";
 import * as Yup from "yup";
 
 export async function getClients() {

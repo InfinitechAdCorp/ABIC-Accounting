@@ -9,7 +9,9 @@ import {
 } from "@/components/transactionMonitoring/types";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import TransactionsTable from "@/components/transactionMonitoring/transactions/transactionsTable";
-import HeaderButtons from "@/components/transactionMonitoring/transactions/headerButtons";
+import Header from "@/components/globals/header";
+import AddAccountModal from "@/components/transactionMonitoring/accounts/addAccountModal";
+import AddTransactionModal from "@/components/transactionMonitoring/transactions/addTransactionModal";
 
 const Transactions = async () => {
   const columns = [
@@ -87,12 +89,12 @@ const Transactions = async () => {
       <div className="flex justify-center">
         <Card className="my-5 p-3">
           <CardHeader>
-            <div className="flex justify-between items-center w-full">
-              <h1 className="font-bold">Transactions</h1>
+            <Header title="Transactions">
               <div className="flex gap-2">
-                <HeaderButtons accounts={formattedAccounts} />
+                <AddAccountModal />
+                <AddTransactionModal accounts={formattedAccounts} />
               </div>
-            </div>
+            </Header>
           </CardHeader>
           <CardBody>
             <TransactionsTable

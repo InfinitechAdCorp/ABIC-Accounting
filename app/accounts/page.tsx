@@ -5,8 +5,9 @@ import {
   AccountWithTransactions,
 } from "@/components/transactionMonitoring/types";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
-import HeaderButtons from "@/components/transactionMonitoring/accounts/headerButtons";
 import AccountsTable from "@/components/transactionMonitoring/accounts/accountsTable";
+import Header from "@/components/globals/header";
+import AddAccountModal from "@/components/transactionMonitoring/accounts/addAccountModal";
 
 const Accounts = async () => {
   const columns = [
@@ -51,10 +52,9 @@ const Accounts = async () => {
       <div className="flex justify-center">
         <Card className="my-5 p-3">
           <CardHeader>
-            <div className="flex justify-between items-center w-full">
-              <h1 className="font-bold">Accounts</h1>
-              <HeaderButtons />
-            </div>
+            <Header title="Accounts">
+              <AddAccountModal />
+            </Header>
           </CardHeader>
           <CardBody>
             <AccountsTable columns={columns} accounts={formattedAccounts} />

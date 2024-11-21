@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { ActionResponse } from "@/components/contractMonitoring/types";
+import { ActionResponse } from "@/components/globals/types";
 import { addMonths, getDate, setDate } from "date-fns";
 import * as Yup from "yup";
 

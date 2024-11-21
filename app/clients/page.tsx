@@ -5,8 +5,9 @@ import {
   ClientWithContracts,
 } from "@/components/contractMonitoring/types";
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
-import HeaderButtons from "@/components/contractMonitoring/clients/headerButtons";
 import ClientsTable from "@/components/contractMonitoring/clients/clientsTable";
+import Header from "@/components/globals/header";
+import AddClientModal from "@/components/contractMonitoring/clients/addClientModal";
 
 const Clients = async () => {
   const columns = [
@@ -39,10 +40,9 @@ const Clients = async () => {
       <div className="flex justify-center">
         <Card className="my-5 p-3">
           <CardHeader>
-            <div className="flex justify-between items-center w-full">
-              <h1 className="font-bold">Clients</h1>
-              <HeaderButtons />
-            </div>
+            <Header title="Clients">
+              <AddClientModal />
+            </Header>
           </CardHeader>
           <CardBody>
             <ClientsTable columns={columns} clients={formattedClients} />

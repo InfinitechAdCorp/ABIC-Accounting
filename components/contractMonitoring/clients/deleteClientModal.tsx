@@ -8,7 +8,7 @@ import {
   Button,
   useDisclosure,
 } from "@nextui-org/react";
-import { ActionResponse } from "@/components/contractMonitoring/types";
+import { ActionResponse } from "@/components/globals/types";
 import { deleteClient } from "./actions";
 
 interface Props {

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   Modal,
@@ -13,17 +15,10 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 import { addContract } from "@/components/contractMonitoring/contracts/actions";
-import {
-  FormattedClient,
-  ActionResponse,
-} from "@/components/contractMonitoring/types";
+import { FormattedClient } from "@/components/contractMonitoring/types";
+import { handleSubmit } from "@/components/globals/functions";
 
 interface Props {
-  onSubmit: (
-    action: (formData: FormData) => Promise<ActionResponse>,
-    formData: FormData,
-    onClose: () => void
-  ) => void;
   clients: FormattedClient[];
   locations: {
     key: string;
@@ -31,7 +26,7 @@ interface Props {
   }[];
 }
 
-const AddContractModal = ({ onSubmit, clients, locations }: Props) => {
+const AddContractModal = ({ clients, locations }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
@@ -45,7 +40,9 @@ const AddContractModal = ({ onSubmit, clients, locations }: Props) => {
           {(onClose) => (
             <>
               <form
-                action={(formData) => onSubmit(addContract, formData, onClose)}
+                action={(formData) =>
+                  handleSubmit(addContract, formData, onClose)
+                }
               >
                 <ModalHeader>Add Contract</ModalHeader>
                 <ModalBody>

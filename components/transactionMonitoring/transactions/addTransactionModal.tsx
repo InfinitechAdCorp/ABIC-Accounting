@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   Modal,
@@ -14,21 +16,14 @@ import {
   Textarea,
 } from "@nextui-org/react";
 import { addTransaction } from "@/components/transactionMonitoring/transactions/actions";
-import {
-  FormattedAccount,
-  ActionResponse,
-} from "@/components/transactionMonitoring/types";
+import { FormattedAccount } from "@/components/transactionMonitoring/types";
+import { handleSubmit } from "@/components/globals/functions";
 
 interface Props {
-  onSubmit: (
-    action: (formData: FormData) => Promise<ActionResponse>,
-    formData: FormData,
-    onClose: () => void
-  ) => void;
   accounts: FormattedAccount[];
 }
 
-const AddTransactionModal = ({ onSubmit, accounts }: Props) => {
+const AddTransactionModal = ({ accounts }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
@@ -43,7 +38,7 @@ const AddTransactionModal = ({ onSubmit, accounts }: Props) => {
             <>
               <form
                 action={(formData) =>
-                  onSubmit(addTransaction, formData, onClose)
+                  handleSubmit(addTransaction, formData, onClose)
                 }
               >
                 <ModalHeader>Add Transaction</ModalHeader>
@@ -81,9 +76,7 @@ const AddTransactionModal = ({ onSubmit, accounts }: Props) => {
                     items={accounts}
                   >
                     {(account) => (
-                      <SelectItem key={account.id}>
-                        {account.name}
-                      </SelectItem>
+                      <SelectItem key={account.id}>{account.name}</SelectItem>
                     )}
                   </Select>
 
