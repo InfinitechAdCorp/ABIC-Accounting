@@ -6,7 +6,7 @@ import {
   PlusIcon,
   VerticalDotsIcon,
   ChevronDownIcon,
-} from "./icons";
+} from "@/components/globals/icons";
 import {
   Table,
   TableHeader,
@@ -25,9 +25,9 @@ import {
   SortDescriptor,
 } from "@nextui-org/react";
 import { columns, rows } from "./data";
-import { capitalize } from "./utils";
+import { capitalize } from "@/components/globals/utils";
 
-const INITIAL_VISIBLE_COLUMNS = ["id", "name", "contracts"];
+const INITIAL_VISIBLE_COLUMNS = ["id", "name", "contracts", "actions"];
 
 type Row = (typeof rows)[0];
 
@@ -50,7 +50,7 @@ const DataTable = () => {
     if (visibleColumns === "all") return columns;
 
     return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.uid)
+      Array.from(visibleColumns).includes(column.key)
     );
   }, [visibleColumns]);
 
@@ -64,7 +64,7 @@ const DataTable = () => {
     }
 
     return filteredRows;
-  }, [rows, filterValue]);
+  }, [filterValue, hasSearchFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -177,7 +177,7 @@ const DataTable = () => {
                 onSelectionChange={setVisibleColumns}
               >
                 {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
+                  <DropdownItem key={column.key} className="capitalize">
                     {capitalize(column.name)}
                   </DropdownItem>
                 ))}
@@ -211,8 +211,7 @@ const DataTable = () => {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    rows.length,
-    hasSearchFilter,
+    onClear,
   ]);
 
   const bottomContent = React.useMemo(() => {
@@ -247,12 +246,12 @@ const DataTable = () => {
         </div>
       </div>
     );
-  }, [items.length, page, pages, hasSearchFilter]);
+  }, [page, pages, onNextPage, onPreviousPage]);
 
   return (
     <>
       <Table
-        aria-label="Example table with custom cells, pagination and sorting"
+        aria-label="DataTable"
         isHeaderSticky
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
@@ -267,8 +266,8 @@ const DataTable = () => {
         <TableHeader columns={headerColumns}>
           {(column) => (
             <TableColumn
-              key={column.uid}
-              align={column.uid === "actions" ? "center" : "start"}
+              key={column.key}
+              align={column.key === "actions" ? "center" : "start"}
               allowsSorting={column.sortable}
             >
               {column.name}

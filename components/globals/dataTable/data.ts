@@ -1,7 +1,8 @@
 export const columns = [
-  { name: "ID", uid: "id", sortable: true },
-  { name: "NAME", uid: "name", sortable: true },
-  { name: "CONTRACTS", uid: "contracts", sortable: true },
+  { name: "ID", key: "id", sortable: true },
+  { name: "NAME", key: "name", sortable: true },
+  { name: "CONTRACTS", key: "contracts", sortable: true },
+  { name: "ACTIONS", key: "actions" },
 ];
 
 export const rows = [
