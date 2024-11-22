@@ -77,7 +77,7 @@ const DataTable = ({
 
     if (hasSearchFilter) {
       filteredRows = filteredRows.filter((row) => {
-        row[sortKey].toLowerCase().includes(filterValue.toLowerCase());
+        return row[sortKey].toLowerCase().includes(filterValue.toLowerCase());
       });
     }
 

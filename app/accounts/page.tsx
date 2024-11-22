@@ -22,7 +22,7 @@ const Accounts = async () => {
     { name: "ACTIONS", key: "actions" },
   ];
 
-  const initialVisibleColumns = ["name", "balance", "transactions", "actions"];
+  const initialVisibleColumns = ["name", "balance", "actions"];
 
   const { accounts } = await getAccounts();
   const formattedAccounts = formatAccounts(accounts);
