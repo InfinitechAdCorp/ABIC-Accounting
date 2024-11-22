@@ -14,6 +14,7 @@ import {
 } from "@/components/transactionMonitoring/types";
 import { ActionResponse } from "@/components/globals/types";
 import { updateAccount } from "./actions";
+import Form from "next/form";
 
 interface Props {
   onSubmit: (
@@ -49,7 +50,7 @@ const EditAccountModal = ({ onSubmit, account }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <form
+              <Form
                 action={(formData) =>
                   onSubmit(updateAccount, formData, onClose)
                 }
@@ -85,7 +86,7 @@ const EditAccountModal = ({ onSubmit, account }: Props) => {
                     Cancel
                   </Button>
                 </ModalFooter>
-              </form>
+              </Form>
             </>
           )}
         </ModalContent>

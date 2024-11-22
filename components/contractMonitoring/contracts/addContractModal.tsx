@@ -17,6 +17,7 @@ import {
 import { addContract } from "@/components/contractMonitoring/contracts/actions";
 import { FormattedClient } from "@/components/contractMonitoring/types";
 import { handleSubmit } from "@/components/globals/utils";
+import Form from "next/form";
 
 interface Props {
   clients: FormattedClient[];
@@ -39,7 +40,7 @@ const AddContractModal = ({ clients, locations }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <form
+              <Form
                 action={(formData) =>
                   handleSubmit(addContract, formData, onClose)
                 }
@@ -157,7 +158,7 @@ const AddContractModal = ({ clients, locations }: Props) => {
                     Cancel
                   </Button>
                 </ModalFooter>
-              </form>
+              </Form>
             </>
           )}
         </ModalContent>

@@ -21,6 +21,7 @@ import {
 } from "@/components/contractMonitoring/types";
 import { ActionResponse } from "@/components/globals/types";
 import { parseDate } from "@internationalized/date";
+import Form from "next/form";
 
 interface Props {
   onSubmit: (
@@ -74,7 +75,7 @@ const EditContractModal = ({
         <ModalContent>
           {(onClose) => (
             <>
-              <form
+              <Form
                 action={(formData) =>
                   onSubmit(updateContract, formData, onClose)
                 }
@@ -213,7 +214,7 @@ const EditContractModal = ({
                     Cancel
                   </Button>
                 </ModalFooter>
-              </form>
+              </Form>
             </>
           )}
         </ModalContent>

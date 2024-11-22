@@ -18,6 +18,7 @@ import {
 import { addTransaction } from "@/components/transactionMonitoring/transactions/actions";
 import { FormattedAccount } from "@/components/transactionMonitoring/types";
 import { handleSubmit } from "@/components/globals/utils";
+import Form from "next/form";
 
 interface Props {
   accounts: FormattedAccount[];
@@ -36,7 +37,7 @@ const AddTransactionModal = ({ accounts }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <form
+              <Form
                 action={(formData) =>
                   handleSubmit(addTransaction, formData, onClose)
                 }
@@ -115,7 +116,7 @@ const AddTransactionModal = ({ accounts }: Props) => {
                     Cancel
                   </Button>
                 </ModalFooter>
-              </form>
+              </Form>
             </>
           )}
         </ModalContent>

@@ -14,6 +14,7 @@ import {
 } from "@/components/contractMonitoring/types";
 import { ActionResponse } from "@/components/globals/types";
 import { updateClient } from "./actions";
+import Form from "next/form";
 
 interface Props {
   onSubmit: (
@@ -49,7 +50,7 @@ const EditClientModal = ({ onSubmit, client }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <form
+              <Form
                 action={(formData) => onSubmit(updateClient, formData, onClose)}
               >
                 <ModalHeader>Edit Account</ModalHeader>
@@ -74,7 +75,7 @@ const EditClientModal = ({ onSubmit, client }: Props) => {
                     Cancel
                   </Button>
                 </ModalFooter>
-              </form>
+              </Form>
             </>
           )}
         </ModalContent>

@@ -20,6 +20,7 @@ import {
 } from "@/components/transactionMonitoring/types";
 import { ActionResponse } from "@/components/globals/types";
 import { parseDate } from "@internationalized/date";
+import Form from "next/form";
 
 interface Props {
   onSubmit: (
@@ -64,7 +65,7 @@ const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <form
+              <Form
                 action={(formData) =>
                   onSubmit(updateTransaction, formData, onClose)
                 }
@@ -158,7 +159,7 @@ const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
                     Cancel
                   </Button>
                 </ModalFooter>
-              </form>
+              </Form>
             </>
           )}
         </ModalContent>

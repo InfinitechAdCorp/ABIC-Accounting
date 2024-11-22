@@ -12,7 +12,7 @@ import {
 } from "@nextui-org/react";
 import { ActionResponse } from "@/components/globals/types";
 import { handleSubmit } from "./utils";
-// import { deleteClient } from "./actions";
+import Form from "next/form";
 
 interface Props {
   title: string;
@@ -32,7 +32,7 @@ const DeleteModal = ({ title, action, id }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <form
+              <Form
                 action={(formData) => handleSubmit(action, formData, onClose)}
               >
                 <ModalHeader>Delete {title}</ModalHeader>
@@ -48,7 +48,7 @@ const DeleteModal = ({ title, action, id }: Props) => {
                     No
                   </Button>
                 </ModalFooter>
-              </form>
+              </Form>
             </>
           )}
         </ModalContent>
