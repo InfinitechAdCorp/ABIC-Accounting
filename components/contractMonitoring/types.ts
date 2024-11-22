@@ -21,6 +21,8 @@ export type FormattedContract = {
   abic_income?: number;
   due_date: Date;
   payments: number;
+  status: string;
+  chipColor: string;
 };
 
 export type ClientWithContracts = Prisma.ClientGetPayload<{

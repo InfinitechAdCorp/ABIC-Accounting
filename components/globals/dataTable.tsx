@@ -23,6 +23,7 @@ import {
   Pagination,
   Selection,
   SortDescriptor,
+  Chip,
 } from "@nextui-org/react";
 import { capitalize } from "@/components/globals/utils";
 
@@ -127,6 +128,18 @@ const DataTable = ({
             </Dropdown>
           </div>
         );
+      case "status": {
+        return (
+          <Chip
+            className="capitalize"
+            color={row.chipColor}
+            size="sm"
+            variant="flat"
+          >
+            {cellValue}
+          </Chip>
+        );
+      }
       default:
         return cellValue;
     }

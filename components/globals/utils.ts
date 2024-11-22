@@ -12,7 +12,7 @@ import {
   FormattedContract,
   ContractWithClient,
 } from "@/components/contractMonitoring/types";
-import { differenceInMonths } from "date-fns";
+import { differenceInMonths, differenceInDays } from "date-fns";
 
 // Event Handlers
 
@@ -116,7 +116,11 @@ export const formatContracts = (contracts: ContractWithClient[]) => {
     const tenant_price = contract.tenant_price?.toNumber();
     const owner_income = contract.owner_income?.toNumber();
     const abic_income = contract.abic_income?.toNumber();
-    const payments = differenceInMonths(contract.due_date, contract.start) - 1;
+    let payments = differenceInMonths(contract.due_date, contract.start) - 1;
+    if (payments < 0) {
+      payments = 0;
+    }
+    const { status, chipColor } = getStatus(contract.due_date);
 
     const formattedContract = {
       ...contract,
@@ -130,6 +134,8 @@ export const formatContracts = (contracts: ContractWithClient[]) => {
       owner_income: owner_income,
       abic_income: abic_income,
       payments: payments,
+      status: status as string,
+      chipColor: chipColor as string,
     };
     formattedContracts.push(formattedContract);
   });
@@ -137,10 +143,35 @@ export const formatContracts = (contracts: ContractWithClient[]) => {
   return formattedContracts;
 };
 
+const getStatus = (due_date: Date) => {
+  const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
+  const difference = differenceInDays(due_date, today);
+
+  let status;
+  let chipColor;
+  if (difference > 0) {
+    status = `${difference} Days Remaining`;
+    chipColor = "success";
+  } else if (difference < 0) {
+    status = `${difference} Days Past Due`.replace("-", "");
+    chipColor = "danger";
+  } else if (difference == 0) {
+    status = "Today";
+    chipColor = "primary";
+  }
+
+  const data = {
+    status: status,
+    chipColor: chipColor,
+  };
+
+  return data;
+};
+
 // Formatters
 
 export function capitalize(string: string) {
-  const capitalized = string.charAt(0).toUpperCase() + string.slice(1)
+  const capitalized = string.charAt(0).toUpperCase() + string.slice(1);
   return capitalized;
 }
 
