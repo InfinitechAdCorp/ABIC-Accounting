@@ -43,10 +43,13 @@ const Contracts = async () => {
     { name: "CLIENT", key: "client.name", sortable: true },
     { name: "PROPERTY", key: "property", sortable: true },
     { name: "LOCATION", key: "location", sortable: true },
+    { name: "CONTRACT START", key: "start", sortable: true },
+    { name: "CONTRACT END", key: "end", sortable: true },
     { name: "ADVANCE", key: "advance", sortable: true },
     { name: "DEPOSIT", key: "deposit", sortable: true },
     { name: "TENANT PRICE", key: "tenant_price", sortable: true },
     { name: "OWNER INCOME", key: "owner_income", sortable: true },
+    { name: "DUE DATE", key: "due_date", sortable: true },
     { name: "STATUS", key: "status", sortable: true },
     { name: "ACTIONS", key: "actions" },
   ];
@@ -55,17 +58,19 @@ const Contracts = async () => {
     "client.name",
     "property",
     "location",
+    "start",
+    "end",
     "advance",
     "deposit",
     "tenant_price",
     "owner_income",
+    "due_date",
     "status",
     "actions",
   ];
 
   const { contracts } = await getContracts();
   const formattedContracts = formatContracts(contracts);
-  console.log("🚀 ~ Contracts ~ formattedContracts:", formattedContracts);
 
   const { clients } = await getClients();
   const formattedClients = formatClients(clients);

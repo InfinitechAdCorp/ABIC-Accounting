@@ -25,7 +25,7 @@ import {
   SortDescriptor,
   Chip,
 } from "@nextui-org/react";
-import { capitalize } from "@/components/globals/utils";
+import { capitalize, formatNumber } from "@/components/globals/utils";
 
 type column = {
   name: string;
@@ -36,7 +36,7 @@ type column = {
 type Props = {
   model: string;
   columns: column[];
-  rows: { [key: string]: any }[];
+  rows: any;
   initialVisibleColumns: string[];
   sortKey: string;
 };
@@ -139,6 +139,12 @@ const DataTable = ({
             {cellValue}
           </Chip>
         );
+      }
+      case "balance":
+      case "tenant_price":
+      case "owner_income":
+      case "abic_income": {
+        return formatNumber(cellValue);
       }
       default:
         return cellValue;

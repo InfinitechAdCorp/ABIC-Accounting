@@ -71,12 +71,14 @@ export const formatTransactions = (transactions: TransactionWithAccount[]) => {
   const formattedTransactions: FormattedTransaction[] = [];
 
   transactions.forEach((transaction) => {
+    const date = formatDate(transaction.date);
     const account = transaction.account;
     const balance = account?.balance.toNumber();
     const amount = transaction.amount.toNumber();
 
     const formattedTransaction = {
       ...transaction,
+      date: date,
       account: {
         ...account,
         id: account?.id as string,
@@ -113,9 +115,12 @@ export const formatContracts = (contracts: ContractWithClient[]) => {
 
   contracts.forEach((contract) => {
     const client = contract.client;
+    const start = formatDate(contract.start);
+    const end = formatDate(contract.end);
     const tenant_price = contract.tenant_price?.toNumber();
     const owner_income = contract.owner_income?.toNumber();
     const abic_income = contract.abic_income?.toNumber();
+    const due_date = formatDate(contract.due_date);
     let payments = differenceInMonths(contract.due_date, contract.start) - 1;
     if (payments < 0) {
       payments = 0;
@@ -130,9 +135,12 @@ export const formatContracts = (contracts: ContractWithClient[]) => {
         name: client?.name as string,
       },
       client_id: contract.client_id as string,
+      start: start,
+      end: end,
       tenant_price: tenant_price,
       owner_income: owner_income,
       abic_income: abic_income,
+      due_date: due_date,
       payments: payments,
       status: status as string,
       chipColor: chipColor as string,

@@ -22,6 +22,7 @@ const Transactions = async () => {
   ];
 
   const columns = [
+    { name: "DATE", key: "date", sortable: true },
     { name: "VOUCHER", key: "voucher", sortable: true },
     { name: "CHECK", key: "check", sortable: true },
     { name: "ACCOUNT", key: "account.name", sortable: true },
@@ -32,6 +33,7 @@ const Transactions = async () => {
   ];
 
   const initialVisibleColumns = [
+    "date",
     "voucher",
     "check",
     "account.name",

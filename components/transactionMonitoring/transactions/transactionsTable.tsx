@@ -16,7 +16,7 @@ import {
 import EditTransactionModal from "@/components/transactionMonitoring/transactions/editTransactionModal";
 import DeleteModal from "@/components/globals/deleteModal";
 import { deleteTransaction } from "./actions";
-import { handleSubmit, formatNumber, formatDate } from "@/components/globals/utils";
+import { handleSubmit, formatNumber } from "@/components/globals/utils";
 
 type Props = {
   columns: {
@@ -36,7 +36,7 @@ const TransactionsTable = ({ columns, transactions, accounts }: Props) => {
       <TableBody items={transactions}>
         {(transaction) => (
           <TableRow key={transaction.id}>
-            <TableCell>{formatDate(transaction.date)}</TableCell>
+            <TableCell>{transaction.date}</TableCell>
             <TableCell>{transaction.voucher}</TableCell>
             <TableCell>{transaction.check}</TableCell>
             <TableCell>{transaction.account?.name}</TableCell>

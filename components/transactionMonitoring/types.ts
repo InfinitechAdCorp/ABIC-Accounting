@@ -9,7 +9,7 @@ export type FormattedAccount = {
 
 export type FormattedTransaction = {
   id: string;
-  date: Date;
+  date: string;
   voucher: string;
   check: string;
   account?: FormattedAccount;
