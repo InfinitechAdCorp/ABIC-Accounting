@@ -47,15 +47,6 @@ const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
     setTransactionData({ ...transactionData, [name]: value });
   };
 
-  const handleDateChange = (dateValue: DateValue) => {
-    const formattedDate = new Date(
-      new Date(
-        `${dateValue.year}-${dateValue.month}-${dateValue.day}`
-      ).setHours(0, 0, 0, 0)
-    );
-    setTransactionData({ ...transactionData, date: formattedDate });
-  };
-
   const formatDate = (date: Date) => {
     if (date) {
       const localeDate = date.toLocaleDateString("en-CA");
@@ -89,7 +80,6 @@ const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
                     label="Voucher Date"
                     name="date"
                     defaultValue={formatDate(transactionData.date)}
-                    onChange={(dateValue) => handleDateChange(dateValue)}
                   />
 
                   <div className="grid grid-cols-2 gap-3">

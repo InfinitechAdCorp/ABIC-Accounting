@@ -57,15 +57,6 @@ const EditContractModal = ({
     setContractData({ ...contractData, [name]: value });
   };
 
-  const handleDateChange = (dateValue: DateValue) => {
-    const formattedDate = new Date(
-      new Date(
-        `${dateValue.year}-${dateValue.month}-${dateValue.day}`
-      ).setHours(0, 0, 0, 0)
-    );
-    // setContractData({ ...contractData, date: formattedDate });
-  };
-
   const formatDate = (date: Date) => {
     if (date) {
       const localeDate = date.toLocaleDateString("en-CA");
@@ -141,6 +132,7 @@ const EditContractModal = ({
                       variant="bordered"
                       label="Start Date"
                       name="start"
+                      defaultValue={formatDate(contractData.start)}
                     />
 
                     <DatePicker
@@ -148,6 +140,7 @@ const EditContractModal = ({
                       variant="bordered"
                       label="End Date"
                       name="end"
+                      defaultValue={formatDate(contractData.end)}
                     />
                   </div>
 
@@ -210,6 +203,7 @@ const EditContractModal = ({
                     variant="bordered"
                     label="Due Date"
                     name="due_date"
+                    defaultValue={formatDate(contractData.due_date)}
                   />
                 </ModalBody>
                 <ModalFooter>
