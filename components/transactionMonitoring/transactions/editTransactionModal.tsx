@@ -75,9 +75,10 @@ const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
                   <input type="hidden" value={transactionData.id} name="id" />
 
                   <DatePicker
-                    size="sm"
+                    size="md"
                     variant="bordered"
                     label="Voucher Date"
+                    labelPlacement="outside"
                     name="date"
                     defaultValue={formatDate(transactionData.date)}
                   />
@@ -85,9 +86,11 @@ const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
                   <div className="grid grid-cols-2 gap-3">
                     <Input
                       type="text"
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Voucher Number"
+                      labelPlacement="outside"
+                      placeholder="Enter Voucher Number"
                       name="voucher"
                       value={transactionData.voucher}
                       onChange={(e) => handleChange(e)}
@@ -95,9 +98,11 @@ const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
 
                     <Input
                       type="text"
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Check Number"
+                      labelPlacement="outside"
+                      placeholder="Enter Check Number"
                       name="check"
                       value={transactionData.check}
                       onChange={(e) => handleChange(e)}
@@ -105,9 +110,11 @@ const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
                   </div>
 
                   <Select
-                    size="sm"
+                    size="md"
                     variant="bordered"
                     label="Account"
+                    labelPlacement="outside"
+                    placeholder="Select Account"
                     name="account_id"
                     items={accounts}
                     defaultSelectedKeys={[transactionData.account_id as string]}
@@ -119,9 +126,11 @@ const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
                   </Select>
 
                   <Textarea
-                    size="sm"
+                    size="md"
                     variant="bordered"
                     label="Particulars"
+                    labelPlacement="outside"
+                    placeholder="Enter Particulars"
                     name="particulars"
                     value={transactionData.particulars}
                     onChange={(e) => handleChange(e)}
@@ -129,9 +138,11 @@ const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
 
                   <div className="grid grid-cols-2 gap-3">
                     <Select
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Type"
+                      labelPlacement="outside"
+                      placeholder="Select Type"
                       name="type"
                       defaultSelectedKeys={[transactionData.type as string]}
                       onChange={(e) => handleChange(e)}
@@ -142,9 +153,11 @@ const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
 
                     <Input
                       type="number"
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Amount"
+                      labelPlacement="outside"
+                      placeholder="Select Amount"
                       name="amount"
                       value={transactionData.amount.toString()}
                       onChange={(e) => handleChange(e)}

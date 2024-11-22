@@ -32,7 +32,7 @@ const Accounts = async () => {
       <div className="flex justify-center">
         <Card className="my-5 p-3">
           <CardHeader>
-            <Header title="Clients">
+            <Header title="Accounts">
               <AddAccountModal />
             </Header>
           </CardHeader>

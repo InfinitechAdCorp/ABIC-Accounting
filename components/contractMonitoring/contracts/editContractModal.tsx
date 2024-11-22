@@ -86,9 +86,11 @@ const EditContractModal = ({
 
                   <div className="grid grid-cols-2 gap-3">
                     <Select
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Client"
+                      labelPlacement="outside"
+                      placeholder="Select Client"
                       name="client_id"
                       items={clients}
                       defaultSelectedKeys={[contractData.client_id as string]}
@@ -100,9 +102,11 @@ const EditContractModal = ({
                     </Select>
 
                     <Select
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Location"
+                      labelPlacement="outside"
+                      placeholder="Select Location"
                       name="location"
                       items={locations.slice(1)}
                       defaultSelectedKeys={[contractData.location as string]}
@@ -118,9 +122,11 @@ const EditContractModal = ({
 
                   <Input
                     type="text"
-                    size="sm"
+                    size="md"
                     variant="bordered"
                     label="Property Details"
+                    labelPlacement="outside"
+                    placeholder="Enter Property Details"
                     name="property"
                     value={contractData.property}
                     onChange={(e) => handleChange(e)}
@@ -128,17 +134,19 @@ const EditContractModal = ({
 
                   <div className="grid grid-cols-2 gap-3">
                     <DatePicker
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Start Date"
+                      labelPlacement="outside"
                       name="start"
                       defaultValue={formatDate(contractData.start)}
                     />
 
                     <DatePicker
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="End Date"
+                      labelPlacement="outside"
                       name="end"
                       defaultValue={formatDate(contractData.end)}
                     />
@@ -147,9 +155,11 @@ const EditContractModal = ({
                   <div className="grid grid-cols-2 gap-3">
                     <Input
                       type="number"
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Advance"
+                      labelPlacement="outside"
+                      placeholder="Enter Advance"
                       name="advance"
                       value={contractData.advance.toString()}
                       onChange={(e) => handleChange(e)}
@@ -157,9 +167,11 @@ const EditContractModal = ({
 
                     <Input
                       type="number"
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Deposit"
+                      labelPlacement="outside"
+                      placeholder="Enter Deposit"
                       name="deposit"
                       value={contractData.deposit.toString()}
                       onChange={(e) => handleChange(e)}
@@ -168,9 +180,11 @@ const EditContractModal = ({
 
                   <Input
                     type="number"
-                    size="sm"
+                    size="md"
                     variant="bordered"
                     label="Tenant Price"
+                    labelPlacement="outside"
+                    placeholder="Enter Tenant Price"
                     name="tenant_price"
                     value={contractData.tenant_price?.toString()}
                     onChange={(e) => handleChange(e)}
@@ -179,9 +193,11 @@ const EditContractModal = ({
                   <div className="grid grid-cols-2 gap-3">
                     <Input
                       type="number"
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Owner Income"
+                      labelPlacement="outside"
+                      placeholder="Enter Owner Income"
                       name="owner_income"
                       value={contractData.owner_income?.toString()}
                       onChange={(e) => handleChange(e)}
@@ -189,9 +205,11 @@ const EditContractModal = ({
 
                     <Input
                       type="number"
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="ABIC Income"
+                      labelPlacement="outside"
+                      placeholder="Enter ABIC Income"
                       name="abic_income"
                       value={contractData.abic_income?.toString()}
                       onChange={(e) => handleChange(e)}
@@ -199,9 +217,10 @@ const EditContractModal = ({
                   </div>
 
                   <DatePicker
-                    size="sm"
+                    size="md"
                     variant="bordered"
                     label="Due Date"
+                    labelPlacement="outside"
                     name="due_date"
                     defaultValue={formatDate(contractData.due_date)}
                   />

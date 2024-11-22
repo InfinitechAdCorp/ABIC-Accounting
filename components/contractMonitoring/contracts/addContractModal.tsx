@@ -49,9 +49,11 @@ const AddContractModal = ({ clients, locations }: Props) => {
                 <ModalBody>
                   <div className="grid grid-cols-2 gap-3">
                     <Select
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Client"
+                      labelPlacement="outside"
+                      placeholder="Select Client"
                       name="client_id"
                       items={clients}
                     >
@@ -61,9 +63,11 @@ const AddContractModal = ({ clients, locations }: Props) => {
                     </Select>
 
                     <Select
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Location"
+                      labelPlacement="outside"
+                      placeholder="Select Location"
                       name="location"
                       items={locations.slice(1)}
                     >
@@ -77,24 +81,28 @@ const AddContractModal = ({ clients, locations }: Props) => {
 
                   <Input
                     type="text"
-                    size="sm"
+                    size="md"
                     variant="bordered"
                     label="Property Details"
+                    labelPlacement="outside"
+                    placeholder="Enter Property Details"
                     name="property"
                   />
 
                   <div className="grid grid-cols-2 gap-3">
                     <DatePicker
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Start Date"
+                      labelPlacement="outside"
                       name="start"
                     />
 
                     <DatePicker
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="End Date"
+                      labelPlacement="outside"
                       name="end"
                     />
                   </div>
@@ -102,51 +110,62 @@ const AddContractModal = ({ clients, locations }: Props) => {
                   <div className="grid grid-cols-2 gap-3">
                     <Input
                       type="number"
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Advance"
+                      labelPlacement="outside"
+                      placeholder="Enter Advance"
                       name="advance"
                     />
 
                     <Input
                       type="number"
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Deposit"
+                      labelPlacement="outside"
+                      placeholder="Enter Deposit"
                       name="deposit"
                     />
                   </div>
 
                   <Input
                     type="number"
-                    size="sm"
+                    size="md"
                     variant="bordered"
                     label="Tenant Price"
+                    labelPlacement="outside"
+                    placeholder="Enter Tenant Price"
                     name="tenant_price"
                   />
 
                   <div className="grid grid-cols-2 gap-3">
                     <Input
                       type="number"
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Owner Income"
+                      labelPlacement="outside"
+                      placeholder="Enter Owner Income"
                       name="owner_income"
                     />
 
                     <Input
                       type="number"
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="ABIC Income"
+                      labelPlacement="outside"
+                      placeholder="Enter ABIC Income"
                       name="abic_income"
                     />
                   </div>
 
                   <DatePicker
-                    size="sm"
+                    size="md"
                     variant="bordered"
                     label="Due Date"
+                    labelPlacement="outside"
                     name="due_date"
                   />
                 </ModalBody>

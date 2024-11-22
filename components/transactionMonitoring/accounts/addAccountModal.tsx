@@ -37,17 +37,21 @@ const AddAccountModal = () => {
                 <ModalBody>
                   <Input
                     type="text"
-                    label="Name"
-                    name="name"
+                    size="md"
                     variant="bordered"
-                    size="sm"
+                    label="Name"
+                    labelPlacement="outside"
+                    placeholder="Enter Name"
+                    name="name"
                   />
                   <Input
                     type="number"
-                    label="Starting Balance"
-                    name="balance"
+                    size="md"
                     variant="bordered"
-                    size="sm"
+                    label="Starting Balance"
+                    labelPlacement="outside"
+                    placeholder="Enter Starting Balance"
+                    name="balance"
                   />
                 </ModalBody>
                 <ModalFooter>

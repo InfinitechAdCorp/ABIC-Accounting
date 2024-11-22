@@ -45,34 +45,41 @@ const AddTransactionModal = ({ accounts }: Props) => {
                 <ModalHeader>Add Transaction</ModalHeader>
                 <ModalBody>
                   <DatePicker
-                    size="sm"
+                    size="md"
                     variant="bordered"
                     label="Voucher Date"
+                    labelPlacement="outside"
                     name="date"
                   />
 
                   <div className="grid grid-cols-2 gap-3">
                     <Input
                       type="text"
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Voucher Number"
+                      labelPlacement="outside"
+                      placeholder="Enter Voucher Number"
                       name="voucher"
                     />
 
                     <Input
                       type="text"
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Check Number"
+                      labelPlacement="outside"
+                      placeholder="Enter Check Number"
                       name="check"
                     />
                   </div>
 
                   <Select
-                    size="sm"
+                    size="md"
                     variant="bordered"
                     label="Account"
+                    labelPlacement="outside"
+                    placeholder="Select Account"
                     name="account_id"
                     items={accounts}
                   >
@@ -82,17 +89,21 @@ const AddTransactionModal = ({ accounts }: Props) => {
                   </Select>
 
                   <Textarea
-                    size="sm"
+                    size="md"
                     variant="bordered"
                     label="Particulars"
+                    labelPlacement="outside"
+                    placeholder="Enter Particulars"
                     name="particulars"
                   />
 
                   <div className="grid grid-cols-2 gap-3">
                     <Select
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Type"
+                      labelPlacement="outside"
+                      placeholder="Select Type"
                       name="type"
                     >
                       <SelectItem key="Credit">Credit</SelectItem>
@@ -101,9 +112,11 @@ const AddTransactionModal = ({ accounts }: Props) => {
 
                     <Input
                       type="number"
-                      size="sm"
+                      size="md"
                       variant="bordered"
                       label="Amount"
+                      labelPlacement="outside"
+                      placeholder="Enter Amount"
                       name="amount"
                     />
                   </div>

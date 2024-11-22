@@ -59,10 +59,12 @@ const EditClientModal = ({ onSubmit, client }: Props) => {
 
                   <Input
                     type="text"
-                    label="Name"
-                    name="name"
+                    size="md"
                     variant="bordered"
-                    size="sm"
+                    label="Name"
+                    labelPlacement="outside"
+                    placeholder="Enter Name"
+                    name="name"
                     value={clientData.name}
                     onChange={(e) => handleChange(e)}
                   />

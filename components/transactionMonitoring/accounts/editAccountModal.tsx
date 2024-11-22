@@ -9,9 +9,7 @@ import {
   useDisclosure,
   Input,
 } from "@nextui-org/react";
-import {
-  FormattedAccount,
-} from "@/components/transactionMonitoring/types";
+import { FormattedAccount } from "@/components/transactionMonitoring/types";
 import { ActionResponse } from "@/components/globals/types";
 import { updateAccount } from "./actions";
 import Form from "next/form";
@@ -27,7 +25,7 @@ interface Props {
 
 const EditAccountModal = ({ onSubmit, account }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  
+
   const [accountData, setAccountData] = useState(account);
 
   const handleChange = (
@@ -61,19 +59,23 @@ const EditAccountModal = ({ onSubmit, account }: Props) => {
 
                   <Input
                     type="text"
-                    label="Name"
-                    name="name"
+                    size="md"
                     variant="bordered"
-                    size="sm"
+                    label="Name"
+                    labelPlacement="outside"
+                    placeholder="Enter Name"
+                    name="name"
                     value={accountData.name}
                     onChange={handleChange}
                   />
                   <Input
                     type="number"
                     label="Starting Balance"
+                    labelPlacement="outside"
+                    placeholder="Enter Starting Balance"
                     name="balance"
                     variant="bordered"
-                    size="sm"
+                    size="md"
                     value={accountData.balance.toString()}
                     onChange={handleChange}
                   />

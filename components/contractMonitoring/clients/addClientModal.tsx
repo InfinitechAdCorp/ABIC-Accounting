@@ -37,10 +37,12 @@ const AddClientModal = () => {
                 <ModalBody>
                   <Input
                     type="text"
-                    label="Name"
-                    name="name"
+                    size="md"
                     variant="bordered"
-                    size="sm"
+                    label="Name"
+                    labelPlacement="outside"
+                    placeholder="Enter Name"
+                    name="name"
                   />
                 </ModalBody>
                 <ModalFooter>
