@@ -6,7 +6,6 @@ import AddClientModal from "@/components/contractMonitoring/clients/addClientMod
 import { formatClients } from "@/components/globals/utils";
 import DataTable from "@/components/globals/dataTable";
 import ClientsTable from "@/components/contractMonitoring/clients/clientsTable";
-import { FormattedClient } from "@/components/contractMonitoring/types";
 
 const Clients = async () => {
   const oldColumns = [
@@ -47,7 +46,7 @@ const Clients = async () => {
             <DataTable
               model="clients"
               columns={columns}
-              rows={formattedClients as FormattedClient[]}
+              rows={formattedClients}
               initialVisibleColumns={initialVisibleColumns}
               sortKey="name"
             />

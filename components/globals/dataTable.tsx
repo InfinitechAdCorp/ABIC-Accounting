@@ -103,7 +103,11 @@ const DataTable = ({
   }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback((row: Row, columnKey: React.Key) => {
-    const cellValue = row[columnKey as keyof Row];
+    let cellValue = row[columnKey as keyof Row];
+    if (columnKey.toString().includes(".")) {
+      const keys = columnKey.toString().split(".");
+      cellValue = row[keys[0]][keys[1]];
+    }
 
     switch (columnKey) {
       case "actions":

@@ -7,6 +7,7 @@ import Header from "@/components/globals/header";
 import AddClientModal from "@/components/contractMonitoring/clients/addClientModal";
 import AddContractModal from "@/components/contractMonitoring/contracts/addContractModal";
 import { formatClients, formatContracts } from "@/components/globals/utils";
+import DataTable from "@/components/globals/dataTable";
 
 const Contracts = async () => {
   const locations = [
@@ -21,7 +22,7 @@ const Contracts = async () => {
     { key: "Paranaque", name: "Paranaque" },
   ];
 
-  const columns = [
+  const oldColumns = [
     { key: "client.name", label: "Client" },
     { key: "property", label: "Property" },
     { key: "location", label: "Location" },
@@ -36,6 +37,28 @@ const Contracts = async () => {
     { key: "payments", label: "Payments" },
     { key: "status", label: "Status" },
     { key: "action", label: "Action" },
+  ];
+
+  const columns = [
+    { name: "CLIENT", key: "client.name", sortable: true },
+    { name: "PROPERTY", key: "property", sortable: true },
+    { name: "LOCATION", key: "location", sortable: true },
+    { name: "ADVANCE", key: "advance", sortable: true },
+    { name: "DEPOSIT", key: "deposit", sortable: true },
+    { name: "TENANT PRICE", key: "tenant_price", sortable: true },
+    { name: "OWNER INCOME", key: "owner_income", sortable: true },
+    { name: "ACTIONS", key: "actions" },
+  ];
+
+  const initialVisibleColumns = [
+    "client.name",
+    "property",
+    "location",
+    "advance",
+    "deposit",
+    "tenant_price",
+    "owner_income",
+    "actions",
   ];
 
   const { contracts } = await getContracts();
@@ -61,10 +84,24 @@ const Contracts = async () => {
           </CardHeader>
           <CardBody>
             <ContractsTable
-              columns={columns}
+              columns={oldColumns}
               contracts={formattedContracts}
               clients={formattedClients}
               locations={locations}
+            />
+          </CardBody>
+        </Card>
+      </div>
+
+      <div className="flex justify-center">
+        <Card>
+          <CardBody>
+            <DataTable
+              model="contracts"
+              columns={columns}
+              rows={formattedContracts}
+              initialVisibleColumns={initialVisibleColumns}
+              sortKey="property"
             />
           </CardBody>
         </Card>

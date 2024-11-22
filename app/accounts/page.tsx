@@ -6,7 +6,6 @@ import AddAccountModal from "@/components/transactionMonitoring/accounts/addAcco
 import { formatAccounts } from "@/components/globals/utils";
 import DataTable from "@/components/globals/dataTable";
 import AccountsTable from "@/components/transactionMonitoring/accounts/accountsTable";
-import { FormattedAccount } from "@/components/transactionMonitoring/types";
 
 const Accounts = async () => {
   const oldColumns = [
@@ -49,7 +48,7 @@ const Accounts = async () => {
             <DataTable
               model="accounts"
               columns={columns}
-              rows={formattedAccounts as FormattedAccount[]}
+              rows={formattedAccounts}
               initialVisibleColumns={initialVisibleColumns}
               sortKey="name"
             />
