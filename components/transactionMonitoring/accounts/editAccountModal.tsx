@@ -11,8 +11,8 @@ import {
 } from "@nextui-org/react";
 import {
   FormattedAccount,
-  ActionResponse,
 } from "@/components/transactionMonitoring/types";
+import { ActionResponse } from "@/components/globals/types";
 import { updateAccount } from "./actions";
 
 interface Props {

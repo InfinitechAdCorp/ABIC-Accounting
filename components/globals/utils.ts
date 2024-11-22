@@ -16,8 +16,6 @@ import { differenceInMonths } from "date-fns";
 
 // Event Handlers
 
-
-
 export const handleSubmit = (
   action: (formData: FormData) => Promise<ActionResponse>,
   formData: FormData,

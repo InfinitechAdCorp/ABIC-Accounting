@@ -13,14 +13,13 @@ import {
   DatePicker,
   Select,
   SelectItem,
-  DateValue,
 } from "@nextui-org/react";
 import { updateContract } from "@/components/contractMonitoring/contracts/actions";
 import {
   FormattedContract,
   FormattedClient,
-  ActionResponse,
 } from "@/components/contractMonitoring/types";
+import { ActionResponse } from "@/components/globals/types";
 import { parseDate } from "@internationalized/date";
 
 interface Props {

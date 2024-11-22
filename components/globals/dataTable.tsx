@@ -27,22 +27,28 @@ import {
 import { capitalize } from "@/components/globals/utils";
 
 type column = {
-  name: string,
-  key: string, 
-  sortable?: boolean,
-}
+  name: string;
+  key: string;
+  sortable?: boolean;
+};
 
 type Props = {
-  model: string,
-  columns: column[]
-  rows: unknown,
-  initialVisibleColumns: string[],
-  sortKey: string,
-}
+  model: string;
+  columns: column[];
+  rows: { [key: string]: any }[];
+  initialVisibleColumns: string[];
+  sortKey: string;
+};
 
-type Row = (typeof rows)[0];
+const DataTable = ({
+  model,
+  columns,
+  rows,
+  initialVisibleColumns,
+  sortKey,
+}: Props) => {
+  type Row = (typeof rows)[0];
 
-const DataTable = ({ model, columns, rows, initialVisibleColumns, sortKey }: Props) => {
   const [filterValue, setFilterValue] = React.useState("");
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
     new Set(initialVisibleColumns)
@@ -69,9 +75,9 @@ const DataTable = ({ model, columns, rows, initialVisibleColumns, sortKey }: Pro
     let filteredRows = [...rows];
 
     if (hasSearchFilter) {
-      filteredRows = filteredRows.filter((row) =>
-        row[sortKey].toLowerCase().includes(filterValue.toLowerCase())
-      );
+      filteredRows = filteredRows.filter((row) => {
+        row[sortKey].toLowerCase().includes(filterValue.toLowerCase());
+      });
     }
 
     return filteredRows;

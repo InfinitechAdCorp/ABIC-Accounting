@@ -11,8 +11,8 @@ import {
 } from "@nextui-org/react";
 import {
   FormattedClient,
-  ActionResponse,
 } from "@/components/contractMonitoring/types";
+import { ActionResponse } from "@/components/globals/types";
 import { updateClient } from "./actions";
 
 interface Props {
@@ -63,7 +63,7 @@ const EditClientModal = ({ onSubmit, client }: Props) => {
                     variant="bordered"
                     size="sm"
                     value={clientData.name}
-                    onChange={handleChange}
+                    onChange={(e) => handleChange(e)}
                   />
                 </ModalBody>
                 <ModalFooter>

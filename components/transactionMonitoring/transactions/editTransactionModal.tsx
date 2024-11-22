@@ -12,14 +12,13 @@ import {
   Select,
   SelectItem,
   Textarea,
-  DateValue,
 } from "@nextui-org/react";
 import { updateTransaction } from "@/components/transactionMonitoring/transactions/actions";
 import {
   FormattedTransaction,
   FormattedAccount,
-  ActionResponse,
 } from "@/components/transactionMonitoring/types";
+import { ActionResponse } from "@/components/globals/types";
 import { parseDate } from "@internationalized/date";
 
 interface Props {
