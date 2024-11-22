@@ -7,9 +7,10 @@ import Header from "@/components/globals/header";
 import AddAccountModal from "@/components/transactionMonitoring/accounts/addAccountModal";
 import AddTransactionModal from "@/components/transactionMonitoring/transactions/addTransactionModal";
 import { formatAccounts, formatTransactions } from "@/components/globals/utils";
+import DataTable from "@/components/globals/dataTable";
 
 const Transactions = async () => {
-  const columns = [
+  const oldColumns = [
     { key: "date", label: "Voucher Date" },
     { key: "voucher", label: "Voucher Number" },
     { key: "check", label: "Check Number" },
@@ -18,6 +19,26 @@ const Transactions = async () => {
     { key: "credit", label: "Credit" },
     { key: "debit", label: "Debit" },
     { key: "action", label: "Action" },
+  ];
+
+  const columns = [
+    { name: "VOUCHER", key: "voucher", sortable: true },
+    { name: "CHECK", key: "check", sortable: true },
+    { name: "ACCOUNT", key: "account.name", sortable: true },
+    { name: "PARTICULARS", key: "particulars", sortable: true },
+    { name: "TYPE", key: "type", sortable: true },
+    { name: "AMOUNT", key: "amount", sortable: true },
+    { name: "ACTIONS", key: "actions" },
+  ];
+
+  const initialVisibleColumns = [
+    "voucher",
+    "check",
+    "account.name",
+    "particulars",
+    "type",
+    "amount",
+    "actions",
   ];
 
   const { transactions } = await getTransactions();
@@ -40,9 +61,23 @@ const Transactions = async () => {
           </CardHeader>
           <CardBody>
             <TransactionsTable
-              columns={columns}
+              columns={oldColumns}
               transactions={formattedTransactions}
               accounts={formattedAccounts}
+            />
+          </CardBody>
+        </Card>
+      </div>
+
+      <div className="flex justify-center">
+        <Card>
+          <CardBody>
+            <DataTable
+              model="transactions"
+              columns={columns}
+              rows={formattedTransactions}
+              initialVisibleColumns={initialVisibleColumns}
+              sortKey="voucher"
             />
           </CardBody>
         </Card>
