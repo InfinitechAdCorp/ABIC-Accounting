@@ -24,7 +24,7 @@ import { handleSubmit } from "@/components/globals/utils";
 import AddClientModal from "@/components/contractMonitoring/clients/addClientModal";
 import EditClientModal from "@/components/contractMonitoring/clients/editClientModal";
 import DeleteModal from "@/components/globals/deleteModal";
-import { deleteClient } from "./actions";
+import { deleteClient } from "@/components/contractMonitoring/clients/actions";
 
 type column = {
   name: string;
