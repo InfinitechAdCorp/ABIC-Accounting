@@ -12,7 +12,7 @@ const Accounts = async () => {
     { name: "ACTIONS", key: "actions" },
   ];
 
-  const initialVisibleColumns = ["name", "balance", "actions"];
+  const initialVisibleColumns = ["name", "balance", "transactions", "actions"];
 
   const { accounts } = await getAccounts();
   const formattedAccounts = formatAccounts(accounts);
@@ -22,6 +22,7 @@ const Accounts = async () => {
       <div className="flex justify-center">
         <Card className="my-5 p-3">
           <CardBody>
+            <h1 className="text-lg font-semibold mb-3">Accounts</h1>
             <AccountsTable
               model="accounts"
               columns={columns}

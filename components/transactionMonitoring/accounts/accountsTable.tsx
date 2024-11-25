@@ -1,10 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  SearchIcon,
-  ChevronDownIcon,
-} from "@/components/globals/icons";
+import { SearchIcon, ChevronDownIcon } from "@/components/globals/icons";
 import {
   Table,
   TableHeader,
@@ -23,15 +20,11 @@ import {
   SortDescriptor,
 } from "@nextui-org/react";
 import { FormattedAccount } from "@/components/transactionMonitoring/types";
-import {
-  capitalize,
-  formatNumber,
-  handleSubmit,
-} from "@/components/globals/utils";
-import { deleteAccount } from "./actions";
+import { formatNumber, handleSubmit } from "@/components/globals/utils";
 import AddAccountModal from "@/components/transactionMonitoring/accounts/addAccountModal";
 import EditAccountModal from "@/components/transactionMonitoring/accounts/editAccountModal";
 import DeleteModal from "@/components/globals/deleteModal";
+import { deleteAccount } from "@/components/transactionMonitoring/accounts/actions";
 
 type column = {
   name: string;
@@ -110,21 +103,13 @@ const DataTable = ({
   }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback((row: Row, columnKey: string) => {
-    let cellValue = row[columnKey as keyof Row];
-    if (columnKey.toString().includes(".")) {
-      const keys = columnKey.toString().split(".");
-      cellValue = row[keys[0]][keys[1]];
-    }
+    const cellValue = row[columnKey as keyof Row];
 
     if (columnKey == "actions") {
       return (
         <div className="relative flex justify-end items-center gap-2">
           <EditAccountModal onSubmit={handleSubmit} account={row} />
-          <DeleteModal
-            title="Account"
-            action={deleteAccount}
-            id={row.id}
-          />
+          <DeleteModal title="Account" action={deleteAccount} id={row.id} />
         </div>
       );
     } else if (columnKey == "balance") {
@@ -200,9 +185,7 @@ const DataTable = ({
                 onSelectionChange={setVisibleColumns}
               >
                 {columns.map((column) => (
-                  <DropdownItem key={column.key} className="capitalize">
-                    {capitalize(column.name)}
-                  </DropdownItem>
+                  <DropdownItem key={column.key}>{column.name}</DropdownItem>
                 ))}
               </DropdownMenu>
             </Dropdown>
@@ -240,7 +223,7 @@ const DataTable = ({
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="py-2 px-2 flex justify-between items-center">
+      <div className="p2 flex justify-between items-center">
         <Pagination
           isCompact
           showControls
