@@ -40,7 +40,7 @@ type column = {
 type Props = {
   model: string;
   columns: column[];
-  rows: any;
+  rows: any[];
   initialVisibleColumns: string[];
   sortKey: string;
 };
@@ -107,57 +107,55 @@ const DataTable = ({
     });
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((row: Row, columnKey: React.Key) => {
+  const renderCell = React.useCallback((row: Row, columnKey: string) => {
     let cellValue = row[columnKey as keyof Row];
     if (columnKey.toString().includes(".")) {
       const keys = columnKey.toString().split(".");
       cellValue = row[keys[0]][keys[1]];
     }
 
-    switch (columnKey) {
-      case "actions":
-        return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-300" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-        );
-      case "status": {
-        return (
-          <Chip
-            className="capitalize"
-            color={row.chipColor}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue}
-          </Chip>
-        );
-      }
-      case "balance":
-      case "tenant_price":
-      case "owner_income":
-      case "abic_income": {
-        return formatNumber(cellValue);
-      }
-      case "date":
-      case "start":
-      case "end":
-      case "due": {
-        return formatDate(cellValue);
-      }
-      default:
-        return cellValue;
+    const dateColumns = ["date", "start", "end", "due"];
+    const moneyColumns = [
+      "balance",
+      "tenant_price",
+      "owner_income",
+      "abic_income",
+    ];
+
+    if (columnKey == "actions") {
+      return (
+        <div className="relative flex justify-end items-center gap-2">
+          <Dropdown>
+            <DropdownTrigger>
+              <Button isIconOnly size="sm" variant="light">
+                <VerticalDotsIcon className="text-default-300" />
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu>
+              <DropdownItem>View</DropdownItem>
+              <DropdownItem>Edit</DropdownItem>
+              <DropdownItem>Delete</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+      );
+    } else if (columnKey == "status") {
+      return (
+        <Chip
+          className="capitalize"
+          color={row.chipColor}
+          size="sm"
+          variant="flat"
+        >
+          {cellValue}
+        </Chip>
+      );
+    } else if (moneyColumns.includes(columnKey)) {
+      return formatNumber(cellValue);
+    } else if (dateColumns.includes(columnKey)) {
+      return formatDate(cellValue);
+    } else {
+      return cellValue;
     }
   }, []);
 

@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
+
 const prisma = new PrismaClient();
 
 const accounts: Prisma.AccountCreateInput[] = [
@@ -130,7 +131,7 @@ const contracts: Prisma.ContractCreateInput[] = [
   },
 ];
 
-async function main() {
+async function seeder() {
   console.log("Started Seeding");
 
   await prisma.account.createMany({
@@ -155,7 +156,8 @@ async function main() {
 
   console.log("Finished Seeding");
 }
-main()
+
+seeder()
   .then(async () => {
     await prisma.$disconnect();
   })
