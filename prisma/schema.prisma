@@ -15,7 +15,7 @@ datasource db {
 
 model Account {
   id           String        @id @default(cuid())
-  name         String
+  name         String        @unique
   balance      Decimal       @db.Decimal(15, 2)
   transactions Transaction[]
   createdAt    DateTime      @default(now()) @map("created_at")
@@ -27,8 +27,8 @@ model Account {
 model Transaction {
   id          String   @id @default(cuid())
   date        DateTime @db.Date
-  voucher     String
-  check       String
+  voucher     String   @unique
+  check       String   @unique
   account     Account? @relation(fields: [account_id], references: [id], onDelete: Cascade)
   account_id  String?
   particulars String   @db.Text
@@ -42,7 +42,7 @@ model Transaction {
 
 model Client {
   id        String     @id @default(cuid())
-  name      String
+  name      String     @unique
   contracts Contract[]
   createdAt DateTime   @default(now()) @map("created_at")
   updatedAt DateTime   @updatedAt @map("updated_at")
@@ -63,7 +63,7 @@ model Contract {
   tenant_price Decimal? @db.Decimal(15, 2)
   owner_income Decimal? @db.Decimal(15, 2)
   abic_income  Decimal? @db.Decimal(15, 2)
-  due    DateTime @db.Date
+  due          DateTime @db.Date
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
