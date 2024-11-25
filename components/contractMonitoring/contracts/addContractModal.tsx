@@ -166,7 +166,7 @@ const AddContractModal = ({ clients, locations }: Props) => {
                     variant="bordered"
                     label="Due Date"
                     labelPlacement="outside"
-                    name="due_date"
+                    name="due"
                   />
                 </ModalBody>
                 <ModalFooter>

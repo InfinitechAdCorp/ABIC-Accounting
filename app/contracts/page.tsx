@@ -33,7 +33,7 @@ const Contracts = async () => {
     { key: "tenant_price", label: "Tenant Price" },
     { key: "owner_income", label: "Owner Income" },
     { key: "abic_income", label: "ABIC Income" },
-    { key: "due_date", label: "Due Date" },
+    { key: "due", label: "Due Date" },
     { key: "payments", label: "Payments" },
     { key: "status", label: "Status" },
     { key: "action", label: "Action" },
@@ -49,7 +49,7 @@ const Contracts = async () => {
     { name: "DEPOSIT", key: "deposit", sortable: true },
     { name: "TENANT PRICE", key: "tenant_price", sortable: true },
     { name: "OWNER INCOME", key: "owner_income", sortable: true },
-    { name: "DUE DATE", key: "due_date", sortable: true },
+    { name: "DUE DATE", key: "due", sortable: true },
     { name: "STATUS", key: "status", sortable: true },
     { name: "ACTIONS", key: "actions" },
   ];
@@ -64,7 +64,7 @@ const Contracts = async () => {
     "deposit",
     "tenant_price",
     "owner_income",
-    "due_date",
+    "due",
     "status",
     "actions",
   ];

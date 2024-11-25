@@ -71,14 +71,14 @@ export const formatTransactions = (transactions: TransactionWithAccount[]) => {
   const formattedTransactions: FormattedTransaction[] = [];
 
   transactions.forEach((transaction) => {
-    const date = formatDate(transaction.date);
+    // const date = formatDate(transaction.date);
     const account = transaction.account;
     const balance = account?.balance.toNumber();
     const amount = transaction.amount.toNumber();
 
     const formattedTransaction = {
       ...transaction,
-      date: date,
+      // date: date,
       account: {
         ...account,
         id: account?.id as string,
@@ -115,17 +115,15 @@ export const formatContracts = (contracts: ContractWithClient[]) => {
 
   contracts.forEach((contract) => {
     const client = contract.client;
-    const start = formatDate(contract.start);
-    const end = formatDate(contract.end);
     const tenant_price = contract.tenant_price?.toNumber();
     const owner_income = contract.owner_income?.toNumber();
     const abic_income = contract.abic_income?.toNumber();
-    const due_date = formatDate(contract.due_date);
-    let payments = differenceInMonths(contract.due_date, contract.start) - 1;
+
+    let payments = differenceInMonths(contract.due, contract.start) - 1;
     if (payments < 0) {
       payments = 0;
     }
-    const { status, chipColor } = getStatus(contract.due_date);
+    const { status, chipColor } = getStatus(contract.due);
 
     const formattedContract = {
       ...contract,
@@ -135,12 +133,12 @@ export const formatContracts = (contracts: ContractWithClient[]) => {
         name: client?.name as string,
       },
       client_id: contract.client_id as string,
-      start: start,
-      end: end,
+      start: contract.start,
+      end: contract.end,
       tenant_price: tenant_price,
       owner_income: owner_income,
       abic_income: abic_income,
-      due_date: due_date,
+      due: contract.due,
       payments: payments,
       status: status as string,
       chipColor: chipColor as string,
@@ -151,9 +149,9 @@ export const formatContracts = (contracts: ContractWithClient[]) => {
   return formattedContracts;
 };
 
-const getStatus = (due_date: Date) => {
+const getStatus = (due: Date) => {
   const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
-  const difference = differenceInDays(due_date, today);
+  const difference = differenceInDays(due, today);
 
   let status;
   let chipColor;

@@ -63,7 +63,7 @@ model Contract {
   tenant_price Decimal? @db.Decimal(15, 2)
   owner_income Decimal? @db.Decimal(15, 2)
   abic_income  Decimal? @db.Decimal(15, 2)
-  due_date     DateTime @db.Date
+  due    DateTime @db.Date
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 

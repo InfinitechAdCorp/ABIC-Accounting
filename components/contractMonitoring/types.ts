@@ -12,14 +12,14 @@ export type FormattedContract = {
   client_id?: string;
   property: string;
   location: string;
-  start: string;
-  end: string;
+  start: Date;
+  end: Date;
   advance: number;
   deposit: number;
   tenant_price?: number;
   owner_income?: number;
   abic_income?: number;
-  due_date: string;
+  due: Date;
   payments: number;
   status: string;
   chipColor: string;

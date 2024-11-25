@@ -16,7 +16,7 @@ import {
 import EditContractModal from "@/components/contractMonitoring/contracts/editContractModal";
 import DeleteModal from "@/components/globals/deleteModal";
 import { deleteContract } from "./actions";
-import { handleSubmit, formatNumber } from "@/components/globals/utils";
+import { handleSubmit, formatNumber, formatDate } from "@/components/globals/utils";
 
 type Props = {
   columns: {
@@ -43,8 +43,8 @@ const ContractsTable = ({ columns, contracts, clients, locations }: Props) => {
             <TableCell>{contract.client?.name}</TableCell>
             <TableCell>{contract.property}</TableCell>
             <TableCell>{contract.location}</TableCell>
-            <TableCell>{contract.start}</TableCell>
-            <TableCell>{contract.end}</TableCell>
+            <TableCell>{formatDate(contract.start)}</TableCell>
+            <TableCell>{formatDate(contract.end)}</TableCell>
             <TableCell>{contract.advance}</TableCell>
             <TableCell>{contract.deposit}</TableCell>
             <TableCell>
@@ -56,7 +56,7 @@ const ContractsTable = ({ columns, contracts, clients, locations }: Props) => {
             <TableCell>
               {formatNumber(contract.abic_income as number)}
             </TableCell>
-            <TableCell>{contract.due_date}</TableCell>
+            <TableCell>{formatDate(contract.due)}</TableCell>
             <TableCell>{contract.payments}</TableCell>
             <TableCell>{contract.status}</TableCell>
             <TableCell>

@@ -41,7 +41,7 @@ export async function addContract(formData: FormData) {
     tenant_price: Yup.number().moreThan(-1),
     owner_income: Yup.number().moreThan(-1),
     abic_income: Yup.number().moreThan(-1),
-    due_date: Yup.date().required(),
+    due: Yup.date().required(),
   });
 
   const request = {
@@ -55,7 +55,7 @@ export async function addContract(formData: FormData) {
     tenant_price: formData.get("tenant_price") as string,
     owner_income: formData.get("owner_income") as string,
     abic_income: formData.get("abic_income") as string,
-    due_date: formData.get("due_date") as string,
+    due: formData.get("due") as string,
   };
 
   try {
@@ -83,7 +83,7 @@ export async function addContract(formData: FormData) {
         tenant_price: parseFloat(request.tenant_price),
         owner_income: parseFloat(request.owner_income),
         abic_income: parseFloat(request.abic_income),
-        due_date: new Date(new Date(request.due_date).setUTCHours(0, 0, 0, 0)),
+        due: new Date(new Date(request.due).setUTCHours(0, 0, 0, 0)),
         client: { connect: { id: request.client_id } },
       },
     });
@@ -110,7 +110,7 @@ export async function updateContract(formData: FormData) {
     tenant_price: Yup.number().moreThan(-1),
     owner_income: Yup.number().moreThan(-1),
     abic_income: Yup.number().moreThan(-1),
-    due_date: Yup.date().required(),
+    due: Yup.date().required(),
   });
 
   const request = {
@@ -125,7 +125,7 @@ export async function updateContract(formData: FormData) {
     tenant_price: formData.get("tenant_price") as string,
     owner_income: formData.get("owner_income") as string,
     abic_income: formData.get("abic_income") as string,
-    due_date: formData.get("due_date") as string,
+    due: formData.get("due") as string,
   };
 
   try {
@@ -154,7 +154,7 @@ export async function updateContract(formData: FormData) {
         tenant_price: parseFloat(request.tenant_price),
         owner_income: parseFloat(request.owner_income),
         abic_income: parseFloat(request.abic_income),
-        due_date: new Date(new Date(request.due_date).setUTCHours(0, 0, 0, 0)),
+        due: new Date(new Date(request.due).setUTCHours(0, 0, 0, 0)),
         client: { connect: { id: request.client_id } },
       },
     });
@@ -230,13 +230,13 @@ export async function makePayment(formData: FormData) {
   const contract = await prisma.contract.findUnique({ where: { id: id } });
 
   const due_day = getDate(contract?.start as Date);
-  let due_date = addMonths(contract?.due_date as Date, 1);
-  due_date = setDate(due_date, due_day);
+  let due = addMonths(contract?.due as Date, 1);
+  due = setDate(due, due_day);
 
   try {
     await prisma.contract.update({
       where: { id: id },
-      data: { due_date: due_date },
+      data: { due: due },
     });
   } catch {
     const response: ActionResponse = { code: 500, message: "Server Error" };

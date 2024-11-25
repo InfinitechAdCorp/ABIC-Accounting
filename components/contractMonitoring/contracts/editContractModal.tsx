@@ -221,8 +221,8 @@ const EditContractModal = ({
                     variant="bordered"
                     label="Due Date"
                     labelPlacement="outside"
-                    name="due_date"
-                    defaultValue={formatDate(contractData.due_date)}
+                    name="due"
+                    defaultValue={formatDate(contractData.due)}
                   />
                 </ModalBody>
                 <ModalFooter>

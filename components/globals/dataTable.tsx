@@ -25,7 +25,11 @@ import {
   SortDescriptor,
   Chip,
 } from "@nextui-org/react";
-import { capitalize, formatNumber } from "@/components/globals/utils";
+import {
+  capitalize,
+  formatNumber,
+  formatDate,
+} from "@/components/globals/utils";
 
 type column = {
   name: string;
@@ -146,6 +150,12 @@ const DataTable = ({
       case "abic_income": {
         return formatNumber(cellValue);
       }
+      case "date":
+      case "start":
+      case "end":
+      case "due": {
+        return formatDate(cellValue);
+      }
       default:
         return cellValue;
     }
@@ -238,9 +248,9 @@ const DataTable = ({
               className="bg-transparent outline-none text-default-400 text-small"
               onChange={onRowsPerPageChange}
             >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
+              <option>5</option>
+              <option>10</option>
+              <option>15</option>
             </select>
           </label>
         </div>
