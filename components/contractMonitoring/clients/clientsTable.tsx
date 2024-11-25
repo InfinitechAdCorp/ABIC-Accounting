@@ -1,10 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  SearchIcon,
-  ChevronDownIcon,
-} from "@/components/globals/icons";
+import { SearchIcon, ChevronDownIcon } from "@/components/globals/icons";
 import {
   Table,
   TableHeader,
@@ -23,9 +20,7 @@ import {
   SortDescriptor,
 } from "@nextui-org/react";
 import { FormattedClient } from "@/components/contractMonitoring/types";
-import {
-  handleSubmit,
-} from "@/components/globals/utils";
+import { handleSubmit } from "@/components/globals/utils";
 import AddClientModal from "@/components/contractMonitoring/clients/addClientModal";
 import EditClientModal from "@/components/contractMonitoring/clients/editClientModal";
 import DeleteModal from "@/components/globals/deleteModal";
@@ -42,7 +37,7 @@ type Props = {
   columns: column[];
   rows: FormattedClient[];
   initialVisibleColumns: string[];
-  sortKey: string;
+  sortKey: keyof FormattedClient;
 };
 
 const DataTable = ({
@@ -114,11 +109,7 @@ const DataTable = ({
       return (
         <div className="relative flex justify-end items-center gap-2">
           <EditClientModal onSubmit={handleSubmit} client={row} />
-          <DeleteModal
-            title="Client"
-            action={deleteClient}
-            id={row.id}
-          />
+          <DeleteModal title="Client" action={deleteClient} id={row.id} />
         </div>
       );
     } else {
@@ -192,9 +183,7 @@ const DataTable = ({
                 onSelectionChange={setVisibleColumns}
               >
                 {columns.map((column) => (
-                  <DropdownItem key={column.key}>
-                    {column.name}
-                  </DropdownItem>
+                  <DropdownItem key={column.key}>{column.name}</DropdownItem>
                 ))}
               </DropdownMenu>
             </Dropdown>

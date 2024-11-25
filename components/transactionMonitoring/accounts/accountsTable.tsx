@@ -37,7 +37,7 @@ type Props = {
   columns: column[];
   rows: FormattedAccount[];
   initialVisibleColumns: string[];
-  sortKey: string;
+  sortKey: keyof FormattedAccount;
 };
 
 const DataTable = ({
