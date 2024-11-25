@@ -14,14 +14,15 @@ import {
 import { addAccount } from "./actions";
 import { handleSubmit } from "@/components/globals/utils";
 import Form from "next/form";
+import { PlusIcon } from "@/components/globals/icons";
 
 const AddAccountModal = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   return (
     <>
-      <Button color="primary" onPress={onOpen}>
-        Add Account
+      <Button color="primary" onPress={onOpen} endContent={<PlusIcon />}>
+        Add New
       </Button>
 
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
