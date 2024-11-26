@@ -31,7 +31,11 @@ import {
 import AddContractModal from "@/components/contractMonitoring/contracts/addContractModal";
 import EditContractModal from "@/components/contractMonitoring/contracts/editContractModal";
 import DeleteModal from "@/components/globals/deleteModal";
-import { deleteContract } from "@/components/contractMonitoring/contracts/actions";
+import PaymentModal from "@/components/contractMonitoring/contracts/paymentModal";
+import {
+  deleteContract,
+  markAsPaid,
+} from "@/components/contractMonitoring/contracts/actions";
 
 type column = {
   name: string;
@@ -128,6 +132,7 @@ const DataTable = ({
       if (columnKey == "actions") {
         return (
           <div className="relative flex justify-end items-center gap-2">
+            <PaymentModal action={markAsPaid} id={row.id} />
             <EditContractModal
               onSubmit={handleSubmit}
               contract={row}

@@ -204,7 +204,7 @@ export async function deleteContract(formData: FormData) {
   return response;
 }
 
-export async function makePayment(formData: FormData) {
+export async function markAsPaid(formData: FormData) {
   const schema = Yup.object().shape({
     id: Yup.string().required(),
   });

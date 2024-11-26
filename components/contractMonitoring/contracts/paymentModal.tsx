@@ -15,17 +15,16 @@ import { handleSubmit } from "@/components/globals/utils";
 import Form from "next/form";
 
 interface Props {
-  title: string;
   action: (formData: FormData) => Promise<ActionResponse>;
   id: string;
 }
 
-const DeleteModal = ({ title, action, id }: Props) => {
+const PaymentModal = ({ action, id }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <>
-      <Button size="sm" color="danger" onPress={onOpen}>
-        Delete
+      <Button size="sm" color="success" onPress={onOpen} className="text-white">
+        Mark as Paid
       </Button>
 
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -35,10 +34,10 @@ const DeleteModal = ({ title, action, id }: Props) => {
               <Form
                 action={(formData) => handleSubmit(action, formData, onClose)}
               >
-                <ModalHeader>Delete {title}</ModalHeader>
+                <ModalHeader>Mark as Paid</ModalHeader>
                 <ModalBody>
                   <input type="hidden" value={id} name="id" />
-                  <h6>Are you sure that you want to delete this {title}?</h6>
+                  <h6>Are you sure that you want to mark this as paid?</h6>
                 </ModalBody>
                 <ModalFooter>
                   <Button color="primary" type="submit">
@@ -57,4 +56,4 @@ const DeleteModal = ({ title, action, id }: Props) => {
   );
 };
 
-export default DeleteModal;
+export default PaymentModal;
