@@ -28,7 +28,7 @@ const Navbar = () => {
             </h3>
           </DropdownTrigger>
 
-          <DropdownMenu>
+          <DropdownMenu className="text-center">
             <DropdownItem>
               <Link href="/accounts">
                 <h3 className="font-semibold">Accounts</h3>
@@ -52,7 +52,7 @@ const Navbar = () => {
               Contract Monitoring
             </h3>
           </DropdownTrigger>
-          <DropdownMenu>
+          <DropdownMenu className="text-center">
             <DropdownItem>
               <Link href="/clients">
                 <h3 className="font-semibold">Clients</h3>

@@ -4,8 +4,8 @@ import { getCounts, getCharts } from "@/components/dashboard/actions";
 import Barchart from "@/components/dashboard/barchart";
 
 const Dashboard = async () => {
-  const { counts } = await getCounts();
-  const { charts } = await getCharts();
+  const { counts } = await getCounts().then();
+  const { charts } = await getCharts().then();
 
   return (
     <>
@@ -18,8 +18,9 @@ const Dashboard = async () => {
           <CardBody>
             <div className="grid grid-rows-2 md:grid-rows-1 md:grid-cols-2 gap-3 mb-3">
               <div>
-
-                <h1 className="font-bold text-lg mb-3">Transaction Monitoring</h1>
+                <h1 className="font-bold text-lg mb-3">
+                  Transaction Monitoring
+                </h1>
 
                 <div className="grid grid-cols-2 gap-3 mb-3">
                   <Card>
@@ -47,11 +48,9 @@ const Dashboard = async () => {
                     />
                   </CardBody>
                 </Card>
-
               </div>
 
               <div>
-
                 <h1 className="font-bold text-lg mb-3">Contract Monitoring</h1>
 
                 <div className="grid grid-cols-2 gap-3 mb-3">
@@ -78,7 +77,6 @@ const Dashboard = async () => {
                     />
                   </CardBody>
                 </Card>
-
               </div>
             </div>
           </CardBody>
