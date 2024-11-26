@@ -1,11 +1,11 @@
-// import React from "react";
+import React from "react";
 // import { getTransactions } from "@/components/transactionMonitoring/transactions/actions";
 // import { getAccounts } from "@/components/transactionMonitoring/accounts/actions";
-// import { Card, CardBody } from "@nextui-org/react";
+import { Card, CardBody } from "@nextui-org/react";
 // import { formatAccounts, formatTransactions } from "@/components/globals/utils";
 // import TransactionsTable from "@/components/transactionMonitoring/transactions/transactionsTable";
 
-// const Transactions = async () => {
+const Transactions = async () => {
 //   const columns = [
 //     { name: "DATE", key: "date", sortable: true },
 //     { name: "VOUCHER", key: "voucher", sortable: true },
@@ -34,17 +34,17 @@
 //   const { accounts } = await getAccounts();
 //   const formattedAccounts = formatAccounts(accounts);
 
-//   return (
-//     <>
-//       <div className="flex justify-center">
-//         <Card className="my-5 p-3">
-//           <CardBody>
-            
-//           </CardBody>
-//         </Card>
-//       </div>
-//     </>
-//   );
-// };
+  return (
+    <>
+      <div className="flex justify-center">
+        <Card className="my-5 p-3">
+          <CardBody>
+          <h1 className="text-lg font-semibold mb-3">Transactions</h1>
+          </CardBody>
+        </Card>
+      </div>
+    </>
+  );
+};
 
-// export default Transactions;
+export default Transactions;
