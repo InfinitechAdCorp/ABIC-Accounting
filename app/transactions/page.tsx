@@ -39,6 +39,7 @@ const Transactions = async () => {
       <div className="flex justify-center">
         <Card className="my-5 p-3">
           <CardBody>
+            <h1 className="text-lg font-semibold mb-3">Transactions</h1>
             <TransactionsTable
               model="transactions"
               columns={columns}

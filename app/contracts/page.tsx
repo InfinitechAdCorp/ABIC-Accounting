@@ -1,13 +1,9 @@
 import React from "react";
 import { getContracts } from "@/components/contractMonitoring/contracts/actions";
 import { getClients } from "@/components/contractMonitoring/clients/actions";
-import { Card, CardHeader, CardBody } from "@nextui-org/react";
+import { Card, CardBody } from "@nextui-org/react";
 import ContractsTable from "@/components/contractMonitoring/contracts/contractsTable";
-import Header from "@/components/globals/header";
-import AddClientModal from "@/components/contractMonitoring/clients/addClientModal";
-import AddContractModal from "@/components/contractMonitoring/contracts/addContractModal";
 import { formatClients, formatContracts } from "@/components/globals/utils";
-import DataTable from "@/components/globals/dataTable";
 
 const Contracts = async () => {
   const locations = [
@@ -22,25 +18,8 @@ const Contracts = async () => {
     { key: "Paranaque", name: "Paranaque" },
   ];
 
-  const oldColumns = [
-    { key: "client.name", label: "Client" },
-    { key: "property", label: "Property" },
-    { key: "location", label: "Location" },
-    { key: "start", label: "Contract Start" },
-    { key: "end", label: "Contract End" },
-    { key: "advance", label: "Advance" },
-    { key: "deposit", label: "Deposit" },
-    { key: "tenant_price", label: "Tenant Price" },
-    { key: "owner_income", label: "Owner Income" },
-    { key: "abic_income", label: "ABIC Income" },
-    { key: "due", label: "Due Date" },
-    { key: "payments", label: "Payments" },
-    { key: "status", label: "Status" },
-    { key: "action", label: "Action" },
-  ];
-
   const columns = [
-    { name: "CLIENT", key: "client.name", sortable: true },
+    { name: "CLIENT", key: "client", sortable: true },
     { name: "PROPERTY", key: "property", sortable: true },
     { name: "LOCATION", key: "location", sortable: true },
     { name: "CONTRACT START", key: "start", sortable: true },
@@ -55,7 +34,7 @@ const Contracts = async () => {
   ];
 
   const initialVisibleColumns = [
-    "client.name",
+    "client",
     "property",
     "location",
     "start",
@@ -79,37 +58,17 @@ const Contracts = async () => {
     <>
       <div className="flex justify-center">
         <Card className="my-5 p-3">
-          <CardHeader>
-            <Header title="Contracts">
-              <div className="flex gap-2">
-                <AddClientModal />
-                <AddContractModal
-                  clients={formattedClients}
-                  locations={locations}
-                />
-              </div>
-            </Header>
-          </CardHeader>
           <CardBody>
+            <h1 className="text-lg font-semibold mb-3">Contracts</h1>
             <ContractsTable
-              columns={oldColumns}
-              contracts={formattedContracts}
-              clients={formattedClients}
-              locations={locations}
-            />
-          </CardBody>
-        </Card>
-      </div>
-
-      <div className="flex justify-center">
-        <Card>
-          <CardBody>
-            <DataTable
               model="contracts"
               columns={columns}
               rows={formattedContracts}
               initialVisibleColumns={initialVisibleColumns}
+              searchKey="property"
               sortKey="property"
+              clients={formattedClients}
+              locations={locations}
             />
           </CardBody>
         </Card>
