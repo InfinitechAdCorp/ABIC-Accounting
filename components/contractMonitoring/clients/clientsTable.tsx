@@ -274,7 +274,6 @@ const DataTable = ({
           {(column) => (
             <TableColumn
               key={column.key}
-              align={column.key === "actions" ? "center" : "start"}
               allowsSorting={column.sortable}
             >
               {column.name}
