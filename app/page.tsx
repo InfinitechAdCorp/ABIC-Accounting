@@ -39,15 +39,6 @@ const Dashboard = async () => {
                     </CardBody>
                   </Card>
                 </div>
-
-                <Card className="mb-3 h-72">
-                  <CardBody className="text-center">
-                    <Barchart
-                      title="Transactions Per Account"
-                      data={charts.accountsWithTransactions}
-                    />
-                  </CardBody>
-                </Card>
               </div>
 
               <div>
@@ -68,16 +59,27 @@ const Dashboard = async () => {
                     </CardBody>
                   </Card>
                 </div>
-
-                <Card className="mb-3 h-72">
-                  <CardBody className="text-center">
-                    <Barchart
-                      title="Contracts Per Client"
-                      data={charts.clientsWithContracts}
-                    />
-                  </CardBody>
-                </Card>
               </div>
+            </div>
+
+            <div>
+              <Card className="mb-3 h-72">
+                <CardBody className="text-center">
+                  <Barchart
+                    title="Transactions Per Account"
+                    data={charts.accountsWithTransactions}
+                  />
+                </CardBody>
+              </Card>
+
+              <Card className="mb-3 h-72">
+                <CardBody className="text-center">
+                  <Barchart
+                    title="Contracts Per Client"
+                    data={charts.clientsWithContracts}
+                  />
+                </CardBody>
+              </Card>
             </div>
           </CardBody>
         </Card>

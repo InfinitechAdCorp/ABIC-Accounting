@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useActionState } from "react";
 import {
   Modal,
   ModalContent,
@@ -11,12 +11,14 @@ import {
   useDisclosure,
   Input,
 } from "@nextui-org/react";
-import { addClient } from "./actions";
+import { addClient } from "@/components/contractMonitoring/clients/actions";
 import { handleSubmit } from "@/components/globals/utils";
 import Form from "next/form";
 
 const AddClientModal = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const [state, formAction, isPending] = useActionState(addClient, null);
 
   return (
     <>
@@ -29,9 +31,7 @@ const AddClientModal = () => {
           {(onClose) => (
             <>
               <Form
-                action={(formData) =>
-                  handleSubmit(addClient, formData, onClose)
-                }
+                action={formAction}
               >
                 <ModalHeader>Add Client</ModalHeader>
                 <ModalBody>
@@ -46,7 +46,7 @@ const AddClientModal = () => {
                   />
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" type="submit">
+                  <Button color="primary" type="submit" isLoading={isPending}>
                     Save
                   </Button>
                   <Button color="danger" onPress={onClose}>

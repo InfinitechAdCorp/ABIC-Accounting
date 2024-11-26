@@ -13,7 +13,7 @@ import {
   FormattedClient,
 } from "@/components/contractMonitoring/types";
 import { ActionResponse } from "@/components/globals/types";
-import { updateClient } from "./actions";
+import { updateClient } from "@/components/contractMonitoring/clients/actions";
 import Form from "next/form";
 
 interface Props {

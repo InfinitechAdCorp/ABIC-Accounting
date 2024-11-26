@@ -11,7 +11,7 @@ import {
   useDisclosure,
   Input,
 } from "@nextui-org/react";
-import { addAccount } from "./actions";
+import { addAccount } from "@/components/transactionMonitoring/accounts/actions";
 import { handleSubmit } from "@/components/globals/utils";
 import Form from "next/form";
 import { PlusIcon } from "@/components/globals/icons";
