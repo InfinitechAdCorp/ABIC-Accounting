@@ -37,7 +37,8 @@ type Props = {
   columns: column[];
   rows: FormattedTransaction[];
   initialVisibleColumns: string[];
-  sortKey: keyof FormattedTransaction;
+  searchKey: string;
+  sortKey: string;
   accounts: FormattedAccount[];
 };
 
@@ -46,6 +47,7 @@ const DataTable = ({
   columns,
   rows,
   initialVisibleColumns,
+  searchKey,
   sortKey,
 }: Props) => {
   type Row = (typeof rows)[0];
@@ -56,7 +58,7 @@ const DataTable = ({
   );
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: "name",
+    column: sortKey,
     direction: "ascending",
   });
 
@@ -77,12 +79,12 @@ const DataTable = ({
 
     if (hasSearchFilter) {
       filteredRows = filteredRows.filter((row) => {
-        return row[sortKey].toLowerCase().includes(filterValue.toLowerCase());
+        return row[searchKey].toLowerCase().includes(filterValue.toLowerCase());
       });
     }
 
     return filteredRows;
-  }, [rows, filterValue, hasSearchFilter, sortKey]);
+  }, [rows, filterValue, hasSearchFilter, searchKey]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 

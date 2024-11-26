@@ -27,6 +27,7 @@ const Clients = async () => {
               columns={columns}
               rows={formattedClients}
               initialVisibleColumns={initialVisibleColumns}
+              searchKey="name"
               sortKey="name"
             />
           </CardBody>

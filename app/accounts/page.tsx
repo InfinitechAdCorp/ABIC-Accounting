@@ -28,6 +28,7 @@ const Accounts = async () => {
               columns={columns}
               rows={formattedAccounts}
               initialVisibleColumns={initialVisibleColumns}
+              searchKey="name"
               sortKey="name"
             />
           </CardBody>
