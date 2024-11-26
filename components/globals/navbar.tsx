@@ -13,7 +13,7 @@ const Navbar = () => {
   return (
     <>
       <div className="flex gap-3 items-center bg-sky-600 p-5">
-        <Link href="/">
+        <Link href="/" className="text-center">
           <h3 className="text-white font-semibold">Dashboard</h3>
         </Link>
 
@@ -22,7 +22,7 @@ const Navbar = () => {
             content: "min-w-0",
           }}
         >
-          <DropdownTrigger>
+          <DropdownTrigger className="text-center">
             <h3 className="text-white font-semibold cursor-pointer">
               Transaction Monitoring
             </h3>
@@ -47,7 +47,7 @@ const Navbar = () => {
             content: "min-w-0",
           }}
         >
-          <DropdownTrigger>
+          <DropdownTrigger className="text-center">
             <h3 className="text-white font-semibold cursor-pointer">
               Contract Monitoring
             </h3>

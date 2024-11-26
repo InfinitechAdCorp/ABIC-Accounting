@@ -16,19 +16,21 @@ const Dashboard = async () => {
           </CardHeader>
 
           <CardBody>
-            <div className="grid grid-rows-2 lg:grid-rows-1 lg:grid-cols-2 gap-3 mb-3">
+            <div className="grid grid-rows-2 md:grid-rows-1 md:grid-cols-2 gap-3 mb-3">
               <div>
-                <h1 className="font-bold text-lg">Transaction Monitoring</h1>
-                <div className="grid grid-rows-2 lg:grid-rows-1 lg:grid-cols-2 gap-3 mb-3">
+
+                <h1 className="font-bold text-lg mb-3">Transaction Monitoring</h1>
+
+                <div className="grid grid-cols-2 gap-3 mb-3">
                   <Card>
-                    <CardBody className="flex justify-center items-center px-20 py-10">
+                    <CardBody className="flex justify-center items-center px-19 py-10">
                       <h1 className="font-semibold text-xl">Accounts</h1>
                       <h1 className="font-bold text-2xl">{counts.accounts}</h1>
                     </CardBody>
                   </Card>
 
                   <Card>
-                    <CardBody className="flex justify-center items-center px-20 py-10">
+                    <CardBody className="flex justify-center items-center px-19 py-10">
                       <h1 className="font-semibold text-xl">Transactions</h1>
                       <h1 className="font-bold text-2xl">
                         {counts.transactions}
@@ -36,6 +38,7 @@ const Dashboard = async () => {
                     </CardBody>
                   </Card>
                 </div>
+
                 <Card className="mb-3 h-72">
                   <CardBody className="text-center">
                     <Barchart
@@ -44,25 +47,29 @@ const Dashboard = async () => {
                     />
                   </CardBody>
                 </Card>
+
               </div>
 
               <div>
-                <h1 className="font-bold text-lg">Contract Monitoring</h1>
-                <div className="grid grid-rows-2 lg:grid-rows-1 lg:grid-cols-2 gap-3 mb-3">
+
+                <h1 className="font-bold text-lg mb-3">Contract Monitoring</h1>
+
+                <div className="grid grid-cols-2 gap-3 mb-3">
                   <Card>
-                    <CardBody className="flex justify-center items-center px-20 py-10">
+                    <CardBody className="flex justify-center items-center px-19 py-10">
                       <h1 className="font-semibold text-xl">Clients</h1>
                       <h1 className="font-bold text-2xl">{counts.clients}</h1>
                     </CardBody>
                   </Card>
 
                   <Card>
-                    <CardBody className="flex justify-center items-center px-20 py-10">
+                    <CardBody className="flex justify-center items-center px-19 py-10">
                       <h1 className="font-semibold text-xl">Contracts</h1>
                       <h1 className="font-bold text-2xl">{counts.contracts}</h1>
                     </CardBody>
                   </Card>
                 </div>
+
                 <Card className="mb-3 h-72">
                   <CardBody className="text-center">
                     <Barchart
@@ -71,6 +78,7 @@ const Dashboard = async () => {
                     />
                   </CardBody>
                 </Card>
+
               </div>
             </div>
           </CardBody>
