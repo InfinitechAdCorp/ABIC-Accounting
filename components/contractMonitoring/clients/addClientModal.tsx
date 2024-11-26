@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useActionState } from "react";
+import React from "react";
 import {
   Modal,
   ModalContent,
@@ -18,8 +18,6 @@ import Form from "next/form";
 const AddClientModal = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const [state, formAction, isPending] = useActionState(addClient, null);
-
   return (
     <>
       <Button color="primary" onPress={onOpen}>
@@ -31,7 +29,9 @@ const AddClientModal = () => {
           {(onClose) => (
             <>
               <Form
-                action={formAction}
+                action={(formData) =>
+                  handleSubmit(addClient, formData, onClose)
+                }
               >
                 <ModalHeader>Add Client</ModalHeader>
                 <ModalBody>
@@ -46,7 +46,7 @@ const AddClientModal = () => {
                   />
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" type="submit" isLoading={isPending}>
+                  <Button color="primary" type="submit">
                     Save
                   </Button>
                   <Button color="danger" onPress={onClose}>

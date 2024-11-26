@@ -71,14 +71,12 @@ export const formatTransactions = (transactions: TransactionWithAccount[]) => {
   const formattedTransactions: FormattedTransaction[] = [];
 
   transactions.forEach((transaction) => {
-    // const date = formatDate(transaction.date);
     const account = transaction.account;
     const balance = account?.balance.toNumber();
     const amount = transaction.amount.toNumber();
 
     const formattedTransaction = {
       ...transaction,
-      // date: date,
       account: {
         ...account,
         id: account?.id as string,
