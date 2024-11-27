@@ -6,7 +6,7 @@ import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import * as Yup from "yup";
 
-export async function getAccounts() {
+export async function getAll() {
   let accounts = [];
 
   try {
@@ -30,7 +30,7 @@ export async function getAccounts() {
   return response;
 }
 
-export async function addAccount(formData: FormData) {
+export async function create(formData: FormData) {
   const schema = Yup.object().shape({
     name: Yup.string().required(),
     balance: Yup.number().moreThan(-1),
@@ -66,7 +66,7 @@ export async function addAccount(formData: FormData) {
   return response;
 }
 
-export async function updateAccount(formData: FormData) {
+export async function update(formData: FormData) {
   const schema = Yup.object().shape({
     id: Yup.string().required(),
     name: Yup.string().required(),
@@ -112,7 +112,7 @@ export async function updateAccount(formData: FormData) {
   return response;
 }
 
-export async function deleteAccount(formData: FormData) {
+export async function destroy(formData: FormData) {
   const schema = Yup.object().shape({
     id: Yup.string().required(),
   });

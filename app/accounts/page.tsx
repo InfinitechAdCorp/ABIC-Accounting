@@ -2,7 +2,7 @@ import React from "react";
 import { getAccounts } from "@/components/transactionMonitoring/accounts/actions";
 import { Card, CardBody } from "@nextui-org/react";
 import { formatAccounts } from "@/components/globals/utils";
-import AccountsTable from "@/components/transactionMonitoring/accounts/accountsTable";
+import AccountsTable from "@/components/transactionMonitoring/accounts/dataTable";
 
 const Accounts = async () => {
   const columns = [

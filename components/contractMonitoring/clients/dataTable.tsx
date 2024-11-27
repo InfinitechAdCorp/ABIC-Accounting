@@ -19,12 +19,12 @@ import {
   Selection,
   SortDescriptor,
 } from "@nextui-org/react";
-import { FormattedAccount } from "@/components/transactionMonitoring/types";
-import { formatNumber, handleSubmit } from "@/components/globals/utils";
-import AddAccountModal from "@/components/transactionMonitoring/accounts/addAccountModal";
-import EditAccountModal from "@/components/transactionMonitoring/accounts/editAccountModal";
+import { FormattedClient } from "@/components/contractMonitoring/types";
+import { handleSubmit } from "@/components/globals/utils";
+import AddClientModal from "@/components/contractMonitoring/clients/addModal";
+import EditClientModal from "@/components/contractMonitoring/clients/editModal";
 import DeleteModal from "@/components/globals/deleteModal";
-import { deleteAccount } from "@/components/transactionMonitoring/accounts/actions";
+import { deleteClient } from "@/components/contractMonitoring/clients/actions";
 
 type column = {
   name: string;
@@ -35,7 +35,7 @@ type column = {
 type Props = {
   model: string;
   columns: column[];
-  rows: FormattedAccount[];
+  rows: FormattedClient[];
   initialVisibleColumns: string[];
   searchKey: string;
   sortKey: string;
@@ -47,7 +47,7 @@ const DataTable = ({
   rows,
   initialVisibleColumns,
   searchKey,
-  sortKey,
+  sortKey
 }: Props) => {
   type Row = (typeof rows)[0];
 
@@ -110,12 +110,10 @@ const DataTable = ({
     if (columnKey == "actions") {
       return (
         <div className="relative flex justify-end items-center gap-2">
-          <EditAccountModal onSubmit={handleSubmit} account={row} />
-          <DeleteModal title="Account" action={deleteAccount} id={row.id} />
+          <EditClientModal onSubmit={handleSubmit} client={row} />
+          <DeleteModal title="Client" action={deleteClient} id={row.id} />
         </div>
       );
-    } else if (columnKey == "balance") {
-      return formatNumber(cellValue);
     } else {
       return cellValue;
     }
@@ -191,7 +189,7 @@ const DataTable = ({
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <AddAccountModal />
+            <AddClientModal />
           </div>
         </div>
         <div className="flex justify-between items-center">

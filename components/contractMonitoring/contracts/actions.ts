@@ -6,7 +6,7 @@ import { ActionResponse } from "@/components/globals/types";
 import { addMonths, getDate, setDate } from "date-fns";
 import * as Yup from "yup";
 
-export async function getContracts() {
+export async function getAll() {
   let contracts = [];
   try {
     contracts = await prisma.contract.findMany({
@@ -29,7 +29,7 @@ export async function getContracts() {
   return response;
 }
 
-export async function addContract(formData: FormData) {
+export async function create(formData: FormData) {
   const schema = Yup.object().shape({
     client_id: Yup.string().required(),
     property: Yup.string().required(),
@@ -97,7 +97,7 @@ export async function addContract(formData: FormData) {
   return response;
 }
 
-export async function updateContract(formData: FormData) {
+export async function update(formData: FormData) {
   const schema = Yup.object().shape({
     id: Yup.string().required(),
     client_id: Yup.string().required(),
@@ -168,7 +168,7 @@ export async function updateContract(formData: FormData) {
   return response;
 }
 
-export async function deleteContract(formData: FormData) {
+export async function destroy(formData: FormData) {
   const schema = Yup.object().shape({
     id: Yup.string().required(),
   });

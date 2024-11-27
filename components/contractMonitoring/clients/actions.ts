@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import { ActionResponse } from "@/components/globals/types";
 import * as Yup from "yup";
 
-export async function getClients() {
+export async function getAll() {
   let clients = [];
 
   try {
@@ -26,8 +26,7 @@ export async function getClients() {
   return response;
 }
 
-export async function addClient(formData: FormData) {
-  await new Promise((resolve) => setTimeout(resolve, 3000))
+export async function create(formData: FormData) {
   const schema = Yup.object().shape({
     name: Yup.string().required(),
   });
@@ -61,7 +60,7 @@ export async function addClient(formData: FormData) {
   return response;
 }
 
-export async function updateClient(formData: FormData) {
+export async function update(formData: FormData) {
   const schema = Yup.object().shape({
     id: Yup.string().required(),
     name: Yup.string().required(),
@@ -104,7 +103,7 @@ export async function updateClient(formData: FormData) {
   return response;
 }
 
-export async function deleteClient(formData: FormData) {
+export async function destroy(formData: FormData) {
   const schema = Yup.object().shape({
     id: Yup.string().required(),
   });

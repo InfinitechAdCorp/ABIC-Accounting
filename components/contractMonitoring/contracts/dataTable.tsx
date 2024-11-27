@@ -20,18 +20,22 @@ import {
   SortDescriptor,
 } from "@nextui-org/react";
 import {
-  FormattedTransaction,
-  FormattedAccount,
-} from "@/components/transactionMonitoring/types";
+  FormattedContract,
+  FormattedClient,
+} from "@/components/contractMonitoring/types";
 import {
   handleSubmit,
   formatDate,
   formatNumber,
 } from "@/components/globals/utils";
-import AddTransactionModal from "@/components/transactionMonitoring/transactions/addTransactionModal";
-import EditTransactionModal from "@/components/transactionMonitoring/transactions/editTransactionModal";
+import AddContractModal from "@/components/contractMonitoring/contracts/addModal";
+import EditContractModal from "@/components/contractMonitoring/contracts/editModal";
 import DeleteModal from "@/components/globals/deleteModal";
-import { deleteTransaction } from "@/components/transactionMonitoring/transactions/actions";
+import PaymentModal from "@/components/contractMonitoring/contracts/paymentModal";
+import {
+  deleteContract,
+  markAsPaid,
+} from "@/components/contractMonitoring/contracts/actions";
 
 type column = {
   name: string;
@@ -42,11 +46,15 @@ type column = {
 type Props = {
   model: string;
   columns: column[];
-  rows: FormattedTransaction[];
+  rows: FormattedContract[];
   initialVisibleColumns: string[];
   searchKey: string;
   sortKey: string;
-  accounts: FormattedAccount[];
+  clients: FormattedClient[];
+  locations: {
+    key: string;
+    name: string;
+  }[];
 };
 
 const DataTable = ({
@@ -56,7 +64,8 @@ const DataTable = ({
   initialVisibleColumns,
   searchKey,
   sortKey,
-  accounts,
+  clients,
+  locations,
 }: Props) => {
   type Row = (typeof rows)[0];
 
@@ -117,32 +126,33 @@ const DataTable = ({
     (row: Row, columnKey: string) => {
       const cellValue = row[columnKey as keyof Row];
 
+      const dateColumns = ["start", "end", "due"];
+      const moneyColumns = ["tenant_price", "owner_income", "abic_income"];
+
       if (columnKey == "actions") {
         return (
           <div className="relative flex justify-end items-center gap-2">
-            <EditTransactionModal
+            <PaymentModal action={markAsPaid} id={row.id} />
+            <EditContractModal
               onSubmit={handleSubmit}
-              transaction={row}
-              accounts={accounts}
+              contract={row}
+              clients={clients}
+              locations={locations}
             />
-            <DeleteModal
-              title="Transaction"
-              action={deleteTransaction}
-              id={row.id}
-            />
+            <DeleteModal title="Contract" action={deleteContract} id={row.id} />
           </div>
         );
-      } else if (columnKey == "account") {
+      } else if (columnKey == "client") {
         return row[columnKey]?.name;
-      } else if (columnKey == "date") {
+      } else if (dateColumns.includes(columnKey)) {
         return formatDate(cellValue);
-      } else if (columnKey == "amount") {
+      } else if (moneyColumns.includes(columnKey)) {
         return formatNumber(cellValue);
       } else {
         return cellValue;
       }
     },
-    [accounts]
+    [clients, locations]
   );
 
   const onNextPage = React.useCallback(() => {
@@ -215,7 +225,7 @@ const DataTable = ({
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <AddTransactionModal accounts={accounts} />
+            <AddContractModal clients={clients} locations={locations} />
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -245,7 +255,8 @@ const DataTable = ({
     columns,
     model,
     rows.length,
-    accounts,
+    clients,
+    locations,
   ]);
 
   const bottomContent = React.useMemo(() => {

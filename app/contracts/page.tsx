@@ -1,8 +1,8 @@
 import React from "react";
 import { getContracts } from "@/components/contractMonitoring/contracts/actions";
-import { getClients } from "@/components/contractMonitoring/clients/actions";
+import { getAll } from "@/components/contractMonitoring/clients/actions";
 import { Card, CardBody } from "@nextui-org/react";
-import ContractsTable from "@/components/contractMonitoring/contracts/contractsTable";
+import ContractsTable from "@/components/contractMonitoring/contracts/dataTable";
 import { formatClients, formatContracts } from "@/components/globals/utils";
 
 const Contracts = async () => {
@@ -51,7 +51,7 @@ const Contracts = async () => {
   const { contracts } = await getContracts();
   const formattedContracts = formatContracts(contracts);
 
-  const { clients } = await getClients();
+  const { clients } = await getAll();
   const formattedClients = formatClients(clients);
 
   return (

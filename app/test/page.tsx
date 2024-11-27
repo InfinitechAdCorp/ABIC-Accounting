@@ -26,14 +26,14 @@ const Test = () => {
     },
   });
 
-  const { values, errors, handleChange, handleSubmit } = formik;
+  const { values, errors, touched, handleChange, handleSubmit } = formik;
   console.log(errors)
 
   return (
     <>
       <div className="flex justify-center items-center">
         <div className="flex w-[450px]">
-          <form action={handleSubmit} className="flex flex-col w-full">
+          <form onSubmit={handleSubmit} className="flex flex-col w-full">
             <input
               type="email"
               name="email"
@@ -42,7 +42,7 @@ const Test = () => {
               onChange={handleChange}
               className="border-2 border-gray-400 p-2 mb-2"
             />
-            {errors.email && <div className="text-red-500">{errors.email}</div>}
+            {errors.email && touched.email && <div className="text-red-500">{errors.email}</div>}
 
             <input
               type="password"
@@ -52,7 +52,7 @@ const Test = () => {
               onChange={handleChange}
               className="border-2 border-gray-400 p-2 mb-2"
             />
-            {errors.password && (
+            {errors.password && touched.password && (
               <div className="text-red-500">{errors.password}</div>
             )}
 
@@ -64,7 +64,7 @@ const Test = () => {
               onChange={handleChange}
               className="border-2 border-gray-400 p-2 mb-2"
             />
-            {errors.confirmPassword && (
+            {errors.confirmPassword && touched.confirmPassword && (
               <div className="text-red-500">{errors.confirmPassword}</div>
             )}
 

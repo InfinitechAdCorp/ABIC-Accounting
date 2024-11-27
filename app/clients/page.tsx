@@ -1,8 +1,8 @@
 import React from "react";
-import { getClients } from "@/components/contractMonitoring/clients/actions";
+import { getAll } from "@/components/contractMonitoring/clients/actions";
 import { Card, CardBody } from "@nextui-org/react";
 import { formatClients } from "@/components/globals/utils";
-import ClientsTable from "@/components/contractMonitoring/clients/clientsTable";
+import ClientsTable from "@/components/contractMonitoring/clients/dataTable";
 
 const Clients = async () => {
   const columns = [
@@ -13,7 +13,7 @@ const Clients = async () => {
 
   const initialVisibleColumns = ["name", "contracts", "actions"];
 
-  const { clients } = await getClients();
+  const { clients } = await getAll();
   const formattedClients = formatClients(clients);
 
   return (

@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import * as Yup from "yup";
 
 
-export async function getTransactions() {
+export async function getAll() {
   let transactions = [];
 
   try {
@@ -32,7 +32,7 @@ export async function getTransactions() {
   return response;
 }
 
-export async function addTransaction(formData: FormData) {
+export async function create(formData: FormData) {
   const schema = Yup.object().shape({
     date: Yup.date().required(),
     voucher: Yup.string().required(),
@@ -88,7 +88,7 @@ export async function addTransaction(formData: FormData) {
   return response;
 }
 
-export async function updateTransaction(formData: FormData) {
+export async function update(formData: FormData) {
   const schema = Yup.object().shape({
     id: Yup.string().required(),
     date: Yup.date().required(),
@@ -150,7 +150,7 @@ export async function updateTransaction(formData: FormData) {
   return response;
 }
 
-export async function deleteTransaction(formData: FormData) {
+export async function destroy(formData: FormData) {
   const schema = Yup.object().shape({
     id: Yup.string().required(),
   });
