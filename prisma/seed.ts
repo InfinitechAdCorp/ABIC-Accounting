@@ -3,9 +3,9 @@ import { Prisma, PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const accounts: Prisma.AccountCreateInput[] = [
-  { name: "Hu Yanchong", balance: 5000000 },
-  { name: "Weiwei Chen", balance: 3000000 },
-  { name: "Dan Li", balance: 5000000 },
+  { name: "Hu Yanchong", starting_balance: 5000000 },
+  { name: "Weiwei Chen", starting_balance: 3000000 },
+  { name: "Dan Li", starting_balance: 5000000 },
 ];
 
 const transactions: Prisma.TransactionCreateInput[] = [
@@ -21,7 +21,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
         where: { name: "Hu Yanchong" },
         create: {
           name: "Hu Yanchong",
-          balance: 5000000,
+          starting_balance: 5000000,
         },
       },
     },
@@ -38,7 +38,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
         where: { name: "Weiwei Chen" },
         create: {
           name: "Weiwei Chen",
-          balance: 3000000,
+          starting_balance: 3000000,
         },
       },
     },
@@ -55,7 +55,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
         where: { name: "Dan Li" },
         create: {
           name: "Dan Li",
-          balance: 4500000,
+          starting_balance: 4500000,
         },
       },
     },

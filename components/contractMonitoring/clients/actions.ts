@@ -8,6 +8,7 @@ import {
   update as updateSchema,
 } from "@/components/contractMonitoring/clients/schemas";
 import { destroy as destroySchema } from "@/components/globals/schemas"
+import { formatErrors } from "@/components/globals/utils"
 import * as Yup from "yup";
 
 export async function getAll() {
@@ -122,13 +123,3 @@ export async function destroy(values, actions) {
   const response: ActionResponse = { code: 200, message: "Deleted Client" };
   return response;
 }
-
-const formatErrors = (errors: Yup.ValidationError) => {
-  const formattedErrors: { [key: string]: string } = {};
-  errors.inner.forEach((error) => {
-    if (error.path) {
-      formattedErrors[error.path] = error.message;
-    }
-  });
-  return formattedErrors;
-};

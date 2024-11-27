@@ -28,9 +28,9 @@ import {
   formatDate,
   formatNumber,
 } from "@/components/globals/utils";
-import AddTransactionModal from "@/components/transactionMonitoring/transactions/addModal";
-import EditTransactionModal from "@/components/transactionMonitoring/transactions/editModal";
-import DeleteModal from "@/components/globals/deleteModal";
+import AddTransactionModal from "@/components/transactionMonitoring/transactions/createModal";
+import EditTransactionModal from "@/components/transactionMonitoring/transactions/updateModal";
+import DeleteModal from "@/components/globals/destroyModal";
 import { deleteTransaction } from "@/components/transactionMonitoring/transactions/actions";
 
 type column = {

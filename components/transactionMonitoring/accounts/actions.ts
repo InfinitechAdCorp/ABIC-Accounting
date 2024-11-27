@@ -2,8 +2,13 @@
 
 import prisma from "@/lib/db";
 import { ActionResponse } from "@/components/globals/types";
-import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import {
+  create as createSchema,
+  update as updateSchema,
+} from "@/components/transactionMonitoring/accounts/schemas";
+import { destroy as destroySchema } from "@/components/globals/schemas";
+import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 
 export async function getAll() {
@@ -30,19 +35,11 @@ export async function getAll() {
   return response;
 }
 
-export async function create(formData: FormData) {
-  const schema = Yup.object().shape({
-    name: Yup.string().required(),
-    balance: Yup.number().moreThan(-1),
-  });
-
-  const request: Prisma.AccountCreateInput = {
-    name: formData.get("name") as string,
-    balance: formData.get("balance") as string,
-  };
+export async function create(values, actions) {
+  const schema = createSchema;
 
   try {
-    await schema.validate(request, { abortEarly: false });
+    await schema.validate(values, { abortEarly: false });
   } catch (errors) {
     const formattedErrors = formatErrors(errors as Yup.ValidationError);
 
@@ -55,7 +52,7 @@ export async function create(formData: FormData) {
   }
 
   try {
-    await prisma.account.create({ data: { ...request } });
+    await prisma.account.create({ data: { ...values } });
   } catch {
     const response: ActionResponse = { code: 500, message: "Server Error" };
     return response;
@@ -66,21 +63,11 @@ export async function create(formData: FormData) {
   return response;
 }
 
-export async function update(formData: FormData) {
-  const schema = Yup.object().shape({
-    id: Yup.string().required(),
-    name: Yup.string().required(),
-    balance: Yup.number().moreThan(-1),
-  });
-
-  const request: Prisma.AccountCreateInput = {
-    id: formData.get("id") as string,
-    name: formData.get("name") as string,
-    balance: formData.get("balance") as string,
-  };
+export async function update(values, actions) {
+  const schema = updateSchema;
 
   try {
-    await schema.validate(request, { abortEarly: false });
+    await schema.validate(values, { abortEarly: false });
   } catch (errors) {
     const formattedErrors = formatErrors(errors as Yup.ValidationError);
 
@@ -95,11 +82,11 @@ export async function update(formData: FormData) {
   try {
     await prisma.account.update({
       where: {
-        id: request.id,
+        id: values.id,
       },
       data: {
-        name: request.name,
-        balance: request.balance,
+        name: values.name,
+        starting_balance: values.starting_balance,
       },
     });
   } catch {
@@ -112,17 +99,11 @@ export async function update(formData: FormData) {
   return response;
 }
 
-export async function destroy(formData: FormData) {
-  const schema = Yup.object().shape({
-    id: Yup.string().required(),
-  });
-
-  const request = {
-    id: formData.get("id") as string,
-  };
+export async function destroy(values, actions) {
+  const schema = destroySchema;
 
   try {
-    await schema.validate(request, { abortEarly: false });
+    await schema.validate(values, { abortEarly: false });
   } catch (errors) {
     const formattedErrors = formatErrors(errors as Yup.ValidationError);
 
@@ -136,7 +117,7 @@ export async function destroy(formData: FormData) {
 
   try {
     await prisma.account.delete({
-      where: { id: request.id },
+      where: { id: values.id },
     });
   } catch {
     const response: ActionResponse = { code: 500, message: "Server Error" };
@@ -150,13 +131,3 @@ export async function destroy(formData: FormData) {
   };
   return response;
 }
-
-const formatErrors = (errors: Yup.ValidationError) => {
-  const formattedErrors: { [key: string]: string } = {};
-  errors.inner.forEach((error) => {
-    if (error.path) {
-      formattedErrors[error.path] = error.message;
-    }
-  });
-  return formattedErrors;
-};

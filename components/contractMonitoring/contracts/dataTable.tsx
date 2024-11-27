@@ -28,9 +28,9 @@ import {
   formatDate,
   formatNumber,
 } from "@/components/globals/utils";
-import AddContractModal from "@/components/contractMonitoring/contracts/addModal";
-import EditContractModal from "@/components/contractMonitoring/contracts/editModal";
-import DeleteModal from "@/components/globals/deleteModal";
+import AddContractModal from "@/components/contractMonitoring/contracts/createModal";
+import EditContractModal from "@/components/contractMonitoring/contracts/updateModal";
+import DeleteModal from "@/components/globals/destroyModal";
 import PaymentModal from "@/components/contractMonitoring/contracts/paymentModal";
 import {
   deleteContract,

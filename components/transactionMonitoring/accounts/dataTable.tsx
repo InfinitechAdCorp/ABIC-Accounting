@@ -20,11 +20,11 @@ import {
   SortDescriptor,
 } from "@nextui-org/react";
 import { FormattedAccount } from "@/components/transactionMonitoring/types";
-import { formatNumber, handleSubmit } from "@/components/globals/utils";
-import AddAccountModal from "@/components/transactionMonitoring/accounts/addModal";
-import EditAccountModal from "@/components/transactionMonitoring/accounts/editModal";
-import DeleteModal from "@/components/globals/deleteModal";
-import { deleteAccount } from "@/components/transactionMonitoring/accounts/actions";
+import { formatNumber } from "@/components/globals/utils";
+import CreateModal from "@/components/transactionMonitoring/accounts/createModal";
+import UpdateModal from "@/components/transactionMonitoring/accounts/updateModal";
+import DestroyModal from "@/components/globals/destroyModal";
+import { destroy } from "@/components/transactionMonitoring/accounts/actions";
 
 type column = {
   name: string;
@@ -110,11 +110,11 @@ const DataTable = ({
     if (columnKey == "actions") {
       return (
         <div className="relative flex justify-end items-center gap-2">
-          <EditAccountModal onSubmit={handleSubmit} account={row} />
-          <DeleteModal title="Account" action={deleteAccount} id={row.id} />
+          <UpdateModal account={row} />
+          <DestroyModal title="Account" action={destroy} id={row.id} />
         </div>
       );
-    } else if (columnKey == "balance") {
+    } else if (columnKey.endsWith("balance")) {
       return formatNumber(cellValue);
     } else {
       return cellValue;
@@ -191,7 +191,7 @@ const DataTable = ({
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <AddAccountModal />
+            <CreateModal />
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -274,10 +274,7 @@ const DataTable = ({
       >
         <TableHeader columns={headerColumns}>
           {(column) => (
-            <TableColumn
-              key={column.key}
-              allowsSorting={column.sortable}
-            >
+            <TableColumn key={column.key} allowsSorting={column.sortable}>
               {column.name}
             </TableColumn>
           )}

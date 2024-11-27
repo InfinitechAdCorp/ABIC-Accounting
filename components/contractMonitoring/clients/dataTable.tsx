@@ -20,9 +20,9 @@ import {
   SortDescriptor,
 } from "@nextui-org/react";
 import { FormattedClient } from "@/components/contractMonitoring/types";
-import AddModal from "@/components/contractMonitoring/clients/addModal";
-import EditModal from "@/components/contractMonitoring/clients/editModal";
-import DeleteModal from "@/components/globals/deleteModal";
+import CreateModal from "@/components/contractMonitoring/clients/createModal";
+import UpdateModal from "@/components/contractMonitoring/clients/updateModal";
+import DestroyModal from "@/components/globals/destroyModal";
 import { destroy } from "@/components/contractMonitoring/clients/actions";
 
 type column = {
@@ -46,7 +46,7 @@ const DataTable = ({
   rows,
   initialVisibleColumns,
   searchKey,
-  sortKey
+  sortKey,
 }: Props) => {
   type Row = (typeof rows)[0];
 
@@ -109,8 +109,8 @@ const DataTable = ({
     if (columnKey == "actions") {
       return (
         <div className="relative flex justify-end items-center gap-2">
-          <EditModal client={row} />
-          <DeleteModal title="Client" action={destroy} id={row.id} />
+          <UpdateModal client={row} />
+          <DestroyModal title="Client" action={destroy} id={row.id} />
         </div>
       );
     } else {
@@ -188,7 +188,7 @@ const DataTable = ({
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <AddModal />
+            <CreateModal />
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -271,10 +271,7 @@ const DataTable = ({
       >
         <TableHeader columns={headerColumns}>
           {(column) => (
-            <TableColumn
-              key={column.key}
-              allowsSorting={column.sortable}
-            >
+            <TableColumn key={column.key} allowsSorting={column.sortable}>
               {column.name}
             </TableColumn>
           )}

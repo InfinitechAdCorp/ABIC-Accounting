@@ -15,12 +15,12 @@ datasource db {
 }
 
 model Account {
-  id           String        @id @default(cuid())
-  name         String        @unique
-  balance      Decimal       @db.Decimal(15, 2)
-  transactions Transaction[]
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @updatedAt @map("updated_at")
+  id               String        @id @default(cuid())
+  name             String        @unique
+  starting_balance Decimal       @db.Decimal(15, 2)
+  transactions     Transaction[]
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
 
   @@map(name: "accounts")
 }
@@ -35,18 +35,18 @@ model Transaction {
   particulars String   @db.Text
   type        String
   amount      Decimal  @db.Decimal(15, 2)
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 
   @@map(name: "transactions")
 }
 
 model Client {
-  id        String     @id @default(cuid())
-  name      String     @unique
-  contracts Contract[]
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @updatedAt @map("updated_at")
+  id         String     @id @default(cuid())
+  name       String     @unique
+  contracts  Contract[]
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
 
   @@map(name: "clients")
 }
@@ -65,8 +65,8 @@ model Contract {
   owner_income Decimal? @db.Decimal(15, 2)
   abic_income  Decimal? @db.Decimal(15, 2)
   due          DateTime @db.Date
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
 
   @@map(name: "contracts")
 }

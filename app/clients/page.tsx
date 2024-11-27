@@ -2,7 +2,7 @@ import React from "react";
 import { getAll } from "@/components/contractMonitoring/clients/actions";
 import { Card, CardBody } from "@nextui-org/react";
 import { formatClients } from "@/components/globals/utils";
-import ClientsTable from "@/components/contractMonitoring/clients/dataTable";
+import DataTable from "@/components/contractMonitoring/clients/dataTable";
 
 const Clients = async () => {
   const columns = [
@@ -22,7 +22,7 @@ const Clients = async () => {
         <Card className="my-5 p-3">
           <CardBody>
             <h1 className="text-lg font-semibold mb-3">Clients</h1>
-            <ClientsTable
+            <DataTable
               model="clients"
               columns={columns}
               rows={formattedClients}

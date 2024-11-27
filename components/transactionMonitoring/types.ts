@@ -3,7 +3,8 @@ import { Prisma } from "@prisma/client";
 export type FormattedAccount = {
   id: string;
   name: string;
-  balance: number;
+  starting_balance: number;
+  current_balance: number;
   transactions?: number;
 };
 

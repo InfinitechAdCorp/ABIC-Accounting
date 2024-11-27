@@ -13,6 +13,7 @@ import {
   ContractWithClient,
 } from "@/components/contractMonitoring/types";
 import { differenceInMonths, differenceInDays } from "date-fns";
+import * as Yup from "yup";
 
 // Event Handlers
 
@@ -45,20 +46,22 @@ export const formatAccounts = (accounts: AccountWithTransactions[]) => {
   const formattedAccounts: FormattedAccount[] = [];
 
   accounts.forEach((account) => {
-    let balance = account.balance.toNumber();
+    const starting_balance = account.starting_balance.toNumber()
+    let current_balance = starting_balance;
     const transactions = account.transactions;
     transactions.forEach((transaction) => {
       const amount = transaction.amount.toNumber();
       if (transaction.type == "Credit") {
-        balance += amount;
+        current_balance += amount;
       } else {
-        balance -= amount;
+        current_balance -= amount;
       }
     });
 
     const formattedAccount = {
       ...account,
-      balance: balance,
+      starting_balance: starting_balance,
+      current_balance: current_balance,
       transactions: transactions.length,
     };
     formattedAccounts.push(formattedAccount);
@@ -72,7 +75,7 @@ export const formatTransactions = (transactions: TransactionWithAccount[]) => {
 
   transactions.forEach((transaction) => {
     const account = transaction.account;
-    const balance = account?.balance.toNumber();
+    const starting_balance = account?.starting_balance.toNumber();
     const amount = transaction.amount.toNumber();
 
     const formattedTransaction = {
@@ -81,7 +84,7 @@ export const formatTransactions = (transactions: TransactionWithAccount[]) => {
         ...account,
         id: account?.id as string,
         name: account?.name as string,
-        balance: balance as number,
+        starting_balance: starting_balance as number,
       },
       account_id: transaction.account_id as string,
       amount: amount,
@@ -193,4 +196,14 @@ export const formatDate = (date: Date) => {
     day: "numeric",
   });
   return formattedDate;
+};
+
+export const formatErrors = (errors: Yup.ValidationError) => {
+  const formattedErrors: { [key: string]: string } = {};
+  errors.inner.forEach((error) => {
+    if (error.path) {
+      formattedErrors[error.path] = error.message;
+    }
+  });
+  return formattedErrors;
 };
