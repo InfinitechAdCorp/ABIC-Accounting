@@ -12,7 +12,6 @@ import {
 } from "@nextui-org/react";
 import { ActionResponse } from "@/components/globals/types";
 import { handleSubmit } from "@/components/globals/utils";
-import Form from "next/form";
 
 interface Props {
   title: string;

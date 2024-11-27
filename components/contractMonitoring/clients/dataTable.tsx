@@ -20,11 +20,10 @@ import {
   SortDescriptor,
 } from "@nextui-org/react";
 import { FormattedClient } from "@/components/contractMonitoring/types";
-import { handleSubmit } from "@/components/globals/utils";
-import AddClientModal from "@/components/contractMonitoring/clients/addModal";
-import EditClientModal from "@/components/contractMonitoring/clients/editModal";
+import AddModal from "@/components/contractMonitoring/clients/addModal";
+import EditModal from "@/components/contractMonitoring/clients/editModal";
 import DeleteModal from "@/components/globals/deleteModal";
-import { deleteClient } from "@/components/contractMonitoring/clients/actions";
+import { destroy } from "@/components/contractMonitoring/clients/actions";
 
 type column = {
   name: string;
@@ -110,8 +109,8 @@ const DataTable = ({
     if (columnKey == "actions") {
       return (
         <div className="relative flex justify-end items-center gap-2">
-          <EditClientModal onSubmit={handleSubmit} client={row} />
-          <DeleteModal title="Client" action={deleteClient} id={row.id} />
+          <EditModal client={row} />
+          <DeleteModal title="Client" action={destroy} id={row.id} />
         </div>
       );
     } else {
@@ -189,7 +188,7 @@ const DataTable = ({
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <AddClientModal />
+            <AddModal />
           </div>
         </div>
         <div className="flex justify-between items-center">

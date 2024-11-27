@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Modal,
   ModalContent,
@@ -9,36 +9,38 @@ import {
   useDisclosure,
   Input,
 } from "@nextui-org/react";
-import {
-  FormattedClient,
-} from "@/components/contractMonitoring/types";
-import { ActionResponse } from "@/components/globals/types";
-import { updateClient } from "@/components/contractMonitoring/clients/actions";
-import Form from "next/form";
+import { FormattedClient } from "@/components/contractMonitoring/types";
+import { update as updateSchema } from "@/components/contractMonitoring/clients/schemas";
+import { useFormik } from "formik";
+import { update as updateAction } from "@/components/contractMonitoring/clients/actions";
 
 interface Props {
-  onSubmit: (
-    action: (formData: FormData) => Promise<ActionResponse>,
-    formData: FormData,
-    onClose: () => void
-  ) => void;
   client: FormattedClient;
 }
 
-const EditClientModal = ({ onSubmit, client }: Props) => {
+const onSubmit = async (values, actions) => {
+  updateAction(values, actions);
+};
+
+const EditModal = ({ client }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const [clientData, setClientData] = useState(client);
-
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setClientData({ ...clientData, [name]: value });
-  };
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+  } = useFormik({
+    initialValues: {
+      id: client.id,
+      name: client.name,
+    },
+    validationSchema: updateSchema,
+    onSubmit,
+  });
 
   return (
     <>
@@ -50,12 +52,10 @@ const EditClientModal = ({ onSubmit, client }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <Form
-                action={(formData) => onSubmit(updateClient, formData, onClose)}
-              >
+              <form onSubmit={handleSubmit}>
                 <ModalHeader>Edit Account</ModalHeader>
                 <ModalBody>
-                  <input type="hidden" value={clientData.id} name="id" />
+                  <input type="hidden" name="id" value={values.id} />
 
                   <Input
                     type="text"
@@ -65,19 +65,28 @@ const EditClientModal = ({ onSubmit, client }: Props) => {
                     labelPlacement="outside"
                     placeholder="Enter Name"
                     name="name"
-                    value={clientData.name}
-                    onChange={(e) => handleChange(e)}
+                    value={values.name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
+
+                  {errors.name && touched.name && (
+                    <small className="text-red-500">{errors.name}</small>
+                  )}
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" type="submit">
+                  <Button
+                    color="primary"
+                    type="submit"
+                    isLoading={isSubmitting}
+                  >
                     Update
                   </Button>
                   <Button color="danger" onPress={onClose}>
                     Cancel
                   </Button>
                 </ModalFooter>
-              </Form>
+              </form>
             </>
           )}
         </ModalContent>
@@ -86,4 +95,4 @@ const EditClientModal = ({ onSubmit, client }: Props) => {
   );
 };
 
-export default EditClientModal;
+export default EditModal;

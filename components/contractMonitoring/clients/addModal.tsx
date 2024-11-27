@@ -11,18 +11,15 @@ import {
   useDisclosure,
   Input,
 } from "@nextui-org/react";
-// import { addClient } from "@/components/contractMonitoring/clients/actions";
-// import { handleSubmit } from "@/components/globals/utils";
-import { addClientSchema } from "@/components/contractMonitoring/clients/schemas";
+import { create as createSchema } from "@/components/contractMonitoring/clients/schemas";
 import { useFormik } from "formik";
+import { create as createAction } from "@/components/contractMonitoring/clients/actions";
 
 const onSubmit = async (values, actions) => {
-  console.log(values);
-  console.log(actions);
-  await new Promise((resolve) => setTimeout(resolve, 3000));
+  createAction(values, actions);
 };
 
-const AddClientModal = () => {
+const AddModal = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const {
@@ -37,7 +34,7 @@ const AddClientModal = () => {
     initialValues: {
       name: "",
     },
-    validationSchema: addClientSchema,
+    validationSchema: createSchema,
     onSubmit,
   });
 
@@ -67,18 +64,18 @@ const AddClientModal = () => {
                     onBlur={handleBlur}
                   />
                   {errors.name && touched.name && (
-                    <p className="text-red-500">{errors.name}</p>
+                    <small className="text-red-500">{errors.name}</small>
                   )}
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" type="submit">
-                    Save
-                  </Button>
                   <Button
-                    color="danger"
-                    onPress={onClose}
+                    color="primary"
+                    type="submit"
                     isLoading={isSubmitting}
                   >
+                    Save
+                  </Button>
+                  <Button color="danger" onPress={onClose}>
                     Cancel
                   </Button>
                 </ModalFooter>
@@ -91,4 +88,4 @@ const AddClientModal = () => {
   );
 };
 
-export default AddClientModal;
+export default AddModal;
