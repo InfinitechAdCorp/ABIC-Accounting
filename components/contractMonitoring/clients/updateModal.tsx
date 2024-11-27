@@ -23,7 +23,6 @@ const EditModal = ({ client }: Props) => {
 
   const onSubmit = async (values, actions) => {
     updateAction(values, actions);
-    actions.resetForm()
   };
 
   const {
@@ -41,6 +40,7 @@ const EditModal = ({ client }: Props) => {
     },
     validationSchema: updateSchema,
     onSubmit,
+    enableReinitialize: true,
   });
 
   return (

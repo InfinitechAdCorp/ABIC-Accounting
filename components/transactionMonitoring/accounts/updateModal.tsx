@@ -23,7 +23,6 @@ const EditModal = ({ account }: Props) => {
 
   const onSubmit = async (values, actions) => {
     updateAction(values, actions);
-    actions.resetForm();
   };
 
   const {
@@ -42,6 +41,7 @@ const EditModal = ({ account }: Props) => {
     },
     validationSchema: updateSchema,
     onSubmit,
+    enableReinitialize: true,
   });
 
   return (
@@ -88,7 +88,9 @@ const EditModal = ({ account }: Props) => {
                     onBlur={handleBlur}
                   />
                   {errors.starting_balance && touched.starting_balance && (
-                    <small className="text-red-500">{errors.starting_balance}</small>
+                    <small className="text-red-500">
+                      {errors.starting_balance}
+                    </small>
                   )}
                 </ModalBody>
                 <ModalFooter>
