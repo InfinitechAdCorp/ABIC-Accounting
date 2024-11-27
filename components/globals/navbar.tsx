@@ -8,8 +8,11 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+  const router = useRouter();
+
   return (
     <>
       <div className="flex gap-3 items-center bg-sky-600 p-5">
@@ -29,15 +32,11 @@ const Navbar = () => {
           </DropdownTrigger>
 
           <DropdownMenu className="text-center">
-            <DropdownItem>
-              <Link href="/accounts">
-                <h3 className="font-semibold">Accounts</h3>
-              </Link>
+            <DropdownItem onClick={() => router.push("/accounts")} textValue="Accounts">
+              <h3 className="font-semibold">Accounts</h3>
             </DropdownItem>
-            <DropdownItem>
-              <Link href="/transactions">
-                <h3 className="font-semibold">Transactions</h3>
-              </Link>
+            <DropdownItem onClick={() => router.push("/transactions")} textValue="Transactions">
+              <h3 className="font-semibold">Transactions</h3>
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
@@ -53,15 +52,11 @@ const Navbar = () => {
             </h3>
           </DropdownTrigger>
           <DropdownMenu className="text-center">
-            <DropdownItem>
-              <Link href="/clients">
-                <h3 className="font-semibold">Clients</h3>
-              </Link>
+            <DropdownItem onClick={() => router.push("/clients")} textValue="Clients">
+              <h3 className="font-semibold">Clients</h3>
             </DropdownItem>
-            <DropdownItem>
-              <Link href="/contracts">
-                <h3 className="font-semibold">Contracts</h3>
-              </Link>
+            <DropdownItem onClick={() => router.push("/contracts")} textValue="Contracts">
+              <h3 className="font-semibold">Contracts</h3>
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
