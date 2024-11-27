@@ -8,7 +8,3 @@ export const update = Yup.object().shape({
   id: Yup.string().required(),
   name: Yup.string().required(),
 });
-
-export const destroy = Yup.object().shape({
-  id: Yup.string().required(),
-});

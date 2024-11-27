@@ -18,12 +18,13 @@ interface Props {
   client: FormattedClient;
 }
 
-const onSubmit = async (values, actions) => {
-  updateAction(values, actions);
-};
-
 const EditModal = ({ client }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const onSubmit = async (values, actions) => {
+    updateAction(values, actions);
+    actions.resetForm()
+  };
 
   const {
     values,

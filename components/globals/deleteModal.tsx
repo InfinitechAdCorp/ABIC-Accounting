@@ -11,16 +11,31 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { ActionResponse } from "@/components/globals/types";
-import { handleSubmit } from "@/components/globals/utils";
+import { destroy as destroySchema } from "@/components/globals/schemas";
+import { useFormik } from "formik";
 
 interface Props {
   title: string;
-  action: (formData: FormData) => Promise<ActionResponse>;
+  action: (values, actions) => Promise<ActionResponse>;
   id: string;
 }
 
 const DeleteModal = ({ title, action, id }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const onSubmit = async (values, actions) => {
+    action(values, actions);
+    actions.resetForm()
+  };
+
+  const { values, isSubmitting, handleSubmit } = useFormik({
+    initialValues: {
+      id: id,
+    },
+    validationSchema: destroySchema,
+    onSubmit,
+  });
+
   return (
     <>
       <Button size="sm" color="danger" onPress={onOpen}>
@@ -31,23 +46,25 @@ const DeleteModal = ({ title, action, id }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <Form
-                action={(formData) => handleSubmit(action, formData, onClose)}
-              >
+              <form onSubmit={handleSubmit}>
                 <ModalHeader>Delete {title}</ModalHeader>
                 <ModalBody>
-                  <input type="hidden" value={id} name="id" />
+                  <input type="hidden" value={values.id} name="id" />
                   <h6>Are you sure that you want to delete this {title}?</h6>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" type="submit">
+                  <Button
+                    color="primary"
+                    type="submit"
+                    isLoading={isSubmitting}
+                  >
                     Yes
                   </Button>
                   <Button color="danger" onPress={onClose}>
                     No
                   </Button>
                 </ModalFooter>
-              </Form>
+              </form>
             </>
           )}
         </ModalContent>

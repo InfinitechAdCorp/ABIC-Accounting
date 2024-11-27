@@ -15,12 +15,13 @@ import { create as createSchema } from "@/components/contractMonitoring/clients/
 import { useFormik } from "formik";
 import { create as createAction } from "@/components/contractMonitoring/clients/actions";
 
-const onSubmit = async (values, actions) => {
-  createAction(values, actions);
-};
-
 const AddModal = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const onSubmit = async (values, actions) => {
+    createAction(values, actions);
+    actions.resetForm()
+  };
 
   const {
     values,
