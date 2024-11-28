@@ -21,7 +21,7 @@ const Accounts = async () => {
   return (
     <>
       <div className="flex justify-center">
-        <Card className="my-5 p-3">
+        <Card className="m-5 p-3">
           <CardBody>
             <h1 className="text-lg font-semibold mb-3">Accounts</h1>
             <DataTable

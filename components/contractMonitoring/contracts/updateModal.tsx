@@ -22,6 +22,7 @@ import { update as updateSchema } from "@/components/contractMonitoring/contract
 import { useFormik } from "formik";
 import { update as updateAction } from "@/components/contractMonitoring/contracts/actions";
 import { Prisma } from "@prisma/client";
+import { parseDate } from "@internationalized/date";
 
 interface Props {
   contract: FormattedContract;
@@ -36,7 +37,8 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const onSubmit = async (values: Prisma.ContractCreateInput) => {
-    updateAction(values);
+    console.log(values);
+    // updateAction(values);
   };
 
   const {
@@ -67,6 +69,14 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
     enableReinitialize: true,
   });
 
+  const formatDate = (date: Date) => {
+    if (date) {
+      const localeDate = date.toLocaleDateString("en-CA");
+      const formattedDate = parseDate(localeDate);
+      return formattedDate;
+    }
+  };
+
   return (
     <>
       <Button size="sm" color="primary" onPress={onOpen}>
@@ -92,7 +102,8 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                       name="client_id"
                       items={clients}
                       defaultSelectedKeys={[values.client_id as string]}
-                      onChange={(e) => handleChange(e)}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     >
                       {(client) => (
                         <SelectItem key={client.id}>{client.name}</SelectItem>
@@ -107,8 +118,9 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                       placeholder="Select Location"
                       name="location"
                       items={locations.slice(1)}
-                      defaultSelectedKeys={[values.location as string]}
-                      onChange={(e) => handleChange(e)}
+                      defaultSelectedKeys={[values.location]}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     >
                       {(location) => (
                         <SelectItem key={location.key}>
@@ -141,6 +153,7 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                       label="Start Date"
                       labelPlacement="outside"
                       name="start"
+                      defaultValue={formatDate(values.start)}
                     />
 
                     <DatePicker
@@ -149,6 +162,7 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                       label="End Date"
                       labelPlacement="outside"
                       name="end"
+                      defaultValue={formatDate(values.end)}
                     />
                   </div>
 

@@ -21,6 +21,7 @@ import { update as updateSchema } from "@/components/transactionMonitoring/trans
 import { useFormik } from "formik";
 import { update as updateAction } from "@/components/transactionMonitoring/transactions/actions";
 import { Prisma } from "@prisma/client";
+import { parseDate } from "@internationalized/date";
 
 interface Props {
   transaction: FormattedTransaction;
@@ -31,7 +32,8 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const onSubmit = async (values: Prisma.TransactionCreateInput) => {
-    updateAction(values);
+    console.log(values);
+    // updateAction(values);
   };
 
   const {
@@ -58,6 +60,14 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
     enableReinitialize: true,
   });
 
+  const formatDate = (date: Date) => {
+    if (date) {
+      const localeDate = date.toLocaleDateString("en-CA");
+      const formattedDate = parseDate(localeDate);
+      return formattedDate;
+    }
+  };
+
   return (
     <>
       <Button size="sm" color="primary" onPress={onOpen}>
@@ -79,6 +89,7 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
                     label="Voucher Date"
                     labelPlacement="outside"
                     name="date"
+                    defaultValue={formatDate(values.date)}
                   />
 
                   <div className="grid grid-cols-2 gap-3">
@@ -128,7 +139,8 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
                     name="account_id"
                     items={accounts}
                     defaultSelectedKeys={[values.account_id as string]}
-                    onChange={(e) => handleChange(e)}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   >
                     {(account) => (
                       <SelectItem key={account.id}>{account.name}</SelectItem>
@@ -187,7 +199,11 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
                   </div>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" type="submit" isLoading={isSubmitting}>
+                  <Button
+                    color="primary"
+                    type="submit"
+                    isLoading={isSubmitting}
+                  >
                     Update
                   </Button>
                   <Button color="danger" onPress={onClose}>
