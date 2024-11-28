@@ -16,16 +16,16 @@ import { useFormik } from "formik";
 
 interface Props {
   title: string;
-  action: (values, actions) => Promise<ActionResponse>;
+  action: (values: { id: string }) => Promise<ActionResponse>;
   id: string;
 }
 
-const DeleteModal = ({ title, action, id }: Props) => {
+const DestroyModal = ({ title, action, id }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const onSubmit = async (values, actions) => {
-    action(values, actions);
-    actions.resetForm()
+  const onSubmit = async (values: { id: string }, actions) => {
+    action(values);
+    actions.resetForm();
   };
 
   const { values, isSubmitting, handleSubmit } = useFormik({
@@ -73,4 +73,4 @@ const DeleteModal = ({ title, action, id }: Props) => {
   );
 };
 
-export default DeleteModal;
+export default DestroyModal;

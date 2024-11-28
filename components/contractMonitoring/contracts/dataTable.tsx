@@ -23,17 +23,13 @@ import {
   FormattedContract,
   FormattedClient,
 } from "@/components/contractMonitoring/types";
-import {
-  handleSubmit,
-  formatDate,
-  formatNumber,
-} from "@/components/globals/utils";
-import AddContractModal from "@/components/contractMonitoring/contracts/createModal";
-import EditContractModal from "@/components/contractMonitoring/contracts/updateModal";
-import DeleteModal from "@/components/globals/destroyModal";
+import { formatDate, formatNumber } from "@/components/globals/utils";
+import CreateModal from "@/components/contractMonitoring/contracts/createModal";
+import UpdateModal from "@/components/contractMonitoring/contracts/updateModal";
+import DestroyModal from "@/components/globals/destroyModal";
 import PaymentModal from "@/components/contractMonitoring/contracts/paymentModal";
 import {
-  deleteContract,
+  destroy,
   markAsPaid,
 } from "@/components/contractMonitoring/contracts/actions";
 
@@ -133,13 +129,12 @@ const DataTable = ({
         return (
           <div className="relative flex justify-end items-center gap-2">
             <PaymentModal action={markAsPaid} id={row.id} />
-            <EditContractModal
-              onSubmit={handleSubmit}
+            <UpdateModal
               contract={row}
               clients={clients}
               locations={locations}
             />
-            <DeleteModal title="Contract" action={deleteContract} id={row.id} />
+            <DestroyModal title="Contract" action={destroy} id={row.id} />
           </div>
         );
       } else if (columnKey == "client") {
@@ -225,7 +220,7 @@ const DataTable = ({
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <AddContractModal clients={clients} locations={locations} />
+            <CreateModal clients={clients} locations={locations} />
           </div>
         </div>
         <div className="flex justify-between items-center">

@@ -14,10 +14,11 @@ import {
   Select,
   SelectItem,
 } from "@nextui-org/react";
-import { addContract } from "@/components/contractMonitoring/contracts/actions";
 import { FormattedClient } from "@/components/contractMonitoring/types";
-import { handleSubmit } from "@/components/globals/utils";
-import Form from "next/form";
+import { create as createSchema } from "@/components/contractMonitoring/contracts/schemas";
+import { useFormik } from "formik";
+import { create as createAction } from "@/components/contractMonitoring/contracts/actions";
+import { Prisma } from "@prisma/client";
 
 interface Props {
   clients: FormattedClient[];
@@ -27,8 +28,39 @@ interface Props {
   }[];
 }
 
-const AddContractModal = ({ clients, locations }: Props) => {
+const CreateModal = ({ clients, locations }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const onSubmit = async (values: Prisma.ContractCreateInput, actions) => {
+    createAction(values);
+    actions.resetForm();
+  };
+
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+  } = useFormik({
+    initialValues: {
+      client_id: "",
+      property: "",
+      location: "",
+      start: "",
+      end: "",
+      advance: 0,
+      deposit: 0,
+      tenant_price: "",
+      owner_income: "",
+      abic_income: "",
+      due: "",
+    },
+    validationSchema: createSchema,
+    onSubmit,
+  });
 
   return (
     <>
@@ -40,11 +72,7 @@ const AddContractModal = ({ clients, locations }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <Form
-                action={(formData) =>
-                  handleSubmit(addContract, formData, onClose)
-                }
-              >
+              <form onSubmit={handleSubmit}>
                 <ModalHeader>Add Contract</ModalHeader>
                 <ModalBody>
                   <div className="grid grid-cols-2 gap-3">
@@ -87,7 +115,13 @@ const AddContractModal = ({ clients, locations }: Props) => {
                     labelPlacement="outside"
                     placeholder="Enter Property Details"
                     name="property"
+                    value={values.property}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
+                  {errors.property && touched.property && (
+                    <small className="text-red-500">{errors.property}</small>
+                  )}
 
                   <div className="grid grid-cols-2 gap-3">
                     <DatePicker
@@ -108,57 +142,101 @@ const AddContractModal = ({ clients, locations }: Props) => {
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
-                    <Input
-                      type="number"
-                      size="md"
-                      variant="bordered"
-                      label="Advance"
-                      labelPlacement="outside"
-                      placeholder="Enter Advance"
-                      name="advance"
-                    />
+                    <div>
+                      <Input
+                        type="text"
+                        size="md"
+                        variant="bordered"
+                        label="Advance"
+                        labelPlacement="outside"
+                        placeholder="Enter Advance"
+                        name="advance"
+                        value={values.advance.toString()}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.advance && touched.advance && (
+                        <small className="text-red-500">{errors.advance}</small>
+                      )}
+                    </div>
 
-                    <Input
-                      type="number"
-                      size="md"
-                      variant="bordered"
-                      label="Deposit"
-                      labelPlacement="outside"
-                      placeholder="Enter Deposit"
-                      name="deposit"
-                    />
+                    <div>
+                      <Input
+                        type="text"
+                        size="md"
+                        variant="bordered"
+                        label="Deposit"
+                        labelPlacement="outside"
+                        placeholder="Enter Deposit"
+                        name="deposit"
+                        value={values.deposit.toString()}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.deposit && touched.deposit && (
+                        <small className="text-red-500">{errors.deposit}</small>
+                      )}
+                    </div>
                   </div>
 
                   <Input
-                    type="number"
+                    type="text"
                     size="md"
                     variant="bordered"
                     label="Tenant Price"
                     labelPlacement="outside"
                     placeholder="Enter Tenant Price"
                     name="tenant_price"
+                    value={values.tenant_price}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
+                  {errors.tenant_price && touched.tenant_price && (
+                    <small className="text-red-500">
+                      {errors.tenant_price}
+                    </small>
+                  )}
 
                   <div className="grid grid-cols-2 gap-3">
-                    <Input
-                      type="number"
-                      size="md"
-                      variant="bordered"
-                      label="Owner Income"
-                      labelPlacement="outside"
-                      placeholder="Enter Owner Income"
-                      name="owner_income"
-                    />
+                    <div>
+                      <Input
+                        type="text"
+                        size="md"
+                        variant="bordered"
+                        label="Owner Income"
+                        labelPlacement="outside"
+                        placeholder="Enter Owner Income"
+                        name="owner_income"
+                        value={values.owner_income}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.owner_income && touched.owner_income && (
+                        <small className="text-red-500">
+                          {errors.owner_income}
+                        </small>
+                      )}
+                    </div>
 
-                    <Input
-                      type="number"
-                      size="md"
-                      variant="bordered"
-                      label="ABIC Income"
-                      labelPlacement="outside"
-                      placeholder="Enter ABIC Income"
-                      name="abic_income"
-                    />
+                    <div>
+                      <Input
+                        type="text"
+                        size="md"
+                        variant="bordered"
+                        label="ABIC Income"
+                        labelPlacement="outside"
+                        placeholder="Enter ABIC Income"
+                        name="abic_income"
+                        value={values.abic_income}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.abic_income && touched.abic_income && (
+                        <small className="text-red-500">
+                          {errors.abic_income}
+                        </small>
+                      )}
+                    </div>
                   </div>
 
                   <DatePicker
@@ -170,14 +248,18 @@ const AddContractModal = ({ clients, locations }: Props) => {
                   />
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" type="submit">
+                  <Button
+                    color="primary"
+                    type="submit"
+                    isLoading={isSubmitting}
+                  >
                     Save
                   </Button>
                   <Button color="danger" onPress={onClose}>
                     Cancel
                   </Button>
                 </ModalFooter>
-              </Form>
+              </form>
             </>
           )}
         </ModalContent>
@@ -186,4 +268,4 @@ const AddContractModal = ({ clients, locations }: Props) => {
   );
 };
 
-export default AddContractModal;
+export default CreateModal;

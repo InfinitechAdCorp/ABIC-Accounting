@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import {
   Modal,
   ModalContent,
@@ -14,21 +14,16 @@ import {
   Select,
   SelectItem,
 } from "@nextui-org/react";
-import { updateContract } from "@/components/contractMonitoring/contracts/actions";
 import {
   FormattedContract,
   FormattedClient,
 } from "@/components/contractMonitoring/types";
-import { ActionResponse } from "@/components/globals/types";
-import { parseDate } from "@internationalized/date";
-import Form from "next/form";
+import { update as updateSchema } from "@/components/contractMonitoring/contracts/schemas";
+import { useFormik } from "formik";
+import { update as updateAction } from "@/components/contractMonitoring/contracts/actions";
+import { Prisma } from "@prisma/client";
 
 interface Props {
-  onSubmit: (
-    action: (formData: FormData) => Promise<ActionResponse>,
-    formData: FormData,
-    onClose: () => void
-  ) => void;
   contract: FormattedContract;
   clients: FormattedClient[];
   locations: {
@@ -37,33 +32,40 @@ interface Props {
   }[];
 }
 
-const EditContractModal = ({
-  onSubmit,
-  contract,
-  clients,
-  locations,
-}: Props) => {
+const UpdateModal = ({ contract, clients, locations }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const [contractData, setContractData] = useState(contract);
-
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setContractData({ ...contractData, [name]: value });
+  const onSubmit = async (values: Prisma.ContractCreateInput) => {
+    updateAction(values);
   };
 
-  const formatDate = (date: Date) => {
-    if (date) {
-      const localeDate = date.toLocaleDateString("en-CA");
-      const formattedDate = parseDate(localeDate);
-      return formattedDate;
-    }
-  };
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+  } = useFormik({
+    initialValues: {
+      id: contract.id,
+      client_id: contract.client_id,
+      property: contract.property,
+      location: contract.location,
+      start: contract.start,
+      end: contract.end,
+      advance: contract.advance,
+      deposit: contract.deposit,
+      tenant_price: contract.tenant_price,
+      owner_income: contract.owner_income,
+      abic_income: contract.abic_income,
+      due: contract.due,
+    },
+    validationSchema: updateSchema,
+    onSubmit,
+    enableReinitialize: true,
+  });
 
   return (
     <>
@@ -75,14 +77,10 @@ const EditContractModal = ({
         <ModalContent>
           {(onClose) => (
             <>
-              <Form
-                action={(formData) =>
-                  onSubmit(updateContract, formData, onClose)
-                }
-              >
+              <form onSubmit={handleSubmit}>
                 <ModalHeader>Edit Contract</ModalHeader>
                 <ModalBody>
-                  <input type="hidden" value={contractData.id} name="id" />
+                  <input type="hidden" value={values.id} name="id" />
 
                   <div className="grid grid-cols-2 gap-3">
                     <Select
@@ -93,7 +91,7 @@ const EditContractModal = ({
                       placeholder="Select Client"
                       name="client_id"
                       items={clients}
-                      defaultSelectedKeys={[contractData.client_id as string]}
+                      defaultSelectedKeys={[values.client_id as string]}
                       onChange={(e) => handleChange(e)}
                     >
                       {(client) => (
@@ -109,7 +107,7 @@ const EditContractModal = ({
                       placeholder="Select Location"
                       name="location"
                       items={locations.slice(1)}
-                      defaultSelectedKeys={[contractData.location as string]}
+                      defaultSelectedKeys={[values.location as string]}
                       onChange={(e) => handleChange(e)}
                     >
                       {(location) => (
@@ -128,9 +126,13 @@ const EditContractModal = ({
                     labelPlacement="outside"
                     placeholder="Enter Property Details"
                     name="property"
-                    value={contractData.property}
-                    onChange={(e) => handleChange(e)}
+                    value={values.property}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
+                  {errors.property && touched.property && (
+                    <small className="text-red-500">{errors.property}</small>
+                  )}
 
                   <div className="grid grid-cols-2 gap-3">
                     <DatePicker
@@ -139,7 +141,6 @@ const EditContractModal = ({
                       label="Start Date"
                       labelPlacement="outside"
                       name="start"
-                      defaultValue={formatDate(contractData.start)}
                     />
 
                     <DatePicker
@@ -148,72 +149,105 @@ const EditContractModal = ({
                       label="End Date"
                       labelPlacement="outside"
                       name="end"
-                      defaultValue={formatDate(contractData.end)}
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
-                    <Input
-                      type="number"
-                      size="md"
-                      variant="bordered"
-                      label="Advance"
-                      labelPlacement="outside"
-                      placeholder="Enter Advance"
-                      name="advance"
-                      value={contractData.advance.toString()}
-                      onChange={(e) => handleChange(e)}
-                    />
+                    <div>
+                      <Input
+                        type="text"
+                        size="md"
+                        variant="bordered"
+                        label="Advance"
+                        labelPlacement="outside"
+                        placeholder="Enter Advance"
+                        name="advance"
+                        value={values.advance.toString()}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.advance && touched.advance && (
+                        <small className="text-red-500">{errors.advance}</small>
+                      )}
+                    </div>
 
-                    <Input
-                      type="number"
-                      size="md"
-                      variant="bordered"
-                      label="Deposit"
-                      labelPlacement="outside"
-                      placeholder="Enter Deposit"
-                      name="deposit"
-                      value={contractData.deposit.toString()}
-                      onChange={(e) => handleChange(e)}
-                    />
+                    <div>
+                      <Input
+                        type="text"
+                        size="md"
+                        variant="bordered"
+                        label="Deposit"
+                        labelPlacement="outside"
+                        placeholder="Enter Deposit"
+                        name="deposit"
+                        value={values.deposit.toString()}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.deposit && touched.deposit && (
+                        <small className="text-red-500">{errors.deposit}</small>
+                      )}
+                    </div>
                   </div>
 
                   <Input
-                    type="number"
+                    type="text"
                     size="md"
                     variant="bordered"
                     label="Tenant Price"
                     labelPlacement="outside"
                     placeholder="Enter Tenant Price"
                     name="tenant_price"
-                    value={contractData.tenant_price?.toString()}
-                    onChange={(e) => handleChange(e)}
+                    value={values.tenant_price?.toString()}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
+                  {errors.tenant_price && touched.tenant_price && (
+                    <small className="text-red-500">
+                      {errors.tenant_price}
+                    </small>
+                  )}
 
                   <div className="grid grid-cols-2 gap-3">
-                    <Input
-                      type="number"
-                      size="md"
-                      variant="bordered"
-                      label="Owner Income"
-                      labelPlacement="outside"
-                      placeholder="Enter Owner Income"
-                      name="owner_income"
-                      value={contractData.owner_income?.toString()}
-                      onChange={(e) => handleChange(e)}
-                    />
+                    <div>
+                      <Input
+                        type="text"
+                        size="md"
+                        variant="bordered"
+                        label="Owner Income"
+                        labelPlacement="outside"
+                        placeholder="Enter Owner Income"
+                        name="owner_income"
+                        value={values.owner_income?.toString()}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.owner_income && touched.owner_income && (
+                        <small className="text-red-500">
+                          {errors.owner_income}
+                        </small>
+                      )}
+                    </div>
 
-                    <Input
-                      type="number"
-                      size="md"
-                      variant="bordered"
-                      label="ABIC Income"
-                      labelPlacement="outside"
-                      placeholder="Enter ABIC Income"
-                      name="abic_income"
-                      value={contractData.abic_income?.toString()}
-                      onChange={(e) => handleChange(e)}
-                    />
+                    <div>
+                      <Input
+                        type="text"
+                        size="md"
+                        variant="bordered"
+                        label="ABIC Income"
+                        labelPlacement="outside"
+                        placeholder="Enter ABIC Income"
+                        name="abic_income"
+                        value={values.abic_income?.toString()}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.abic_income && touched.abic_income && (
+                        <small className="text-red-500">
+                          {errors.abic_income}
+                        </small>
+                      )}
+                    </div>
                   </div>
 
                   <DatePicker
@@ -222,18 +256,21 @@ const EditContractModal = ({
                     label="Due Date"
                     labelPlacement="outside"
                     name="due"
-                    defaultValue={formatDate(contractData.due)}
                   />
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" type="submit">
+                  <Button
+                    color="primary"
+                    type="submit"
+                    isLoading={isSubmitting}
+                  >
                     Update
                   </Button>
                   <Button color="danger" onPress={onClose}>
                     Cancel
                   </Button>
                 </ModalFooter>
-              </Form>
+              </form>
             </>
           )}
         </ModalContent>
@@ -242,4 +279,4 @@ const EditContractModal = ({
   );
 };
 
-export default EditContractModal;
+export default UpdateModal;

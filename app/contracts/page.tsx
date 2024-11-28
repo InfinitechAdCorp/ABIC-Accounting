@@ -1,8 +1,8 @@
 import React from "react";
-import { getContracts } from "@/components/contractMonitoring/contracts/actions";
-import { getAll } from "@/components/contractMonitoring/clients/actions";
+import { getAll as getContracts } from "@/components/contractMonitoring/contracts/actions";
+import { getAll as getClients } from "@/components/contractMonitoring/clients/actions";
 import { Card, CardBody } from "@nextui-org/react";
-import ContractsTable from "@/components/contractMonitoring/contracts/dataTable";
+import DataTable from "@/components/contractMonitoring/contracts/dataTable";
 import { formatClients, formatContracts } from "@/components/globals/utils";
 
 const Contracts = async () => {
@@ -51,7 +51,7 @@ const Contracts = async () => {
   const { contracts } = await getContracts();
   const formattedContracts = formatContracts(contracts);
 
-  const { clients } = await getAll();
+  const { clients } = await getClients();
   const formattedClients = formatClients(clients);
 
   return (
@@ -60,7 +60,7 @@ const Contracts = async () => {
         <Card className="my-5 p-3">
           <CardBody>
             <h1 className="text-lg font-semibold mb-3">Contracts</h1>
-            <ContractsTable
+            <DataTable
               model="contracts"
               columns={columns}
               rows={formattedContracts}

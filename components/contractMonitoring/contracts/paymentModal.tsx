@@ -11,16 +11,30 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { ActionResponse } from "@/components/globals/types";
-import { handleSubmit } from "@/components/globals/utils";
-import Form from "next/form";
+import { markAsPaid } from "@/components/contractMonitoring/contracts/schemas";
+import { useFormik } from "formik";
 
 interface Props {
-  action: (formData: FormData) => Promise<ActionResponse>;
+  action: (values: { id: string }) => Promise<ActionResponse>;
   id: string;
 }
 
 const PaymentModal = ({ action, id }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const onSubmit = async (values: { id: string }, actions) => {
+    action(values);
+    actions.resetForm();
+  };
+
+  const { values, isSubmitting, handleSubmit } = useFormik({
+    initialValues: {
+      id: id,
+    },
+    validationSchema: markAsPaid,
+    onSubmit,
+  });
+
   return (
     <>
       <Button size="sm" color="success" onPress={onOpen} className="text-white">
@@ -31,23 +45,25 @@ const PaymentModal = ({ action, id }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <Form
-                action={(formData) => handleSubmit(action, formData, onClose)}
-              >
-                <ModalHeader>Mark as Paid</ModalHeader>
+              <form onSubmit={handleSubmit}>
+                <ModalHeader>Mark As Paid</ModalHeader>
                 <ModalBody>
-                  <input type="hidden" value={id} name="id" />
+                  <input type="hidden" value={values.id} name="id" />
                   <h6>Are you sure that you want to mark this as paid?</h6>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" type="submit">
+                  <Button
+                    color="primary"
+                    type="submit"
+                    isLoading={isSubmitting}
+                  >
                     Yes
                   </Button>
                   <Button color="danger" onPress={onClose}>
                     No
                   </Button>
                 </ModalFooter>
-              </Form>
+              </form>
             </>
           )}
         </ModalContent>
