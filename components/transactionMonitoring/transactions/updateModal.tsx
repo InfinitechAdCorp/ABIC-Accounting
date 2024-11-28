@@ -21,7 +21,7 @@ import { update as updateSchema } from "@/components/transactionMonitoring/trans
 import { useFormik } from "formik";
 import { update as updateAction } from "@/components/transactionMonitoring/transactions/actions";
 import { Prisma } from "@prisma/client";
-import { parseDate } from "@internationalized/date";
+import { dateToDateValue, dateValueToDate } from "@/components/globals/utils";
 
 interface Props {
   transaction: FormattedTransaction;
@@ -32,8 +32,7 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const onSubmit = async (values: Prisma.TransactionCreateInput) => {
-    console.log(values);
-    // updateAction(values);
+    updateAction(values);
   };
 
   const {
@@ -44,6 +43,7 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
     handleBlur,
     handleChange,
     handleSubmit,
+    setFieldValue,
   } = useFormik({
     initialValues: {
       id: transaction.id,
@@ -59,14 +59,6 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
     onSubmit,
     enableReinitialize: true,
   });
-
-  const formatDate = (date: Date) => {
-    if (date) {
-      const localeDate = date.toLocaleDateString("en-CA");
-      const formattedDate = parseDate(localeDate);
-      return formattedDate;
-    }
-  };
 
   return (
     <>
@@ -89,7 +81,11 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
                     label="Voucher Date"
                     labelPlacement="outside"
                     name="date"
-                    defaultValue={formatDate(values.date)}
+                    defaultValue={dateToDateValue(values.date)}
+                    onChange={(value) => {
+                      const date = dateValueToDate(value);
+                      setFieldValue("date", date);
+                    }}
                   />
 
                   <div className="grid grid-cols-2 gap-3">

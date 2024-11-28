@@ -22,7 +22,7 @@ import { update as updateSchema } from "@/components/contractMonitoring/contract
 import { useFormik } from "formik";
 import { update as updateAction } from "@/components/contractMonitoring/contracts/actions";
 import { Prisma } from "@prisma/client";
-import { parseDate } from "@internationalized/date";
+import { dateToDateValue, dateValueToDate } from "@/components/globals/utils";
 
 interface Props {
   contract: FormattedContract;
@@ -37,8 +37,7 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const onSubmit = async (values: Prisma.ContractCreateInput) => {
-    console.log(values);
-    // updateAction(values);
+    updateAction(values);
   };
 
   const {
@@ -49,6 +48,7 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
     handleBlur,
     handleChange,
     handleSubmit,
+    setFieldValue,
   } = useFormik({
     initialValues: {
       id: contract.id,
@@ -68,14 +68,6 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
     onSubmit,
     enableReinitialize: true,
   });
-
-  const formatDate = (date: Date) => {
-    if (date) {
-      const localeDate = date.toLocaleDateString("en-CA");
-      const formattedDate = parseDate(localeDate);
-      return formattedDate;
-    }
-  };
 
   return (
     <>
@@ -153,7 +145,11 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                       label="Start Date"
                       labelPlacement="outside"
                       name="start"
-                      defaultValue={formatDate(values.start)}
+                      defaultValue={dateToDateValue(values.start)}
+                      onChange={(value) => {
+                        const date = dateValueToDate(value);
+                        setFieldValue("start", date);
+                      }}
                     />
 
                     <DatePicker
@@ -162,7 +158,11 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                       label="End Date"
                       labelPlacement="outside"
                       name="end"
-                      defaultValue={formatDate(values.end)}
+                      defaultValue={dateToDateValue(values.end)}
+                      onChange={(value) => {
+                        const date = dateValueToDate(value);
+                        setFieldValue("end", date);
+                      }}
                     />
                   </div>
 
@@ -270,6 +270,11 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                     label="Due Date"
                     labelPlacement="outside"
                     name="due"
+                    defaultValue={dateToDateValue(values.due)}
+                    onChange={(value) => {
+                      const date = dateValueToDate(value);
+                      setFieldValue("due", date);
+                    }}
                   />
                 </ModalBody>
                 <ModalFooter>

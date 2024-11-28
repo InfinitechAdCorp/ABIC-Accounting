@@ -14,6 +14,7 @@ import {
 } from "@/components/contractMonitoring/types";
 import { differenceInMonths, differenceInDays } from "date-fns";
 import * as Yup from "yup";
+import { DateValue, parseDate } from "@internationalized/date";
 
 // Event Handlers
 
@@ -206,4 +207,19 @@ export const formatErrors = (errors: Yup.ValidationError) => {
     }
   });
   return formattedErrors;
+};
+
+export const dateToDateValue = (date: Date) => {
+  if (date) {
+    const localeDate = date.toLocaleDateString("en-CA");
+    const formattedDate = parseDate(localeDate);
+    return formattedDate;
+  }
+};
+
+export const dateValueToDate = (dateValue: DateValue) => {
+  const formattedDate = new Date(
+    new Date(dateValue.toString()).setUTCHours(0, 0, 0, 0)
+  );
+  return formattedDate
 };
