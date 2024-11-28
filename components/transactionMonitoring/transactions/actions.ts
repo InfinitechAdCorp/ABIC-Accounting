@@ -11,7 +11,6 @@ import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 
-
 export async function getAll() {
   let transactions = [];
 

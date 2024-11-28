@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
+import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { ActionResponse } from "@/components/globals/types";
 import {
@@ -31,7 +32,7 @@ export async function getAll() {
   return response;
 }
 
-export async function create(values, actions) {
+export async function create(values: Prisma.ClientCreateInput) {
   const schema = createSchema;
 
   try {
@@ -59,7 +60,7 @@ export async function create(values, actions) {
   return response;
 }
 
-export async function update(values, actions) {
+export async function update(values: Prisma.ClientCreateInput) {
   const schema = updateSchema;
 
   try {
@@ -94,7 +95,7 @@ export async function update(values, actions) {
   return response;
 }
 
-export async function destroy(values, actions) {
+export async function destroy(values: { id: string }) {
   const schema = destroySchema
 
   try {
