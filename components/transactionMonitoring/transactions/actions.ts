@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
+import { Prisma } from "@prisma/client";
 import { ActionResponse } from "@/components/globals/types";
 import { revalidatePath } from "next/cache";
 import {
@@ -10,6 +11,8 @@ import {
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
+
+type TransactionCreateInput = Prisma.TransactionCreateInput & { account_id?: string };
 
 export async function getAll() {
   let transactions = [];
@@ -37,7 +40,7 @@ export async function getAll() {
   return response;
 }
 
-export async function create(values, actions) {
+export async function create(values: TransactionCreateInput) {
   const schema = createSchema
 
   try {
@@ -75,7 +78,7 @@ export async function create(values, actions) {
   return response;
 }
 
-export async function update(values, actions) {
+export async function update(values: TransactionCreateInput) {
   const schema = updateSchema
 
   try {
@@ -117,7 +120,7 @@ export async function update(values, actions) {
   return response;
 }
 
-export async function destroy(values, actions) {
+export async function destroy(values: { id: string }) {
   const schema = destroySchema
 
   try {

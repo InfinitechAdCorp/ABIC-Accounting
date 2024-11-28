@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
+import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { ActionResponse } from "@/components/globals/types";
 import { addMonths, getDate, setDate } from "date-fns";
@@ -12,6 +13,8 @@ import {
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
+
+type ContractCreateInput = Prisma.ContractCreateInput & { client_id?: string };
 
 export async function getAll() {
   let contracts = [];
@@ -36,7 +39,7 @@ export async function getAll() {
   return response;
 }
 
-export async function create(values, actions) {
+export async function create(values: ContractCreateInput) {
   const schema = createSchema;
 
   try {
@@ -59,11 +62,11 @@ export async function create(values, actions) {
         location: values.location,
         start: new Date(new Date(values.start).setUTCHours(0, 0, 0, 0)),
         end: new Date(new Date(values.end).setUTCHours(0, 0, 0, 0)),
-        advance: parseInt(values.advance),
-        deposit: parseInt(values.deposit),
-        tenant_price: parseFloat(values.tenant_price),
-        owner_income: parseFloat(values.owner_income),
-        abic_income: parseFloat(values.abic_income),
+        advance: values.advance,
+        deposit: values.deposit,
+        tenant_price: values.tenant_price,
+        owner_income: values.owner_income,
+        abic_income: values.abic_income,
         due: new Date(new Date(values.due).setUTCHours(0, 0, 0, 0)),
         client: { connect: { id: values.client_id } },
       },
@@ -78,7 +81,7 @@ export async function create(values, actions) {
   return response;
 }
 
-export async function update(values, actions) {
+export async function update(values: ContractCreateInput) {
   const schema = updateSchema;
 
   try {
@@ -102,11 +105,11 @@ export async function update(values, actions) {
         location: values.location,
         start: new Date(new Date(values.start).setUTCHours(0, 0, 0, 0)),
         end: new Date(new Date(values.end).setUTCHours(0, 0, 0, 0)),
-        advance: parseInt(values.advance),
-        deposit: parseInt(values.deposit),
-        tenant_price: parseFloat(values.tenant_price),
-        owner_income: parseFloat(values.owner_income),
-        abic_income: parseFloat(values.abic_income),
+        advance: values.advance,
+        deposit: values.deposit,
+        tenant_price: values.tenant_price,
+        owner_income: values.owner_income,
+        abic_income: values.abic_income,
         due: new Date(new Date(values.due).setUTCHours(0, 0, 0, 0)),
         client: { connect: { id: values.client_id } },
       },
@@ -121,7 +124,7 @@ export async function update(values, actions) {
   return response;
 }
 
-export async function destroy(values, actions) {
+export async function destroy(values: { id: string }) {
   const schema = destroySchema;
 
   try {
@@ -151,7 +154,7 @@ export async function destroy(values, actions) {
   return response;
 }
 
-export async function markAsPaid(values, actions) {
+export async function markAsPaid(values: { id: string }) {
   const schema = markAsPaidSchema;
 
   try {
