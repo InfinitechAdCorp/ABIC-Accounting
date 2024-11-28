@@ -18,6 +18,7 @@ import {
   Pagination,
   Selection,
   SortDescriptor,
+  Chip,
 } from "@nextui-org/react";
 import {
   FormattedContract,
@@ -120,7 +121,7 @@ const DataTable = ({
 
   const renderCell = React.useCallback(
     (row: Row, columnKey: string) => {
-      const cellValue = row[columnKey as keyof Row];
+      let cellValue = row[columnKey as keyof Row];
 
       const dateColumns = ["start", "end", "due"];
       const moneyColumns = ["tenant_price", "owner_income", "abic_income"];
@@ -143,6 +144,12 @@ const DataTable = ({
         return formatDate(cellValue);
       } else if (moneyColumns.includes(columnKey)) {
         return formatNumber(cellValue);
+      } else if (columnKey == "status") {
+        return (
+          <Chip color={row.chipColor} size="sm" variant="flat">
+            {cellValue}
+          </Chip>
+        );
       } else {
         return cellValue;
       }

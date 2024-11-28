@@ -47,7 +47,7 @@ export const formatAccounts = (accounts: AccountWithTransactions[]) => {
   const formattedAccounts: FormattedAccount[] = [];
 
   accounts.forEach((account) => {
-    const starting_balance = account.starting_balance.toNumber()
+    const starting_balance = account.starting_balance.toNumber();
     let current_balance = starting_balance;
     const transactions = account.transactions;
     transactions.forEach((transaction) => {
@@ -86,6 +86,7 @@ export const formatTransactions = (transactions: TransactionWithAccount[]) => {
         id: account?.id as string,
         name: account?.name as string,
         starting_balance: starting_balance as number,
+        current_balance: 0,
       },
       account_id: transaction.account_id as string,
       amount: amount,
@@ -221,5 +222,5 @@ export const dateValueToDate = (dateValue: DateValue) => {
   const formattedDate = new Date(
     new Date(dateValue.toString()).setUTCHours(0, 0, 0, 0)
   );
-  return formattedDate
+  return formattedDate;
 };
