@@ -3,7 +3,7 @@ import { getAll as getTransactions } from "@/components/transactionMonitoring/tr
 import { getAll as getAccounts } from "@/components/transactionMonitoring/accounts/actions";
 import { Card, CardBody } from "@nextui-org/react";
 import { formatAccounts, formatTransactions } from "@/components/globals/utils";
-import TransactionsTable from "@/components/transactionMonitoring/transactions/dataTable";
+import DataTable from "@/components/transactionMonitoring/transactions/dataTable";
 
 const Transactions = async () => {
   const columns = [
@@ -40,7 +40,7 @@ const Transactions = async () => {
         <Card className="my-5 p-3">
           <CardBody>
             <h1 className="text-lg font-semibold mb-3">Transactions</h1>
-            <TransactionsTable
+            <DataTable
               model="transactions"
               columns={columns}
               rows={formattedTransactions}

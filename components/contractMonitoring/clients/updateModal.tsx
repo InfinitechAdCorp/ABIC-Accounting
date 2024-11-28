@@ -13,16 +13,17 @@ import { FormattedClient } from "@/components/contractMonitoring/types";
 import { update as updateSchema } from "@/components/contractMonitoring/clients/schemas";
 import { useFormik } from "formik";
 import { update as updateAction } from "@/components/contractMonitoring/clients/actions";
+import { Prisma } from "@prisma/client";
 
 interface Props {
   client: FormattedClient;
 }
 
-const EditModal = ({ client }: Props) => {
+const UpdateModal = ({ client }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const onSubmit = async (values, actions) => {
-    updateAction(values, actions);
+  const onSubmit = async (values: Prisma.ClientCreateInput) => {
+    updateAction(values);
   };
 
   const {
@@ -96,4 +97,4 @@ const EditModal = ({ client }: Props) => {
   );
 };
 
-export default EditModal;
+export default UpdateModal;

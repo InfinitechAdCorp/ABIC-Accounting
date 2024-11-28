@@ -13,16 +13,17 @@ import { FormattedAccount } from "@/components/transactionMonitoring/types";
 import { update as updateSchema } from "@/components/transactionMonitoring/accounts/schemas";
 import { useFormik } from "formik";
 import { update as updateAction } from "@/components/transactionMonitoring/accounts/actions";
+import { Prisma } from "@prisma/client";
 
 interface Props {
   account: FormattedAccount;
 }
 
-const EditModal = ({ account }: Props) => {
+const UpdateModal = ({ account }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const onSubmit = async (values, actions) => {
-    updateAction(values, actions);
+  const onSubmit = async (values: Prisma.AccountCreateInput) => {
+    updateAction(values);
   };
 
   const {
@@ -114,4 +115,4 @@ const EditModal = ({ account }: Props) => {
   );
 };
 
-export default EditModal;
+export default UpdateModal;

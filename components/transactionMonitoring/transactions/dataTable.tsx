@@ -23,15 +23,11 @@ import {
   FormattedTransaction,
   FormattedAccount,
 } from "@/components/transactionMonitoring/types";
-import {
-  handleSubmit,
-  formatDate,
-  formatNumber,
-} from "@/components/globals/utils";
-import AddTransactionModal from "@/components/transactionMonitoring/transactions/createModal";
-import EditTransactionModal from "@/components/transactionMonitoring/transactions/updateModal";
-import DeleteModal from "@/components/globals/destroyModal";
-import { deleteTransaction } from "@/components/transactionMonitoring/transactions/actions";
+import { formatDate, formatNumber } from "@/components/globals/utils";
+import CreateModal from "@/components/transactionMonitoring/transactions/createModal";
+import UpdateModal from "@/components/transactionMonitoring/transactions/updateModal";
+import DestroyModal from "@/components/globals/destroyModal";
+import { destroy } from "@/components/transactionMonitoring/transactions/actions";
 
 type column = {
   name: string;
@@ -120,16 +116,8 @@ const DataTable = ({
       if (columnKey == "actions") {
         return (
           <div className="relative flex justify-end items-center gap-2">
-            <EditTransactionModal
-              onSubmit={handleSubmit}
-              transaction={row}
-              accounts={accounts}
-            />
-            <DeleteModal
-              title="Transaction"
-              action={deleteTransaction}
-              id={row.id}
-            />
+            <UpdateModal transaction={row} accounts={accounts} />
+            <DestroyModal title="Transaction" action={destroy} id={row.id} />
           </div>
         );
       } else if (columnKey == "account") {
@@ -215,7 +203,7 @@ const DataTable = ({
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <AddTransactionModal accounts={accounts} />
+            <CreateModal accounts={accounts} />
           </div>
         </div>
         <div className="flex justify-between items-center">

@@ -15,17 +15,45 @@ import {
   SelectItem,
   Textarea,
 } from "@nextui-org/react";
-import { addTransaction } from "@/components/transactionMonitoring/transactions/actions";
 import { FormattedAccount } from "@/components/transactionMonitoring/types";
-import { handleSubmit } from "@/components/globals/utils";
-import Form from "next/form";
+import { create as createSchema } from "@/components/transactionMonitoring/transactions/schemas";
+import { useFormik } from "formik";
+import { create as createAction } from "@/components/transactionMonitoring/transactions/actions";
+import { Prisma } from "@prisma/client";
 
 interface Props {
   accounts: FormattedAccount[];
 }
 
-const AddTransactionModal = ({ accounts }: Props) => {
+const CreateModal = ({ accounts }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const onSubmit = async (values: Prisma.TransactionCreateInput, actions) => {
+    createAction(values);
+    actions.resetForm();
+  };
+
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+  } = useFormik({
+    initialValues: {
+      date: "",
+      voucher: "",
+      check: "",
+      account_id: "",
+      particulars: "",
+      type: "",
+      amount: "",
+    },
+    validationSchema: createSchema,
+    onSubmit,
+  });
 
   return (
     <>
@@ -37,11 +65,7 @@ const AddTransactionModal = ({ accounts }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <Form
-                action={(formData) =>
-                  handleSubmit(addTransaction, formData, onClose)
-                }
-              >
+              <form onSubmit={handleSubmit}>
                 <ModalHeader>Add Transaction</ModalHeader>
                 <ModalBody>
                   <DatePicker
@@ -53,25 +77,41 @@ const AddTransactionModal = ({ accounts }: Props) => {
                   />
 
                   <div className="grid grid-cols-2 gap-3">
-                    <Input
-                      type="text"
-                      size="md"
-                      variant="bordered"
-                      label="Voucher Number"
-                      labelPlacement="outside"
-                      placeholder="Enter Voucher Number"
-                      name="voucher"
-                    />
+                    <div>
+                      <Input
+                        type="text"
+                        size="md"
+                        variant="bordered"
+                        label="Voucher Number"
+                        labelPlacement="outside"
+                        placeholder="Enter Voucher Number"
+                        name="voucher"
+                        value={values.voucher}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.voucher && touched.voucher && (
+                        <small className="text-red-500">{errors.voucher}</small>
+                      )}
+                    </div>
 
-                    <Input
-                      type="text"
-                      size="md"
-                      variant="bordered"
-                      label="Check Number"
-                      labelPlacement="outside"
-                      placeholder="Enter Check Number"
-                      name="check"
-                    />
+                    <div>
+                      <Input
+                        type="text"
+                        size="md"
+                        variant="bordered"
+                        label="Check Number"
+                        labelPlacement="outside"
+                        placeholder="Enter Check Number"
+                        name="check"
+                        value={values.check}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.check && touched.check && (
+                        <small className="text-red-500">{errors.check}</small>
+                      )}
+                    </div>
                   </div>
 
                   <Select
@@ -95,41 +135,61 @@ const AddTransactionModal = ({ accounts }: Props) => {
                     labelPlacement="outside"
                     placeholder="Enter Particulars"
                     name="particulars"
+                    value={values.particulars}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
+                  {errors.particulars && touched.particulars && (
+                    <small className="text-red-500">{errors.particulars}</small>
+                  )}
 
                   <div className="grid grid-cols-2 gap-3">
-                    <Select
-                      size="md"
-                      variant="bordered"
-                      label="Type"
-                      labelPlacement="outside"
-                      placeholder="Select Type"
-                      name="type"
-                    >
-                      <SelectItem key="Credit">Credit</SelectItem>
-                      <SelectItem key="Debit">Debit</SelectItem>
-                    </Select>
+                    <div>
+                      <Select
+                        size="md"
+                        variant="bordered"
+                        label="Type"
+                        labelPlacement="outside"
+                        placeholder="Select Type"
+                        name="type"
+                      >
+                        <SelectItem key="Credit">Credit</SelectItem>
+                        <SelectItem key="Debit">Debit</SelectItem>
+                      </Select>
+                    </div>
 
-                    <Input
-                      type="number"
-                      size="md"
-                      variant="bordered"
-                      label="Amount"
-                      labelPlacement="outside"
-                      placeholder="Enter Amount"
-                      name="amount"
-                    />
+                    <div>
+                      <Input
+                        type="text"
+                        size="md"
+                        variant="bordered"
+                        label="Amount"
+                        labelPlacement="outside"
+                        placeholder="Enter Amount"
+                        name="amount"
+                        value={values.amount}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.amount && touched.amount && (
+                        <small className="text-red-500">{errors.amount}</small>
+                      )}
+                    </div>
                   </div>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" type="submit">
+                  <Button
+                    color="primary"
+                    type="submit"
+                    isLoading={isSubmitting}
+                  >
                     Save
                   </Button>
                   <Button color="danger" onPress={onClose}>
                     Cancel
                   </Button>
                 </ModalFooter>
-              </Form>
+              </form>
             </>
           )}
         </ModalContent>
@@ -138,4 +198,4 @@ const AddTransactionModal = ({ accounts }: Props) => {
   );
 };
 
-export default AddTransactionModal;
+export default CreateModal;

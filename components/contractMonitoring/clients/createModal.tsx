@@ -14,12 +14,13 @@ import {
 import { create as createSchema } from "@/components/contractMonitoring/clients/schemas";
 import { useFormik } from "formik";
 import { create as createAction } from "@/components/contractMonitoring/clients/actions";
+import { Prisma } from "@prisma/client";
 
-const AddModal = () => {
+const CreateModal = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const onSubmit = async (values, actions) => {
-    createAction(values, actions);
+  const onSubmit = async (values: Prisma.ClientCreateInput, actions) => {
+    createAction(values);
     actions.resetForm()
   };
 
@@ -89,4 +90,4 @@ const AddModal = () => {
   );
 };
 
-export default AddModal;
+export default CreateModal;

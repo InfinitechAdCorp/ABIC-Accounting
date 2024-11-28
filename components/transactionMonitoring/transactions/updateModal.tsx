@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Modal,
   ModalContent,
@@ -13,47 +13,50 @@ import {
   SelectItem,
   Textarea,
 } from "@nextui-org/react";
-import { updateTransaction } from "@/components/transactionMonitoring/transactions/actions";
 import {
   FormattedTransaction,
   FormattedAccount,
 } from "@/components/transactionMonitoring/types";
-import { ActionResponse } from "@/components/globals/types";
-import { parseDate } from "@internationalized/date";
-import Form from "next/form";
+import { update as updateSchema } from "@/components/transactionMonitoring/transactions/schemas";
+import { useFormik } from "formik";
+import { update as updateAction } from "@/components/transactionMonitoring/transactions/actions";
+import { Prisma } from "@prisma/client";
 
 interface Props {
-  onSubmit: (
-    action: (formData: FormData) => Promise<ActionResponse>,
-    formData: FormData,
-    onClose: () => void
-  ) => void;
   transaction: FormattedTransaction;
   accounts: FormattedAccount[];
 }
 
-const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
+const UpdateModal = ({ transaction, accounts }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const [transactionData, setTransactionData] = useState(transaction);
-
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    setTransactionData({ ...transactionData, [name]: value });
+  const onSubmit = async (values: Prisma.TransactionCreateInput) => {
+    updateAction(values);
   };
 
-  const formatDate = (date: Date) => {
-    if (date) {
-      const localeDate = date.toLocaleDateString("en-CA");
-      const formattedDate = parseDate(localeDate);
-      return formattedDate;
-    }
-  };
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+  } = useFormik({
+    initialValues: {
+      id: transaction.id,
+      date: transaction.date,
+      voucher: transaction.voucher,
+      check: transaction.check,
+      account_id: transaction.account_id,
+      particulars: transaction.particulars,
+      type: transaction.type,
+      amount: transaction.amount,
+    },
+    validationSchema: updateSchema,
+    onSubmit,
+    enableReinitialize: true,
+  });
 
   return (
     <>
@@ -65,14 +68,10 @@ const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <Form
-                action={(formData) =>
-                  onSubmit(updateTransaction, formData, onClose)
-                }
-              >
+              <form onSubmit={handleSubmit}>
                 <ModalHeader>Edit Transaction</ModalHeader>
                 <ModalBody>
-                  <input type="hidden" value={transactionData.id} name="id" />
+                  <input type="hidden" value={values.id} name="id" />
 
                   <DatePicker
                     size="md"
@@ -80,33 +79,44 @@ const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
                     label="Voucher Date"
                     labelPlacement="outside"
                     name="date"
-                    defaultValue={formatDate(transactionData.date)}
                   />
 
                   <div className="grid grid-cols-2 gap-3">
-                    <Input
-                      type="text"
-                      size="md"
-                      variant="bordered"
-                      label="Voucher Number"
-                      labelPlacement="outside"
-                      placeholder="Enter Voucher Number"
-                      name="voucher"
-                      value={transactionData.voucher}
-                      onChange={(e) => handleChange(e)}
-                    />
+                    <div>
+                      <Input
+                        type="text"
+                        size="md"
+                        variant="bordered"
+                        label="Voucher Number"
+                        labelPlacement="outside"
+                        placeholder="Enter Voucher Number"
+                        name="voucher"
+                        value={values.voucher}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.voucher && touched.voucher && (
+                        <small className="text-red-500">{errors.voucher}</small>
+                      )}
+                    </div>
 
-                    <Input
-                      type="text"
-                      size="md"
-                      variant="bordered"
-                      label="Check Number"
-                      labelPlacement="outside"
-                      placeholder="Enter Check Number"
-                      name="check"
-                      value={transactionData.check}
-                      onChange={(e) => handleChange(e)}
-                    />
+                    <div>
+                      <Input
+                        type="text"
+                        size="md"
+                        variant="bordered"
+                        label="Check Number"
+                        labelPlacement="outside"
+                        placeholder="Enter Check Number"
+                        name="check"
+                        value={values.check}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.check && touched.check && (
+                        <small className="text-red-500">{errors.check}</small>
+                      )}
+                    </div>
                   </div>
 
                   <Select
@@ -117,7 +127,7 @@ const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
                     placeholder="Select Account"
                     name="account_id"
                     items={accounts}
-                    defaultSelectedKeys={[transactionData.account_id as string]}
+                    defaultSelectedKeys={[values.account_id as string]}
                     onChange={(e) => handleChange(e)}
                   >
                     {(account) => (
@@ -132,47 +142,59 @@ const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
                     labelPlacement="outside"
                     placeholder="Enter Particulars"
                     name="particulars"
-                    value={transactionData.particulars}
-                    onChange={(e) => handleChange(e)}
+                    value={values.particulars}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
+                  {errors.particulars && touched.particulars && (
+                    <small className="text-red-500">{errors.particulars}</small>
+                  )}
 
                   <div className="grid grid-cols-2 gap-3">
-                    <Select
-                      size="md"
-                      variant="bordered"
-                      label="Type"
-                      labelPlacement="outside"
-                      placeholder="Select Type"
-                      name="type"
-                      defaultSelectedKeys={[transactionData.type as string]}
-                      onChange={(e) => handleChange(e)}
-                    >
-                      <SelectItem key="Credit">Credit</SelectItem>
-                      <SelectItem key="Debit">Debit</SelectItem>
-                    </Select>
+                    <div>
+                      <Select
+                        size="md"
+                        variant="bordered"
+                        label="Type"
+                        labelPlacement="outside"
+                        placeholder="Select Type"
+                        name="type"
+                        defaultSelectedKeys={[values.type as string]}
+                        onChange={(e) => handleChange(e)}
+                      >
+                        <SelectItem key="Credit">Credit</SelectItem>
+                        <SelectItem key="Debit">Debit</SelectItem>
+                      </Select>
+                    </div>
 
-                    <Input
-                      type="number"
-                      size="md"
-                      variant="bordered"
-                      label="Amount"
-                      labelPlacement="outside"
-                      placeholder="Select Amount"
-                      name="amount"
-                      value={transactionData.amount.toString()}
-                      onChange={(e) => handleChange(e)}
-                    />
+                    <div>
+                      <Input
+                        type="text"
+                        size="md"
+                        variant="bordered"
+                        label="Amount"
+                        labelPlacement="outside"
+                        placeholder="Select Amount"
+                        name="amount"
+                        value={values.amount.toString()}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.amount && touched.amount && (
+                        <small className="text-red-500">{errors.amount}</small>
+                      )}
+                    </div>
                   </div>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" type="submit">
+                  <Button color="primary" type="submit" isLoading={isSubmitting}>
                     Update
                   </Button>
                   <Button color="danger" onPress={onClose}>
                     Cancel
                   </Button>
                 </ModalFooter>
-              </Form>
+              </form>
             </>
           )}
         </ModalContent>
@@ -181,4 +203,4 @@ const EditTransactionModal = ({ onSubmit, transaction, accounts }: Props) => {
   );
 };
 
-export default EditTransactionModal;
+export default UpdateModal;
