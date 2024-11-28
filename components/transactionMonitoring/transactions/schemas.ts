@@ -1,22 +1,30 @@
 import * as Yup from "yup";
 
 export const create = Yup.object().shape({
-  date: Yup.date().required(),
-  voucher: Yup.string().required(),
-  check: Yup.string().required(),
-  account_id: Yup.string().required(),
-  particulars: Yup.string().required(),
-  type: Yup.string().required(),
-  amount: Yup.number().moreThan(-1),
+  date: Yup.date()
+    .typeError("Date must be a valid date")
+    .required("Date is a required field"),
+  voucher: Yup.string().required("Voucher is a required field"),
+  check: Yup.string().required("Check is a required field"),
+  account_id: Yup.string().required("Account ID is a required field"),
+  particulars: Yup.string().required("Particulars is a required field"),
+  type: Yup.string().required("Type is a required field"),
+  amount: Yup.number()
+    .typeError("Amount must be a number")
+    .moreThan(-1, "Amount must be a positive number"),
 });
 
 export const update = Yup.object().shape({
-  id: Yup.string().required(),
-  date: Yup.date().required(),
-  voucher: Yup.string().required(),
-  check: Yup.string().required(),
-  account_id: Yup.string().required(),
-  particulars: Yup.string().required(),
-  type: Yup.string().required(),
-  amount: Yup.number().moreThan(-1),
+  id: Yup.string().required("ID is a required field"),
+  date: Yup.date()
+    .typeError("Date must be a valid date")
+    .required("Date is a required field"),
+  voucher: Yup.string().required("Voucher is a required field"),
+  check: Yup.string().required("Check is a required field"),
+  account_id: Yup.string().required("Account ID is a required field"),
+  particulars: Yup.string().required("Particulars is a required field"),
+  type: Yup.string().required("Type is a required field"),
+  amount: Yup.number()
+    .typeError("Amount must be a number")
+    .moreThan(-1, "Amount must be a positive number"),
 });
