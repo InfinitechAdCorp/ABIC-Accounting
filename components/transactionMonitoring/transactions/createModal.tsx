@@ -20,17 +20,31 @@ import { create as createSchema } from "@/components/transactionMonitoring/trans
 import { useFormik } from "formik";
 import { create as createAction } from "@/components/transactionMonitoring/transactions/actions";
 import { Prisma } from "@prisma/client";
+import { toast } from "react-toastify";
 
 interface Props {
   accounts: FormattedAccount[];
 }
 
 const CreateModal = ({ accounts }: Props) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
-  const onSubmit = async (values: Prisma.TransactionCreateInput, actions) => {
-    createAction(values);
-    actions.resetForm();
+  const onSubmit = async (
+    values: Prisma.TransactionCreateInput,
+    actions: { resetForm: () => void }
+  ) => {
+    createAction(values).then((response) => {
+      if (response.code == 200) {
+        actions.resetForm();
+        toast.success(response.message);
+        onClose();
+      } else {
+        if (response.code == 429) {
+          console.log(response.errors);
+        }
+        toast.error(response.message);
+      }
+    });
   };
 
   const {

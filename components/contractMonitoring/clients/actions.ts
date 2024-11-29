@@ -8,8 +8,8 @@ import {
   create as createSchema,
   update as updateSchema,
 } from "@/components/contractMonitoring/clients/schemas";
-import { destroy as destroySchema } from "@/components/globals/schemas"
-import { formatErrors } from "@/components/globals/utils"
+import { destroy as destroySchema } from "@/components/globals/schemas";
+import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 
 export async function getAll() {
@@ -96,7 +96,7 @@ export async function update(values: Prisma.ClientCreateInput) {
 }
 
 export async function destroy(values: { id: string }) {
-  const schema = destroySchema
+  const schema = destroySchema;
 
   try {
     await schema.validate(values, { abortEarly: false });

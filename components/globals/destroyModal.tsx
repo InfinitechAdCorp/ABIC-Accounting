@@ -13,6 +13,7 @@ import {
 import { ActionResponse } from "@/components/globals/types";
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { useFormik } from "formik";
+import { toast } from "react-toastify";
 
 interface Props {
   title: string;
@@ -21,11 +22,24 @@ interface Props {
 }
 
 const DestroyModal = ({ title, action, id }: Props) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
-  const onSubmit = async (values: { id: string }, actions) => {
-    action(values);
-    actions.resetForm();
+  const onSubmit = async (
+    values: { id: string },
+    actions: { resetForm: () => void }
+  ) => {
+    action(values).then((response) => {
+      if (response.code == 200) {
+        actions.resetForm();
+        toast.success(response.message);
+        onClose();
+      } else {
+        if (response.code == 429) {
+          console.log(response.errors);
+        }
+        toast.error(response.message);
+      }
+    });
   };
 
   const { values, isSubmitting, handleSubmit } = useFormik({

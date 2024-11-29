@@ -14,16 +14,29 @@ import { update as updateSchema } from "@/components/contractMonitoring/clients/
 import { useFormik } from "formik";
 import { update as updateAction } from "@/components/contractMonitoring/clients/actions";
 import { Prisma } from "@prisma/client";
+import { toast } from "react-toastify";
 
 interface Props {
   client: FormattedClient;
 }
 
 const UpdateModal = ({ client }: Props) => {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
-  const onSubmit = async (values: Prisma.ClientCreateInput) => {
-    updateAction(values);
+  const onSubmit = async (
+    values: Prisma.ClientCreateInput,
+  ) => {
+    updateAction(values).then((response) => {
+      if (response.code == 200) {
+        toast.success(response.message);
+        onClose();
+      } else {
+        if (response.code == 429) {
+          console.log(response.errors);
+        }
+        toast.error(response.message);
+      }
+    });
   };
 
   const {
