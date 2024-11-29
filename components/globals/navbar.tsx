@@ -8,16 +8,25 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const Navbar = () => {
   const router = useRouter();
+  const pathname = usePathname();
+
+  const isActive = (hrefs: string[]) => hrefs.includes(pathname);
 
   return (
     <>
       <div className="flex gap-3 items-center bg-sky-600 p-5">
         <Link href="/" className="text-center">
-          <h3 className="text-white font-semibold">Dashboard</h3>
+          <h3
+            className={`text-white cursor-pointer ${
+              isActive(["/"]) ? "font-black" : "font-semibold"
+            }`}
+          >
+            Dashboard
+          </h3>
         </Link>
 
         <Dropdown
@@ -26,16 +35,28 @@ const Navbar = () => {
           }}
         >
           <DropdownTrigger className="text-center">
-            <h3 className="text-white font-semibold cursor-pointer">
+            <h3
+              className={`text-white cursor-pointer ${
+                isActive(["/accounts", "/transactions"])
+                  ? "font-black"
+                  : "font-semibold"
+              }`}
+            >
               Transaction Monitoring
             </h3>
           </DropdownTrigger>
 
           <DropdownMenu className="text-center">
-            <DropdownItem onClick={() => router.push("/accounts")} textValue="Accounts">
+            <DropdownItem
+              onClick={() => router.push("/accounts")}
+              textValue="Accounts"
+            >
               <h3 className="font-semibold">Accounts</h3>
             </DropdownItem>
-            <DropdownItem onClick={() => router.push("/transactions")} textValue="Transactions">
+            <DropdownItem
+              onClick={() => router.push("/transactions")}
+              textValue="Transactions"
+            >
               <h3 className="font-semibold">Transactions</h3>
             </DropdownItem>
           </DropdownMenu>
@@ -47,15 +68,27 @@ const Navbar = () => {
           }}
         >
           <DropdownTrigger className="text-center">
-            <h3 className="text-white font-semibold cursor-pointer">
+            <h3
+              className={`text-white cursor-pointer ${
+                isActive(["/clients", "/contracts"])
+                  ? "font-black"
+                  : "font-semibold"
+              }`}
+            >
               Contract Monitoring
             </h3>
           </DropdownTrigger>
           <DropdownMenu className="text-center">
-            <DropdownItem onClick={() => router.push("/clients")} textValue="Clients">
+            <DropdownItem
+              onClick={() => router.push("/clients")}
+              textValue="Clients"
+            >
               <h3 className="font-semibold">Clients</h3>
             </DropdownItem>
-            <DropdownItem onClick={() => router.push("/contracts")} textValue="Contracts">
+            <DropdownItem
+              onClick={() => router.push("/contracts")}
+              textValue="Contracts"
+            >
               <h3 className="font-semibold">Contracts</h3>
             </DropdownItem>
           </DropdownMenu>
