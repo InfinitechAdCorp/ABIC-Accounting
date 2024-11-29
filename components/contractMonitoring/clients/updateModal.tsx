@@ -25,9 +25,11 @@ const UpdateModal = ({ client }: Props) => {
 
   const onSubmit = async (
     values: Prisma.ClientCreateInput,
+    actions: { resetForm: () => void }
   ) => {
     updateAction(values).then((response) => {
       if (response.code == 200) {
+        actions.resetForm();
         toast.success(response.message);
         onClose();
       } else {

@@ -23,9 +23,13 @@ interface Props {
 const UpdateModal = ({ account }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
-  const onSubmit = async (values: Prisma.AccountCreateInput) => {
+  const onSubmit = async (
+    values: Prisma.AccountCreateInput,
+    actions: { resetForm: () => void }
+  ) => {
     updateAction(values).then((response) => {
       if (response.code == 200) {
+        actions.resetForm();
         toast.success(response.message);
         onClose();
       } else {

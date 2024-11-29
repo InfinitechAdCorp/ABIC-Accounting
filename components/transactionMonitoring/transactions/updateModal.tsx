@@ -34,9 +34,11 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
 
   const onSubmit = async (
     values: Prisma.TransactionCreateInput,
+    actions: { resetForm: () => void }
   ) => {
     updateAction(values).then((response) => {
       if (response.code == 200) {
+        actions.resetForm();
         toast.success(response.message);
         onClose();
       } else {

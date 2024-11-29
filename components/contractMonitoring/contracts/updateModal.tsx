@@ -37,9 +37,13 @@ interface Props {
 const UpdateModal = ({ contract, clients, locations }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
-  const onSubmit = async (values: Prisma.ContractCreateInput) => {
+  const onSubmit = async (
+    values: Prisma.ContractCreateInput,
+    actions: { resetForm: () => void }
+  ) => {
     updateAction(values).then((response) => {
       if (response.code == 200) {
+        actions.resetForm();
         toast.success(response.message);
         onClose();
       } else {
