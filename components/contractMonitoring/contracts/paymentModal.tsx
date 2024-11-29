@@ -23,6 +23,7 @@ const PaymentModal = ({ action, id }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const onSubmit = async (values: { id: string }, actions) => {
+    await new Promise((resolve) => setTimeout(resolve, 5000))
     action(values);
     actions.resetForm();
   };

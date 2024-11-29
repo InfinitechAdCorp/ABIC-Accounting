@@ -56,8 +56,8 @@ const Contracts = async () => {
 
   return (
     <>
-      <div className="flex justify-center">
-        <Card className="m-5 p-3">
+      <div className="flex justify-center max-h-[93vh]">
+        <Card className="m-5 md:m-7 p-3">
           <CardBody>
             <h1 className="text-lg font-semibold mb-3">Contracts</h1>
             <DataTable
