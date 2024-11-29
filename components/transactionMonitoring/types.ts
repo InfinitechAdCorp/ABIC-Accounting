@@ -4,8 +4,7 @@ export type FormattedAccount = {
   id: string;
   name: string;
   starting_balance: number;
-  current_balance: number;
-  transactions?: number;
+  transactions?: FormattedTransaction[];
 };
 
 export type FormattedTransaction = {

@@ -13,6 +13,26 @@ import {
 import { differenceInMonths, differenceInDays } from "date-fns";
 import * as Yup from "yup";
 import { DateValue, parseDate } from "@internationalized/date";
+import { toast } from "react-toastify";
+import { ActionResponse } from "@/components/globals/types";
+
+// Event Handlers
+export const handlePostSubmit = (
+  response: ActionResponse,
+  actions: { resetForm: () => void },
+  onClose: () => void
+) => {
+  if (response.code == 200) {
+    actions.resetForm();
+    toast.success(response.message);
+    onClose();
+  } else {
+    if (response.code == 429) {
+      console.log(response.errors);
+    }
+    toast.error(response.message);
+  }
+};
 
 // Data Formatters
 
@@ -20,23 +40,19 @@ export const formatAccounts = (accounts: AccountWithTransactions[]) => {
   const formattedAccounts: FormattedAccount[] = [];
 
   accounts.forEach((account) => {
-    const starting_balance = account.starting_balance.toNumber();
-    let current_balance = starting_balance;
-    const transactions = account.transactions;
-    transactions.forEach((transaction) => {
-      const amount = transaction.amount.toNumber();
-      if (transaction.type == "Credit") {
-        current_balance += amount;
-      } else {
-        current_balance -= amount;
-      }
+    let formattedTransactions: FormattedTransaction[] = [];
+    account.transactions.forEach((transaction) => {
+      const formattedTransaction = {
+        ...transaction,
+        amount: transaction.amount.toNumber(),
+      };
+      formattedTransactions.push(formattedTransaction);
     });
 
     const formattedAccount = {
       ...account,
-      starting_balance: starting_balance,
-      current_balance: current_balance,
-      transactions: transactions.length,
+      starting_balance: account.starting_balance.toNumber(),
+      transactions: formattedTransactions,
     };
     formattedAccounts.push(formattedAccount);
   });

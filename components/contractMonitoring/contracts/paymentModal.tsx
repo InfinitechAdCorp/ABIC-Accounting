@@ -13,7 +13,7 @@ import {
 import { ActionResponse } from "@/components/globals/types";
 import { markAsPaid } from "@/components/contractMonitoring/contracts/schemas";
 import { useFormik } from "formik";
-import { toast } from "react-toastify";
+import { handlePostSubmit } from "@/components/globals/utils";
 
 interface Props {
   action: (values: { id: string }) => Promise<ActionResponse>;
@@ -27,18 +27,7 @@ const PaymentModal = ({ action, id }: Props) => {
     values: { id: string },
     actions: { resetForm: () => void }
   ) => {
-    action(values).then((response) => {
-      if (response.code == 200) {
-        actions.resetForm();
-        toast.success(response.message);
-        onClose();
-      } else {
-        if (response.code == 429) {
-          console.log(response.errors);
-        }
-        toast.error(response.message);
-      }
-    });
+    action(values).then((response) => handlePostSubmit(response, actions, onClose));
   };
 
   const { values, isSubmitting, handleSubmit } = useFormik({

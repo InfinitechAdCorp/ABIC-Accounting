@@ -14,7 +14,7 @@ import { update as updateSchema } from "@/components/transactionMonitoring/accou
 import { useFormik } from "formik";
 import { update as updateAction } from "@/components/transactionMonitoring/accounts/actions";
 import { Prisma } from "@prisma/client";
-import { toast } from "react-toastify";
+import { handlePostSubmit } from "@/components/globals/utils";
 
 interface Props {
   account: FormattedAccount;
@@ -27,18 +27,9 @@ const UpdateModal = ({ account }: Props) => {
     values: Prisma.AccountCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    updateAction(values).then((response) => {
-      if (response.code == 200) {
-        actions.resetForm();
-        toast.success(response.message);
-        onClose();
-      } else {
-        if (response.code == 429) {
-          console.log(response.errors);
-        }
-        toast.error(response.message);
-      }
-    });
+    updateAction(values).then((response) =>
+      handlePostSubmit(response, actions, onClose)
+    );
   };
 
   const {

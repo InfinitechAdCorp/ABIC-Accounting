@@ -15,7 +15,7 @@ import { create as createSchema } from "@/components/contractMonitoring/clients/
 import { useFormik } from "formik";
 import { create as createAction } from "@/components/contractMonitoring/clients/actions";
 import { Prisma } from "@prisma/client";
-import { toast } from "react-toastify";
+import { handlePostSubmit } from "@/components/globals/utils";
 
 const CreateModal = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -24,18 +24,7 @@ const CreateModal = () => {
     values: Prisma.ClientCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    createAction(values).then((response) => {
-      if (response.code == 200) {
-        actions.resetForm();
-        toast.success(response.message);
-        onClose();
-      } else {
-        if (response.code == 429) {
-          console.log(response.errors);
-        }
-        toast.error(response.message);
-      }
-    });
+    createAction(values).then((response) => handlePostSubmit(response, actions, onClose));
   };
 
   const {

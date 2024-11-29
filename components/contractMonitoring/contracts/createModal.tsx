@@ -19,7 +19,7 @@ import { create as createSchema } from "@/components/contractMonitoring/contract
 import { useFormik } from "formik";
 import { create as createAction } from "@/components/contractMonitoring/contracts/actions";
 import { Prisma } from "@prisma/client";
-import { toast } from "react-toastify";
+import { handlePostSubmit } from "@/components/globals/utils";
 
 interface Props {
   clients: FormattedClient[];
@@ -36,18 +36,7 @@ const CreateModal = ({ clients, locations }: Props) => {
     values: Prisma.ContractCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    createAction(values).then((response) => {
-      if (response.code == 200) {
-        actions.resetForm();
-        toast.success(response.message);
-        onClose();
-      } else {
-        if (response.code == 429) {
-          console.log(response.errors);
-        }
-        toast.error(response.message);
-      }
-    });
+    createAction(values).then((response) => handlePostSubmit(response, actions, onClose));
   };
 
   const {

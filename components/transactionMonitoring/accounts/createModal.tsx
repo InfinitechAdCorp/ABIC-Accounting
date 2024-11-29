@@ -15,7 +15,7 @@ import { create as createSchema } from "@/components/transactionMonitoring/accou
 import { useFormik } from "formik";
 import { create as createAction } from "@/components/transactionMonitoring/accounts/actions";
 import { Prisma } from "@prisma/client";
-import { toast } from "react-toastify";
+import { handlePostSubmit } from "@/components/globals/utils";
 
 const CreateModal = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -24,18 +24,9 @@ const CreateModal = () => {
     values: Prisma.AccountCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    createAction(values).then((response) => {
-      if (response.code == 200) {
-        actions.resetForm();
-        toast.success(response.message);
-        onClose();
-      } else {
-        if (response.code == 429) {
-          console.log(response.errors);
-        }
-        toast.error(response.message);
-      }
-    });
+    createAction(values).then((response) =>
+      handlePostSubmit(response, actions, onClose)
+    );
   };
 
   const {
@@ -97,11 +88,17 @@ const CreateModal = () => {
                     onBlur={handleBlur}
                   />
                   {errors.starting_balance && touched.starting_balance && (
-                    <small className="text-red-500">{errors.starting_balance}</small>
+                    <small className="text-red-500">
+                      {errors.starting_balance}
+                    </small>
                   )}
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" type="submit" isLoading={isSubmitting}>
+                  <Button
+                    color="primary"
+                    type="submit"
+                    isLoading={isSubmitting}
+                  >
                     Save
                   </Button>
                   <Button color="danger" onPress={onClose}>

@@ -23,7 +23,7 @@ import { useFormik } from "formik";
 import { update as updateAction } from "@/components/contractMonitoring/contracts/actions";
 import { Prisma } from "@prisma/client";
 import { dateToDateValue, dateValueToDate } from "@/components/globals/utils";
-import { toast } from "react-toastify";
+import { handlePostSubmit } from "@/components/globals/utils";
 
 interface Props {
   contract: FormattedContract;
@@ -41,18 +41,7 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
     values: Prisma.ContractCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    updateAction(values).then((response) => {
-      if (response.code == 200) {
-        actions.resetForm();
-        toast.success(response.message);
-        onClose();
-      } else {
-        if (response.code == 429) {
-          console.log(response.errors);
-        }
-        toast.error(response.message);
-      }
-    });
+    updateAction(values).then((response) => handlePostSubmit(response, actions, onClose));
   };
 
   const {
