@@ -55,7 +55,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
         where: { name: "Dan Li" },
         create: {
           name: "Dan Li",
-          starting_balance: 4500000,
+          starting_balance: 5000000,
         },
       },
     },

@@ -10,13 +10,13 @@ const Dashboard = async () => {
   return (
     <>
       <div className="flex justify-center">
-        <Card className="my-5 p-3">
+        <Card className="m-5 md:m-7 p-3">
           <CardHeader>
             <h1 className="font-bold text-xl">Dashboard</h1>
           </CardHeader>
 
           <CardBody>
-            <div className="grid grid-rows-2 md:grid-rows-1 md:grid-cols-2 gap-3 mb-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
               <div>
                 <h1 className="font-bold text-lg mb-3">
                   Transaction Monitoring
