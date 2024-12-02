@@ -40,10 +40,11 @@ export const formatAccounts = (accounts: AccountWithTransactions[]) => {
   const formattedAccounts: FormattedAccount[] = [];
 
   accounts.forEach((account) => {
-    let formattedTransactions: FormattedTransaction[] = [];
+    const formattedTransactions: FormattedTransaction[] = [];
     account.transactions.forEach((transaction) => {
       const formattedTransaction = {
         ...transaction,
+        account_id: transaction.account_id as string,
         amount: transaction.amount.toNumber(),
       };
       formattedTransactions.push(formattedTransaction);

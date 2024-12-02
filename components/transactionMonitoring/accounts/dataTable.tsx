@@ -49,6 +49,7 @@ const DataTable = ({
   searchKey,
   sortKey,
 }: Props) => {
+  console.log(rows)
   type Row = (typeof rows)[0];
 
   const [filterValue, setFilterValue] = React.useState("");
@@ -105,8 +106,6 @@ const DataTable = ({
   }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback((row: Row, columnKey: string) => {
-    const cellValue = row[columnKey as keyof Row];
-
     if (columnKey == "actions") {
       return (
         <div className="relative flex justify-end items-center gap-2">
@@ -114,10 +113,13 @@ const DataTable = ({
           <DestroyModal title="Account" action={destroy} id={row.id} />
         </div>
       );
-    } else if (columnKey.endsWith("balance")) {
-      return formatNumber(cellValue);
-    } else {
-      return cellValue;
+    } else if (columnKey == "starting_balance") {
+      return formatNumber(row[columnKey as keyof Row]);
+    } else if (columnKey == "current_balance") {
+      
+    } 
+    else {
+      return row[columnKey as keyof Row];
     }
   }, []);
 
