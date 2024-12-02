@@ -33,7 +33,7 @@ import {
   destroy,
   markAsPaid,
 } from "@/components/contractMonitoring/contracts/actions";
-import { differenceInDays } from "date-fns";
+import { differenceInDays, differenceInMonths } from "date-fns";
 
 type column = {
   name: string;
@@ -173,6 +173,12 @@ const DataTable = ({
             {status}
           </Chip>
         );
+      } else if (columnKey == "payments") {
+        let payments = differenceInMonths(row.due, row.start) - 1;
+        if (payments < 0) {
+          payments = 0;
+        }
+        return payments;
       } else {
         return row[columnKey as keyof Row];
       }

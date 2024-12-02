@@ -31,6 +31,7 @@ const Contracts = async () => {
     { name: "ABIC INCOME", key: "abic_income", sortable: true },
     { name: "DUE DATE", key: "due", sortable: true },
     { name: "STATUS", key: "status", sortable: true },
+    { name: "PAYMENTS", key: "payments", sortable: true },
     { name: "ACTIONS", key: "actions" },
   ];
 
@@ -42,6 +43,7 @@ const Contracts = async () => {
     "end",
     "due",
     "status",
+    "payments",
     "actions",
   ];
 
