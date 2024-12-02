@@ -66,8 +66,6 @@ export const formatTransactions = (transactions: TransactionWithAccount[]) => {
 
   transactions.forEach((transaction) => {
     const account = transaction.account;
-    const starting_balance = account?.starting_balance.toNumber();
-    const amount = transaction.amount.toNumber();
 
     const formattedTransaction = {
       ...transaction,
@@ -75,11 +73,10 @@ export const formatTransactions = (transactions: TransactionWithAccount[]) => {
         ...account,
         id: account?.id as string,
         name: account?.name as string,
-        starting_balance: starting_balance as number,
-        current_balance: 0,
+        starting_balance: account?.starting_balance.toNumber() as number,
       },
       account_id: transaction.account_id as string,
-      amount: amount,
+      amount: transaction.amount.toNumber(),
     };
     formattedTransactions.push(formattedTransaction);
   });

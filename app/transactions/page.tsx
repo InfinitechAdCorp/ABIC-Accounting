@@ -12,8 +12,8 @@ const Transactions = async () => {
     { name: "CHECK", key: "check", sortable: true },
     { name: "ACCOUNT", key: "account", sortable: true },
     { name: "PARTICULARS", key: "particulars", sortable: true },
-    { name: "TYPE", key: "type", sortable: true },
-    { name: "AMOUNT", key: "amount", sortable: true },
+    { name: "CREDIT", key: "credit", sortable: true },
+    { name: "DEBIT", key: "debit", sortable: true },
     { name: "ACTIONS", key: "actions" },
   ];
 
@@ -23,8 +23,8 @@ const Transactions = async () => {
     "check",
     "account",
     "particulars",
-    "type",
-    "amount",
+    "credit",
+    "debit",
     "actions",
   ];
 
