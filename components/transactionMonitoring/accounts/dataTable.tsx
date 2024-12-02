@@ -19,7 +19,9 @@ import {
   Selection,
   SortDescriptor,
 } from "@nextui-org/react";
-import { FormattedAccount } from "@/components/transactionMonitoring/types";
+import {
+  FormattedAccount,
+} from "@/components/transactionMonitoring/types";
 import { formatNumber } from "@/components/globals/utils";
 import CreateModal from "@/components/transactionMonitoring/accounts/createModal";
 import UpdateModal from "@/components/transactionMonitoring/accounts/updateModal";
@@ -49,7 +51,6 @@ const DataTable = ({
   searchKey,
   sortKey,
 }: Props) => {
-  console.log(rows)
   type Row = (typeof rows)[0];
 
   const [filterValue, setFilterValue] = React.useState("");
@@ -79,7 +80,9 @@ const DataTable = ({
 
     if (hasSearchFilter) {
       filteredRows = filteredRows.filter((row) => {
-        return row[searchKey].toLowerCase().includes(filterValue.toLowerCase());
+        return (row[searchKey as keyof Row] as string)
+          .toLowerCase()
+          .includes(filterValue.toLowerCase());
       });
     }
 
@@ -114,11 +117,20 @@ const DataTable = ({
         </div>
       );
     } else if (columnKey == "starting_balance") {
-      return formatNumber(row[columnKey as keyof Row]);
+      return formatNumber(row.starting_balance);
     } else if (columnKey == "current_balance") {
-      
-    } 
-    else {
+      let currentBalance = row.starting_balance;
+      row.transactions?.forEach((transaction) => {
+        if (transaction.type == "Credit") {
+          currentBalance += transaction.amount;
+        } else {
+          currentBalance -= transaction.amount;
+        }
+      });
+      return formatNumber(currentBalance);
+    } else if (columnKey == "transactions") {
+      return row.transactions?.length;
+    } else {
       return row[columnKey as keyof Row];
     }
   }, []);

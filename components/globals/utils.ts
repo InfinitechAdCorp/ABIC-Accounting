@@ -142,31 +142,6 @@ export const formatContracts = (contracts: ContractWithClient[]) => {
   return formattedContracts;
 };
 
-const getStatus = (due: Date) => {
-  const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
-  const difference = differenceInDays(due, today);
-
-  let status;
-  let chipColor;
-  if (difference > 0) {
-    status = `${difference} Days Remaining`;
-    chipColor = "success";
-  } else if (difference < 0) {
-    status = `${difference} Days Past Due`.replace("-", "");
-    chipColor = "danger";
-  } else if (difference == 0) {
-    status = "Today";
-    chipColor = "primary";
-  }
-
-  const data = {
-    status: status,
-    chipColor: chipColor,
-  };
-
-  return data;
-};
-
 // Formatters
 
 export function capitalize(string: string) {
@@ -213,4 +188,29 @@ export const dateValueToDate = (dateValue: DateValue) => {
     new Date(dateValue.toString()).setUTCHours(0, 0, 0, 0)
   );
   return formattedDate;
+};
+
+const getStatus = (due: Date) => {
+  const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
+  const difference = differenceInDays(due, today);
+
+  let status;
+  let chipColor;
+  if (difference > 0) {
+    status = `${difference} Days Remaining`;
+    chipColor = "success";
+  } else if (difference < 0) {
+    status = `${difference} Days Past Due`.replace("-", "");
+    chipColor = "danger";
+  } else if (difference == 0) {
+    status = "Today";
+    chipColor = "primary";
+  }
+
+  const data = {
+    status: status,
+    chipColor: chipColor,
+  };
+
+  return data;
 };
