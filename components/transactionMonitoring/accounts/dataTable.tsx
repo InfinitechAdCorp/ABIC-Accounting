@@ -99,13 +99,11 @@ const DataTable = ({
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: Row, b: Row) => {
-      const first = a[sortDescriptor.column as keyof Row] as number;
-      const second = b[sortDescriptor.column as keyof Row] as number;
-      const cmp = first < second ? -1 : first > second ? 1 : 0;
-
-      return sortDescriptor.direction === "descending" ? -cmp : cmp;
-    });
+    if (sortDescriptor.direction == "ascending") {
+      return [...items].sort();
+    } else {
+      return [...items].sort().reverse();
+    }
   }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback((row: Row, columnKey: string) => {

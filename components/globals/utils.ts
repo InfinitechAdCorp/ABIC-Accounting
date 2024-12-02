@@ -91,11 +91,21 @@ export const formatClients = (clients: ClientWithContracts[]) => {
   const formattedClients: FormattedClient[] = [];
 
   clients.forEach((client) => {
-    const contracts = client.contracts.length;
+    const formattedContracts: FormattedContract[] = [];
+    client.contracts.forEach((contract) => {
+      const formattedContract = {
+        ...contract,
+        client_id: contract.client_id as string,
+        tenant_price: contract.tenant_price?.toNumber(),
+        owner_income: contract.owner_income?.toNumber(),
+        abic_income: contract.abic_income?.toNumber(),
+      };
+      formattedContracts.push(formattedContract);
+    });
 
     const formattedClient = {
       ...client,
-      contracts: contracts,
+      contracts: formattedContracts,
     };
     formattedClients.push(formattedClient);
   });

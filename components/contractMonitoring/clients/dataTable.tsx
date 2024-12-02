@@ -77,7 +77,9 @@ const DataTable = ({
 
     if (hasSearchFilter) {
       filteredRows = filteredRows.filter((row) => {
-        return row[searchKey].toLowerCase().includes(filterValue.toLowerCase());
+        return (row[searchKey as keyof Row] as string)
+          .toLowerCase()
+          .includes(filterValue.toLowerCase());
       });
     }
 
@@ -94,18 +96,14 @@ const DataTable = ({
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: Row, b: Row) => {
-      const first = a[sortDescriptor.column as keyof Row] as number;
-      const second = b[sortDescriptor.column as keyof Row] as number;
-      const cmp = first < second ? -1 : first > second ? 1 : 0;
-
-      return sortDescriptor.direction === "descending" ? -cmp : cmp;
-    });
+    if (sortDescriptor.direction == "ascending") {
+      return [...items].sort();
+    } else {
+      return [...items].sort().reverse();
+    }
   }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback((row: Row, columnKey: string) => {
-    const cellValue = row[columnKey as keyof Row];
-
     if (columnKey == "actions") {
       return (
         <div className="relative flex justify-end items-center gap-2">
@@ -113,8 +111,10 @@ const DataTable = ({
           <DestroyModal title="Client" action={destroy} id={row.id} />
         </div>
       );
+    } else if (columnKey == "contracts") {
+      return row.contracts?.length;
     } else {
-      return cellValue;
+      return row[columnKey as keyof Row];
     }
   }, []);
 

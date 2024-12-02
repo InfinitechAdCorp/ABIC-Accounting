@@ -3,7 +3,7 @@ import { Prisma } from "@prisma/client";
 export type FormattedClient = {
   id: string;
   name: string;
-  contracts?: number;
+  contracts?: FormattedContract[];
 };
 
 export type FormattedContract = {
@@ -20,9 +20,6 @@ export type FormattedContract = {
   owner_income?: number;
   abic_income?: number;
   due: Date;
-  payments: number;
-  status: string;
-  chipColor: string;
 };
 
 export type ClientWithContracts = Prisma.ClientGetPayload<{
