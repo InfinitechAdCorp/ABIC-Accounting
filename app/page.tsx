@@ -1,88 +1,109 @@
 import React from "react";
-import { Card, CardHeader, CardBody } from "@nextui-org/react";
+import { Card, CardBody } from "@nextui-org/react";
 import { getCounts, getCharts } from "@/components/dashboard/actions";
 import Barchart from "@/components/dashboard/barchart";
+import { FaUsers } from "react-icons/fa";
+import { GrTransaction } from "react-icons/gr";
+import { FaFileSignature } from "react-icons/fa6";
 
 const Dashboard = async () => {
-  const { counts } = await getCounts().then();
-  const { charts } = await getCharts().then();
+  const { counts } = await getCounts();
+  const { charts } = await getCharts();
 
   return (
     <>
-      <div className="flex justify-center">
-        <Card className="m-5 md:m-7 p-3">
-          <CardHeader>
-            <h1 className="font-bold text-xl">Dashboard</h1>
-          </CardHeader>
+      <div className="m-3 p-3">
+        <h1 className="font-bold text-xl mb-5">Dashboard</h1>
 
-          <CardBody>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-              <div>
-                <h1 className="font-bold text-lg mb-3">
-                  Transaction Monitoring
-                </h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+          <div>
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <Card>
+                <CardBody className="grid grid-cols-1 md:grid-cols-2 px-10 py-7">
+                  <div className="flex justify-center items-center">
+                    <FaUsers size={56} />
+                  </div>
 
-                <div className="grid grid-cols-2 gap-3 mb-3">
-                  <Card>
-                    <CardBody className="flex justify-center items-center px-19 py-10">
-                      <h1 className="font-semibold text-xl">Accounts</h1>
-                      <h1 className="font-bold text-2xl">{counts.accounts}</h1>
-                    </CardBody>
-                  </Card>
-
-                  <Card>
-                    <CardBody className="flex justify-center items-center px-19 py-10">
-                      <h1 className="font-semibold text-xl">Transactions</h1>
-                      <h1 className="font-bold text-2xl">
-                        {counts.transactions}
-                      </h1>
-                    </CardBody>
-                  </Card>
-                </div>
-              </div>
-
-              <div>
-                <h1 className="font-bold text-lg mb-3">Contract Monitoring</h1>
-
-                <div className="grid grid-cols-2 gap-3 mb-3">
-                  <Card>
-                    <CardBody className="flex justify-center items-center px-19 py-10">
-                      <h1 className="font-semibold text-xl">Clients</h1>
-                      <h1 className="font-bold text-2xl">{counts.clients}</h1>
-                    </CardBody>
-                  </Card>
-
-                  <Card>
-                    <CardBody className="flex justify-center items-center px-19 py-10">
-                      <h1 className="font-semibold text-xl">Contracts</h1>
-                      <h1 className="font-bold text-2xl">{counts.contracts}</h1>
-                    </CardBody>
-                  </Card>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <Card className="mb-3 h-72">
-                <CardBody className="text-center">
-                  <Barchart
-                    title="Transactions Per Account"
-                    data={charts.accountsWithTransactions}
-                  />
+                  <div className="flex flex-col justify-center items-center">
+                    <h1 className="font-extrabold text-2xl">
+                      {counts.accounts}
+                    </h1>
+                    <h4 className="text-neutral-500">Accounts</h4>
+                  </div>
                 </CardBody>
               </Card>
 
-              <Card className="mb-3 h-72">
-                <CardBody className="text-center">
-                  <Barchart
-                    title="Contracts Per Client"
-                    data={charts.clientsWithContracts}
-                  />
+              <Card>
+                <CardBody className="grid grid-cols-1 md:grid-cols-2 px-10 py-7">
+                  <div className="flex justify-center items-center">
+                    <GrTransaction size={56} />
+                  </div>
+
+                  <div className="flex flex-col justify-center items-center">
+                    <h1 className="font-extrabold text-2xl">
+                      {counts.transactions}
+                    </h1>
+                    <h4 className="text-neutral-500">Transactions</h4>
+                  </div>
                 </CardBody>
               </Card>
             </div>
-          </CardBody>
-        </Card>
+          </div>
+
+          <div>
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              <Card>
+                <CardBody className="grid grid-cols-1 md:grid-cols-2 px-10 py-7">
+                  <div className="flex justify-center items-center">
+                    <FaUsers size={56} />
+                  </div>
+
+                  <div className="flex flex-col justify-center items-center">
+                    <h1 className="font-extrabold text-2xl">
+                      {counts.clients}
+                    </h1>
+                    <h4 className="text-neutral-500">Clients</h4>
+                  </div>
+                </CardBody>
+              </Card>
+
+              <Card>
+                <CardBody className="grid grid-cols-1 md:grid-cols-2 px-10 py-7">
+                  <div className="flex justify-center items-center">
+                    <FaFileSignature size={56} />
+                  </div>
+
+                  <div className="flex flex-col justify-center items-center">
+                    <h1 className="font-extrabold text-2xl">
+                      {counts.contracts}
+                    </h1>
+                    <h4 className="text-neutral-500">Contracts</h4>
+                  </div>
+                </CardBody>
+              </Card>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+          <Card className="mb-3 h-72">
+            <CardBody className="text-center">
+              <Barchart
+                title="Transactions Per Account"
+                data={charts.accountsWithTransactions}
+              />
+            </CardBody>
+          </Card>
+
+          <Card className="mb-3 h-72">
+            <CardBody className="text-center">
+              <Barchart
+                title="Contracts Per Client"
+                data={charts.clientsWithContracts}
+              />
+            </CardBody>
+          </Card>
+        </div>
       </div>
     </>
   );
