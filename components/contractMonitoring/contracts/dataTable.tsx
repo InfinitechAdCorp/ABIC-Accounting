@@ -33,6 +33,7 @@ import {
   destroy,
   markAsPaid,
 } from "@/components/contractMonitoring/contracts/actions";
+import { differenceInDays } from "date-fns";
 
 type column = {
   name: string;
@@ -93,7 +94,9 @@ const DataTable = ({
 
     if (hasSearchFilter) {
       filteredRows = filteredRows.filter((row) => {
-        return row[searchKey].toLowerCase().includes(filterValue.toLowerCase());
+        return (row[searchKey as keyof Row] as string)
+          .toLowerCase()
+          .includes(filterValue.toLowerCase());
       });
     }
 
@@ -110,19 +113,15 @@ const DataTable = ({
   }, [page, filteredItems, rowsPerPage]);
 
   const sortedItems = React.useMemo(() => {
-    return [...items].sort((a: Row, b: Row) => {
-      const first = a[sortDescriptor.column as keyof Row] as number;
-      const second = b[sortDescriptor.column as keyof Row] as number;
-      const cmp = first < second ? -1 : first > second ? 1 : 0;
-
-      return sortDescriptor.direction === "descending" ? -cmp : cmp;
-    });
+    if (sortDescriptor.direction == "ascending") {
+      return [...items].sort();
+    } else {
+      return [...items].sort().reverse();
+    }
   }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback(
     (row: Row, columnKey: string) => {
-      let cellValue = row[columnKey as keyof Row];
-
       const dateColumns = ["start", "end", "due"];
       const moneyColumns = ["tenant_price", "owner_income", "abic_income"];
 
@@ -139,19 +138,43 @@ const DataTable = ({
           </div>
         );
       } else if (columnKey == "client") {
-        return row[columnKey]?.name;
+        return row.client?.name;
       } else if (dateColumns.includes(columnKey)) {
-        return formatDate(cellValue);
+        return formatDate(row[columnKey as keyof Row] as Date);
       } else if (moneyColumns.includes(columnKey)) {
-        return formatNumber(cellValue);
+        return formatNumber(row[columnKey as keyof Row] as number);
       } else if (columnKey == "status") {
+        const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
+        const difference = differenceInDays(row.due, today);
+
+        type Color =
+          | "default"
+          | "primary"
+          | "secondary"
+          | "success"
+          | "warning"
+          | "danger";
+
+        let color;
+        let status;
+        if (difference > 0) {
+          color = "success";
+          status = `${difference} Days Remaining`;
+        } else if (difference < 0) {
+          color = "danger";
+          status = `${difference} Days Past Due`.replace("-", "");
+        } else if (difference == 0) {
+          color = "primary";
+          status = "Today";
+        }
+
         return (
-          <Chip color={row.chipColor} size="sm" variant="flat">
-            {cellValue}
+          <Chip color={color as Color} size="sm" variant="flat">
+            {status}
           </Chip>
         );
       } else {
-        return cellValue;
+        return row[columnKey as keyof Row];
       }
     },
     [clients, locations]

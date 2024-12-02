@@ -10,7 +10,6 @@ import {
   FormattedContract,
   ContractWithClient,
 } from "@/components/contractMonitoring/types";
-import { differenceInMonths, differenceInDays } from "date-fns";
 import * as Yup from "yup";
 import { DateValue, parseDate } from "@internationalized/date";
 import { toast } from "react-toastify";
@@ -115,15 +114,6 @@ export const formatContracts = (contracts: ContractWithClient[]) => {
 
   contracts.forEach((contract) => {
     const client = contract.client;
-    const tenant_price = contract.tenant_price?.toNumber();
-    const owner_income = contract.owner_income?.toNumber();
-    const abic_income = contract.abic_income?.toNumber();
-
-    let payments = differenceInMonths(contract.due, contract.start) - 1;
-    if (payments < 0) {
-      payments = 0;
-    }
-    const { status, chipColor } = getStatus(contract.due);
 
     const formattedContract = {
       ...contract,
@@ -133,16 +123,11 @@ export const formatContracts = (contracts: ContractWithClient[]) => {
         name: client?.name as string,
       },
       client_id: contract.client_id as string,
-      start: contract.start,
-      end: contract.end,
-      tenant_price: tenant_price,
-      owner_income: owner_income,
-      abic_income: abic_income,
-      due: contract.due,
-      payments: payments,
-      status: status as string,
-      chipColor: chipColor as string,
+      tenant_price: contract.tenant_price?.toNumber() as number,
+      owner_income: contract.owner_income?.toNumber() as number,
+      abic_income: contract.abic_income?.toNumber() as number,
     };
+
     formattedContracts.push(formattedContract);
   });
 
@@ -172,16 +157,6 @@ export const formatDate = (date: Date) => {
   return formattedDate;
 };
 
-export const formatErrors = (errors: Yup.ValidationError) => {
-  const formattedErrors: { [key: string]: string } = {};
-  errors.inner.forEach((error) => {
-    if (error.path) {
-      formattedErrors[error.path] = error.message;
-    }
-  });
-  return formattedErrors;
-};
-
 export const dateToDateValue = (date: Date) => {
   if (date) {
     const localeDate = date.toLocaleDateString("en-CA");
@@ -197,27 +172,12 @@ export const dateValueToDate = (dateValue: DateValue) => {
   return formattedDate;
 };
 
-const getStatus = (due: Date) => {
-  const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
-  const difference = differenceInDays(due, today);
-
-  let status;
-  let chipColor;
-  if (difference > 0) {
-    status = `${difference} Days Remaining`;
-    chipColor = "success";
-  } else if (difference < 0) {
-    status = `${difference} Days Past Due`.replace("-", "");
-    chipColor = "danger";
-  } else if (difference == 0) {
-    status = "Today";
-    chipColor = "primary";
-  }
-
-  const data = {
-    status: status,
-    chipColor: chipColor,
-  };
-
-  return data;
+export const formatErrors = (errors: Yup.ValidationError) => {
+  const formattedErrors: { [key: string]: string } = {};
+  errors.inner.forEach((error) => {
+    if (error.path) {
+      formattedErrors[error.path] = error.message;
+    }
+  });
+  return formattedErrors;
 };
