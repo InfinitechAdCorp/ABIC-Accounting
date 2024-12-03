@@ -12,14 +12,16 @@ const Dashboard = async () => {
 
   return (
     <>
-      <div className="m-3 p-3">
-        <h1 className="font-bold text-xl mb-5">Dashboard</h1>
+      <div className="m-5 md:mx-7 xl:mx-14 2xl:mx-60">
+        <div className="text-center">
+          <h1 className="font-bold text-2xl mb-5">Dashboard</h1>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
           <div>
             <div className="grid grid-cols-2 gap-3 mb-3">
               <Card>
-                <CardBody className="grid grid-cols-1 md:grid-cols-2 px-10 py-7">
+                <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
                   <div className="flex justify-center items-center">
                     <FaUsers size={56} />
                   </div>
@@ -34,7 +36,7 @@ const Dashboard = async () => {
               </Card>
 
               <Card>
-                <CardBody className="grid grid-cols-1 md:grid-cols-2 px-10 py-7">
+                <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
                   <div className="flex justify-center items-center">
                     <GrTransaction size={56} />
                   </div>
@@ -53,7 +55,7 @@ const Dashboard = async () => {
           <div>
             <div className="grid grid-cols-2 gap-3 mb-3">
               <Card>
-                <CardBody className="grid grid-cols-1 md:grid-cols-2 px-10 py-7">
+                <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
                   <div className="flex justify-center items-center">
                     <FaUsers size={56} />
                   </div>
@@ -68,7 +70,7 @@ const Dashboard = async () => {
               </Card>
 
               <Card>
-                <CardBody className="grid grid-cols-1 md:grid-cols-2 px-10 py-7">
+                <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
                   <div className="flex justify-center items-center">
                     <FaFileSignature size={56} />
                   </div>
