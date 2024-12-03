@@ -258,7 +258,7 @@ const DataTable = ({
               </DropdownMenu>
             </Dropdown>
 
-            <div className="hidden md:flex">
+            <div className="hidden sm:flex">
               <CreateClientModal />
             </div>
             <CreateContractModal clients={clients} locations={locations} />

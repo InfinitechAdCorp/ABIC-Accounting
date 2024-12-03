@@ -18,7 +18,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="flex gap-3 items-center bg-sky-600 p-5">
+      <div className="flex gap-3 justify-evenly md:justify-start items-center bg-sky-600 p-5">
         <Link href="/" className="text-center">
           <h3
             className={`text-white cursor-pointer ${

@@ -209,7 +209,7 @@ const DataTable = ({
               </DropdownMenu>
             </Dropdown>
 
-            <div className="hidden md:flex">
+            <div className="hidden sm:flex">
               <CreateAccountModal />
             </div>
 
