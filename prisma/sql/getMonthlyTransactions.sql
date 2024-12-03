@@ -1,0 +1,1 @@
+SELECT TO_CHAR(date, 'Month') AS month, Count(id) as count FROM transactions Where Extract(Year From date) = $1 Group By month;

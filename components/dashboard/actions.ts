@@ -1,6 +1,10 @@
 "use server";
 
 import prisma from "@/lib/db";
+import {
+  getMonthlyTransactions,
+  getMonthlyContracts,
+} from "@prisma/client/sql";
 
 export async function getCounts() {
   const counts = {
@@ -104,9 +108,24 @@ export async function getCharts() {
     clientsWithContracts.push(clientWithContracts);
   });
 
+  const today = new Date();
+  const year = today.getFullYear();
+
+  const monthlyTransactions = await prisma.$queryRawTyped(
+    getMonthlyTransactions(year)
+  );
+  const monthlyContracts = await prisma.$queryRawTyped(
+    getMonthlyContracts(year)
+  );
+
+  const formattedMonthlyTransactions = formatMonthlyData(monthlyTransactions);
+  const formattedMonthlyContracts = formatMonthlyData(monthlyContracts);
+
   const charts = {
     accountsWithTransactions: accountsWithTransactions,
     clientsWithContracts: clientsWithContracts,
+    monthlyTransactions: formattedMonthlyTransactions,
+    monthlyContracts: formattedMonthlyContracts,
   };
 
   const response = {
@@ -116,3 +135,29 @@ export async function getCharts() {
   };
   return response;
 }
+
+const formatMonthlyData = (records: { month: string; count: number }[]) => {
+  const formattedRecords = [];
+
+  const today = new Date();
+
+  const months = {
+    firstHalf: ["Jan", "Feb", "March", "April", "May", "June"],
+    secondHalf: ["July", "Aug", "Sept", "Oct", "Nov", "Dec"],
+  };
+
+  let half = "firstHalf";
+  if (today.getMonth() > 5) {
+    half = "secondHalf";
+  }
+
+  months[half].forEach((month) => {
+    const monthData = { month: month, count: 0 };
+    records.forEach((record) => {
+      if (record.month?.startsWith(month)) {
+        monthData.count = parseInt(record.count?.toString());
+      }
+    });
+    formattedRecords.push(monthData);
+  });
+};

@@ -1,0 +1,1 @@
+SELECT TO_CHAR(start, 'Month') AS month, Count(id) as count FROM contracts Where Extract(Year From start) = $1 Group By month;

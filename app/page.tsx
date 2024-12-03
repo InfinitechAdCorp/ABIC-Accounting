@@ -105,6 +105,24 @@ const Dashboard = async () => {
               />
             </CardBody>
           </Card>
+
+          <Card className="mb-3 h-72">
+            <CardBody className="text-center">
+              <Barchart
+                title="Transactions Per Month"
+                data={charts.monthlyTransactions}
+              />
+            </CardBody>
+          </Card>
+
+          <Card className="mb-3 h-72">
+            <CardBody className="text-center">
+              <Barchart
+                title="Contracts Per Month"
+                data={charts.monthlyContracts}
+              />
+            </CardBody>
+          </Card>
         </div>
       </div>
     </>
