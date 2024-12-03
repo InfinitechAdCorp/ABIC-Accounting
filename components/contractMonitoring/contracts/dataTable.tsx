@@ -25,7 +25,7 @@ import {
   FormattedClient,
 } from "@/components/contractMonitoring/types";
 import { formatDate, formatNumber } from "@/components/globals/utils";
-import CreateModal from "@/components/contractMonitoring/contracts/createModal";
+import CreateContractModal from "@/components/contractMonitoring/contracts/createModal";
 import UpdateModal from "@/components/contractMonitoring/contracts/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
 import PaymentModal from "@/components/contractMonitoring/contracts/paymentModal";
@@ -33,6 +33,7 @@ import {
   destroy,
   markAsPaid,
 } from "@/components/contractMonitoring/contracts/actions";
+import CreateClientModal from "@/components/contractMonitoring/clients/createModal";
 import { differenceInDays, differenceInMonths } from "date-fns";
 
 type column = {
@@ -256,7 +257,11 @@ const DataTable = ({
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <CreateModal clients={clients} locations={locations} />
+
+            <div className="hidden md:flex">
+              <CreateClientModal />
+            </div>
+            <CreateContractModal clients={clients} locations={locations} />
           </div>
         </div>
         <div className="flex justify-between items-center">

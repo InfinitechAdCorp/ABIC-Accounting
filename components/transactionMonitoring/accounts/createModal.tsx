@@ -49,7 +49,7 @@ const CreateModal = () => {
   return (
     <>
       <Button color="primary" onPress={onOpen}>
-        Add New
+        Add Account
       </Button>
 
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>

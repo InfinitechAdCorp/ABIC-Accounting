@@ -162,7 +162,7 @@ const formatMonthlyData = (
     const monthData = { month: month, count: 0 };
     records.forEach((record) => {
       if (record.month?.startsWith(month)) {
-        monthData.count = record.count;
+        monthData.count = record.count as number;
       }
     });
     formattedRecords.push(monthData);

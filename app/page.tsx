@@ -26,7 +26,7 @@ const Dashboard = async () => {
                   </div>
 
                   <div className="flex flex-col justify-center items-center">
-                    <h1 className="font-extrabold text-2xl">
+                    <h1 className="font-extrabold text-3xl">
                       {counts.accounts}
                     </h1>
                     <h4 className="text-neutral-500">Accounts</h4>
@@ -41,7 +41,7 @@ const Dashboard = async () => {
                   </div>
 
                   <div className="flex flex-col justify-center items-center">
-                    <h1 className="font-extrabold text-2xl">
+                    <h1 className="font-extrabold text-3xl">
                       {counts.transactions}
                     </h1>
                     <h4 className="text-neutral-500">Transactions</h4>
@@ -60,7 +60,7 @@ const Dashboard = async () => {
                   </div>
 
                   <div className="flex flex-col justify-center items-center">
-                    <h1 className="font-extrabold text-2xl">
+                    <h1 className="font-extrabold text-3xl">
                       {counts.clients}
                     </h1>
                     <h4 className="text-neutral-500">Clients</h4>
@@ -75,7 +75,7 @@ const Dashboard = async () => {
                   </div>
 
                   <div className="flex flex-col justify-center items-center">
-                    <h1 className="font-extrabold text-2xl">
+                    <h1 className="font-extrabold text-3xl">
                       {counts.contracts}
                     </h1>
                     <h4 className="text-neutral-500">Contracts</h4>

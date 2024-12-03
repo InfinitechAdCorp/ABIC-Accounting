@@ -24,10 +24,11 @@ import {
   FormattedAccount,
 } from "@/components/transactionMonitoring/types";
 import { formatDate, formatNumber } from "@/components/globals/utils";
-import CreateModal from "@/components/transactionMonitoring/transactions/createModal";
+import CreateTransactionModal from "@/components/transactionMonitoring/transactions/createModal";
 import UpdateModal from "@/components/transactionMonitoring/transactions/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
 import { destroy } from "@/components/transactionMonitoring/transactions/actions";
+import CreateAccountModal from "@/components/transactionMonitoring/accounts/createModal";
 
 type column = {
   name: string;
@@ -207,7 +208,12 @@ const DataTable = ({
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <CreateModal accounts={accounts} />
+
+            <div className="hidden md:flex">
+              <CreateAccountModal />
+            </div>
+
+            <CreateTransactionModal accounts={accounts} />
           </div>
         </div>
         <div className="flex justify-between items-center">
