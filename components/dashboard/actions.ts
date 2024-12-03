@@ -82,28 +82,28 @@ export async function getCharts() {
 
   type AccountWithTransactions = {
     name: string;
-    transactions: number;
+    count: number;
   };
 
   const accountsWithTransactions: AccountWithTransactions[] = [];
   accounts.map((account) => {
     const accountWithTransaction = {
       name: account.name,
-      transactions: account._count.transactions,
+      count: account._count.transactions,
     };
     accountsWithTransactions.push(accountWithTransaction);
   });
 
   type ClientWithContracts = {
     name: string;
-    contracts: number;
+    count: number;
   };
 
   const clientsWithContracts: ClientWithContracts[] = [];
   clients.map((client) => {
     const clientWithContracts = {
       name: client.name,
-      contracts: client._count.contracts,
+      count: client._count.contracts,
     };
     clientsWithContracts.push(clientWithContracts);
   });
@@ -136,10 +136,15 @@ export async function getCharts() {
   return response;
 }
 
-const formatMonthlyData = (records: { month: string; count: number }[]) => {
-  const formattedRecords = [];
+type MonthData = {
+  month: string;
+  count: number;
+};
 
-  const today = new Date();
+const formatMonthlyData = (
+  records: getMonthlyTransactions.Result[] | getMonthlyContracts.Result[]
+) => {
+  type Half = "firstHalf" | "secondHalf";
 
   const months = {
     firstHalf: ["Jan", "Feb", "March", "April", "May", "June"],
@@ -147,17 +152,21 @@ const formatMonthlyData = (records: { month: string; count: number }[]) => {
   };
 
   let half = "firstHalf";
-  if (today.getMonth() > 5) {
+  if (new Date().getMonth() > 5) {
     half = "secondHalf";
   }
 
-  months[half].forEach((month) => {
+  const formattedRecords: MonthData[] = [];
+
+  months[half as Half].forEach((month) => {
     const monthData = { month: month, count: 0 };
     records.forEach((record) => {
       if (record.month?.startsWith(month)) {
-        monthData.count = parseInt(record.count?.toString());
+        monthData.count = record.count;
       }
     });
     formattedRecords.push(monthData);
   });
+
+  return formattedRecords;
 };

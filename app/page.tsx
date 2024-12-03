@@ -2,9 +2,8 @@ import React from "react";
 import { Card, CardBody } from "@nextui-org/react";
 import { getCounts, getCharts } from "@/components/dashboard/actions";
 import Barchart from "@/components/dashboard/barchart";
-import { FaUsers } from "react-icons/fa";
 import { GrTransaction } from "react-icons/gr";
-import { FaFileSignature } from "react-icons/fa6";
+import { FaUsers, FaFileSignature } from "react-icons/fa6";
 
 const Dashboard = async () => {
   const { counts } = await getCounts();

@@ -12,9 +12,9 @@ import {
 type Props = {
   title: string;
   data: {
-    name: string;
-    transactions?: number;
-    contracts?: number;
+    name?: string;
+    month?: string;
+    count?: number;
   }[];
 };
 
@@ -28,7 +28,7 @@ const Barchart = ({ title, data }: Props) => {
         <BarChart data={data}>
           <Tooltip />
           <XAxis dataKey={x} />
-          <YAxis dataKey={y} />
+          <YAxis dataKey={y} allowDecimals={false} />
           <Bar dataKey={y} fill="#0284c7"></Bar>
         </BarChart>
       </ResponsiveContainer>
