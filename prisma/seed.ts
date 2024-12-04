@@ -110,7 +110,7 @@ const contracts: Prisma.ContractCreateInput[] = [
     },
   },
   {
-    property: "The Oriental Place",
+    property: "Oriental Place",
     location: "Makati",
     start: "2024-11-25T00:00:00.000Z",
     end: "2027-11-25T00:00:00.000Z",

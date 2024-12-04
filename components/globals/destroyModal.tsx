@@ -37,6 +37,8 @@ const DestroyModal = ({ title, action, id }: Props) => {
     },
     validationSchema: destroySchema,
     onSubmit,
+    validateOnBlur: false,
+    validateOnChange: false,
   });
 
   return (

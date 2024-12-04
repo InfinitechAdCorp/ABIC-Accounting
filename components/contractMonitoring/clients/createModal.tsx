@@ -41,6 +41,8 @@ const CreateModal = () => {
     },
     validationSchema: createSchema,
     onSubmit,
+    validateOnBlur: false,
+    validateOnChange: false,
   });
 
   return (
