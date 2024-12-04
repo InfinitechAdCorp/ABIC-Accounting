@@ -10,7 +10,6 @@ import {
   Button,
   useDisclosure,
   Input,
-  DatePicker,
   Select,
   SelectItem,
 } from "@nextui-org/react";
@@ -36,7 +35,9 @@ const CreateModal = ({ clients, locations }: Props) => {
     values: Prisma.ContractCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    createAction(values).then((response) => handlePostSubmit(response, actions, onClose));
+    createAction(values).then((response) =>
+      handlePostSubmit(response, actions, onClose)
+    );
   };
 
   const {
@@ -129,20 +130,28 @@ const CreateModal = ({ clients, locations }: Props) => {
                   )}
 
                   <div className="grid grid-cols-2 gap-3">
-                    <DatePicker
+                    <Input
+                      type="date"
                       size="md"
                       variant="bordered"
                       label="Start Date"
                       labelPlacement="outside"
                       name="start"
+                      value={values.start}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     />
 
-                    <DatePicker
+                    <Input
+                      type="date"
                       size="md"
                       variant="bordered"
                       label="End Date"
                       labelPlacement="outside"
                       name="end"
+                      value={values.end}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     />
                   </div>
 
@@ -244,12 +253,16 @@ const CreateModal = ({ clients, locations }: Props) => {
                     </div>
                   </div>
 
-                  <DatePicker
+                  <Input
+                    type="date"
                     size="md"
                     variant="bordered"
                     label="Due Date"
                     labelPlacement="outside"
                     name="due"
+                    value={values.due}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
                 </ModalBody>
                 <ModalFooter>

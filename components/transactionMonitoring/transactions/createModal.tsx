@@ -10,7 +10,6 @@ import {
   Button,
   useDisclosure,
   Input,
-  DatePicker,
   Select,
   SelectItem,
   Textarea,
@@ -75,12 +74,16 @@ const CreateModal = ({ accounts }: Props) => {
               <form onSubmit={handleSubmit}>
                 <ModalHeader>Add Transaction</ModalHeader>
                 <ModalBody>
-                  <DatePicker
+                  <Input
+                    type="date"
                     size="md"
                     variant="bordered"
                     label="Voucher Date"
                     labelPlacement="outside"
                     name="date"
+                    value={values.date}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
 
                   <div className="grid grid-cols-2 gap-3">
