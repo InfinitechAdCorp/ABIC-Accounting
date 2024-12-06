@@ -10,6 +10,7 @@ import {
   Button,
   useDisclosure,
   Input,
+  DatePicker,
   Select,
   SelectItem,
 } from "@nextui-org/react";
@@ -21,6 +22,7 @@ import { update as updateSchema } from "@/components/contractMonitoring/contract
 import { useFormik } from "formik";
 import { update as updateAction } from "@/components/contractMonitoring/contracts/actions";
 import { Prisma } from "@prisma/client";
+import { dateToDateValue, dateValueToDate } from "@/components/globals/utils";
 import { handlePostSubmit } from "@/components/globals/utils";
 
 interface Props {
@@ -39,9 +41,7 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
     values: Prisma.ContractCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    updateAction(values).then((response) =>
-      handlePostSubmit(response, actions, onClose)
-    );
+    updateAction(values).then((response) => handlePostSubmit(response, actions, onClose));
   };
 
   const {
@@ -52,6 +52,7 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
     handleBlur,
     handleChange,
     handleSubmit,
+    setFieldValue,
   } = useFormik({
     initialValues: {
       id: contract.id,
@@ -142,28 +143,30 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                   )}
 
                   <div className="grid grid-cols-2 gap-3">
-                    <Input
-                      type="date"
+                    <DatePicker
                       size="md"
                       variant="bordered"
                       label="Start Date"
                       labelPlacement="outside"
                       name="start"
-                      value={values.start.toLocaleDateString("en-CA")}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
+                      defaultValue={dateToDateValue(values.start)}
+                      onChange={(value) => {
+                        const date = dateValueToDate(value);
+                        setFieldValue("start", date);
+                      }}
                     />
 
-                    <Input
-                      type="date"
+                    <DatePicker
                       size="md"
                       variant="bordered"
                       label="End Date"
                       labelPlacement="outside"
                       name="end"
-                      value={values.end.toLocaleDateString("en-CA")}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
+                      defaultValue={dateToDateValue(values.end)}
+                      onChange={(value) => {
+                        const date = dateValueToDate(value);
+                        setFieldValue("end", date);
+                      }}
                     />
                   </div>
 
@@ -265,16 +268,17 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                     </div>
                   </div>
 
-                  <Input
-                    type="date"
+                  <DatePicker
                     size="md"
                     variant="bordered"
                     label="Due Date"
                     labelPlacement="outside"
                     name="due"
-                    value={values.due.toLocaleDateString("en-CA")}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+                    defaultValue={dateToDateValue(values.due)}
+                    onChange={(value) => {
+                      const date = dateValueToDate(value);
+                      setFieldValue("due", date);
+                    }}
                   />
                 </ModalBody>
                 <ModalFooter>

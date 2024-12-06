@@ -8,6 +8,7 @@ import {
   Button,
   useDisclosure,
   Input,
+  DatePicker,
   Select,
   SelectItem,
   Textarea,
@@ -20,6 +21,7 @@ import { update as updateSchema } from "@/components/transactionMonitoring/trans
 import { useFormik } from "formik";
 import { update as updateAction } from "@/components/transactionMonitoring/transactions/actions";
 import { Prisma } from "@prisma/client";
+import { dateToDateValue, dateValueToDate } from "@/components/globals/utils";
 import { handlePostSubmit } from "@/components/globals/utils";
 interface Props {
   transaction: FormattedTransaction;
@@ -46,6 +48,7 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
     handleBlur,
     handleChange,
     handleSubmit,
+    setFieldValue,
   } = useFormik({
     initialValues: {
       id: transaction.id,
@@ -77,16 +80,17 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
                 <ModalBody>
                   <input type="hidden" value={values.id} name="id" />
 
-                  <Input
-                    type="date"
+                  <DatePicker
                     size="md"
                     variant="bordered"
                     label="Voucher Date"
                     labelPlacement="outside"
                     name="date"
-                    value={values.date.toLocaleDateString("en-CA")}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+                    defaultValue={dateToDateValue(values.date)}
+                    onChange={(value) => {
+                      const date = dateValueToDate(value);
+                      setFieldValue("date", date);
+                    }}
                   />
 
                   <div className="grid grid-cols-2 gap-3">

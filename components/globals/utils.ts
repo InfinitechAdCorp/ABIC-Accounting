@@ -13,6 +13,7 @@ import {
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { ActionResponse } from "@/components/globals/types";
+import { DateValue, parseDate } from "@internationalized/date";
 
 // Event Handlers
 export const handlePostSubmit = (
@@ -155,6 +156,22 @@ export const formatDate = (date: Date) => {
   });
   return formattedDate;
 };
+
+export const dateToDateValue = (date: Date) => {
+  if (date) {
+    const localeDate = date.toLocaleDateString("en-CA");
+    const formattedDate = parseDate(localeDate);
+    return formattedDate;
+  }
+};
+
+export const dateValueToDate = (dateValue: DateValue) => {
+  const formattedDate = new Date(
+    new Date(dateValue.toString()).setUTCHours(0, 0, 0, 0)
+  );
+  return formattedDate;
+};
+
 export const formatErrors = (errors: Yup.ValidationError) => {
   const formattedErrors: { [key: string]: string } = {};
   errors.inner.forEach((error) => {
