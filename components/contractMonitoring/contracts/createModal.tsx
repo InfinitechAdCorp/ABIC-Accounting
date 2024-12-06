@@ -64,8 +64,6 @@ const CreateModal = ({ clients, locations }: Props) => {
     },
     validationSchema: createSchema,
     onSubmit,
-    validateOnBlur: false,
-    validateOnChange: false,
   });
 
   return (

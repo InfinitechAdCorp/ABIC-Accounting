@@ -36,8 +36,6 @@ const PaymentModal = ({ action, id }: Props) => {
     },
     validationSchema: markAsPaid,
     onSubmit,
-    validateOnBlur: false,
-    validateOnChange: false,
   });
 
   return (

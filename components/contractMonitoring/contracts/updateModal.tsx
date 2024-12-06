@@ -70,8 +70,6 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
     validationSchema: updateSchema,
     onSubmit,
     enableReinitialize: true,
-    validateOnBlur: false,
-    validateOnChange: false,
   });
 
   return (

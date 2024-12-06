@@ -46,8 +46,6 @@ const UpdateModal = ({ client }: Props) => {
     validationSchema: updateSchema,
     onSubmit,
     enableReinitialize: true,
-    validateOnBlur: false,
-    validateOnChange: false,
   });
 
   return (

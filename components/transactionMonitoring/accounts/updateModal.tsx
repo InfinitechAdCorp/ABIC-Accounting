@@ -49,8 +49,6 @@ const UpdateModal = ({ account }: Props) => {
     validationSchema: updateSchema,
     onSubmit,
     enableReinitialize: true,
-    validateOnBlur: false,
-    validateOnChange: false,
   });
 
   return (
