@@ -21,8 +21,9 @@ import { useFormik } from "formik";
 import { create as createAction } from "@/components/transactionMonitoring/transactions/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
+import { dateToDateValue, dateValueToDate } from "@/components/globals/utils";
 
-interface Props {
+type Props = {
   accounts: FormattedAccount[];
 }
 
@@ -33,9 +34,10 @@ const CreateModal = ({ accounts }: Props) => {
     values: Prisma.TransactionCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    createAction(values).then((response) =>
-      handlePostSubmit(response, actions, onClose)
-    );
+    console.log(values)
+    // createAction(values).then((response) =>
+    //   handlePostSubmit(response, actions, onClose)
+    // );
   };
 
   const {
@@ -46,6 +48,7 @@ const CreateModal = ({ accounts }: Props) => {
     handleBlur,
     handleChange,
     handleSubmit,
+    setFieldValue,
   } = useFormik({
     initialValues: {
       date: "",
@@ -79,7 +82,15 @@ const CreateModal = ({ accounts }: Props) => {
                     label="Voucher Date"
                     labelPlacement="outside"
                     name="date"
+                    defaultValue={dateToDateValue(values.date)}
+                    onChange={(value) => {
+                      const date = dateValueToDate(value);
+                      setFieldValue("date", date);
+                    }}
                   />
+                  {errors.date && touched.date && (
+                    <small className="text-red-500">{errors.date}</small>
+                  )}
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>

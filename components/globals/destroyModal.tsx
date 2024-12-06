@@ -15,7 +15,7 @@ import { destroy as destroySchema } from "@/components/globals/schemas";
 import { useFormik } from "formik";
 import { handlePostSubmit } from "@/components/globals/utils";
 
-interface Props {
+type Props = {
   title: string;
   action: (values: { id: string }) => Promise<ActionResponse>;
   id: string;

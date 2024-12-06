@@ -21,7 +21,7 @@ import { create as createAction } from "@/components/contractMonitoring/contract
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
 
-interface Props {
+type Props = {
   clients: FormattedClient[];
   locations: {
     key: string;

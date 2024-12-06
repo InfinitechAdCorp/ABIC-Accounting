@@ -16,7 +16,7 @@ import { update as updateAction } from "@/components/transactionMonitoring/accou
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
 
-interface Props {
+type Props = {
   account: FormattedAccount;
 }
 

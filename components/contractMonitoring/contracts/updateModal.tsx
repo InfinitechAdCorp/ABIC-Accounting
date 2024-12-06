@@ -25,7 +25,7 @@ import { Prisma } from "@prisma/client";
 import { dateToDateValue, dateValueToDate } from "@/components/globals/utils";
 import { handlePostSubmit } from "@/components/globals/utils";
 
-interface Props {
+type Props = {
   contract: FormattedContract;
   clients: FormattedClient[];
   locations: {

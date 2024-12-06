@@ -15,7 +15,7 @@ import { markAsPaid } from "@/components/contractMonitoring/contracts/schemas";
 import { useFormik } from "formik";
 import { handlePostSubmit } from "@/components/globals/utils";
 
-interface Props {
+type Props = {
   action: (values: { id: string }) => Promise<ActionResponse>;
   id: string;
 }

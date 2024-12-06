@@ -23,7 +23,8 @@ import { update as updateAction } from "@/components/transactionMonitoring/trans
 import { Prisma } from "@prisma/client";
 import { dateToDateValue, dateValueToDate } from "@/components/globals/utils";
 import { handlePostSubmit } from "@/components/globals/utils";
-interface Props {
+
+type Props = {
   transaction: FormattedTransaction;
   accounts: FormattedAccount[];
 }
