@@ -4,6 +4,7 @@ import { getAll as getClients } from "@/components/contractMonitoring/clients/ac
 import { Card, CardBody } from "@nextui-org/react";
 import DataTable from "@/components/contractMonitoring/contracts/dataTable";
 import { formatClients, formatContracts } from "@/components/globals/utils";
+import Navbar from "@/components/globals/navbar";
 
 export const dynamic = 'force-dynamic'
 
@@ -56,7 +57,7 @@ const Contracts = async () => {
   const formattedClients = formatClients(clients);
 
   return (
-    <>
+    <>      
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
           <CardBody>

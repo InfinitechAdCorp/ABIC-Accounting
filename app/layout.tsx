@@ -27,11 +27,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isLoggedIn = false;
+
   return (
     <html lang="en" className={montserrat.className} data-theme="light">
       <body>
         <Providers>
-          <Navbar />
+          {isLoggedIn && <Navbar />}
           {children}
           <ToastContainer autoClose={1300} />
         </Providers>

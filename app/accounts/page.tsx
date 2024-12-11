@@ -4,7 +4,7 @@ import { Card, CardBody } from "@nextui-org/react";
 import { formatAccounts } from "@/components/globals/utils";
 import DataTable from "@/components/transactionMonitoring/accounts/dataTable";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 const Accounts = async () => {
   const columns = [
