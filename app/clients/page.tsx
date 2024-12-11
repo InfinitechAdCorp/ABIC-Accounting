@@ -3,7 +3,6 @@ import { getAll } from "@/components/contractMonitoring/clients/actions";
 import { Card, CardBody } from "@nextui-org/react";
 import { formatClients } from "@/components/globals/utils";
 import DataTable from "@/components/contractMonitoring/clients/dataTable";
-import Navbar from "@/components/globals/navbar";
 
 export const dynamic = "force-dynamic";
 
