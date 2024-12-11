@@ -5,6 +5,8 @@ import { Card, CardBody } from "@nextui-org/react";
 import DataTable from "@/components/contractMonitoring/contracts/dataTable";
 import { formatClients, formatContracts } from "@/components/globals/utils";
 
+export const dynamic = 'force-dynamic'
+
 const Contracts = async () => {
   const locations = [
     { key: "All", name: "All" },

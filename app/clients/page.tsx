@@ -4,6 +4,8 @@ import { Card, CardBody } from "@nextui-org/react";
 import { formatClients } from "@/components/globals/utils";
 import DataTable from "@/components/contractMonitoring/clients/dataTable";
 
+export const dynamic = 'force-dynamic'
+
 const Clients = async () => {
   const columns = [
     { name: "NAME", key: "name", sortable: true },

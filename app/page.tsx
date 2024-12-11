@@ -5,6 +5,8 @@ import Barchart from "@/components/dashboard/barchart";
 import { GrTransaction } from "react-icons/gr";
 import { FaUsers, FaFileSignature } from "react-icons/fa6";
 
+export const dynamic = 'force-dynamic'
+
 const Dashboard = async () => {
   const { counts } = await getCounts();
   const { charts } = await getCharts();
