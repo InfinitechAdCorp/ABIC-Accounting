@@ -14,12 +14,13 @@ import { ActionResponse } from "@/components/globals/types";
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { useFormik } from "formik";
 import { handlePostSubmit } from "@/components/globals/utils";
+import { FaTrash } from "react-icons/fa6";
 
 type Props = {
   title: string;
   action: (values: { id: string }) => Promise<ActionResponse>;
   id: string;
-}
+};
 
 const DestroyModal = ({ title, action, id }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -28,7 +29,9 @@ const DestroyModal = ({ title, action, id }: Props) => {
     values: { id: string },
     actions: { resetForm: () => void }
   ) => {
-    action(values).then((response) => handlePostSubmit(response, actions, onClose));
+    action(values).then((response) =>
+      handlePostSubmit(response, actions, onClose)
+    );
   };
 
   const { values, isSubmitting, handleSubmit } = useFormik({
@@ -41,8 +44,8 @@ const DestroyModal = ({ title, action, id }: Props) => {
 
   return (
     <>
-      <Button size="sm" color="danger" onPress={onOpen}>
-        Delete
+      <Button size="sm" color="danger" isIconOnly={true} title="Delete" onPress={onOpen}>
+        <FaTrash />
       </Button>
 
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>

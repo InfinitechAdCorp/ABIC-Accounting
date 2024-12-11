@@ -23,6 +23,7 @@ import { update as updateAction } from "@/components/transactionMonitoring/trans
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
 import { dateToDateValue, dateValueToDate } from "@/components/globals/utils";
+import { FaPenToSquare } from "react-icons/fa6";
 
 type Props = {
   transaction: FormattedTransaction;
@@ -68,8 +69,14 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
 
   return (
     <>
-      <Button size="sm" color="primary" onPress={onOpen}>
-        Edit
+      <Button
+        size="sm"
+        color="primary"
+        isIconOnly={true}
+        title="Edit"
+        onPress={onOpen}
+      >
+        <FaPenToSquare />
       </Button>
 
       <Modal size="lg" isOpen={isOpen} onOpenChange={onOpenChange}>

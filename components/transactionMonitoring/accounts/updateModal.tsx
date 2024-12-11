@@ -15,6 +15,7 @@ import { useFormik } from "formik";
 import { update as updateAction } from "@/components/transactionMonitoring/accounts/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
+import { FaPenToSquare } from "react-icons/fa6";
 
 type Props = {
   account: FormattedAccount;
@@ -53,8 +54,8 @@ const UpdateModal = ({ account }: Props) => {
 
   return (
     <>
-      <Button size="sm" color="primary" onPress={onOpen}>
-        Edit
+      <Button size="sm" color="primary" isIconOnly={true} title="Edit" onPress={onOpen}>
+        <FaPenToSquare />
       </Button>
 
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>

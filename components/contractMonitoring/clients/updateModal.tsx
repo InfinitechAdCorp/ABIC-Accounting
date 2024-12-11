@@ -15,10 +15,11 @@ import { useFormik } from "formik";
 import { update as updateAction } from "@/components/contractMonitoring/clients/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
+import { FaPenToSquare } from "react-icons/fa6";
 
 type Props = {
   client: FormattedClient;
-}
+};
 
 const UpdateModal = ({ client }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -27,7 +28,9 @@ const UpdateModal = ({ client }: Props) => {
     values: Prisma.ClientCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    updateAction(values).then((response) => handlePostSubmit(response, actions, onClose));
+    updateAction(values).then((response) =>
+      handlePostSubmit(response, actions, onClose)
+    );
   };
 
   const {
@@ -50,8 +53,14 @@ const UpdateModal = ({ client }: Props) => {
 
   return (
     <>
-      <Button size="sm" color="primary" onPress={onOpen}>
-        Edit
+      <Button
+        size="sm"
+        color="primary"
+        isIconOnly={true}
+        title="Edit"
+        onPress={onOpen}
+      >
+        <FaPenToSquare />
       </Button>
 
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>

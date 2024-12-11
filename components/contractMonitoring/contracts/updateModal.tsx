@@ -24,6 +24,7 @@ import { update as updateAction } from "@/components/contractMonitoring/contract
 import { Prisma } from "@prisma/client";
 import { dateToDateValue, dateValueToDate } from "@/components/globals/utils";
 import { handlePostSubmit } from "@/components/globals/utils";
+import { FaPenToSquare } from "react-icons/fa6";
 
 type Props = {
   contract: FormattedContract;
@@ -77,8 +78,14 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
 
   return (
     <>
-      <Button size="sm" color="primary" onPress={onOpen}>
-        Edit
+      <Button
+        size="sm"
+        color="primary"
+        isIconOnly={true}
+        title="Edit"
+        onPress={onOpen}
+      >
+        <FaPenToSquare />
       </Button>
 
       <Modal size="lg" isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -323,7 +330,9 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                     />
 
                     {errors.due && touched.due && (
-                      <small className="text-red-500">{errors.due as string}</small>
+                      <small className="text-red-500">
+                        {errors.due as string}
+                      </small>
                     )}
                   </div>
                 </ModalBody>

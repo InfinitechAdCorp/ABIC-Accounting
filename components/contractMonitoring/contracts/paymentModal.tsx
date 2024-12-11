@@ -14,11 +14,12 @@ import { ActionResponse } from "@/components/globals/types";
 import { markAsPaid } from "@/components/contractMonitoring/contracts/schemas";
 import { useFormik } from "formik";
 import { handlePostSubmit } from "@/components/globals/utils";
+import { MdPayments } from "react-icons/md";
 
 type Props = {
   action: (values: { id: string }) => Promise<ActionResponse>;
   id: string;
-}
+};
 
 const PaymentModal = ({ action, id }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -27,7 +28,9 @@ const PaymentModal = ({ action, id }: Props) => {
     values: { id: string },
     actions: { resetForm: () => void }
   ) => {
-    action(values).then((response) => handlePostSubmit(response, actions, onClose));
+    action(values).then((response) =>
+      handlePostSubmit(response, actions, onClose)
+    );
   };
 
   const { values, isSubmitting, handleSubmit } = useFormik({
@@ -40,8 +43,15 @@ const PaymentModal = ({ action, id }: Props) => {
 
   return (
     <>
-      <Button size="sm" color="success" onPress={onOpen} className="text-white">
-        Mark as Paid
+      <Button
+        className="text-white"
+        size="sm"
+        color="success"
+        isIconOnly={true}
+        title="Mark as Paid"
+        onPress={onOpen}
+      >
+        <MdPayments size={14} />
       </Button>
 
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
