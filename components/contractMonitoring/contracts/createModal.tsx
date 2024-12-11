@@ -20,6 +20,7 @@ import { useFormik } from "formik";
 import { create as createAction } from "@/components/contractMonitoring/contracts/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
+import { dateValueToDate } from "@/components/globals/utils";
 
 type Props = {
   clients: FormattedClient[];
@@ -27,16 +28,18 @@ type Props = {
     key: string;
     name: string;
   }[];
-}
+};
 
 const CreateModal = ({ clients, locations }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const onSubmit = async (
-    values: Prisma.ContractCreateInput,
+    values: Prisma.ContractCreateInput & { client_id?: string },
     actions: { resetForm: () => void }
   ) => {
-    createAction(values).then((response) => handlePostSubmit(response, actions, onClose));
+    createAction(values).then((response) =>
+      handlePostSubmit(response, actions, onClose)
+    );
   };
 
   const {
@@ -47,6 +50,7 @@ const CreateModal = ({ clients, locations }: Props) => {
     handleBlur,
     handleChange,
     handleSubmit,
+    setFieldValue,
   } = useFormik({
     initialValues: {
       client_id: "",
@@ -79,69 +83,111 @@ const CreateModal = ({ clients, locations }: Props) => {
                 <ModalHeader>Add Contract</ModalHeader>
                 <ModalBody>
                   <div className="grid grid-cols-2 gap-3">
-                    <Select
-                      size="md"
-                      variant="bordered"
-                      label="Client"
-                      labelPlacement="outside"
-                      placeholder="Select Client"
-                      name="client_id"
-                      items={clients}
-                    >
-                      {(client) => (
-                        <SelectItem key={client.id}>{client.name}</SelectItem>
+                    <div>
+                      <Select
+                        size="md"
+                        variant="bordered"
+                        label="Client"
+                        labelPlacement="outside"
+                        placeholder="Select Client"
+                        name="client_id"
+                        items={clients}
+                        onChange={(e) =>
+                          setFieldValue(e.target.name, e.target.value)
+                        }
+                      >
+                        {(client) => (
+                          <SelectItem key={client.id}>{client.name}</SelectItem>
+                        )}
+                      </Select>
+                      {errors.client_id && touched.client_id && (
+                        <small className="text-red-500">
+                          {errors.client_id}
+                        </small>
                       )}
-                    </Select>
+                    </div>
 
-                    <Select
-                      size="md"
-                      variant="bordered"
-                      label="Location"
-                      labelPlacement="outside"
-                      placeholder="Select Location"
-                      name="location"
-                      items={locations.slice(1)}
-                    >
-                      {(location) => (
-                        <SelectItem key={location.key}>
-                          {location.name}
-                        </SelectItem>
+                    <div>
+                      <Select
+                        size="md"
+                        variant="bordered"
+                        label="Location"
+                        labelPlacement="outside"
+                        placeholder="Select Location"
+                        name="location"
+                        items={locations.filter(
+                          (location) => location.name != "All"
+                        )}
+                        onChange={(e) =>
+                          setFieldValue(e.target.name, e.target.value)
+                        }
+                      >
+                        {(location) => (
+                          <SelectItem key={location.key}>
+                            {location.name}
+                          </SelectItem>
+                        )}
+                      </Select>
+                      {errors.location && touched.location && (
+                        <small className="text-red-500">
+                          {errors.location}
+                        </small>
                       )}
-                    </Select>
+                    </div>
                   </div>
 
-                  <Input
-                    type="text"
-                    size="md"
-                    variant="bordered"
-                    label="Property Details"
-                    labelPlacement="outside"
-                    placeholder="Enter Property Details"
-                    name="property"
-                    value={values.property}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.property && touched.property && (
-                    <small className="text-red-500">{errors.property}</small>
-                  )}
+                  <div>
+                    <Input
+                      type="text"
+                      size="md"
+                      variant="bordered"
+                      label="Property Details"
+                      labelPlacement="outside"
+                      placeholder="Enter Property Details"
+                      name="property"
+                      value={values.property}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.property && touched.property && (
+                      <small className="text-red-500">{errors.property}</small>
+                    )}
+                  </div>
 
                   <div className="grid grid-cols-2 gap-3">
-                    <DatePicker
-                      size="md"
-                      variant="bordered"
-                      label="Start Date"
-                      labelPlacement="outside"
-                      name="start"
-                    />
+                    <div>
+                      <DatePicker
+                        size="md"
+                        variant="bordered"
+                        label="Start Date"
+                        labelPlacement="outside"
+                        name="start"
+                        onChange={(value) => {
+                          const date = dateValueToDate(value);
+                          setFieldValue("start", date);
+                        }}
+                      />
+                      {errors.start && touched.start && (
+                        <small className="text-red-500">{errors.start}</small>
+                      )}
+                    </div>
 
-                    <DatePicker
-                      size="md"
-                      variant="bordered"
-                      label="End Date"
-                      labelPlacement="outside"
-                      name="end"
-                    />
+                    <div>
+                      <DatePicker
+                        size="md"
+                        variant="bordered"
+                        label="End Date"
+                        labelPlacement="outside"
+                        name="end"
+                        onChange={(value) => {
+                          const date = dateValueToDate(value);
+                          setFieldValue("end", date);
+                        }}
+                      />
+                      {errors.end && touched.end && (
+                        <small className="text-red-500">{errors.end}</small>
+                      )}
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
@@ -182,23 +228,25 @@ const CreateModal = ({ clients, locations }: Props) => {
                     </div>
                   </div>
 
-                  <Input
-                    type="text"
-                    size="md"
-                    variant="bordered"
-                    label="Tenant Price"
-                    labelPlacement="outside"
-                    placeholder="Enter Tenant Price"
-                    name="tenant_price"
-                    value={values.tenant_price}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.tenant_price && touched.tenant_price && (
-                    <small className="text-red-500">
-                      {errors.tenant_price}
-                    </small>
-                  )}
+                  <div>
+                    <Input
+                      type="text"
+                      size="md"
+                      variant="bordered"
+                      label="Tenant Price"
+                      labelPlacement="outside"
+                      placeholder="Enter Tenant Price"
+                      name="tenant_price"
+                      value={values.tenant_price}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.tenant_price && touched.tenant_price && (
+                      <small className="text-red-500">
+                        {errors.tenant_price}
+                      </small>
+                    )}
+                  </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
@@ -242,13 +290,22 @@ const CreateModal = ({ clients, locations }: Props) => {
                     </div>
                   </div>
 
-                  <DatePicker
-                    size="md"
-                    variant="bordered"
-                    label="Due Date"
-                    labelPlacement="outside"
-                    name="due"
-                  />
+                  <div>
+                    <DatePicker
+                      size="md"
+                      variant="bordered"
+                      label="Due Date"
+                      labelPlacement="outside"
+                      name="due"
+                      onChange={(value) => {
+                        const date = dateValueToDate(value);
+                        setFieldValue("due", date);
+                      }}
+                    />
+                    {errors.due && touched.due && (
+                      <small className="text-red-500">{errors.due}</small>
+                    )}
+                  </div>
                 </ModalBody>
                 <ModalFooter>
                   <Button

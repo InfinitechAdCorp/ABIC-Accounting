@@ -21,11 +21,11 @@ import { useFormik } from "formik";
 import { create as createAction } from "@/components/transactionMonitoring/transactions/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
-import { dateToDateValue, dateValueToDate } from "@/components/globals/utils";
+import { dateValueToDate } from "@/components/globals/utils";
 
 type Props = {
   accounts: FormattedAccount[];
-}
+};
 
 const CreateModal = ({ accounts }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -34,10 +34,9 @@ const CreateModal = ({ accounts }: Props) => {
     values: Prisma.TransactionCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    console.log(values)
-    // createAction(values).then((response) =>
-    //   handlePostSubmit(response, actions, onClose)
-    // );
+    createAction(values).then((response) =>
+      handlePostSubmit(response, actions, onClose)
+    );
   };
 
   const {
@@ -82,7 +81,6 @@ const CreateModal = ({ accounts }: Props) => {
                     label="Voucher Date"
                     labelPlacement="outside"
                     name="date"
-                    defaultValue={dateToDateValue(values.date)}
                     onChange={(value) => {
                       const date = dateValueToDate(value);
                       setFieldValue("date", date);
@@ -130,34 +128,48 @@ const CreateModal = ({ accounts }: Props) => {
                     </div>
                   </div>
 
-                  <Select
-                    size="md"
-                    variant="bordered"
-                    label="Account"
-                    labelPlacement="outside"
-                    placeholder="Select Account"
-                    name="account_id"
-                    items={accounts}
-                  >
-                    {(account) => (
-                      <SelectItem key={account.id}>{account.name}</SelectItem>
+                  <div>
+                    <Select
+                      size="md"
+                      variant="bordered"
+                      label="Account"
+                      labelPlacement="outside"
+                      placeholder="Select Account"
+                      name="account_id"
+                      items={accounts}
+                      onChange={(e) =>
+                        setFieldValue(e.target.name, e.target.value)
+                      }
+                    >
+                      {(account) => (
+                        <SelectItem key={account.id}>{account.name}</SelectItem>
+                      )}
+                    </Select>
+                    {errors.account_id && touched.account_id && (
+                      <small className="text-red-500">
+                        {errors.account_id}
+                      </small>
                     )}
-                  </Select>
+                  </div>
 
-                  <Textarea
-                    size="md"
-                    variant="bordered"
-                    label="Particulars"
-                    labelPlacement="outside"
-                    placeholder="Enter Particulars"
-                    name="particulars"
-                    value={values.particulars}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.particulars && touched.particulars && (
-                    <small className="text-red-500">{errors.particulars}</small>
-                  )}
+                  <div>
+                    <Textarea
+                      size="md"
+                      variant="bordered"
+                      label="Particulars"
+                      labelPlacement="outside"
+                      placeholder="Enter Particulars"
+                      name="particulars"
+                      value={values.particulars}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.particulars && touched.particulars && (
+                      <small className="text-red-500">
+                        {errors.particulars}
+                      </small>
+                    )}
+                  </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
@@ -168,10 +180,14 @@ const CreateModal = ({ accounts }: Props) => {
                         labelPlacement="outside"
                         placeholder="Select Type"
                         name="type"
+                        onChange={(e) => setFieldValue(e.target.name, e.target.value)}
                       >
                         <SelectItem key="Credit">Credit</SelectItem>
                         <SelectItem key="Debit">Debit</SelectItem>
                       </Select>
+                      {errors.type && touched.type && (
+                        <small className="text-red-500">{errors.type}</small>
+                      )}
                     </div>
 
                     <div>
