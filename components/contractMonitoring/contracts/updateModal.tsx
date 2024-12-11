@@ -85,7 +85,7 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
         title="Edit"
         onPress={onOpen}
       >
-        <FaPenToSquare />
+        <FaPenToSquare size={14} />
       </Button>
 
       <Modal size="lg" isOpen={isOpen} onOpenChange={onOpenChange}>

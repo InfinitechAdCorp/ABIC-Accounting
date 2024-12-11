@@ -19,7 +19,7 @@ import { FaPenToSquare } from "react-icons/fa6";
 
 type Props = {
   account: FormattedAccount;
-}
+};
 
 const UpdateModal = ({ account }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -54,8 +54,14 @@ const UpdateModal = ({ account }: Props) => {
 
   return (
     <>
-      <Button size="sm" color="primary" isIconOnly={true} title="Edit" onPress={onOpen}>
-        <FaPenToSquare />
+      <Button
+        size="sm"
+        color="primary"
+        isIconOnly={true}
+        title="Edit"
+        onPress={onOpen}
+      >
+        <FaPenToSquare size={14} />
       </Button>
 
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
