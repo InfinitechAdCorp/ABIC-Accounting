@@ -16,11 +16,6 @@ const Navbar = () => {
 
   const isActive = (hrefs: string[]) => hrefs.includes(pathname);
 
-  const [width, setWidth] = useState(0);
-  useEffect(() => {
-    setWidth(window.innerWidth);
-  }, []);
-
   return (
     <>
       <div className="flex gap-3 justify-evenly sm:justify-start items-center bg-sky-600 p-5">
@@ -47,7 +42,8 @@ const Navbar = () => {
                   : "font-semibold"
               }`}
             >
-              {width < 640 ? "Transactions" : "Transaction Monitoring"}
+              <span className="hidden md:inline">Transaction Monitoring</span>
+              <span className="inline md:hidden">Transactions</span>
             </h3>
           </DropdownTrigger>
 
@@ -80,7 +76,8 @@ const Navbar = () => {
                   : "font-semibold"
               }`}
             >
-              {width < 640 ? "Contracts" : "Contract Monitoring"}
+              <span className="hidden md:inline">Contract Monitoring</span>
+              <span className="inline md:hidden">Contracts</span>
             </h3>
           </DropdownTrigger>
           <DropdownMenu className="text-center">
