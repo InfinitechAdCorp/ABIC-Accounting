@@ -32,7 +32,7 @@ type Props = {
     key: string;
     name: string;
   }[];
-}
+};
 
 const UpdateModal = ({ contract, clients, locations }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -41,7 +41,9 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
     values: Prisma.ContractCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    updateAction(values).then((response) => handlePostSubmit(response, actions, onClose));
+    updateAction(values).then((response) =>
+      handlePostSubmit(response, actions, onClose)
+    );
   };
 
   const {
@@ -89,85 +91,120 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                   <input type="hidden" value={values.id} name="id" />
 
                   <div className="grid grid-cols-2 gap-3">
-                    <Select
-                      size="md"
-                      variant="bordered"
-                      label="Client"
-                      labelPlacement="outside"
-                      placeholder="Select Client"
-                      name="client_id"
-                      items={clients}
-                      defaultSelectedKeys={[values.client_id as string]}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    >
-                      {(client) => (
-                        <SelectItem key={client.id}>{client.name}</SelectItem>
+                    <div>
+                      <Select
+                        size="md"
+                        variant="bordered"
+                        label="Client"
+                        labelPlacement="outside"
+                        placeholder="Select Client"
+                        name="client_id"
+                        items={clients}
+                        defaultSelectedKeys={[values.client_id as string]}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      >
+                        {(client) => (
+                          <SelectItem key={client.id}>{client.name}</SelectItem>
+                        )}
+                      </Select>
+                      {errors.client_id && touched.client_id && (
+                        <small className="text-red-500">
+                          {errors.client_id}
+                        </small>
                       )}
-                    </Select>
+                    </div>
 
-                    <Select
-                      size="md"
-                      variant="bordered"
-                      label="Location"
-                      labelPlacement="outside"
-                      placeholder="Select Location"
-                      name="location"
-                      items={locations.slice(1)}
-                      defaultSelectedKeys={[values.location]}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                    >
-                      {(location) => (
-                        <SelectItem key={location.key}>
-                          {location.name}
-                        </SelectItem>
+                    <div>
+                      <Select
+                        size="md"
+                        variant="bordered"
+                        label="Location"
+                        labelPlacement="outside"
+                        placeholder="Select Location"
+                        name="location"
+                        items={locations.filter(
+                          (location) => location.name != "All"
+                        )}
+                        defaultSelectedKeys={[values.location]}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      >
+                        {(location) => (
+                          <SelectItem key={location.key}>
+                            {location.name}
+                          </SelectItem>
+                        )}
+                      </Select>
+
+                      {errors.location && touched.location && (
+                        <small className="text-red-500">
+                          {errors.location}
+                        </small>
                       )}
-                    </Select>
+                    </div>
                   </div>
 
-                  <Input
-                    type="text"
-                    size="md"
-                    variant="bordered"
-                    label="Property Details"
-                    labelPlacement="outside"
-                    placeholder="Enter Property Details"
-                    name="property"
-                    value={values.property}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.property && touched.property && (
-                    <small className="text-red-500">{errors.property}</small>
-                  )}
+                  <div>
+                    <Input
+                      type="text"
+                      size="md"
+                      variant="bordered"
+                      label="Property Details"
+                      labelPlacement="outside"
+                      placeholder="Enter Property Details"
+                      name="property"
+                      value={values.property}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.property && touched.property && (
+                      <small className="text-red-500">{errors.property}</small>
+                    )}
+                  </div>
 
                   <div className="grid grid-cols-2 gap-3">
-                    <DatePicker
-                      size="md"
-                      variant="bordered"
-                      label="Start Date"
-                      labelPlacement="outside"
-                      name="start"
-                      defaultValue={dateToDateValue(values.start)}
-                      onChange={(value) => {
-                        const date = dateValueToDate(value);
-                        setFieldValue("start", date);
-                      }}
-                    />
+                    <div>
+                      <DatePicker
+                        size="md"
+                        variant="bordered"
+                        label="Start Date"
+                        labelPlacement="outside"
+                        name="start"
+                        defaultValue={dateToDateValue(values.start)}
+                        onChange={(value) => {
+                          const date = dateValueToDate(value);
+                          setFieldValue("start", date);
+                        }}
+                        onBlur={handleBlur}
+                      />
+                      {errors.start && touched.start && (
+                        <small className="text-red-500">
+                          {errors.start as string}
+                        </small>
+                      )}
+                    </div>
 
-                    <DatePicker
-                      size="md"
-                      variant="bordered"
-                      label="End Date"
-                      labelPlacement="outside"
-                      name="end"
-                      defaultValue={dateToDateValue(values.end)}
-                      onChange={(value) => {
-                        const date = dateValueToDate(value);
-                        setFieldValue("end", date);
-                      }}
-                    />
+                    <div>
+                      <DatePicker
+                        size="md"
+                        variant="bordered"
+                        label="End Date"
+                        labelPlacement="outside"
+                        name="end"
+                        defaultValue={dateToDateValue(values.end)}
+                        onChange={(value) => {
+                          const date = dateValueToDate(value);
+                          setFieldValue("end", date);
+                        }}
+                        onBlur={handleBlur}
+                      />
+                      {errors.end && touched.end && (
+                        <small className="text-red-500">
+                          {errors.end as string}
+                        </small>
+                      )}
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
@@ -208,23 +245,25 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                     </div>
                   </div>
 
-                  <Input
-                    type="text"
-                    size="md"
-                    variant="bordered"
-                    label="Tenant Price"
-                    labelPlacement="outside"
-                    placeholder="Enter Tenant Price"
-                    name="tenant_price"
-                    value={values.tenant_price?.toString()}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.tenant_price && touched.tenant_price && (
-                    <small className="text-red-500">
-                      {errors.tenant_price}
-                    </small>
-                  )}
+                  <div>
+                    <Input
+                      type="text"
+                      size="md"
+                      variant="bordered"
+                      label="Tenant Price"
+                      labelPlacement="outside"
+                      placeholder="Enter Tenant Price"
+                      name="tenant_price"
+                      value={values.tenant_price?.toString()}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.tenant_price && touched.tenant_price && (
+                      <small className="text-red-500">
+                        {errors.tenant_price}
+                      </small>
+                    )}
+                  </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
@@ -268,18 +307,25 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                     </div>
                   </div>
 
-                  <DatePicker
-                    size="md"
-                    variant="bordered"
-                    label="Due Date"
-                    labelPlacement="outside"
-                    name="due"
-                    defaultValue={dateToDateValue(values.due)}
-                    onChange={(value) => {
-                      const date = dateValueToDate(value);
-                      setFieldValue("due", date);
-                    }}
-                  />
+                  <div>
+                    <DatePicker
+                      size="md"
+                      variant="bordered"
+                      label="Due Date"
+                      labelPlacement="outside"
+                      name="due"
+                      defaultValue={dateToDateValue(values.due)}
+                      onChange={(value) => {
+                        const date = dateValueToDate(value);
+                        setFieldValue("due", date);
+                      }}
+                      onBlur={handleBlur}
+                    />
+
+                    {errors.due && touched.due && (
+                      <small className="text-red-500">{errors.due as string}</small>
+                    )}
+                  </div>
                 </ModalBody>
                 <ModalFooter>
                   <Button

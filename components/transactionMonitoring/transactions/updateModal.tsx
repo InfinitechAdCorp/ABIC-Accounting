@@ -21,13 +21,13 @@ import { update as updateSchema } from "@/components/transactionMonitoring/trans
 import { useFormik } from "formik";
 import { update as updateAction } from "@/components/transactionMonitoring/transactions/actions";
 import { Prisma } from "@prisma/client";
-import { dateToDateValue, dateValueToDate } from "@/components/globals/utils";
 import { handlePostSubmit } from "@/components/globals/utils";
+import { dateToDateValue, dateValueToDate } from "@/components/globals/utils";
 
 type Props = {
   transaction: FormattedTransaction;
   accounts: FormattedAccount[];
-}
+};
 
 const UpdateModal = ({ transaction, accounts }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -81,18 +81,26 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
                 <ModalBody>
                   <input type="hidden" value={values.id} name="id" />
 
-                  <DatePicker
-                    size="md"
-                    variant="bordered"
-                    label="Voucher Date"
-                    labelPlacement="outside"
-                    name="date"
-                    defaultValue={dateToDateValue(values.date)}
-                    onChange={(value) => {
-                      const date = dateValueToDate(value);
-                      setFieldValue("date", date);
-                    }}
-                  />
+                  <div>
+                    <DatePicker
+                      size="md"
+                      variant="bordered"
+                      label="Voucher Date"
+                      labelPlacement="outside"
+                      name="date"
+                      defaultValue={dateToDateValue(values.date)}
+                      onChange={(value) => {
+                        const date = dateValueToDate(value);
+                        setFieldValue("date", date);
+                      }}
+                      onBlur={handleBlur}
+                    />
+                    {errors.date && touched.date && (
+                      <small className="text-red-500">
+                        {errors.date as string}
+                      </small>
+                    )}
+                  </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
@@ -132,37 +140,48 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
                     </div>
                   </div>
 
-                  <Select
-                    size="md"
-                    variant="bordered"
-                    label="Account"
-                    labelPlacement="outside"
-                    placeholder="Select Account"
-                    name="account_id"
-                    items={accounts}
-                    defaultSelectedKeys={[values.account_id as string]}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  >
-                    {(account) => (
-                      <SelectItem key={account.id}>{account.name}</SelectItem>
+                  <div>
+                    <Select
+                      size="md"
+                      variant="bordered"
+                      label="Account"
+                      labelPlacement="outside"
+                      placeholder="Select Account"
+                      name="account_id"
+                      items={accounts}
+                      defaultSelectedKeys={[values.account_id as string]}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    >
+                      {(account) => (
+                        <SelectItem key={account.id}>{account.name}</SelectItem>
+                      )}
+                    </Select>
+                    {errors.account_id && touched.account_id && (
+                      <small className="text-red-500">
+                        {errors.account_id}
+                      </small>
                     )}
-                  </Select>
+                  </div>
 
-                  <Textarea
-                    size="md"
-                    variant="bordered"
-                    label="Particulars"
-                    labelPlacement="outside"
-                    placeholder="Enter Particulars"
-                    name="particulars"
-                    value={values.particulars}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.particulars && touched.particulars && (
-                    <small className="text-red-500">{errors.particulars}</small>
-                  )}
+                  <div>
+                    <Textarea
+                      size="md"
+                      variant="bordered"
+                      label="Particulars"
+                      labelPlacement="outside"
+                      placeholder="Enter Particulars"
+                      name="particulars"
+                      value={values.particulars}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.particulars && touched.particulars && (
+                      <small className="text-red-500">
+                        {errors.particulars}
+                      </small>
+                    )}
+                  </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
@@ -174,11 +193,15 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
                         placeholder="Select Type"
                         name="type"
                         defaultSelectedKeys={[values.type as string]}
-                        onChange={(e) => handleChange(e)}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                       >
                         <SelectItem key="Credit">Credit</SelectItem>
                         <SelectItem key="Debit">Debit</SelectItem>
                       </Select>
+                      {errors.type && touched.type && (
+                        <small className="text-red-500">{errors.type}</small>
+                      )}
                     </div>
 
                     <div>

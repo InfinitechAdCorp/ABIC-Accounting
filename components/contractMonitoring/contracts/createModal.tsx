@@ -92,9 +92,8 @@ const CreateModal = ({ clients, locations }: Props) => {
                         placeholder="Select Client"
                         name="client_id"
                         items={clients}
-                        onChange={(e) =>
-                          setFieldValue(e.target.name, e.target.value)
-                        }
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                       >
                         {(client) => (
                           <SelectItem key={client.id}>{client.name}</SelectItem>
@@ -118,9 +117,8 @@ const CreateModal = ({ clients, locations }: Props) => {
                         items={locations.filter(
                           (location) => location.name != "All"
                         )}
-                        onChange={(e) =>
-                          setFieldValue(e.target.name, e.target.value)
-                        }
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                       >
                         {(location) => (
                           <SelectItem key={location.key}>
@@ -166,6 +164,7 @@ const CreateModal = ({ clients, locations }: Props) => {
                           const date = dateValueToDate(value);
                           setFieldValue("start", date);
                         }}
+                        onBlur={handleBlur}
                       />
                       {errors.start && touched.start && (
                         <small className="text-red-500">{errors.start}</small>
@@ -183,6 +182,7 @@ const CreateModal = ({ clients, locations }: Props) => {
                           const date = dateValueToDate(value);
                           setFieldValue("end", date);
                         }}
+                        onBlur={handleBlur}
                       />
                       {errors.end && touched.end && (
                         <small className="text-red-500">{errors.end}</small>
@@ -301,6 +301,7 @@ const CreateModal = ({ clients, locations }: Props) => {
                         const date = dateValueToDate(value);
                         setFieldValue("due", date);
                       }}
+                      onBlur={handleBlur}
                     />
                     {errors.due && touched.due && (
                       <small className="text-red-500">{errors.due}</small>

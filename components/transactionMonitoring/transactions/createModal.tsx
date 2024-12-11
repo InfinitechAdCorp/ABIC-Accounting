@@ -85,6 +85,7 @@ const CreateModal = ({ accounts }: Props) => {
                       const date = dateValueToDate(value);
                       setFieldValue("date", date);
                     }}
+                    onBlur={handleBlur}
                   />
                   {errors.date && touched.date && (
                     <small className="text-red-500">{errors.date}</small>
@@ -137,9 +138,8 @@ const CreateModal = ({ accounts }: Props) => {
                       placeholder="Select Account"
                       name="account_id"
                       items={accounts}
-                      onChange={(e) =>
-                        setFieldValue(e.target.name, e.target.value)
-                      }
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     >
                       {(account) => (
                         <SelectItem key={account.id}>{account.name}</SelectItem>
@@ -180,7 +180,8 @@ const CreateModal = ({ accounts }: Props) => {
                         labelPlacement="outside"
                         placeholder="Select Type"
                         name="type"
-                        onChange={(e) => setFieldValue(e.target.name, e.target.value)}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                       >
                         <SelectItem key="Credit">Credit</SelectItem>
                         <SelectItem key="Debit">Debit</SelectItem>
