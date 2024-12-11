@@ -21,7 +21,7 @@ const Navbar = () => {
       <div className="flex gap-3 justify-evenly sm:justify-start items-center bg-sky-600 p-5">
         <Link href="/" className="text-center">
           <h3
-            className={`text-white cursor-pointer ${
+            className={`text-sm md:text-base text-white cursor-pointer ${
               isActive(["/"]) ? "font-black" : "font-semibold"
             }`}
           >
@@ -36,13 +36,15 @@ const Navbar = () => {
         >
           <DropdownTrigger className="text-center">
             <h3
-              className={`text-white cursor-pointer ${
+              className={`text-sm md:text-base text-white cursor-pointer ${
                 isActive(["/accounts", "/transactions"])
                   ? "font-black"
                   : "font-semibold"
               }`}
             >
-              Transaction Monitoring
+              {window.innerWidth < 640
+                ? "Transactions"
+                : "Transaction Monitoring"}
             </h3>
           </DropdownTrigger>
 
@@ -69,13 +71,13 @@ const Navbar = () => {
         >
           <DropdownTrigger className="text-center">
             <h3
-              className={`text-white cursor-pointer ${
+              className={`text-sm md:text-base text-white cursor-pointer ${
                 isActive(["/clients", "/contracts"])
                   ? "font-black"
                   : "font-semibold"
               }`}
             >
-              Contract Monitoring
+              {window.innerWidth < 640 ? "Contracts" : "Contract Monitoring"}
             </h3>
           </DropdownTrigger>
           <DropdownMenu className="text-center">
