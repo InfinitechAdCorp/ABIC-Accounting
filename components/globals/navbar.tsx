@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Dropdown,
@@ -15,6 +15,11 @@ const Navbar = () => {
   const pathname = usePathname();
 
   const isActive = (hrefs: string[]) => hrefs.includes(pathname);
+
+  const [width, setWidth] = useState(0);
+  useEffect(() => {
+    setWidth(window.innerWidth);
+  }, []);
 
   return (
     <>
@@ -42,9 +47,7 @@ const Navbar = () => {
                   : "font-semibold"
               }`}
             >
-              {window.innerWidth < 640
-                ? "Transactions"
-                : "Transaction Monitoring"}
+              {width < 640 ? "Transactions" : "Transaction Monitoring"}
             </h3>
           </DropdownTrigger>
 
@@ -77,7 +80,7 @@ const Navbar = () => {
                   : "font-semibold"
               }`}
             >
-              {window.innerWidth < 640 ? "Contracts" : "Contract Monitoring"}
+              {width < 640 ? "Contracts" : "Contract Monitoring"}
             </h3>
           </DropdownTrigger>
           <DropdownMenu className="text-center">
