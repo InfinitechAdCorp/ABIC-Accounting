@@ -11,7 +11,7 @@ import {
 } from "@nextui-org/react";
 import { FormattedAccount } from "@/components/transactionMonitoring/types";
 import { update as updateSchema } from "@/components/transactionMonitoring/accounts/schemas";
-import { useFormik } from "formik";
+import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
 import { update as updateAction } from "@/components/transactionMonitoring/accounts/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
@@ -24,6 +24,12 @@ type Props = {
 const UpdateModal = ({ account }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
+  const initialValues = {
+    id: account.id,
+    name: account.name,
+    starting_balance: account.starting_balance,
+  };
+
   const onSubmit = async (
     values: Prisma.AccountCreateInput,
     actions: { resetForm: () => void }
@@ -32,25 +38,6 @@ const UpdateModal = ({ account }: Props) => {
       handlePostSubmit(response, actions, onClose)
     );
   };
-
-  const {
-    values,
-    errors,
-    touched,
-    isSubmitting,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-  } = useFormik({
-    initialValues: {
-      id: account.id,
-      name: account.name,
-      starting_balance: account.starting_balance,
-    },
-    validationSchema: updateSchema,
-    onSubmit,
-    enableReinitialize: true,
-  });
 
   return (
     <>
@@ -68,58 +55,75 @@ const UpdateModal = ({ account }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <form onSubmit={handleSubmit}>
-                <ModalHeader>Edit Account</ModalHeader>
-                <ModalBody>
-                  <input type="hidden" value={values.id} name="id" />
+              <Formik
+                initialValues={initialValues}
+                validationSchema={updateSchema}
+                onSubmit={onSubmit}
+                enableReinitialize={true}
+              >
+                {(props: FormikProps<any>) => (
+                  <Form>
+                    <ModalHeader>Update Account</ModalHeader>
+                    <ModalBody>
+                      <Field type="hidden" name="id" />
 
-                  <Input
-                    type="text"
-                    size="md"
-                    variant="bordered"
-                    label="Name"
-                    labelPlacement="outside"
-                    placeholder="Enter Name"
-                    name="name"
-                    value={values.name}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.name && touched.name && (
-                    <small className="text-red-500">{errors.name}</small>
-                  )}
+                      <Field name="name">
+                        {({ field, meta }: FieldProps) => (
+                          <div>
+                            <Input
+                              {...field}
+                              type="text"
+                              size="md"
+                              variant="bordered"
+                              label="Name"
+                              labelPlacement="outside"
+                              placeholder="Enter Name"
+                            />
+                            {meta.touched && meta.error && (
+                              <small className="text-red-500">
+                                {meta.error}
+                              </small>
+                            )}
+                          </div>
+                        )}
+                      </Field>
 
-                  <Input
-                    type="text"
-                    size="md"
-                    variant="bordered"
-                    label="Starting Balance"
-                    labelPlacement="outside"
-                    placeholder="Enter Starting Balance"
-                    name="starting_balance"
-                    value={values.starting_balance.toString()}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.starting_balance && touched.starting_balance && (
-                    <small className="text-red-500">
-                      {errors.starting_balance}
-                    </small>
-                  )}
-                </ModalBody>
-                <ModalFooter>
-                  <Button
-                    color="primary"
-                    type="submit"
-                    isLoading={isSubmitting}
-                  >
-                    Update
-                  </Button>
-                  <Button color="danger" onPress={onClose}>
-                    Cancel
-                  </Button>
-                </ModalFooter>
-              </form>
+                      <Field name="starting_balance">
+                        {({ field, meta }: FieldProps) => (
+                          <div>
+                            <Input
+                              {...field}
+                              type="text"
+                              size="md"
+                              variant="bordered"
+                              label="Starting Balance"
+                              labelPlacement="outside"
+                              placeholder="Enter Starting Balance"
+                            />
+                            {meta.touched && meta.error && (
+                              <small className="text-red-500">
+                                {meta.error}
+                              </small>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button
+                        color="primary"
+                        type="submit"
+                        isLoading={props.isSubmitting}
+                      >
+                        Update
+                      </Button>
+                      <Button color="danger" onPress={onClose}>
+                        Cancel
+                      </Button>
+                    </ModalFooter>
+                  </Form>
+                )}
+              </Formik>
             </>
           )}
         </ModalContent>

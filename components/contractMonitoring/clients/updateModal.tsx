@@ -71,13 +71,13 @@ const UpdateModal = ({ client }: Props) => {
                         {({ field, meta }: FieldProps) => (
                           <div>
                             <Input
+                              {...field}
                               type="text"
                               size="md"
                               variant="bordered"
                               label="Name"
                               labelPlacement="outside"
                               placeholder="Enter Name"
-                              {...field}
                             />
                             {meta.touched && meta.error && (
                               <small className="text-red-500">

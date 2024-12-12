@@ -12,13 +12,18 @@ import {
   Input,
 } from "@nextui-org/react";
 import { create as createSchema } from "@/components/transactionMonitoring/accounts/schemas";
-import { useFormik } from "formik";
+import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
 import { create as createAction } from "@/components/transactionMonitoring/accounts/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
 
 const CreateModal = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
+  const initialValues = {
+    name: "",
+    starting_balance: "",
+  };
 
   const onSubmit = async (
     values: Prisma.AccountCreateInput,
@@ -28,23 +33,6 @@ const CreateModal = () => {
       handlePostSubmit(response, actions, onClose)
     );
   };
-
-  const {
-    values,
-    errors,
-    touched,
-    isSubmitting,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-  } = useFormik({
-    initialValues: {
-      name: "",
-      starting_balance: "",
-    },
-    validationSchema: createSchema,
-    onSubmit,
-  });
 
   return (
     <>
@@ -56,56 +44,72 @@ const CreateModal = () => {
         <ModalContent>
           {(onClose) => (
             <>
-              <form onSubmit={handleSubmit}>
-                <ModalHeader>Add Account</ModalHeader>
-                <ModalBody>
-                  <Input
-                    type="text"
-                    size="md"
-                    variant="bordered"
-                    label="Name"
-                    labelPlacement="outside"
-                    placeholder="Enter Name"
-                    name="name"
-                    value={values.name}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.name && touched.name && (
-                    <small className="text-red-500">{errors.name}</small>
-                  )}
+              <Formik
+                initialValues={initialValues}
+                validationSchema={createSchema}
+                onSubmit={onSubmit}
+              >
+                {(props: FormikProps<any>) => (
+                  <Form>
+                    <ModalHeader>Add Account</ModalHeader>
+                    <ModalBody>
+                      <Field name="name">
+                        {({ field, meta }: FieldProps) => (
+                          <div>
+                            <Input
+                              {...field}
+                              type="text"
+                              size="md"
+                              variant="bordered"
+                              label="Name"
+                              labelPlacement="outside"
+                              placeholder="Enter Name"
+                            />
+                            {meta.touched && meta.error && (
+                              <small className="text-red-500">
+                                {meta.error}
+                              </small>
+                            )}
+                          </div>
+                        )}
+                      </Field>
 
-                  <Input
-                    type="text"
-                    size="md"
-                    variant="bordered"
-                    label="Starting Balance"
-                    labelPlacement="outside"
-                    placeholder="Enter Starting Balance"
-                    name="starting_balance"
-                    value={values.starting_balance}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                  {errors.starting_balance && touched.starting_balance && (
-                    <small className="text-red-500">
-                      {errors.starting_balance}
-                    </small>
-                  )}
-                </ModalBody>
-                <ModalFooter>
-                  <Button
-                    color="primary"
-                    type="submit"
-                    isLoading={isSubmitting}
-                  >
-                    Save
-                  </Button>
-                  <Button color="danger" onPress={onClose}>
-                    Cancel
-                  </Button>
-                </ModalFooter>
-              </form>
+                      <Field name="starting_balance">
+                        {({ field, meta }: FieldProps) => (
+                          <div>
+                            <Input
+                              {...field}
+                              type="text"
+                              size="md"
+                              variant="bordered"
+                              label="Starting Balance"
+                              labelPlacement="outside"
+                              placeholder="Enter Starting Balance"
+                            />
+                            {meta.touched && meta.error && (
+                              <small className="text-red-500">
+                                {meta.error}
+                              </small>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button
+                        color="primary"
+                        type="submit"
+                        isLoading={props.isSubmitting}
+                      >
+                        Save
+                      </Button>
+                      <Button color="danger" onPress={onClose}>
+                        Cancel
+                      </Button>
+                    </ModalFooter>
+                  </Form>
+                )}
+              </Formik>
             </>
           )}
         </ModalContent>
