@@ -11,18 +11,14 @@ import {
 } from "@nextui-org/react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import getConfig from 'next/config'
+import { login } from "@/components/globals/auth";
 
 const Login = () => {
   sessionStorage.clear();
   const router = useRouter();
-  const { publicRuntimeConfig } = getConfig()
 
-  const handleSubmit = (formData: FormData) => {
-    const username = formData.get("username");
-    const password = formData.get("password");
-
-    if (username == publicRuntimeConfig.loginUsername && password == publicRuntimeConfig.loginPassword) {
+  const handlePostSubmit = (isLoggedIn: boolean) => {
+    if (isLoggedIn) {
       sessionStorage.setItem("isLoggedIn", "true");
       toast.success("Logged In");
       router.push("/dashboard");
@@ -35,7 +31,13 @@ const Login = () => {
     <>
       <div className="flex justify-center items-center h-screen">
         <Card className="m-5 md:m-7 p-5 w-[30rem]">
-          <form action={handleSubmit}>
+          <form
+            action={(formData) =>
+              login(formData).then(({ isLoggedIn }) =>
+                handlePostSubmit(isLoggedIn)
+              )
+            }
+          >
             <CardHeader>
               <h1 className="text-2xl font-bold">Login</h1>
             </CardHeader>

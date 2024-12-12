@@ -12,7 +12,7 @@ import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 
-export async function getAll() {
+export const getAll = async () => {
   let clients = [];
 
   try {
@@ -32,7 +32,7 @@ export async function getAll() {
   return response;
 }
 
-export async function create(values: Prisma.ClientCreateInput) {
+export const create = async (values: Prisma.ClientCreateInput) => {
   const schema = createSchema;
 
   try {
@@ -60,7 +60,7 @@ export async function create(values: Prisma.ClientCreateInput) {
   return response;
 }
 
-export async function update(values: Prisma.ClientCreateInput) {
+export const update = async (values: Prisma.ClientCreateInput) => {
   const schema = updateSchema;
 
   try {
@@ -95,7 +95,7 @@ export async function update(values: Prisma.ClientCreateInput) {
   return response;
 }
 
-export async function destroy(values: { id: string }) {
+export const destroy = async (values: { id: string }) => {
   const schema = destroySchema;
 
   try {

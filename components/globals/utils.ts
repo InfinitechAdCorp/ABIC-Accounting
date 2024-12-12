@@ -136,7 +136,7 @@ export const formatContracts = (contracts: ContractWithClient[]) => {
 
 // Formatters
 
-export function capitalize(string: string) {
+export const capitalize = (string: string) => {
   const capitalized = string.charAt(0).toUpperCase() + string.slice(1);
   return capitalized;
 }

@@ -6,7 +6,7 @@ import {
   getMonthlyContracts,
 } from "@prisma/client/sql";
 
-export async function getCounts() {
+export const getCounts = async () => {
   const counts = {
     accounts: 0,
     transactions: 0,
@@ -43,7 +43,7 @@ export async function getCounts() {
   return response;
 }
 
-export async function getCharts() {
+export const getCharts = async () => {
   const accounts = await prisma.account.findMany({
     include: {
       _count: {

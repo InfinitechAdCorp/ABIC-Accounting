@@ -12,7 +12,7 @@ import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 
-export async function getAll() {
+export const getAll = async () => {
   let accounts = [];
 
   try {
@@ -36,7 +36,7 @@ export async function getAll() {
   return response;
 }
 
-export async function create(values: Prisma.AccountCreateInput) {
+export const create = async (values: Prisma.AccountCreateInput) => {
   const schema = createSchema;
 
   try {
@@ -64,7 +64,7 @@ export async function create(values: Prisma.AccountCreateInput) {
   return response;
 }
 
-export async function update(values: Prisma.AccountCreateInput) {
+export const update = async (values: Prisma.AccountCreateInput) => {
   const schema = updateSchema;
 
   try {
@@ -100,7 +100,7 @@ export async function update(values: Prisma.AccountCreateInput) {
   return response;
 }
 
-export async function destroy(values: { id: string }) {
+export const destroy = async (values: { id: string }) => {
   const schema = destroySchema;
 
   try {

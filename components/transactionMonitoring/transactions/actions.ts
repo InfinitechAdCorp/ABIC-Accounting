@@ -14,7 +14,7 @@ import * as Yup from "yup";
 
 type TransactionCreateInput = Prisma.TransactionCreateInput & { account_id?: string };
 
-export async function getAll() {
+export const getAll = async () => {
   let transactions = [];
 
   try {
@@ -40,7 +40,7 @@ export async function getAll() {
   return response;
 }
 
-export async function create(values: TransactionCreateInput) {
+export const create = async (values: TransactionCreateInput) => {
   const schema = createSchema
 
   try {
@@ -78,7 +78,7 @@ export async function create(values: TransactionCreateInput) {
   return response;
 }
 
-export async function update(values: TransactionCreateInput) {
+export const update = async (values: TransactionCreateInput) => {
   const schema = updateSchema
 
   try {
@@ -120,7 +120,7 @@ export async function update(values: TransactionCreateInput) {
   return response;
 }
 
-export async function destroy(values: { id: string }) {
+export const destroy = async (values: { id: string }) => {
   const schema = destroySchema
 
   try {

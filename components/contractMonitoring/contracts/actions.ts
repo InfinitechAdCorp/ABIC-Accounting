@@ -16,7 +16,7 @@ import * as Yup from "yup";
 
 type ContractCreateInput = Prisma.ContractCreateInput & { client_id?: string };
 
-export async function getAll() {
+export const getAll = async () => {
   let contracts = [];
   try {
     contracts = await prisma.contract.findMany({
@@ -39,7 +39,7 @@ export async function getAll() {
   return response;
 }
 
-export async function create(values: ContractCreateInput) {
+export const create = async (values: ContractCreateInput) => {
   const schema = createSchema;
 
   try {
@@ -81,7 +81,7 @@ export async function create(values: ContractCreateInput) {
   return response;
 }
 
-export async function update(values: ContractCreateInput) {
+export const update = async (values: ContractCreateInput) => {
   const schema = updateSchema;
 
   try {
@@ -124,7 +124,7 @@ export async function update(values: ContractCreateInput) {
   return response;
 }
 
-export async function destroy(values: { id: string }) {
+export const destroy = async (values: { id: string }) => {
   const schema = destroySchema;
 
   try {
@@ -154,7 +154,7 @@ export async function destroy(values: { id: string }) {
   return response;
 }
 
-export async function markAsPaid(values: { id: string }) {
+export const markAsPaid = async (values: { id: string }) => {
   const schema = markAsPaidSchema;
 
   try {
