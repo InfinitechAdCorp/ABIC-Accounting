@@ -9,9 +9,9 @@ import {
   Input,
   Button,
 } from "@nextui-org/react";
-import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { login } from "@/components/globals/auth";
+import { toast } from "react-toastify";
 
 const Login = () => {
   sessionStorage.clear();
@@ -39,7 +39,7 @@ const Login = () => {
             }
           >
             <CardHeader>
-              <h1 className="text-2xl font-bold">Login</h1>
+              <h1 className="text-2xl font-bold">Xero</h1>
             </CardHeader>
             <CardBody>
               <Input

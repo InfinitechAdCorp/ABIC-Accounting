@@ -1,6 +1,7 @@
 "use server";
 
 export const login = async (formData: FormData) => {
+  const response = { isLoggedIn: false };
   const username = formData.get("username");
   const password = formData.get("password");
 
@@ -8,8 +9,8 @@ export const login = async (formData: FormData) => {
     username == process.env.LOGIN_USERNAME &&
     password == process.env.LOGIN_PASSWORD
   ) {
-    return { isLoggedIn: true };
+    response.isLoggedIn = true;
   }
 
-  return { isLoggedIn: false };
+  return response;
 };
