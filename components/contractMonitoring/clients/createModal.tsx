@@ -12,7 +12,7 @@ import {
   Input,
 } from "@nextui-org/react";
 import { create as createSchema } from "@/components/contractMonitoring/clients/schemas";
-import { Formik, Form, Field, FormikProps } from "formik";
+import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
 import { create as createAction } from "@/components/contractMonitoring/clients/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
@@ -48,12 +48,12 @@ const CreateModal = () => {
                 validationSchema={createSchema}
                 onSubmit={onSubmit}
               >
-                {(props: FormikProps<any>) => (
+                {(props: FormikProps<Prisma.ClientCreateInput>) => (
                   <Form>
                     <ModalHeader>Add Client</ModalHeader>
                     <ModalBody>
                       <Field name="name">
-                        {({ field, meta }) => (
+                        {({ field, meta }: FieldProps) => (
                           <div>
                             <Input
                               type="text"
