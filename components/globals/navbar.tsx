@@ -14,12 +14,19 @@ import { toast } from "react-toastify";
 const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const isServer = typeof window === "undefined";
 
   const isActive = (hrefs: string[]) => hrefs.includes(pathname);
-  const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+
+  let isLoggedIn;
+  if (isServer) {
+    isLoggedIn = sessionStorage.getItem("isLoggedIn");
+  }
 
   const logout = () => {
-    sessionStorage.clear();
+    if (isServer) {
+      sessionStorage.clear();
+    }
     toast.success("Logged Out");
   };
 

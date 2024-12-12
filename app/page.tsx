@@ -13,15 +13,22 @@ import { useRouter } from "next/navigation";
 import { login } from "@/components/globals/auth";
 import { toast } from "react-toastify";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 const Login = () => {
-  sessionStorage.clear();
   const router = useRouter();
+  const isServer = typeof window === "undefined";
+
+  if (isServer) {
+    sessionStorage.clear();
+  }
 
   const handlePostSubmit = (isLoggedIn: boolean) => {
     if (isLoggedIn) {
-      sessionStorage.setItem("isLoggedIn", "true");
+      if (isServer) {
+        sessionStorage.setItem("isLoggedIn", "true");
+      }
+      
       toast.success("Logged In");
       router.push("/dashboard");
     } else {
