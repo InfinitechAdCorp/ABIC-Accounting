@@ -11,7 +11,7 @@ import {
 } from "@nextui-org/react";
 import { FormattedClient } from "@/components/contractMonitoring/types";
 import { update as updateSchema } from "@/components/contractMonitoring/clients/schemas";
-import { useFormik } from "formik";
+import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
 import { update as updateAction } from "@/components/contractMonitoring/clients/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
@@ -21,8 +21,15 @@ type Props = {
   client: FormattedClient;
 };
 
+type ClientCreateInput = Prisma.ClientCreateInput & { id: string };
+
 const UpdateModal = ({ client }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
+  const initialValues = {
+    id: client.id,
+    name: client.name,
+  };
 
   const onSubmit = async (
     values: Prisma.ClientCreateInput,
@@ -32,24 +39,6 @@ const UpdateModal = ({ client }: Props) => {
       handlePostSubmit(response, actions, onClose)
     );
   };
-
-  const {
-    values,
-    errors,
-    touched,
-    isSubmitting,
-    handleBlur,
-    handleChange,
-    handleSubmit,
-  } = useFormik({
-    initialValues: {
-      id: client.id,
-      name: client.name,
-    },
-    validationSchema: updateSchema,
-    onSubmit,
-    enableReinitialize: true,
-  });
 
   return (
     <>
@@ -67,41 +56,53 @@ const UpdateModal = ({ client }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <form onSubmit={handleSubmit}>
-                <ModalHeader>Edit Account</ModalHeader>
-                <ModalBody>
-                  <input type="hidden" name="id" value={values.id} />
+              <Formik
+                initialValues={initialValues}
+                validationSchema={updateSchema}
+                onSubmit={onSubmit}
+              >
+                {(props: FormikProps<ClientCreateInput>) => (
+                  <Form>
+                    <ModalHeader>Update Client</ModalHeader>
+                    <ModalBody>
+                      <Field type="hidden" name="id" />
 
-                  <Input
-                    type="text"
-                    size="md"
-                    variant="bordered"
-                    label="Name"
-                    labelPlacement="outside"
-                    placeholder="Enter Name"
-                    name="name"
-                    value={values.name}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-
-                  {errors.name && touched.name && (
-                    <small className="text-red-500">{errors.name}</small>
-                  )}
-                </ModalBody>
-                <ModalFooter>
-                  <Button
-                    color="primary"
-                    type="submit"
-                    isLoading={isSubmitting}
-                  >
-                    Update
-                  </Button>
-                  <Button color="danger" onPress={onClose}>
-                    Cancel
-                  </Button>
-                </ModalFooter>
-              </form>
+                      <Field name="name">
+                        {({ field, meta }: FieldProps) => (
+                          <div>
+                            <Input
+                              type="text"
+                              size="md"
+                              variant="bordered"
+                              label="Name"
+                              labelPlacement="outside"
+                              placeholder="Enter Name"
+                              {...field}
+                            />
+                            {meta.touched && meta.error && (
+                              <small className="text-red-500">
+                                {meta.error}
+                              </small>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button
+                        color="primary"
+                        type="submit"
+                        isLoading={props.isSubmitting}
+                      >
+                        Update
+                      </Button>
+                      <Button color="danger" onPress={onClose}>
+                        Cancel
+                      </Button>
+                    </ModalFooter>
+                  </Form>
+                )}
+              </Formik>
             </>
           )}
         </ModalContent>
