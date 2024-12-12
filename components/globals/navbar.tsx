@@ -58,10 +58,10 @@ const Navbar = () => {
                       : "font-semibold"
                   }`}
                 >
-                  <span className="hidden md:inline">
+                  <span className="hidden lg:inline">
                     Transaction Monitoring
                   </span>
-                  <span className="inline md:hidden">Transactions</span>
+                  <span className="inline lg:hidden">Transactions</span>
                 </h3>
               </DropdownTrigger>
 
@@ -94,8 +94,8 @@ const Navbar = () => {
                       : "font-semibold"
                   }`}
                 >
-                  <span className="hidden md:inline">Contract Monitoring</span>
-                  <span className="inline md:hidden">Contracts</span>
+                  <span className="hidden lg:inline">Contract Monitoring</span>
+                  <span className="inline lg:hidden">Contracts</span>
                 </h3>
               </DropdownTrigger>
               <DropdownMenu className="text-center">
