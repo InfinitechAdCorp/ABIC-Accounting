@@ -10,18 +10,22 @@ import {
   Button,
 } from "@nextui-org/react";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import getConfig from 'next/config'
 
 const Login = () => {
+  sessionStorage.clear();
+  const router = useRouter();
+  const { publicRuntimeConfig } = getConfig()
+
   const handleSubmit = (formData: FormData) => {
     const username = formData.get("username");
     const password = formData.get("password");
 
-    if (
-      username == process.env.LOGIN_USERNAME &&
-      password == process.env.LOGIN_PASSWORD
-    ) {
+    if (username == publicRuntimeConfig.loginUsername && password == publicRuntimeConfig.loginPassword) {
       sessionStorage.setItem("isLoggedIn", "true");
       toast.success("Logged In");
+      router.push("/dashboard");
     } else {
       toast.error("Invalid Credentials");
     }

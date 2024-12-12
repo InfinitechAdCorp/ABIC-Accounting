@@ -15,7 +15,6 @@ const Navbar = () => {
   const pathname = usePathname();
 
   const isActive = (hrefs: string[]) => hrefs.includes(pathname);
-
   const isLoggedIn = sessionStorage.getItem("isLoggedIn");
 
   return (

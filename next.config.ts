@@ -11,6 +11,10 @@ module.exports = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  publicRuntimeConfig: {
+    loginUsername: 'test',
+    loginPassword: '123',
+  },
 };
 
 export default nextConfig;
