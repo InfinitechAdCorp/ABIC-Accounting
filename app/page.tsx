@@ -19,13 +19,13 @@ const Login = () => {
   const router = useRouter();
   const isServer = typeof window === "undefined";
 
-  if (isServer) {
+  if (!isServer) {
     sessionStorage.clear();
   }
 
   const handlePostSubmit = (isLoggedIn: boolean) => {
     if (isLoggedIn) {
-      if (isServer) {
+      if (!isServer) {
         sessionStorage.setItem("isLoggedIn", "true");
       }
       

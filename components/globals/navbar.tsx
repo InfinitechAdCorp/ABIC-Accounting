@@ -19,12 +19,12 @@ const Navbar = () => {
   const isActive = (hrefs: string[]) => hrefs.includes(pathname);
 
   let isLoggedIn;
-  if (isServer) {
+  if (!isServer) {
     isLoggedIn = sessionStorage.getItem("isLoggedIn");
   }
 
   const logout = () => {
-    if (isServer) {
+    if (!isServer) {
       sessionStorage.clear();
     }
     toast.success("Logged Out");
