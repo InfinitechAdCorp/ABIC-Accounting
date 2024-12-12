@@ -13,8 +13,6 @@ import { useRouter } from "next/navigation";
 import { login } from "@/components/globals/auth";
 import { toast } from "react-toastify";
 
-export const dynamic = "force-dynamic";
-
 const Login = () => {
   const router = useRouter();
   const isServer = typeof window === "undefined";
