@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React from "react";
 import Link from "next/link";
 import {
   Dropdown,
@@ -14,23 +14,19 @@ import { toast } from "react-toastify";
 const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const navbarRef = useRef<HTMLDivElement>(null);
 
   const isActive = (hrefs: string[]) => hrefs.includes(pathname);
   const isLoggedIn = sessionStorage.getItem("isLoggedIn");
 
   const logout = () => {
+    sessionStorage.clear();
     toast.success("Logged Out");
-    navbarRef.current!.style.display = "none";
   };
 
   return (
     <>
       {isLoggedIn == "true" ? (
-        <div
-          className="grid grid-cols-2 items-center bg-sky-600 p-5"
-          ref={navbarRef}
-        >
+        <div className="grid grid-cols-2 items-center bg-sky-600 p-5">
           <div className="flex justify-evenly sm:justify-start gap-3">
             <Link href="/dashboard" className="text-center">
               <h3
