@@ -129,13 +129,13 @@ const DataTable = ({
       if (columnKey == "actions") {
         return (
           <div className="relative flex justify-end items-center gap-2">
-            <PaymentModal action={markAsPaid} id={row.id} />
             <UpdateModal
               contract={row}
               clients={clients}
               locations={locations}
             />
             <DestroyModal title="Contract" action={destroy} id={row.id} />
+            <PaymentModal action={markAsPaid} id={row.id} />
           </div>
         );
       } else if (columnKey == "client") {

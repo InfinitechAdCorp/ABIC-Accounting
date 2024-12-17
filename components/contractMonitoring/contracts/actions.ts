@@ -37,7 +37,7 @@ export const getAll = async () => {
     contracts: contracts,
   };
   return response;
-}
+};
 
 export const create = async (values: ContractCreateInput) => {
   const schema = createSchema;
@@ -79,7 +79,7 @@ export const create = async (values: ContractCreateInput) => {
   revalidatePath("/contracts");
   const response: ActionResponse = { code: 200, message: "Added Contract" };
   return response;
-}
+};
 
 export const update = async (values: ContractCreateInput) => {
   const schema = updateSchema;
@@ -105,8 +105,8 @@ export const update = async (values: ContractCreateInput) => {
         location: values.location,
         start: new Date(new Date(values.start).setUTCHours(0)),
         end: new Date(new Date(values.end).setUTCHours(0)),
-        advance: values.advance,
-        deposit: values.deposit,
+        advance: Number(values.advance),
+        deposit: Number(values.deposit),
         tenant_price: values.tenant_price,
         owner_income: values.owner_income,
         abic_income: values.abic_income,
@@ -122,7 +122,7 @@ export const update = async (values: ContractCreateInput) => {
   revalidatePath("/contracts");
   const response: ActionResponse = { code: 200, message: "Updated Contract" };
   return response;
-}
+};
 
 export const destroy = async (values: { id: string }) => {
   const schema = destroySchema;
@@ -152,7 +152,7 @@ export const destroy = async (values: { id: string }) => {
   revalidatePath("/contracts");
   const response: ActionResponse = { code: 200, message: "Deleted Contract" };
   return response;
-}
+};
 
 export const markAsPaid = async (values: { id: string }) => {
   const schema = markAsPaidSchema;
@@ -193,4 +193,4 @@ export const markAsPaid = async (values: { id: string }) => {
     message: "Successfully Made Payment",
   };
   return response;
-}
+};

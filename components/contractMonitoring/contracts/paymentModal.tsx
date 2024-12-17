@@ -11,8 +11,8 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { ActionResponse } from "@/components/globals/types";
-import { markAsPaid } from "@/components/contractMonitoring/contracts/schemas";
-import { useFormik } from "formik";
+import { markAsPaid as markAsPaidSchema } from "@/components/contractMonitoring/contracts/schemas";
+import { Formik, Form, Field, FormikProps } from "formik";
 import { handlePostSubmit } from "@/components/globals/utils";
 import { MdPayments } from "react-icons/md";
 
@@ -24,6 +24,10 @@ type Props = {
 const PaymentModal = ({ action, id }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
+  const initialValues = {
+    id: id,
+  };
+
   const onSubmit = async (
     values: { id: string },
     actions: { resetForm: () => void }
@@ -32,14 +36,6 @@ const PaymentModal = ({ action, id }: Props) => {
       handlePostSubmit(response, actions, onClose)
     );
   };
-
-  const { values, isSubmitting, handleSubmit } = useFormik({
-    initialValues: {
-      id: id,
-    },
-    validationSchema: markAsPaid,
-    onSubmit,
-  });
 
   return (
     <>
@@ -58,25 +54,33 @@ const PaymentModal = ({ action, id }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <form onSubmit={handleSubmit}>
-                <ModalHeader>Mark As Paid</ModalHeader>
-                <ModalBody>
-                  <input type="hidden" value={values.id} name="id" />
-                  <h6>Are you sure that you want to mark this as paid?</h6>
-                </ModalBody>
-                <ModalFooter>
-                  <Button
-                    color="primary"
-                    type="submit"
-                    isLoading={isSubmitting}
-                  >
-                    Yes
-                  </Button>
-                  <Button color="danger" onPress={onClose}>
-                    No
-                  </Button>
-                </ModalFooter>
-              </form>
+              <Formik
+                initialValues={initialValues}
+                validationSchema={markAsPaidSchema}
+                onSubmit={onSubmit}
+              >
+                {(props: FormikProps<{ id: string }>) => (
+                  <Form>
+                    <ModalHeader>Mark As Paid</ModalHeader>
+                    <ModalBody>
+                      <Field type="hidden" name="id" />
+                      <h6>Are you sure that you want to mark this as paid?</h6>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button
+                        color="primary"
+                        type="submit"
+                        isLoading={props.isSubmitting}
+                      >
+                        Yes
+                      </Button>
+                      <Button color="danger" onPress={onClose}>
+                        No
+                      </Button>
+                    </ModalFooter>
+                  </Form>
+                )}
+              </Formik>
             </>
           )}
         </ModalContent>
