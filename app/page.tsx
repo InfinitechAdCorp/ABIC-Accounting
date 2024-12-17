@@ -15,11 +15,15 @@ import { toast } from "react-toastify";
 
 const Login = () => {
   const router = useRouter();
-  sessionStorage.clear();
+  if (typeof window !== "undefined") {
+    sessionStorage.clear();
+  }
 
   const handlePostSubmit = (isLoggedIn: boolean) => {
     if (isLoggedIn) {
-      sessionStorage.setItem("isLoggedIn", "true");
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("isLoggedIn", "true");
+      }
       toast.success("Logged In");
       router.push("/dashboard");
     } else {

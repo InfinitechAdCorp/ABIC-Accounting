@@ -16,10 +16,15 @@ const Navbar = () => {
   const pathname = usePathname();
 
   const isActive = (hrefs: string[]) => hrefs.includes(pathname);
-  const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+  let isLoggedIn;
+  if (typeof window !== "undefined") {
+    isLoggedIn = sessionStorage.getItem("isLoggedIn");
+  }
 
   const logout = () => {
-    sessionStorage.clear();
+    if (typeof window !== "undefined") {
+      sessionStorage.clear();
+    }
     toast.success("Logged Out");
   };
 
