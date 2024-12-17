@@ -20,8 +20,7 @@ import { create as createSchema } from "@/components/transactionMonitoring/trans
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
 import { create as createAction } from "@/components/transactionMonitoring/transactions/actions";
 import { Prisma } from "@prisma/client";
-import { handlePostSubmit } from "@/components/globals/utils";
-import { dateValueToDate } from "@/components/globals/utils";
+import { handlePostSubmit, dateToDateValue, dateValueToDate } from "@/components/globals/utils";
 
 type Props = {
   accounts: FormattedAccount[];
@@ -31,7 +30,7 @@ const CreateModal = ({ accounts }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const initialValues = {
-    date: new Date(new Date().setUTCHours(0)),
+    date: "",
     voucher: "",
     check: "",
     account_id: "",
@@ -68,7 +67,7 @@ const CreateModal = ({ accounts }: Props) => {
                   <Form>
                     <ModalHeader>Add Transaction</ModalHeader>
                     <ModalBody>
-                      {/* <Field name="date">
+                      <Field name="date">
                         {({ field, meta }: FieldProps) => (
                           <div>
                             <DatePicker
@@ -77,6 +76,7 @@ const CreateModal = ({ accounts }: Props) => {
                               variant="bordered"
                               label="Voucher Date"
                               labelPlacement="outside"
+                              value={dateToDateValue(field.value)}
                               onChange={(value) => {
                                 const date = dateValueToDate(value);
                                 props.setFieldValue("date", date);
@@ -89,7 +89,7 @@ const CreateModal = ({ accounts }: Props) => {
                             )}
                           </div>
                         )}
-                      </Field> */}
+                      </Field>
 
                       <div className="grid grid-cols-2 gap-3">
                         <Field name="voucher">
