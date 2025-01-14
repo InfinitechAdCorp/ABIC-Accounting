@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -15,15 +15,11 @@ import { toast } from "react-toastify";
 
 const Login = () => {
   const router = useRouter();
-  if (typeof window !== "undefined") {
-    sessionStorage.clear();
-  }
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  const handlePostSubmit = (isLoggedIn: boolean) => {
-    if (isLoggedIn) {
-      if (typeof window !== "undefined") {
-        sessionStorage.setItem("isLoggedIn", "true");
-      }
+  const handlePostSubmit = (isValid: boolean) => {
+    if (isValid) {
+      setIsLoggedIn(true)
       toast.success("Logged In");
       router.push("/dashboard");
     } else {
@@ -31,14 +27,24 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+    sessionStorage.clear();
+  }, [])
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      sessionStorage.setItem("isLoggedIn", "true")
+    }
+  }, [isLoggedIn])
+
   return (
     <>
       <div className="flex justify-center items-center h-screen">
         <Card className="m-5 md:m-7 p-5 w-[30rem]">
           <form
             action={(formData) =>
-              login(formData).then(({ isLoggedIn }) =>
-                handlePostSubmit(isLoggedIn)
+              login(formData).then(({ isValid }) =>
+                handlePostSubmit(isValid)
               )
             }
           >

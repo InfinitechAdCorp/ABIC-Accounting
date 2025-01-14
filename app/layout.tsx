@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { Providers } from "@/app/providers";
-import "@/styles/globals.css";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import Navbar from "@/components/globals/navbar";
+
+import "@/styles/globals.css";
+import "react-toastify/dist/ReactToastify.css";
 
 const montserrat = Montserrat({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -31,7 +32,6 @@ export default function RootLayout({
     <html lang="en" className={montserrat.className} data-theme="light">
       <body>
         <Providers>
-          <Navbar />
           {children}
           <ToastContainer autoClose={1300} />
         </Providers>

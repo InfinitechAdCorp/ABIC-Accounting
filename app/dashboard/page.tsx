@@ -4,6 +4,7 @@ import { getCounts, getCharts } from "@/components/dashboard/actions";
 import Barchart from "@/components/dashboard/barchart";
 import { GrTransaction } from "react-icons/gr";
 import { FaUsers, FaFileSignature } from "react-icons/fa6";
+import Navbar from "@/components/globals/navbar";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +14,8 @@ const Dashboard = async () => {
 
   return (
     <>
+      <Navbar />
+
       <div className="m-5 md:mx-7 xl:mx-14 2xl:mx-60">
         <div className="text-center">
           <h1 className="font-bold text-2xl mb-5">Dashboard</h1>

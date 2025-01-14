@@ -4,6 +4,7 @@ import { getAll as getAccounts } from "@/components/transactionMonitoring/accoun
 import { Card, CardBody } from "@nextui-org/react";
 import { formatAccounts, formatTransactions } from "@/components/globals/utils";
 import DataTable from "@/components/transactionMonitoring/transactions/dataTable";
+import Navbar from "@/components/globals/navbar";
 
 export const dynamic = 'force-dynamic'
 
@@ -38,6 +39,8 @@ const Transactions = async () => {
 
   return (
     <>
+      <Navbar />
+
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
           <CardBody>

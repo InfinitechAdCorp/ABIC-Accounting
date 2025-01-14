@@ -3,6 +3,7 @@ import { getAll } from "@/components/contractMonitoring/clients/actions";
 import { Card, CardBody } from "@nextui-org/react";
 import { formatClients } from "@/components/globals/utils";
 import DataTable from "@/components/contractMonitoring/clients/dataTable";
+import Navbar from "@/components/globals/navbar";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,8 @@ const Clients = async () => {
 
   return (
     <>
+      <Navbar />
+
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
           <CardBody>
