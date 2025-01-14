@@ -1,13 +1,7 @@
 "use client";
 
-import {
-  BarChart,
-  Bar,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import React from "react";
+import ReactEcharts from "echarts-for-react";
 
 type Props = {
   title: string;
@@ -21,17 +15,26 @@ type Props = {
 const Barchart = ({ title, data }: Props) => {
   const [x, y] = Object.keys(data[0]);
 
+  const option = {
+    xAxis: {
+      type: "category",
+      data: x,
+    },
+    yAxis: {
+      type: "value",
+    },
+    series: [
+      {
+        data: y,
+        type: "bar",
+      },
+    ],
+  };
+
   return (
     <>
       <h1 className="font-semibold text-lg">{title}</h1>
-      <ResponsiveContainer>
-        <BarChart data={data}>
-          <Tooltip />
-          <XAxis dataKey={x} />
-          <YAxis dataKey={y} allowDecimals={false} />
-          <Bar dataKey={y} fill="#0284c7"></Bar>
-        </BarChart>
-      </ResponsiveContainer>
+      <ReactEcharts option={option} />
     </>
   );
 };

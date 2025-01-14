@@ -12,14 +12,15 @@ import {
 import { useRouter } from "next/navigation";
 import { login } from "@/components/globals/auth";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 const Login = () => {
   const router = useRouter();
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handlePostSubmit = (isValid: boolean) => {
     if (isValid) {
-      setIsLoggedIn(true)
+      setIsLoggedIn(true);
       toast.success("Logged In");
       router.push("/dashboard");
     } else {
@@ -29,13 +30,13 @@ const Login = () => {
 
   useEffect(() => {
     sessionStorage.clear();
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (isLoggedIn) {
-      sessionStorage.setItem("isLoggedIn", "true")
+      sessionStorage.setItem("isLoggedIn", "true");
     }
-  }, [isLoggedIn])
+  }, [isLoggedIn]);
 
   return (
     <>
@@ -43,13 +44,13 @@ const Login = () => {
         <Card className="m-5 md:m-7 p-5 w-[30rem]">
           <form
             action={(formData) =>
-              login(formData).then(({ isValid }) =>
-                handlePostSubmit(isValid)
-              )
+              login(formData).then(({ isValid }) => handlePostSubmit(isValid))
             }
           >
             <CardHeader>
-              <h1 className="text-2xl font-bold">Xero</h1>
+              <div className="flex w-full justify-center">
+                <Image src={"/favicon.ico"} width={75} height={75} alt="logo" />
+              </div>
             </CardHeader>
             <CardBody>
               <Input
