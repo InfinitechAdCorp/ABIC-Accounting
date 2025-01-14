@@ -132,9 +132,9 @@ const DataTable = ({
               </Button>
             </DropdownTrigger>
             <DropdownMenu>
-              <DropdownItem>View</DropdownItem>
-              <DropdownItem>Edit</DropdownItem>
-              <DropdownItem>Delete</DropdownItem>
+              <DropdownItem key="View">View</DropdownItem>
+              <DropdownItem key="Edit">Edit</DropdownItem>
+              <DropdownItem key="Delete">Delete</DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>

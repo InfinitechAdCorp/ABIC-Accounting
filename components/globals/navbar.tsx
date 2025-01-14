@@ -63,14 +63,14 @@ const Navbar = () => {
 
             <DropdownMenu className="text-center">
               <DropdownItem
-                onClick={() => router.push("/accounts")}
-                textValue="Accounts"
+                onPress={() => router.push("/accounts")}
+                key="Accounts"
               >
                 <h3 className="font-semibold">Accounts</h3>
               </DropdownItem>
               <DropdownItem
-                onClick={() => router.push("/transactions")}
-                textValue="Transactions"
+                onPress={() => router.push("/transactions")}
+                key="Transactions"
               >
                 <h3 className="font-semibold">Transactions</h3>
               </DropdownItem>
@@ -96,14 +96,14 @@ const Navbar = () => {
             </DropdownTrigger>
             <DropdownMenu className="text-center">
               <DropdownItem
-                onClick={() => router.push("/clients")}
-                textValue="Clients"
+                onPress={() => router.push("/clients")}
+                key="Clients"
               >
                 <h3 className="font-semibold">Clients</h3>
               </DropdownItem>
               <DropdownItem
-                onClick={() => router.push("/contracts")}
-                textValue="Contracts"
+                onPress={() => router.push("/contracts")}
+                key="Contracts"
               >
                 <h3 className="font-semibold">Contracts</h3>
               </DropdownItem>
