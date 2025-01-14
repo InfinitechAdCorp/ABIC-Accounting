@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 const Dashboard = async () => {
   const { counts } = await getCounts();
-  // const { charts } = await getCharts();
+  const { charts } = await getCharts();
 
   return (
     <>
@@ -91,7 +91,7 @@ const Dashboard = async () => {
           </div>
         </div>
 
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
           <Card className="mb-3 h-72">
             <CardBody className="text-center">
               <Barchart
@@ -127,7 +127,7 @@ const Dashboard = async () => {
               />
             </CardBody>
           </Card>
-        </div> */}
+        </div>
       </div>
     </>
   );
