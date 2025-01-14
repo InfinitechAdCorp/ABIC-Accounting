@@ -12,6 +12,8 @@ const Dashboard = async () => {
   const { counts } = await getCounts();
   const { charts } = await getCharts();
 
+  console.log(charts)
+
   return (
     <>
       <Navbar />
@@ -93,7 +95,7 @@ const Dashboard = async () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
           <Card className="mb-3 h-72">
-            <CardBody className="text-center">
+            <CardBody className="text-center pt-7">
               <Barchart
                 title="Transactions Per Account"
                 data={charts.accountsWithTransactions}
@@ -102,7 +104,7 @@ const Dashboard = async () => {
           </Card>
 
           <Card className="mb-3 h-72">
-            <CardBody className="text-center">
+            <CardBody className="text-center pt-7">
               <Barchart
                 title="Contracts Per Client"
                 data={charts.clientsWithContracts}
@@ -111,7 +113,7 @@ const Dashboard = async () => {
           </Card>
 
           <Card className="mb-3 h-72">
-            <CardBody className="text-center">
+            <CardBody className="text-center pt-7">
               <Barchart
                 title="Transactions Per Month"
                 data={charts.monthlyTransactions}
@@ -120,7 +122,7 @@ const Dashboard = async () => {
           </Card>
 
           <Card className="mb-3 h-72">
-            <CardBody className="text-center">
+            <CardBody className="text-center pt-7">
               <Barchart
                 title="Contracts Per Month"
                 data={charts.monthlyContracts}

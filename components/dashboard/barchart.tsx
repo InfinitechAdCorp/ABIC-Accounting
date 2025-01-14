@@ -13,7 +13,20 @@ type Props = {
 };
 
 const Barchart = ({ title, data }: Props) => {
-  const [x, y] = Object.keys(data[0]);
+  console.log(data);
+  const x: any[] = [];
+  const y: any[] = [];
+
+  data.forEach((datum) => {
+    Object.entries(datum).forEach((entry) => {
+      const [key, value] = entry;
+      if (["name", "month"].includes(key)) {
+        x.push(value);
+      } else if (key == "count") {
+        y.push(value);
+      }
+    });
+  });
 
   const option = {
     xAxis: {
@@ -22,6 +35,7 @@ const Barchart = ({ title, data }: Props) => {
     },
     yAxis: {
       type: "value",
+      splitNumber: 1,
     },
     series: [
       {
@@ -29,11 +43,18 @@ const Barchart = ({ title, data }: Props) => {
         type: "bar",
       },
     ],
+    title: {
+      text: title,
+      left: "center",
+    },
+    textStyle: {
+      fontFamily: "Montserrat",
+    },
+    color: ["#0284c7"],
   };
 
   return (
     <>
-      <h1 className="font-semibold text-lg">{title}</h1>
       <ReactEcharts option={option} />
     </>
   );
