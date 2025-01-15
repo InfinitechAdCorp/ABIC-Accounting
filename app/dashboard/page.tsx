@@ -7,6 +7,7 @@ import Barchart from "@/components/dashboard/barchart";
 import { GrTransaction } from "react-icons/gr";
 import { FaUsers, FaFileSignature } from "react-icons/fa6";
 import Navbar from "@/components/globals/navbar";
+import { useRouter } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -37,6 +38,7 @@ export type Charts = {
 };
 
 const Dashboard = () => {
+  const router = useRouter();
   const [counts, setCounts] = useState<Counts>({
     accounts: 0,
     transactions: 0,
@@ -78,7 +80,13 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
           <div>
             <div className="grid grid-cols-2 gap-3 mb-3">
-              <Card>
+              <Card
+                className="cursor-pointer"
+                title="View Accounts"
+                isPressable
+                isHoverable
+                onPress={() => {router.push("/accounts")}}
+              >
                 <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
                   <div className="flex justify-center items-center">
                     <FaUsers size={56} />
@@ -93,7 +101,13 @@ const Dashboard = () => {
                 </CardBody>
               </Card>
 
-              <Card>
+              <Card
+                className="cursor-pointer"
+                title="View Transactions"
+                isPressable
+                isHoverable
+                onPress={() => router.push("/transactions")}
+              >
                 <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
                   <div className="flex justify-center items-center">
                     <GrTransaction size={56} />
@@ -112,7 +126,13 @@ const Dashboard = () => {
 
           <div>
             <div className="grid grid-cols-2 gap-3 mb-3">
-              <Card>
+              <Card
+                className="cursor-pointer"
+                title="View Clients"
+                isPressable
+                isHoverable
+                onPress={() => router.push("/clients")}
+              >
                 <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
                   <div className="flex justify-center items-center">
                     <FaUsers size={56} />
@@ -127,7 +147,13 @@ const Dashboard = () => {
                 </CardBody>
               </Card>
 
-              <Card>
+              <Card
+                className="cursor-pointer"
+                title="View Contracts"
+                isPressable
+                isHoverable
+                onPress={() => router.push("/contracts")}
+              >
                 <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
                   <div className="flex justify-center items-center">
                     <FaFileSignature size={56} />
