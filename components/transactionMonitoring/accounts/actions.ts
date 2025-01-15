@@ -34,7 +34,7 @@ export const getAll = async () => {
     accounts: accounts,
   };
   return response;
-}
+};
 
 export const create = async (values: Prisma.AccountCreateInput) => {
   const schema = createSchema;
@@ -52,17 +52,29 @@ export const create = async (values: Prisma.AccountCreateInput) => {
     return response;
   }
 
-  try {
-    await prisma.account.create({ data: { ...values } });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  const nameExists = await prisma.account.findFirst({
+    where: { name: values.name },
+  });
+
+  if (!nameExists) {
+    try {
+      await prisma.account.create({ data: { ...values } });
+    } catch {
+      const response: ActionResponse = { code: 500, message: "Server Error" };
+      return response;
+    }
+  } else {
+    const response: ActionResponse = {
+      code: 429,
+      message: "Name Is Already Taken",
+    };
     return response;
   }
 
   revalidatePath("/accounts");
   const response: ActionResponse = { code: 200, message: "Added Account" };
   return response;
-}
+};
 
 export const update = async (values: Prisma.AccountCreateInput) => {
   const schema = updateSchema;
@@ -98,7 +110,7 @@ export const update = async (values: Prisma.AccountCreateInput) => {
   revalidatePath("/accounts");
   const response: ActionResponse = { code: 200, message: "Updated Account" };
   return response;
-}
+};
 
 export const destroy = async (values: { id: string }) => {
   const schema = destroySchema;
@@ -131,4 +143,4 @@ export const destroy = async (values: { id: string }) => {
     message: "Deleted Account",
   };
   return response;
-}
+};
