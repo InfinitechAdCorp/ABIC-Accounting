@@ -10,7 +10,7 @@ const accounts: Prisma.AccountCreateInput[] = [
 
 const transactions: Prisma.TransactionCreateInput[] = [
   {
-    date: "2024-11-25T00:00:00.000Z",
+    date: "2025-02-25T00:00:00.000Z",
     voucher: "5245",
     check: "24837",
     particulars: "Tivoli",
@@ -27,7 +27,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
     },
   },
   {
-    date: "2024-10-25T00:00:00.000Z",
+    date: "2025-03-25T00:00:00.000Z",
     voucher: "4321",
     check: "76598",
     particulars: "Alea Residences",
@@ -44,7 +44,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
     },
   },
   {
-    date: "2024-09-20T00:00:00.000Z",
+    date: "2025-04-20T00:00:00.000Z",
     voucher: "4256",
     check: "42783",
     particulars: "Jazz Residences",
@@ -72,14 +72,14 @@ const contracts: Prisma.ContractCreateInput[] = [
   {
     property: "Alea Residences",
     location: "Bacoor",
-    start: "2024-11-25T00:00:00.000Z",
-    end: "2027-11-25T00:00:00.000Z",
+    start: "2025-03-25T00:00:00.000Z",
+    end: "2027-03-25T00:00:00.000Z",
     advance: 1,
     deposit: 1,
     tenant_price: 3000,
     owner_income: 3000,
     abic_income: 3000,
-    due: "2025-01-25T00:00:00.000Z",
+    due: "2025-05-25T00:00:00.000Z",
     client: {
       connectOrCreate: {
         where: { name: "Jun Xie" },
@@ -92,14 +92,14 @@ const contracts: Prisma.ContractCreateInput[] = [
   {
     property: "Tivoli Residences",
     location: "Makati",
-    start: "2024-11-25T00:00:00.000Z",
-    end: "2027-11-25T00:00:00.000Z",
+    start: "2025-02-25T00:00:00.000Z",
+    end: "2027-02-25T00:00:00.000Z",
     advance: 1,
     deposit: 1,
     tenant_price: 5000,
     owner_income: 5000,
     abic_income: 5000,
-    due: "2025-01-25T00:00:00.000Z",
+    due: "2025-04-25T00:00:00.000Z",
     client: {
       connectOrCreate: {
         where: { name: "Quan Long" },
@@ -112,14 +112,14 @@ const contracts: Prisma.ContractCreateInput[] = [
   {
     property: "Oriental Place",
     location: "Makati",
-    start: "2024-11-25T00:00:00.000Z",
-    end: "2027-11-25T00:00:00.000Z",
+    start: "2025-04-25T00:00:00.000Z",
+    end: "2027-04-25T00:00:00.000Z",
     advance: 1,
     deposit: 1,
     tenant_price: 7000,
     owner_income: 7000,
     abic_income: 7000,
-    due: "2025-01-25T00:00:00.000Z",
+    due: "2025-06-25T00:00:00.000Z",
     client: {
       connectOrCreate: {
         where: { name: "Zong Guofeng" },
