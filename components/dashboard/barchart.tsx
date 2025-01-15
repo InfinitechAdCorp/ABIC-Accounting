@@ -13,20 +13,21 @@ type Props = {
 };
 
 const Barchart = ({ title, data }: Props) => {
-  console.log(data);
   const x: any[] = [];
   const y: any[] = [];
 
-  data.forEach((datum) => {
-    Object.entries(datum).forEach((entry) => {
-      const [key, value] = entry;
-      if (["name", "month"].includes(key)) {
-        x.push(value);
-      } else if (key == "count") {
-        y.push(value);
-      }
+  if (data) {
+    data.forEach((datum) => {
+      Object.entries(datum).forEach((entry) => {
+        const [key, value] = entry;
+        if (["name", "month"].includes(key)) {
+          x.push(value);
+        } else if (key == "count") {
+          y.push(value);
+        }
+      });
     });
-  });
+  }
 
   const option = {
     xAxis: {

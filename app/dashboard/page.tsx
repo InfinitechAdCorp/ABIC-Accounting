@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import { Card, CardBody } from "@nextui-org/react";
 import { getCounts, getCharts } from "@/components/dashboard/actions";
 import Barchart from "@/components/dashboard/barchart";
@@ -8,11 +10,24 @@ import Navbar from "@/components/globals/navbar";
 
 export const dynamic = "force-dynamic";
 
-const Dashboard = async () => {
-  const { counts } = await getCounts();
-  const { charts } = await getCharts();
+const Dashboard = () => {
+  const [counts, setCounts] = useState([]);
+  const [charts, setCharts] = useState([]);
 
-  console.log(charts)
+  useEffect(() => {
+    const fetchCounts = async () => {
+      const countsResponse = await getCounts();
+      setCounts(countsResponse.counts);
+    };
+
+    const fetchCharts = async () => {
+      const chartsResponse = await getCharts();
+      setCharts(chartsResponse.charts);
+    };
+
+    fetchCounts();
+    fetchCharts();
+  }, []);
 
   return (
     <>
