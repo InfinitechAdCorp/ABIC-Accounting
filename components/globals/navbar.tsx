@@ -114,7 +114,7 @@ const Navbar = () => {
         <div className="flex justify-end">
           <Link href="/" className="text-center">
             <h3
-              className={"text-sm md:text-base text-white cursor-pointer"}
+              className={"text-sm md:text-base font-semibold text-white cursor-pointer"}
               onClick={logout}
             >
               Logout

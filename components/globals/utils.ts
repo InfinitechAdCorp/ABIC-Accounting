@@ -38,24 +38,26 @@ export const handlePostSubmit = (
 export const formatAccounts = (accounts: AccountWithTransactions[]) => {
   const formattedAccounts: FormattedAccount[] = [];
 
-  accounts.forEach((account) => {
-    const formattedTransactions: FormattedTransaction[] = [];
-    account.transactions.forEach((transaction) => {
-      const formattedTransaction = {
-        ...transaction,
-        account_id: transaction.account_id as string,
-        amount: transaction.amount.toNumber(),
-      };
-      formattedTransactions.push(formattedTransaction);
-    });
+  if (accounts) {
+    accounts.forEach((account) => {
+      const formattedTransactions: FormattedTransaction[] = [];
+      account.transactions.forEach((transaction) => {
+        const formattedTransaction = {
+          ...transaction,
+          account_id: transaction.account_id as string,
+          amount: transaction.amount.toNumber(),
+        };
+        formattedTransactions.push(formattedTransaction);
+      });
 
-    const formattedAccount = {
-      ...account,
-      starting_balance: account.starting_balance.toNumber(),
-      transactions: formattedTransactions,
-    };
-    formattedAccounts.push(formattedAccount);
-  });
+      const formattedAccount = {
+        ...account,
+        starting_balance: account.starting_balance.toNumber(),
+        transactions: formattedTransactions,
+      };
+      formattedAccounts.push(formattedAccount);
+    });
+  }
 
   return formattedAccounts;
 };
@@ -139,7 +141,7 @@ export const formatContracts = (contracts: ContractWithClient[]) => {
 export const capitalize = (string: string) => {
   const capitalized = string.charAt(0).toUpperCase() + string.slice(1);
   return capitalized;
-}
+};
 
 export const formatNumber = (number: number) => {
   const formattedNumber = new Intl.NumberFormat("en-US", {
@@ -158,17 +160,24 @@ export const formatDate = (date: Date) => {
 };
 
 export const dateToDateValue = (date: Date) => {
+  let formattedDate;
+
   if (date) {
-    const localeDate = date.toLocaleDateString("en-CA");
-    const formattedDate = parseDate(localeDate);
-    return formattedDate;
+    const dateComponents = date.toLocaleDateString("en-CA").split("-");
+    dateComponents[0] = dateComponents[0].padStart(4, "0");
+    formattedDate = parseDate(dateComponents.join("-"));
   }
+
+  return formattedDate;
 };
 
-export const dateValueToDate = (dateValue: DateValue) => {
-  const formattedDate = new Date(
-    new Date(dateValue.toString()).setUTCHours(0)
-  );
+export const dateValueToDate = (dateValue: DateValue | null) => {
+  let formattedDate;
+
+  if (dateValue) {
+    formattedDate = new Date(new Date(dateValue.toString()).setUTCHours(0));
+  }
+
   return formattedDate;
 };
 
