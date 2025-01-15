@@ -90,7 +90,7 @@ export const create = async (values: TransactionCreateInput) => {
     try {
       await prisma.transaction.create({
         data: {
-          date: new Date(new Date(values.date).setUTCHours(0)),
+          date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
           voucher: values.voucher,
           check: values.check,
           particulars: values.particulars,
@@ -166,7 +166,7 @@ export const update = async (values: TransactionCreateInput) => {
       await prisma.transaction.update({
         where: { id: values.id },
         data: {
-          date: new Date(new Date(values.date).setUTCHours(0)),
+          date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
           voucher: values.voucher,
           check: values.check,
           particulars: values.particulars,

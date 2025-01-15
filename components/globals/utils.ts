@@ -175,7 +175,7 @@ export const dateValueToDate = (dateValue: DateValue | null) => {
   let formattedDate;
 
   if (dateValue) {
-    formattedDate = new Date(new Date(dateValue.toString()).setUTCHours(0));
+    formattedDate = new Date(new Date(dateValue.toString()).setUTCHours(0, 0, 0, 0));
   }
 
   return formattedDate;

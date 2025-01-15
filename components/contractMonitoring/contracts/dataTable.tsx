@@ -145,8 +145,8 @@ const DataTable = ({
       } else if (moneyColumns.includes(columnKey)) {
         return formatNumber(row[columnKey as keyof Row] as number);
       } else if (columnKey == "status") {
-        const today = new Date(new Date().setUTCHours(0));
-        const difference = differenceInDays(row.due, today);
+        const today = new Date(new Date().setHours(0, 0, 0, 0));
+        const difference = differenceInDays(row.due.setHours(0, 0, 0, 0), today);
 
         type Color =
           | "default"
