@@ -13,17 +13,17 @@ type Props = {
 };
 
 const Barchart = ({ title, data }: Props) => {
-  const x: any[] = [];
-  const y: any[] = [];
+  const x: string[] = [];
+  const y: number[] = [];
 
   if (data) {
     data.forEach((datum) => {
       Object.entries(datum).forEach((entry) => {
         const [key, value] = entry;
         if (["name", "month"].includes(key)) {
-          x.push(value);
+          x.push(value as string);
         } else if (key == "count") {
-          y.push(value);
+          y.push(value as number);
         }
       });
     });
