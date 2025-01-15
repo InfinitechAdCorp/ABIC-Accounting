@@ -30,7 +30,7 @@ export const getAll = async () => {
 
   const response = { code: 200, message: "Fetched Clients", clients: clients };
   return response;
-}
+};
 
 export const create = async (values: Prisma.ClientCreateInput) => {
   const schema = createSchema;
@@ -48,17 +48,29 @@ export const create = async (values: Prisma.ClientCreateInput) => {
     return response;
   }
 
-  try {
-    await prisma.client.create({ data: { ...values } });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  const nameExists = await prisma.client.findFirst({
+    where: { name: values.name },
+  });
+
+  if (!nameExists) {
+    try {
+      await prisma.client.create({ data: { ...values } });
+    } catch {
+      const response: ActionResponse = { code: 500, message: "Server Error" };
+      return response;
+    }
+  } else {
+    const response: ActionResponse = {
+      code: 429,
+      message: "Name Is Already Taken",
+    };
     return response;
   }
 
   revalidatePath("/clients");
   const response: ActionResponse = { code: 200, message: "Added Client" };
   return response;
-}
+};
 
 export const update = async (values: Prisma.ClientCreateInput) => {
   const schema = updateSchema;
@@ -76,24 +88,40 @@ export const update = async (values: Prisma.ClientCreateInput) => {
     return response;
   }
 
-  try {
-    await prisma.client.update({
-      where: {
-        id: values.id,
-      },
-      data: {
-        name: values.name,
-      },
-    });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  const nameExists = await prisma.client.findFirst({
+    where: { name: values.name },
+  });
+
+  const client = await prisma.client.findFirst({
+    where: { id: values.id },
+  });
+
+  if (!nameExists || client?.name == values.name) {
+    try {
+      await prisma.client.update({
+        where: {
+          id: values.id,
+        },
+        data: {
+          name: values.name,
+        },
+      });
+    } catch {
+      const response: ActionResponse = { code: 500, message: "Server Error" };
+      return response;
+    }
+  } else {
+    const response: ActionResponse = {
+      code: 429,
+      message: "Name Is Already Taken",
+    };
     return response;
   }
 
   revalidatePath("/clients");
   const response: ActionResponse = { code: 200, message: "Updated Client" };
   return response;
-}
+};
 
 export const destroy = async (values: { id: string }) => {
   const schema = destroySchema;
@@ -123,4 +151,4 @@ export const destroy = async (values: { id: string }) => {
   revalidatePath("/clients");
   const response: ActionResponse = { code: 200, message: "Deleted Client" };
   return response;
-}
+};

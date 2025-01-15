@@ -92,18 +92,34 @@ export const update = async (values: Prisma.AccountCreateInput) => {
     return response;
   }
 
-  try {
-    await prisma.account.update({
-      where: {
-        id: values.id,
-      },
-      data: {
-        name: values.name,
-        starting_balance: values.starting_balance,
-      },
-    });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  const nameExists = await prisma.account.findFirst({
+    where: { name: values.name },
+  });
+
+  const account = await prisma.account.findFirst({
+    where: { id: values.id }
+  });
+
+  if (!nameExists || account?.name == values.name) {
+    try {
+      await prisma.account.update({
+        where: {
+          id: values.id,
+        },
+        data: {
+          name: values.name,
+          starting_balance: values.starting_balance,
+        },
+      });
+    } catch {
+      const response: ActionResponse = { code: 500, message: "Server Error" };
+      return response;
+    }
+  } else {
+    const response: ActionResponse = {
+      code: 429,
+      message: "Name Is Already Taken",
+    };
     return response;
   }
 
