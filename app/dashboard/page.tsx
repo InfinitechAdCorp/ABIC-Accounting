@@ -10,9 +10,46 @@ import Navbar from "@/components/globals/navbar";
 
 export const dynamic = "force-dynamic";
 
+export type Counts = {
+  accounts: number;
+  transactions: number;
+  clients: number;
+  contracts: number;
+};
+
+export type Charts = {
+  accountsWithTransactions: {
+    name: string;
+    count: number;
+  }[];
+  clientsWithContracts: {
+    name: string;
+    count: number;
+  }[];
+  monthlyTransactions: {
+    month: string;
+    count: number;
+  }[];
+  monthlyContracts: {
+    month: string;
+    count: number;
+  }[];
+};
+
 const Dashboard = () => {
-  const [counts, setCounts] = useState([]);
-  const [charts, setCharts] = useState([]);
+  const [counts, setCounts] = useState<Counts>({
+    accounts: 0,
+    transactions: 0,
+    clients: 0,
+    contracts: 0,
+  });
+
+  const [charts, setCharts] = useState<Charts>({
+    accountsWithTransactions: [],
+    clientsWithContracts: [],
+    monthlyTransactions: [],
+    monthlyContracts: [],
+  });
 
   useEffect(() => {
     const fetchCounts = async () => {
