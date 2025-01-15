@@ -328,7 +328,7 @@ const DataTable = ({
         <TableBody emptyContent={`No ${model} found`} items={sortedItems}>
           {(item) => (
             <TableRow key={item.id}>
-              {(columnKey) => (
+              {(columnKey: any) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}
             </TableRow>
