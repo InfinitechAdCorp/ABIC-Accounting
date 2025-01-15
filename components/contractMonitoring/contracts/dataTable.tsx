@@ -355,6 +355,7 @@ const DataTable = ({
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey: any) => (
+                
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}
             </TableRow>
