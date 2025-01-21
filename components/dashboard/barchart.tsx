@@ -51,7 +51,7 @@ const Barchart = ({ title, data }: Props) => {
     textStyle: {
       fontFamily: "Montserrat",
     },
-    color: ["#0284c7"],
+    color: ["#0072F5"],
   };
 
   return (

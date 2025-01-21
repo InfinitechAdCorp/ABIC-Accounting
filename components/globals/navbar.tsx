@@ -31,7 +31,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="grid grid-cols-2 items-center bg-sky-600 p-5">
+      <div className="grid grid-cols-2 items-center bg-[#0072F5] p-5">
         <div className="flex justify-evenly sm:justify-start gap-3">
           <Link href="/dashboard" className="text-center">
             <h3
