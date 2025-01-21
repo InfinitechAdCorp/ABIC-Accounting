@@ -29,7 +29,7 @@ import CreateContractModal from "@/components/contractMonitoring/contracts/creat
 import UpdateModal from "@/components/contractMonitoring/contracts/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
 import PaymentModal from "@/components/contractMonitoring/contracts/paymentModal";
-import PaymentsModal from "@/components/contractMonitoring/contracts/paymentsModal";
+// import PaymentsModal from "@/components/contractMonitoring/contracts/paymentsModal";
 import {
   destroy,
   markAsPaid,
@@ -137,7 +137,7 @@ const DataTable = ({
             />
             <DestroyModal title="Contract" action={destroy} id={row.id} />
             <PaymentModal action={markAsPaid} id={row.id} />
-            <PaymentsModal />
+            {/* <PaymentsModal /> */}
           </div>
         );
       } else if (columnKey == "client") {

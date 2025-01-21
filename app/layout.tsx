@@ -16,7 +16,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Xero",
+  title: "ABIC Accounting",
   description: "Accounting Software",
   icons: {
     icon: "/favicon.ico",

@@ -49,7 +49,7 @@ const Login = () => {
           >
             <CardHeader>
               <div className="flex w-full justify-center">
-                <Image src={"/favicon.ico"} width={75} height={75} alt="logo" />
+                <Image src={"/logo.jpg"} width={200} height={200} alt="logo" />
               </div>
             </CardHeader>
             <CardBody>
