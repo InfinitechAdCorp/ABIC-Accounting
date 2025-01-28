@@ -45,7 +45,7 @@ export const getCounts = async () => {
 };
 
 export const getCharts = async () => {
-  const transaction_clients = await prisma.transactionClient.findMany({
+  const transactionClients = await prisma.transactionClient.findMany({
     include: {
       _count: {
         select: {
@@ -63,7 +63,7 @@ export const getCharts = async () => {
     take: 7,
   });
 
-  const collection_clients = await prisma.collectionClient.findMany({
+  const collectionClients = await prisma.collectionClient.findMany({
     include: {
       _count: {
         select: {
@@ -87,10 +87,10 @@ export const getCharts = async () => {
   };
 
   const clientsWithTransactions: ClientWithTransactions[] = [];
-  transaction_clients.map((transaction_client) => {
+  transactionClients.map((transactionClient) => {
     const clientWithTransactions = {
-      name: transaction_client.name,
-      count: transaction_client._count.transactions,
+      name: transactionClient.name,
+      count: transactionClient._count.transactions,
     };
     clientsWithTransactions.push(clientWithTransactions);
   });
@@ -101,10 +101,10 @@ export const getCharts = async () => {
   };
 
   const clientsWithCollections: ClientWithCollections[] = [];
-  collection_clients.map((collection_client) => {
+  collectionClients.map((collectionClient) => {
     const clientWithCollections = {
-      name: collection_client.name,
-      count: collection_client._count.collections,
+      name: collectionClient.name,
+      count: collectionClient._count.collections,
     };
     clientsWithCollections.push(clientWithCollections);
   });

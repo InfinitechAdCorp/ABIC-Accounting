@@ -2,20 +2,78 @@ import { Prisma, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+const accounts: Prisma.AccountCreateInput[] = [
+  {
+    name: "SCB 443",
+    transaction_history_access: true,
+    collection_monitoring_access: true,
+  },
+  {
+    name: "SCB 483",
+    transaction_history_access: true,
+    collection_monitoring_access: false,
+  },
+  {
+    name: "SCB 202",
+    transaction_history_access: true,
+    collection_monitoring_access: false,
+  },
+];
+
 const transactionClients: Prisma.TransactionClientCreateInput[] = [
-  { name: "Hu Yanchong" },
-  { name: "Weiwei Chen" },
-  { name: "Dan Li" },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: "SCB 443" },
+        create: {
+          name: "SCB 443",
+          transaction_history_access: true,
+          collection_monitoring_access: true,
+        },
+      },
+    },
+    name: "Hu Yanchong",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: "SCB 443" },
+        create: {
+          name: "SCB 443",
+          transaction_history_access: true,
+          collection_monitoring_access: true,
+        },
+      },
+    },
+    name: "Weiwei Chen",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: "SCB 443" },
+        create: {
+          name: "SCB 443",
+          transaction_history_access: true,
+          collection_monitoring_access: true,
+        },
+      },
+    },
+    name: "Dan Li",
+  },
 ];
 
 const transactions: Prisma.TransactionCreateInput[] = [
   {
-    date: "2025-02-25T00:00:00.000Z",
-    voucher: "5245",
-    check: "24837",
-    particulars: "Tivoli",
-    type: "Credit",
-    amount: 5000.5,
+    account: {
+      connectOrCreate: {
+        where: { name: "SCB 443" },
+        create: {
+          name: "SCB 443",
+          transaction_history_access: true,
+          collection_monitoring_access: true,
+        },
+      },
+    },
     transaction_client: {
       connectOrCreate: {
         where: { name: "Hu Yanchong" },
@@ -24,14 +82,24 @@ const transactions: Prisma.TransactionCreateInput[] = [
         },
       },
     },
+    date: "2025-02-25T00:00:00.000Z",
+    voucher: "5245",
+    check: "24837",
+    particulars: "Tivoli",
+    type: "Credit",
+    amount: 5000.5,
   },
   {
-    date: "2025-03-25T00:00:00.000Z",
-    voucher: "4321",
-    check: "76598",
-    particulars: "Alea Residences",
-    type: "Debit",
-    amount: 3000.75,
+    account: {
+      connectOrCreate: {
+        where: { name: "SCB 443" },
+        create: {
+          name: "SCB 443",
+          transaction_history_access: true,
+          collection_monitoring_access: true,
+        },
+      },
+    },
     transaction_client: {
       connectOrCreate: {
         where: { name: "Weiwei Chen" },
@@ -40,14 +108,24 @@ const transactions: Prisma.TransactionCreateInput[] = [
         },
       },
     },
+    date: "2025-03-25T00:00:00.000Z",
+    voucher: "4321",
+    check: "76598",
+    particulars: "Alea Residences",
+    type: "Debit",
+    amount: 3000.75,
   },
   {
-    date: "2025-04-20T00:00:00.000Z",
-    voucher: "4256",
-    check: "42783",
-    particulars: "Jazz Residences",
-    type: "Credit",
-    amount: 4000.5,
+    account: {
+      connectOrCreate: {
+        where: { name: "SCB 443" },
+        create: {
+          name: "SCB 443",
+          transaction_history_access: true,
+          collection_monitoring_access: true,
+        },
+      },
+    },
     transaction_client: {
       connectOrCreate: {
         where: { name: "Dan Li" },
@@ -56,17 +134,77 @@ const transactions: Prisma.TransactionCreateInput[] = [
         },
       },
     },
+    date: "2025-04-20T00:00:00.000Z",
+    voucher: "4256",
+    check: "42783",
+    particulars: "Jazz Residences",
+    type: "Credit",
+    amount: 4000.5,
   },
 ];
 
 const collectionClients: Prisma.CollectionClientCreateInput[] = [
-  { name: "Jun Xie" },
-  { name: "Quan Long" },
-  { name: "Zong Guofeng" },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: "SCB 443" },
+        create: {
+          name: "SCB 443",
+          transaction_history_access: true,
+          collection_monitoring_access: true,
+        },
+      },
+    },
+    name: "Jun Xie",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: "SCB 443" },
+        create: {
+          name: "SCB 443",
+          transaction_history_access: true,
+          collection_monitoring_access: true,
+        },
+      },
+    },
+    name: "Quan Long",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: "SCB 443" },
+        create: {
+          name: "SCB 443",
+          transaction_history_access: true,
+          collection_monitoring_access: true,
+        },
+      },
+    },
+    name: "Zong Guofeng",
+  },
 ];
 
 const collections: Prisma.CollectionCreateInput[] = [
   {
+    account: {
+      connectOrCreate: {
+        where: { name: "SCB 443" },
+        create: {
+          name: "SCB 443",
+          transaction_history_access: true,
+          collection_monitoring_access: true,
+        },
+      },
+    },
+    collection_client: {
+      connectOrCreate: {
+        where: { name: "Jun Xie" },
+        create: {
+          name: "Jun Xie",
+        },
+      },
+    },
     property: "Alea Residences",
     location: "Bacoor",
     start: "2025-03-25T00:00:00.000Z",
@@ -77,16 +215,26 @@ const collections: Prisma.CollectionCreateInput[] = [
     owner_income: 3000,
     abic_income: 3000,
     due: "2025-05-25T00:00:00.000Z",
-    collection_client: {
+  },
+  {
+    account: {
       connectOrCreate: {
-        where: { name: "Jun Xie" },
+        where: { name: "SCB 443" },
         create: {
-          name: "Jun Xie",
+          name: "SCB 443",
+          transaction_history_access: true,
+          collection_monitoring_access: true,
         },
       },
     },
-  },
-  {
+    collection_client: {
+      connectOrCreate: {
+        where: { name: "Quan Long" },
+        create: {
+          name: "Quan Long",
+        },
+      },
+    },
     property: "Tivoli Residences",
     location: "Makati",
     start: "2025-02-25T00:00:00.000Z",
@@ -97,16 +245,26 @@ const collections: Prisma.CollectionCreateInput[] = [
     owner_income: 5000,
     abic_income: 5000,
     due: "2025-04-25T00:00:00.000Z",
-    collection_client: {
+  },
+  {
+    account: {
       connectOrCreate: {
-        where: { name: "Quan Long" },
+        where: { name: "SCB 443" },
         create: {
-          name: "Quan Long",
+          name: "SCB 443",
+          transaction_history_access: true,
+          collection_monitoring_access: true,
         },
       },
     },
-  },
-  {
+    collection_client: {
+      connectOrCreate: {
+        where: { name: "Zong Guofeng" },
+        create: {
+          name: "Zong Guofeng",
+        },
+      },
+    },
     property: "Oriental Place",
     location: "Makati",
     start: "2025-04-25T00:00:00.000Z",
@@ -117,22 +275,22 @@ const collections: Prisma.CollectionCreateInput[] = [
     owner_income: 7000,
     abic_income: 7000,
     due: "2025-06-25T00:00:00.000Z",
-    collection_client: {
-      connectOrCreate: {
-        where: { name: "Zong Guofeng" },
-        create: {
-          name: "Zong Guofeng",
-        },
-      },
-    },
   },
 ];
 
 async function seeder() {
   console.log("Started Seeding");
 
-  await prisma.transactionClient.createMany({
-    data: transactionClients,
+  accounts.forEach(async (account) => {
+    await prisma.account.create({
+      data: account,
+    });
+  });
+
+  transactionClients.forEach(async (transactionClient) => {
+    await prisma.transactionClient.create({
+      data: transactionClient,
+    });
   });
 
   transactions.forEach(async (transaction) => {
@@ -141,8 +299,10 @@ async function seeder() {
     });
   });
 
-  await prisma.collectionClient.createMany({
-    data: collectionClients,
+  collectionClients.forEach(async (collectionClient) => {
+    await prisma.collectionClient.create({
+      data: collectionClient,
+    });
   });
 
   collections.forEach(async (collection) => {

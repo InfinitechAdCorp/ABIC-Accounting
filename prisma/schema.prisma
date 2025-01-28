@@ -15,10 +15,27 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
+model Account {
+  id                           String              @id @default(cuid())
+  transaction_clients          TransactionClient[]
+  transactions                 Transaction[]
+  collection_clients           CollectionClient[]
+  collections                  Collection[]
+  name                         String              @unique
+  transaction_history_access   Boolean
+  collection_monitoring_access Boolean
+  created_at                   DateTime            @default(now())
+  updated_at                   DateTime            @updatedAt
+
+  @@map(name: "accounts")
+}
+
 model TransactionClient {
   id           String        @id @default(cuid())
-  name         String        @unique
+  account      Account?      @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  account_id   String?
   transactions Transaction[]
+  name         String        @unique
   created_at   DateTime      @default(now())
   updated_at   DateTime      @updatedAt
 
@@ -27,11 +44,13 @@ model TransactionClient {
 
 model Transaction {
   id                    String             @id @default(cuid())
+  account               Account?           @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  account_id            String?
+  transaction_client    TransactionClient? @relation(fields: [transaction_client_id], references: [id], onDelete: Cascade)
+  transaction_client_id String?
   date                  DateTime           @db.Date
   voucher               String             @unique
   check                 String             @unique
-  transaction_client    TransactionClient? @relation(fields: [transaction_client_id], references: [id], onDelete: Cascade)
-  transaction_client_id String?
   particulars           String             @db.Text
   type                  String
   amount                Decimal            @db.Decimal(15, 2)
@@ -43,8 +62,10 @@ model Transaction {
 
 model CollectionClient {
   id          String       @id @default(cuid())
-  name        String       @unique
+  account     Account?     @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  account_id  String?
   collections Collection[]
+  name        String       @unique
   created_at  DateTime     @default(now())
   updated_at  DateTime     @updatedAt
 
@@ -53,6 +74,8 @@ model CollectionClient {
 
 model Collection {
   id                   String            @id @default(cuid())
+  account              Account?          @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  account_id           String?
   collection_client    CollectionClient? @relation(fields: [collection_client_id], references: [id], onDelete: Cascade)
   collection_client_id String?
   property             String
