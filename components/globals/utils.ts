@@ -44,7 +44,6 @@ export const formatTransactionClients = (transactionClients: TransactionClientWi
       transactionClient.transactions.forEach((transaction) => {
         const formattedTransaction = {
           ...transaction,
-          account_id: transaction.account_id as string,
           transaction_client_id: transaction.transaction_client_id as string,
           amount: transaction.amount.toNumber(),
         };
@@ -74,6 +73,7 @@ export const formatTransactions = (transactions: TransactionWithTransactionClien
       transaction_client: {
         ...transactionClient,
         id: transactionClient?.id as string,
+        account_id: transactionClient?.account_id as string,
         name: transactionClient?.name as string,
       },
       transaction_client_id: transaction.transaction_client_id as string,

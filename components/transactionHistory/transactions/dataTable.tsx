@@ -28,7 +28,7 @@ import CreateTransactionModal from "@/components/transactionHistory/transactions
 import UpdateModal from "@/components/transactionHistory/transactions/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
 import { destroy } from "@/components/transactionHistory/transactions/actions";
-import CreateAccountModal from "@/components/transactionHistory/transactionClients/createModal";
+import CreateTransactionClientModal from "@/components/transactionHistory/transactionClients/createModal";
 
 type column = {
   name: string;
@@ -135,7 +135,7 @@ const DataTable = ({
         return row[columnKey as keyof Row];
       }
     },
-    [transactionClients]
+    []
   );
 
   const onNextPage = React.useCallback(() => {
@@ -210,10 +210,10 @@ const DataTable = ({
             </Dropdown>
 
             <div className="hidden sm:flex">
-              <CreateAccountModal />
+              <CreateTransactionClientModal />
             </div>
 
-            <CreateTransactionModal accounts={accounts} />
+            {/* <CreateTransactionModal accounts={accounts} /> */}
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -243,7 +243,6 @@ const DataTable = ({
     columns,
     model,
     rows.length,
-    accounts,
   ]);
 
   const bottomContent = React.useMemo(() => {

@@ -52,12 +52,6 @@ const transactionClients: Prisma.TransactionClientCreateInput[] = [
 
 const transactions: Prisma.TransactionCreateInput[] = [
   {
-    account: {
-      connectOrCreate: {
-        where: { name: accounts[0].name },
-        create: accounts[0],
-      },
-    },
     transaction_client: {
       connectOrCreate: {
         where: { name: transactionClients[0].name },
@@ -75,12 +69,6 @@ const transactions: Prisma.TransactionCreateInput[] = [
     status: "Active",
   },
   {
-    account: {
-      connectOrCreate: {
-        where: { name: accounts[0].name },
-        create: accounts[0],
-      },
-    },
     transaction_client: {
       connectOrCreate: {
         where: { name: transactionClients[1].name },
@@ -98,12 +86,6 @@ const transactions: Prisma.TransactionCreateInput[] = [
     status: "Active",
   },
   {
-    account: {
-      connectOrCreate: {
-        where: { name: accounts[0].name },
-        create: accounts[0],
-      },
-    },
     transaction_client: {
       connectOrCreate: {
         where: { name: transactionClients[2].name },
@@ -154,12 +136,6 @@ const collectionClients: Prisma.CollectionClientCreateInput[] = [
 
 const collections: Prisma.CollectionCreateInput[] = [
   {
-    account: {
-      connectOrCreate: {
-        where: { name: accounts[0].name },
-        create: accounts[0],
-      },
-    },
     collection_client: {
       connectOrCreate: {
         where: { name: collectionClients[0].name },
@@ -178,12 +154,6 @@ const collections: Prisma.CollectionCreateInput[] = [
     due: "2025-05-25T00:00:00.000Z",
   },
   {
-    account: {
-      connectOrCreate: {
-        where: { name: accounts[0].name },
-        create: accounts[0],
-      },
-    },
     collection_client: {
       connectOrCreate: {
         where: { name: collectionClients[1].name },
@@ -202,12 +172,6 @@ const collections: Prisma.CollectionCreateInput[] = [
     due: "2025-04-25T00:00:00.000Z",
   },
   {
-    account: {
-      connectOrCreate: {
-        where: { name: accounts[0].name },
-        create: accounts[0],
-      },
-    },
     collection_client: {
       connectOrCreate: {
         where: { name: collectionClients[2].name },
