@@ -2,10 +2,10 @@ import { Prisma, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const accounts: Prisma.AccountCreateInput[] = [
-  { name: "Hu Yanchong", starting_balance: 5000000 },
-  { name: "Weiwei Chen", starting_balance: 3000000 },
-  { name: "Dan Li", starting_balance: 5000000 },
+const transactionClients: Prisma.TransactionClientCreateInput[] = [
+  { name: "Hu Yanchong" },
+  { name: "Weiwei Chen" },
+  { name: "Dan Li" },
 ];
 
 const transactions: Prisma.TransactionCreateInput[] = [
@@ -16,12 +16,11 @@ const transactions: Prisma.TransactionCreateInput[] = [
     particulars: "Tivoli",
     type: "Credit",
     amount: 5000.5,
-    account: {
+    transaction_client: {
       connectOrCreate: {
         where: { name: "Hu Yanchong" },
         create: {
           name: "Hu Yanchong",
-          starting_balance: 5000000,
         },
       },
     },
@@ -33,12 +32,11 @@ const transactions: Prisma.TransactionCreateInput[] = [
     particulars: "Alea Residences",
     type: "Debit",
     amount: 3000.75,
-    account: {
+    transaction_client: {
       connectOrCreate: {
         where: { name: "Weiwei Chen" },
         create: {
           name: "Weiwei Chen",
-          starting_balance: 3000000,
         },
       },
     },
@@ -50,25 +48,24 @@ const transactions: Prisma.TransactionCreateInput[] = [
     particulars: "Jazz Residences",
     type: "Credit",
     amount: 4000.5,
-    account: {
+    transaction_client: {
       connectOrCreate: {
         where: { name: "Dan Li" },
         create: {
           name: "Dan Li",
-          starting_balance: 5000000,
         },
       },
     },
   },
 ];
 
-const clients: Prisma.ClientCreateInput[] = [
+const collectionClients: Prisma.CollectionClientCreateInput[] = [
   { name: "Jun Xie" },
   { name: "Quan Long" },
   { name: "Zong Guofeng" },
 ];
 
-const contracts: Prisma.ContractCreateInput[] = [
+const collections: Prisma.CollectionCreateInput[] = [
   {
     property: "Alea Residences",
     location: "Bacoor",
@@ -80,7 +77,7 @@ const contracts: Prisma.ContractCreateInput[] = [
     owner_income: 3000,
     abic_income: 3000,
     due: "2025-05-25T00:00:00.000Z",
-    client: {
+    collection_client: {
       connectOrCreate: {
         where: { name: "Jun Xie" },
         create: {
@@ -100,7 +97,7 @@ const contracts: Prisma.ContractCreateInput[] = [
     owner_income: 5000,
     abic_income: 5000,
     due: "2025-04-25T00:00:00.000Z",
-    client: {
+    collection_client: {
       connectOrCreate: {
         where: { name: "Quan Long" },
         create: {
@@ -120,7 +117,7 @@ const contracts: Prisma.ContractCreateInput[] = [
     owner_income: 7000,
     abic_income: 7000,
     due: "2025-06-25T00:00:00.000Z",
-    client: {
+    collection_client: {
       connectOrCreate: {
         where: { name: "Zong Guofeng" },
         create: {
@@ -134,35 +131,34 @@ const contracts: Prisma.ContractCreateInput[] = [
 async function seeder() {
   console.log("Started Seeding");
 
-  await prisma.account.createMany({
-    data: accounts,
+  await prisma.transactionClient.createMany({
+    data: transactionClients,
   });
 
-  for (const transaction of transactions) {
+  transactions.forEach(async (transaction) => {
     await prisma.transaction.create({
       data: transaction,
     });
-  }
-
-  await prisma.client.createMany({
-    data: clients,
   });
 
-  for (const contract of contracts) {
-    await prisma.contract.create({
-      data: contract,
+  await prisma.collectionClient.createMany({
+    data: collectionClients,
+  });
+
+  collections.forEach(async (collection) => {
+    await prisma.collection.create({
+      data: collection,
     });
-  }
+  });
 
   console.log("Finished Seeding");
 }
 
 seeder()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
   .catch(async (e) => {
     console.error(e);
-    await prisma.$disconnect();
     process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
   });
