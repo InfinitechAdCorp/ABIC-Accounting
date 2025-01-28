@@ -72,6 +72,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
     particulars: "Tivoli",
     type: "Credit",
     amount: 5000.5,
+    status: "Active",
   },
   {
     account: {
@@ -94,6 +95,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
     particulars: "Alea Residences",
     type: "Debit",
     amount: 3000.75,
+    status: "Active",
   },
   {
     account: {
@@ -116,6 +118,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
     particulars: "Jazz Residences",
     type: "Credit",
     amount: 4000.5,
+    status: "Active",
   },
 ];
 
