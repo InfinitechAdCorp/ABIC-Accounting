@@ -27,7 +27,7 @@ const Navbar = () => {
     if (!isLoggedIn) {
       sessionStorage.clear();
     }
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <>
