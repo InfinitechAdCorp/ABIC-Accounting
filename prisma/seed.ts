@@ -64,16 +64,6 @@ const transactionClients: Prisma.TransactionClientCreateInput[] = [
 
 const transactions: Prisma.TransactionCreateInput[] = [
   {
-    account: {
-      connectOrCreate: {
-        where: { name: "SCB 443" },
-        create: {
-          name: "SCB 443",
-          transaction_history_access: true,
-          collection_monitoring_access: true,
-        },
-      },
-    },
     transaction_client: {
       connectOrCreate: {
         where: { name: "Hu Yanchong" },
@@ -90,16 +80,6 @@ const transactions: Prisma.TransactionCreateInput[] = [
     amount: 5000.5,
   },
   {
-    account: {
-      connectOrCreate: {
-        where: { name: "SCB 443" },
-        create: {
-          name: "SCB 443",
-          transaction_history_access: true,
-          collection_monitoring_access: true,
-        },
-      },
-    },
     transaction_client: {
       connectOrCreate: {
         where: { name: "Weiwei Chen" },
@@ -116,16 +96,6 @@ const transactions: Prisma.TransactionCreateInput[] = [
     amount: 3000.75,
   },
   {
-    account: {
-      connectOrCreate: {
-        where: { name: "SCB 443" },
-        create: {
-          name: "SCB 443",
-          transaction_history_access: true,
-          collection_monitoring_access: true,
-        },
-      },
-    },
     transaction_client: {
       connectOrCreate: {
         where: { name: "Dan Li" },
@@ -293,23 +263,29 @@ async function seeder() {
     });
   });
 
-  transactions.forEach(async (transaction) => {
-    await prisma.transaction.create({
-      data: transaction,
-    });
-  });
+  // for (const transactionClient of transactionClients) {
+  //   await prisma.transactionClient.create({
+  //     data: transactionClient,
+  //   });
+  // }
 
-  collectionClients.forEach(async (collectionClient) => {
-    await prisma.collectionClient.create({
-      data: collectionClient,
-    });
-  });
+  // transactions.forEach(async (transaction) => {
+  //   await prisma.transaction.create({
+  //     data: transaction,
+  //   });
+  // });
 
-  collections.forEach(async (collection) => {
-    await prisma.collection.create({
-      data: collection,
-    });
-  });
+  // collectionClients.forEach(async (collectionClient) => {
+  //   await prisma.collectionClient.create({
+  //     data: collectionClient,
+  //   });
+  // });
+
+  // collections.forEach(async (collection) => {
+  //   await prisma.collection.create({
+  //     data: collection,
+  //   });
+  // });
 
   console.log("Finished Seeding");
 }
