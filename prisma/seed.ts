@@ -192,39 +192,44 @@ const collections: Prisma.CollectionCreateInput[] = [
 ];
 
 async function seeder() {
-  console.log("Started Seeding");
+  console.log("\nStarted Seeding\n");
 
+  console.log("Seeding Accounts");
   for (const account of accounts) {
     await prisma.account.create({
       data: account,
     });
   }
 
+  console.log("Seeding Transaction Clients");
   for (const transactionClient of transactionClients) {
     await prisma.transactionClient.create({
       data: transactionClient,
     });
   }
 
+  console.log("Seeding Transactions");
   for (const transaction of transactions) {
     await prisma.transaction.create({
       data: transaction,
     });
   }
 
+  console.log("Seeding Collection Clients");
   for (const collectionClient of collectionClients) {
     await prisma.collectionClient.create({
       data: collectionClient,
     });
   }
 
+  console.log("Seeding Collections");
   for (const collection of collections) {
     await prisma.collection.create({
       data: collection,
     });
   }
 
-  console.log("Finished Seeding");
+  console.log("\nFinished Seeding");
 }
 
 seeder()

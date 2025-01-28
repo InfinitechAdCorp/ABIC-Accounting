@@ -5,10 +5,10 @@ import {
   TransactionWithTransactionClient,
 } from "@/components/transactionHistory/types";
 import {
-  FormattedClient,
-  ClientWithContracts,
-  FormattedContract,
-  ContractWithClient,
+  FormattedCollectionClient,
+  CollectionClientWithCollections,
+  FormattedCollection,
+  CollectionWithCollectionClient,
 } from "@/components/collectionMonitoring/types";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
@@ -85,55 +85,57 @@ export const formatTransactions = (transactions: TransactionWithTransactionClien
   return formattedTransactions;
 };
 
-export const formatClients = (clients: ClientWithContracts[]) => {
-  const formattedClients: FormattedClient[] = [];
+export const formatCollectionClients = (collectionClients: CollectionClientWithCollections[]) => {
+  const formattedCollectionClients: FormattedCollectionClient[] = [];
 
-  clients.forEach((client) => {
-    const formattedContracts: FormattedContract[] = [];
-    client.contracts.forEach((contract) => {
-      const formattedContract = {
-        ...contract,
-        client_id: contract.client_id as string,
-        tenant_price: contract.tenant_price?.toNumber(),
-        owner_income: contract.owner_income?.toNumber(),
-        abic_income: contract.abic_income?.toNumber(),
+  collectionClients.forEach((collectionClient) => {
+    const formattedCollections: FormattedCollection[] = [];
+    collectionClient.collections.forEach((collection) => {
+      const formattedCollection = {
+        ...collection,
+        collection_client_id: collection.collection_client_id as string,
+        tenant_price: collection.tenant_price?.toNumber(),
+        owner_income: collection.owner_income?.toNumber(),
+        abic_income: collection.abic_income?.toNumber(),
       };
-      formattedContracts.push(formattedContract);
+      formattedCollections.push(formattedCollection);
     });
 
-    const formattedClient = {
-      ...client,
-      contracts: formattedContracts,
+    const formattedCollectionClient = {
+      ...collectionClient,
+      account_id: collectionClient.account_id as string,
+      collections: formattedCollections,
     };
-    formattedClients.push(formattedClient);
+    formattedCollectionClients.push(formattedCollectionClient);
   });
 
-  return formattedClients;
+  return formattedCollectionClients;
 };
 
-export const formatContracts = (contracts: ContractWithClient[]) => {
-  const formattedContracts: FormattedContract[] = [];
+export const formatCollections = (collections: CollectionWithCollectionClient[]) => {
+  const formattedCollections: FormattedCollection[] = [];
 
-  contracts.forEach((contract) => {
-    const client = contract.client;
+  collections.forEach((collection) => {
+    const collectionClient = collection.collection_client;
 
-    const formattedContract = {
-      ...contract,
-      client: {
-        ...client,
-        id: client?.id as string,
-        name: client?.name as string,
+    const formattedCollection = {
+      ...collection,
+      collection_client: {
+        ...collectionClient,
+        id: collectionClient?.id as string,
+        account_id: collectionClient?.account_id as string,
+        name: collectionClient?.name as string,
       },
-      client_id: contract.client_id as string,
-      tenant_price: contract.tenant_price?.toNumber() as number,
-      owner_income: contract.owner_income?.toNumber() as number,
-      abic_income: contract.abic_income?.toNumber() as number,
+      collection_client_id: collection.collection_client_id as string,
+      tenant_price: collection.tenant_price?.toNumber() as number,
+      owner_income: collection.owner_income?.toNumber() as number,
+      abic_income: collection.abic_income?.toNumber() as number,
     };
 
-    formattedContracts.push(formattedContract);
+    formattedCollections.push(formattedCollection);
   });
 
-  return formattedContracts;
+  return formattedCollections;
 };
 
 // Formatters
