@@ -24,12 +24,8 @@ const transactionClients: Prisma.TransactionClientCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: "SCB 443" },
-        create: {
-          name: "SCB 443",
-          transaction_history_access: true,
-          collection_monitoring_access: true,
-        },
+        where: { name: accounts[0].name },
+        create: accounts[0],
       },
     },
     name: "Hu Yanchong",
@@ -37,12 +33,8 @@ const transactionClients: Prisma.TransactionClientCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: "SCB 443" },
-        create: {
-          name: "SCB 443",
-          transaction_history_access: true,
-          collection_monitoring_access: true,
-        },
+        where: { name: accounts[0].name },
+        create: accounts[0],
       },
     },
     name: "Weiwei Chen",
@@ -50,12 +42,8 @@ const transactionClients: Prisma.TransactionClientCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: "SCB 443" },
-        create: {
-          name: "SCB 443",
-          transaction_history_access: true,
-          collection_monitoring_access: true,
-        },
+        where: { name: accounts[0].name },
+        create: accounts[0],
       },
     },
     name: "Dan Li",
@@ -64,11 +52,17 @@ const transactionClients: Prisma.TransactionClientCreateInput[] = [
 
 const transactions: Prisma.TransactionCreateInput[] = [
   {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
     transaction_client: {
       connectOrCreate: {
-        where: { name: "Hu Yanchong" },
+        where: { name: transactionClients[0].name },
         create: {
-          name: "Hu Yanchong",
+          name: transactionClients[0].name,
         },
       },
     },
@@ -80,11 +74,17 @@ const transactions: Prisma.TransactionCreateInput[] = [
     amount: 5000.5,
   },
   {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
     transaction_client: {
       connectOrCreate: {
-        where: { name: "Weiwei Chen" },
+        where: { name: transactionClients[1].name },
         create: {
-          name: "Weiwei Chen",
+          name: transactionClients[1].name,
         },
       },
     },
@@ -96,11 +96,17 @@ const transactions: Prisma.TransactionCreateInput[] = [
     amount: 3000.75,
   },
   {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
     transaction_client: {
       connectOrCreate: {
-        where: { name: "Dan Li" },
+        where: { name: transactionClients[2].name },
         create: {
-          name: "Dan Li",
+          name: transactionClients[2].name,
         },
       },
     },
@@ -117,12 +123,8 @@ const collectionClients: Prisma.CollectionClientCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: "SCB 443" },
-        create: {
-          name: "SCB 443",
-          transaction_history_access: true,
-          collection_monitoring_access: true,
-        },
+        where: { name: accounts[0].name },
+        create: accounts[0],
       },
     },
     name: "Jun Xie",
@@ -130,12 +132,8 @@ const collectionClients: Prisma.CollectionClientCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: "SCB 443" },
-        create: {
-          name: "SCB 443",
-          transaction_history_access: true,
-          collection_monitoring_access: true,
-        },
+        where: { name: accounts[0].name },
+        create: accounts[0],
       },
     },
     name: "Quan Long",
@@ -143,12 +141,8 @@ const collectionClients: Prisma.CollectionClientCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: "SCB 443" },
-        create: {
-          name: "SCB 443",
-          transaction_history_access: true,
-          collection_monitoring_access: true,
-        },
+        where: { name: accounts[0].name },
+        create: accounts[0],
       },
     },
     name: "Zong Guofeng",
@@ -159,20 +153,14 @@ const collections: Prisma.CollectionCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: "SCB 443" },
-        create: {
-          name: "SCB 443",
-          transaction_history_access: true,
-          collection_monitoring_access: true,
-        },
+        where: { name: accounts[0].name },
+        create: accounts[0],
       },
     },
     collection_client: {
       connectOrCreate: {
-        where: { name: "Jun Xie" },
-        create: {
-          name: "Jun Xie",
-        },
+        where: { name: collectionClients[0].name },
+        create: collectionClients[0],
       },
     },
     property: "Alea Residences",
@@ -189,20 +177,14 @@ const collections: Prisma.CollectionCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: "SCB 443" },
-        create: {
-          name: "SCB 443",
-          transaction_history_access: true,
-          collection_monitoring_access: true,
-        },
+        where: { name: accounts[0].name },
+        create: accounts[0],
       },
     },
     collection_client: {
       connectOrCreate: {
-        where: { name: "Quan Long" },
-        create: {
-          name: "Quan Long",
-        },
+        where: { name: collectionClients[1].name },
+        create: collectionClients[1],
       },
     },
     property: "Tivoli Residences",
@@ -219,20 +201,14 @@ const collections: Prisma.CollectionCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: "SCB 443" },
-        create: {
-          name: "SCB 443",
-          transaction_history_access: true,
-          collection_monitoring_access: true,
-        },
+        where: { name: accounts[0].name },
+        create: accounts[0],
       },
     },
     collection_client: {
       connectOrCreate: {
-        where: { name: "Zong Guofeng" },
-        create: {
-          name: "Zong Guofeng",
-        },
+        where: { name: collectionClients[2].name },
+        create: collectionClients[2],
       },
     },
     property: "Oriental Place",
@@ -251,41 +227,35 @@ const collections: Prisma.CollectionCreateInput[] = [
 async function seeder() {
   console.log("Started Seeding");
 
-  accounts.forEach(async (account) => {
+  for (const account of accounts) {
     await prisma.account.create({
       data: account,
     });
-  });
+  }
 
-  transactionClients.forEach(async (transactionClient) => {
+  for (const transactionClient of transactionClients) {
     await prisma.transactionClient.create({
       data: transactionClient,
     });
-  });
+  }
 
-  // for (const transactionClient of transactionClients) {
-  //   await prisma.transactionClient.create({
-  //     data: transactionClient,
-  //   });
-  // }
+  for (const transaction of transactions) {
+    await prisma.transaction.create({
+      data: transaction,
+    });
+  }
 
-  // transactions.forEach(async (transaction) => {
-  //   await prisma.transaction.create({
-  //     data: transaction,
-  //   });
-  // });
+  for (const collectionClient of collectionClients) {
+    await prisma.collectionClient.create({
+      data: collectionClient,
+    });
+  }
 
-  // collectionClients.forEach(async (collectionClient) => {
-  //   await prisma.collectionClient.create({
-  //     data: collectionClient,
-  //   });
-  // });
-
-  // collections.forEach(async (collection) => {
-  //   await prisma.collection.create({
-  //     data: collection,
-  //   });
-  // });
+  for (const collection of collections) {
+    await prisma.collection.create({
+      data: collection,
+    });
+  }
 
   console.log("Finished Seeding");
 }
