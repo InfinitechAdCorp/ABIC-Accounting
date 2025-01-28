@@ -77,101 +77,74 @@ const Dashboard = () => {
           <h1 className="font-bold text-2xl mb-5">Dashboard</h1>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-          <div>
-            <div className="grid grid-cols-2 gap-3 mb-3">
-              <Card
-                className="cursor-pointer"
-                title="View Accounts"
-                isPressable
-                isHoverable
-                onPress={() => {router.push("/accounts")}}
-              >
-                <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
-                  <div className="flex justify-center items-center">
-                    <FaUsers size={56} />
-                  </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 px-5 lg:px-24 xl:px-60 gap-3 mb-3">
+          <Card
+            className="cursor-pointer"
+            title="View Clients"
+            isPressable
+            isHoverable
+            onPress={() => {
+              router.push("/transaction-clients");
+            }}
+          >
+            <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
+              <div className="flex justify-center items-center">
+                <FaUsers size={56} />
+              </div>
 
-                  <div className="flex flex-col justify-center items-center">
-                    <h1 className="font-extrabold text-3xl">
-                      {counts.accounts}
-                    </h1>
-                    <h4 className="text-neutral-500">Accounts</h4>
-                  </div>
-                </CardBody>
-              </Card>
+              <div className="flex flex-col justify-center items-center">
+                <h1 className="font-extrabold text-3xl">
+                  {/* {counts.transaction_clients} */}0
+                </h1>
+                <h4 className="text-neutral-500">Clients</h4>
+              </div>
+            </CardBody>
+          </Card>
 
-              <Card
-                className="cursor-pointer"
-                title="View Transactions"
-                isPressable
-                isHoverable
-                onPress={() => router.push("/transactions")}
-              >
-                <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
-                  <div className="flex justify-center items-center">
-                    <GrTransaction size={56} />
-                  </div>
+          <Card
+            className="cursor-pointer"
+            title="View Transactions"
+            isPressable
+            isHoverable
+            onPress={() => router.push("/transactions")}
+          >
+            <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
+              <div className="flex justify-center items-center">
+                <GrTransaction size={56} />
+              </div>
 
-                  <div className="flex flex-col justify-center items-center">
-                    <h1 className="font-extrabold text-3xl">
-                      {counts.transactions}
-                    </h1>
-                    <h4 className="text-neutral-500">Transactions</h4>
-                  </div>
-                </CardBody>
-              </Card>
-            </div>
-          </div>
+              <div className="flex flex-col justify-center items-center">
+                <h1 className="font-extrabold text-3xl">
+                  {counts.transactions}
+                </h1>
+                <h4 className="text-neutral-500">Transactions</h4>
+              </div>
+            </CardBody>
+          </Card>
 
-          <div>
-            <div className="grid grid-cols-2 gap-3 mb-3">
-              <Card
-                className="cursor-pointer"
-                title="View Clients"
-                isPressable
-                isHoverable
-                onPress={() => router.push("/clients")}
-              >
-                <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
-                  <div className="flex justify-center items-center">
-                    <FaUsers size={56} />
-                  </div>
+          <Card
+            className="cursor-pointer"
+            title="View Collections"
+            isPressable
+            isHoverable
+            onPress={() => router.push("/collections")}
+          >
+            <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
+              <div className="flex justify-center items-center">
+                <FaFileSignature size={56} />
+              </div>
 
-                  <div className="flex flex-col justify-center items-center">
-                    <h1 className="font-extrabold text-3xl">
-                      {counts.clients}
-                    </h1>
-                    <h4 className="text-neutral-500">Clients</h4>
-                  </div>
-                </CardBody>
-              </Card>
-
-              <Card
-                className="cursor-pointer"
-                title="View Contracts"
-                isPressable
-                isHoverable
-                onPress={() => router.push("/contracts")}
-              >
-                <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
-                  <div className="flex justify-center items-center">
-                    <FaFileSignature size={56} />
-                  </div>
-
-                  <div className="flex flex-col justify-center items-center">
-                    <h1 className="font-extrabold text-3xl">
-                      {counts.contracts}
-                    </h1>
-                    <h4 className="text-neutral-500">Contracts</h4>
-                  </div>
-                </CardBody>
-              </Card>
-            </div>
-          </div>
+              <div className="flex flex-col justify-center items-center">
+                <h1 className="font-extrabold text-3xl">
+                  {/* {counts.collections} */}0
+                </h1>
+                <h4 className="text-neutral-500">Collections</h4>
+              </div>
+            </CardBody>
+          </Card>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
           <Card className="mb-3 h-72">
             <CardBody className="text-center pt-7">
               <Barchart
@@ -207,7 +180,7 @@ const Dashboard = () => {
               />
             </CardBody>
           </Card>
-        </div>
+        </div> */}
       </div>
     </>
   );

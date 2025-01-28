@@ -51,22 +51,22 @@ const Navbar = () => {
             <DropdownTrigger className="text-center">
               <h3
                 className={`text-sm md:text-base text-white cursor-pointer ${
-                  isActive(["/accounts", "/transactions"])
+                  isActive(["/transaction-clients", "/transactions"])
                     ? "font-black"
                     : "font-semibold"
                 }`}
               >
-                <span className="hidden lg:inline">Transaction Monitoring</span>
+                <span className="hidden lg:inline">Transaction History</span>
                 <span className="inline lg:hidden">Transactions</span>
               </h3>
             </DropdownTrigger>
 
             <DropdownMenu className="text-center">
               <DropdownItem
-                onPress={() => router.push("/accounts")}
-                key="Accounts"
+                onPress={() => router.push("/transaction-clients")}
+                key="Transaction Clients"
               >
-                <h3 className="font-semibold">Accounts</h3>
+                <h3 className="font-semibold">Clients</h3>
               </DropdownItem>
               <DropdownItem
                 onPress={() => router.push("/transactions")}
@@ -85,27 +85,27 @@ const Navbar = () => {
             <DropdownTrigger className="text-center">
               <h3
                 className={`text-sm md:text-base text-white cursor-pointer ${
-                  isActive(["/clients", "/contracts"])
+                  isActive(["/collection-clients", "/collections"])
                     ? "font-black"
                     : "font-semibold"
                 }`}
               >
-                <span className="hidden lg:inline">Contract Monitoring</span>
-                <span className="inline lg:hidden">Contracts</span>
+                <span className="hidden lg:inline">Collection Monitoring</span>
+                <span className="inline lg:hidden">Collections</span>
               </h3>
             </DropdownTrigger>
             <DropdownMenu className="text-center">
               <DropdownItem
-                onPress={() => router.push("/clients")}
-                key="Clients"
+                onPress={() => router.push("/collection-clients")}
+                key="Collection Clients"
               >
                 <h3 className="font-semibold">Clients</h3>
               </DropdownItem>
               <DropdownItem
-                onPress={() => router.push("/contracts")}
-                key="Contracts"
+                onPress={() => router.push("/collections")}
+                key="Collections"
               >
-                <h3 className="font-semibold">Contracts</h3>
+                <h3 className="font-semibold">Collections</h3>
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
