@@ -10,8 +10,6 @@ export type FormattedTransactionClient = {
 
 export type FormattedTransaction = {
   id: string;
-  account?: Prisma.AccountSelect;
-  account_id?: string;
   transaction_client?: FormattedTransactionClient;
   transaction_client_id?: string;
   date: Date;

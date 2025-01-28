@@ -22,7 +22,7 @@ export const getAll = async () => {
   try {
     transactions = await prisma.transaction.findMany({
       include: {
-        account: true,
+        transaction_client: true,
       },
     });
   } catch {
