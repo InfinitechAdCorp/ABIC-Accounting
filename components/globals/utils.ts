@@ -1,8 +1,8 @@
 import {
-  FormattedAccount,
-  AccountWithTransactions,
+  FormattedTransactionClient,
+  TransactionClientWithTransactions,
   FormattedTransaction,
-  TransactionWithAccount,
+  TransactionWithTransactionClient,
 } from "@/components/transactionHistory/types";
 import {
   FormattedClient,
@@ -35,48 +35,48 @@ export const handlePostSubmit = (
 
 // Data Formatters
 
-export const formatAccounts = (accounts: AccountWithTransactions[]) => {
-  const formattedAccounts: FormattedAccount[] = [];
+export const formatTransactionClients = (transactionClients: TransactionClientWithTransactions[]) => {
+  const formattedTransactionClients: FormattedTransactionClient[] = [];
 
-  if (accounts) {
-    accounts.forEach((account) => {
+  if (transactionClients) {
+    transactionClients.forEach((transactionClient) => {
       const formattedTransactions: FormattedTransaction[] = [];
-      account.transactions.forEach((transaction) => {
+      transactionClient.transactions.forEach((transaction) => {
         const formattedTransaction = {
           ...transaction,
           account_id: transaction.account_id as string,
+          transaction_client_id: transaction.transaction_client_id as string,
           amount: transaction.amount.toNumber(),
         };
         formattedTransactions.push(formattedTransaction);
       });
 
-      const formattedAccount = {
-        ...account,
-        starting_balance: account.starting_balance.toNumber(),
+      const formattedTransactionClient = {
+        ...transactionClient,
+        account_id: transactionClient.account_id as string,
         transactions: formattedTransactions,
       };
-      formattedAccounts.push(formattedAccount);
+      formattedTransactionClients.push(formattedTransactionClient);
     });
   }
 
-  return formattedAccounts;
+  return formattedTransactionClients;
 };
 
-export const formatTransactions = (transactions: TransactionWithAccount[]) => {
+export const formatTransactions = (transactions: TransactionWithTransactionClient[]) => {
   const formattedTransactions: FormattedTransaction[] = [];
 
   transactions.forEach((transaction) => {
-    const account = transaction.account;
+    const transactionClient = transaction.transaction_client;
 
     const formattedTransaction = {
       ...transaction,
-      account: {
-        ...account,
-        id: account?.id as string,
-        name: account?.name as string,
-        starting_balance: account?.starting_balance.toNumber() as number,
+      transaction_client: {
+        ...transactionClient,
+        id: transactionClient?.id as string,
+        name: transactionClient?.name as string,
       },
-      account_id: transaction.account_id as string,
+      transaction_client_id: transaction.transaction_client_id as string,
       amount: transaction.amount.toNumber(),
     };
     formattedTransactions.push(formattedTransaction);

@@ -13,17 +13,17 @@ import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 
 export const getAll = async () => {
-  let accounts = [];
+  let transactionClients = [];
 
   try {
-    accounts = await prisma.transactionClient.findMany({
+    transactionClients = await prisma.transactionClient.findMany({
       include: { transactions: true },
     });
   } catch {
     const response = {
       code: 500,
       message: "Server Error",
-      accounts: [],
+      transactionClients: [],
     };
     return response;
   }
@@ -31,7 +31,7 @@ export const getAll = async () => {
   const response = {
     code: 200,
     message: "Fetched Clients",
-    accounts: accounts,
+    transactionClients: transactionClients,
   };
   return response;
 };
@@ -123,7 +123,7 @@ export const update = async (values: Prisma.TransactionClientCreateInput) => {
   }
 
   revalidatePath("/transaction-clients");
-  const response: ActionResponse = { code: 200, message: "Updated Account" };
+  const response: ActionResponse = { code: 200, message: "Updated Client" };
   return response;
 };
 
@@ -155,9 +155,7 @@ export const destroy = async (values: { id: string }) => {
   revalidatePath("/transaction-clients");
   const response: ActionResponse = {
     code: 200,
-    message: "Deleted Account",
+    message: "Deleted Client",
   };
   return response;
 };
-
-

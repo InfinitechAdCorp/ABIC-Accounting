@@ -1,32 +1,36 @@
 import { Prisma } from "@prisma/client";
 
-export type FormattedAccount = {
+export type FormattedTransactionClient = {
   id: string;
-  name: string;
-  starting_balance: number;
+  account?: Prisma.AccountSelect;
+  account_id?: string;
   transactions?: FormattedTransaction[];
+  name: string;
 };
 
 export type FormattedTransaction = {
   id: string;
+  account?: Prisma.AccountSelect;
+  account_id?: string;
+  transaction_client?: FormattedTransactionClient;
+  transaction_client_id?: string;
   date: Date;
   voucher: string;
   check: string;
-  account?: FormattedAccount;
-  account_id?: string;
   particulars: string;
   type: string;
   amount: number;
+  status: string;
 };
 
-export type AccountWithTransactions = Prisma.AccountGetPayload<{
+export type TransactionClientWithTransactions = Prisma.TransactionClientGetPayload<{
   include: {
     transactions: true;
   };
 }>;
 
-export type TransactionWithAccount = Prisma.TransactionGetPayload<{
+export type TransactionWithTransactionClient = Prisma.TransactionGetPayload<{
   include: {
-    account: true;
+    transaction_client: true;
   };
 }>;

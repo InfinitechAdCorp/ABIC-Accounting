@@ -18,9 +18,7 @@ datasource db {
 model Account {
   id                           String              @id @default(cuid())
   transaction_clients          TransactionClient[]
-  transactions                 Transaction[]
   collection_clients           CollectionClient[]
-  collections                  Collection[]
   name                         String              @unique
   transaction_history_access   Boolean
   collection_monitoring_access Boolean
@@ -44,8 +42,6 @@ model TransactionClient {
 
 model Transaction {
   id                    String             @id @default(cuid())
-  account               Account?           @relation(fields: [account_id], references: [id], onDelete: Cascade)
-  account_id            String?
   transaction_client    TransactionClient? @relation(fields: [transaction_client_id], references: [id], onDelete: Cascade)
   transaction_client_id String?
   date                  DateTime           @db.Date
@@ -75,8 +71,6 @@ model CollectionClient {
 
 model Collection {
   id                   String            @id @default(cuid())
-  account              Account?          @relation(fields: [account_id], references: [id], onDelete: Cascade)
-  account_id           String?
   collection_client    CollectionClient? @relation(fields: [collection_client_id], references: [id], onDelete: Cascade)
   collection_client_id String?
   property             String

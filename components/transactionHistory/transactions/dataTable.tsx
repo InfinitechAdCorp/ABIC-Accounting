@@ -21,7 +21,7 @@ import {
 } from "@nextui-org/react";
 import {
   FormattedTransaction,
-  FormattedAccount,
+  FormattedTransactionClient,
 } from "@/components/transactionHistory/types";
 import { formatDate, formatNumber } from "@/components/globals/utils";
 import CreateTransactionModal from "@/components/transactionHistory/transactions/createModal";
@@ -43,7 +43,7 @@ type Props = {
   initialVisibleColumns: string[];
   searchKey: string;
   sortKey: string;
-  accounts: FormattedAccount[];
+  transactionClients: FormattedTransactionClient[];
 };
 
 const DataTable = ({
@@ -53,7 +53,7 @@ const DataTable = ({
   initialVisibleColumns,
   searchKey,
   sortKey,
-  accounts,
+  transactionClients,
 }: Props) => {
   type Row = (typeof rows)[0];
 
@@ -115,14 +115,14 @@ const DataTable = ({
       if (columnKey == "actions") {
         return (
           <div className="relative flex justify-end items-center gap-2">
-            <UpdateModal transaction={row} accounts={accounts} />
-            <DestroyModal title="Transaction" action={destroy} id={row.id} />
+            {/* <UpdateModal transaction={row} transactionClients={transactionClients} /> */}
+            {/* <DestroyModal title="Transaction" action={destroy} id={row.id} /> */}
           </div>
         );
       } else if (columnKey == "date") {
         return formatDate(row.date);
-      } else if (columnKey == "account") {
-        return row.account?.name;
+      } else if (columnKey == "client") {
+        return row.transaction_client?.name;
       } else if (columnKey == "credit") {
         if (row.type == "Credit") {
           return formatNumber(row.amount);
@@ -135,7 +135,7 @@ const DataTable = ({
         return row[columnKey as keyof Row];
       }
     },
-    [accounts]
+    [transactionClients]
   );
 
   const onNextPage = React.useCallback(() => {

@@ -1,31 +1,27 @@
 import React from "react";
 import { getAll } from "@/components/transactionHistory/transactionClients/actions";
 import { Card, CardBody } from "@nextui-org/react";
-import { formatAccounts } from "@/components/globals/utils";
+import { formatTransactionClients } from "@/components/globals/utils";
 import DataTable from "@/components/transactionHistory/transactionClients/dataTable";
 import Navbar from "@/components/globals/navbar";
 
 export const dynamic = "force-dynamic";
 
-const Accounts = async () => {
+const TransactionClients = async () => {
   const columns = [
     { name: "NAME", key: "name", sortable: true },
-    { name: "STARTING BALANCE", key: "starting_balance", sortable: true },
-    { name: "CURRENT BALANCE", key: "current_balance", sortable: true },
     { name: "TRANSACTIONS", key: "transactions", sortable: true },
     { name: "ACTIONS", key: "actions" },
   ];
 
   const initialVisibleColumns = [
     "name",
-    "starting_balance",
-    "current_balance",
     "transactions",
     "actions",
   ];
 
-  const { accounts } = await getAll();
-  const formattedAccounts = formatAccounts(accounts);
+  const { transactionClients } = await getAll();
+  const formattedTransactionClients = formatTransactionClients(transactionClients);
 
   return (
     <>
@@ -34,11 +30,11 @@ const Accounts = async () => {
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
           <CardBody>
-            <h1 className="text-lg font-semibold mb-3">Accounts</h1>
+            <h1 className="text-lg font-semibold mb-3">Clients</h1>
             <DataTable
-              model="accounts"
+              model="clients"
               columns={columns}
-              rows={formattedAccounts}
+              rows={formattedTransactionClients}
               initialVisibleColumns={initialVisibleColumns}
               searchKey="name"
               sortKey="name"
@@ -50,4 +46,4 @@ const Accounts = async () => {
   );
 };
 
-export default Accounts;
+export default TransactionClients;

@@ -37,7 +37,7 @@ const CreateModal = () => {
   return (
     <>
       <Button color="primary" onPress={onOpen}>
-        Add Account
+        Add Client
       </Button>
 
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -51,7 +51,7 @@ const CreateModal = () => {
               >
                 {(props: FormikProps<any>) => (
                   <Form>
-                    <ModalHeader>Add Account</ModalHeader>
+                    <ModalHeader>Add Client</ModalHeader>
                     <ModalBody>
                       <Field name="name">
                         {({ field, meta }: FieldProps) => (
