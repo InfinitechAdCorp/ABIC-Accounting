@@ -19,11 +19,12 @@ import {
   Selection,
   SortDescriptor,
 } from "@nextui-org/react";
-import { FormattedClient } from "@/components/contractMonitoring/types";
-import CreateModal from "@/components/contractMonitoring/clients/createModal";
-import UpdateModal from "@/components/contractMonitoring/clients/updateModal";
+import { FormattedAccount } from "@/components/transactionHistory/types";
+import { formatNumber } from "@/components/globals/utils";
+import CreateModal from "@/components/transactionHistory/transactionClients/createModal";
+import UpdateModal from "@/components/transactionHistory/transactionClients/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
-import { destroy } from "@/components/contractMonitoring/clients/actions";
+import { destroy } from "@/components/transactionHistory/transactionClients/actions";
 
 type column = {
   name: string;
@@ -34,7 +35,7 @@ type column = {
 type Props = {
   model: string;
   columns: column[];
-  rows: FormattedClient[];
+  rows: FormattedAccount[];
   initialVisibleColumns: string[];
   searchKey: string;
   sortKey: string;
@@ -107,12 +108,24 @@ const DataTable = ({
     if (columnKey == "actions") {
       return (
         <div className="relative flex justify-end items-center gap-2">
-          <UpdateModal client={row} />
-          <DestroyModal title="Client" action={destroy} id={row.id} />
+          <UpdateModal account={row} />
+          <DestroyModal title="Account" action={destroy} id={row.id} />
         </div>
       );
-    } else if (columnKey == "contracts") {
-      return row.contracts?.length;
+    } else if (columnKey == "starting_balance") {
+      return formatNumber(row.starting_balance);
+    } else if (columnKey == "current_balance") {
+      let currentBalance = row.starting_balance;
+      row.transactions?.forEach((transaction) => {
+        if (transaction.type == "Credit") {
+          currentBalance += transaction.amount;
+        } else {
+          currentBalance -= transaction.amount;
+        }
+      });
+      return formatNumber(currentBalance);
+    } else if (columnKey == "transactions") {
+      return row.transactions?.length;
     } else {
       return row[columnKey as keyof Row];
     }

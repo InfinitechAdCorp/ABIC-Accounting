@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 import {
   create as createSchema,
   update as updateSchema,
-} from "@/components/transactionMonitoring/transactions/schemas";
+} from "@/components/transactionHistory/transactions/schemas";
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";

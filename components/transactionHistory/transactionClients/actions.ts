@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 import {
   create as createSchema,
   update as updateSchema,
-} from "@/components/transactionMonitoring/accounts/schemas";
+} from "@/components/transactionHistory/transactionClients/schemas";
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
@@ -16,7 +16,7 @@ export const getAll = async () => {
   let accounts = [];
 
   try {
-    accounts = await prisma.account.findMany({
+    accounts = await prisma.transactionClient.findMany({
       include: { transactions: true },
     });
   } catch {
@@ -30,13 +30,13 @@ export const getAll = async () => {
 
   const response = {
     code: 200,
-    message: "Fetched Accounts",
+    message: "Fetched Clients",
     accounts: accounts,
   };
   return response;
 };
 
-export const create = async (values: Prisma.AccountCreateInput) => {
+export const create = async (values: Prisma.TransactionClientCreateInput) => {
   const schema = createSchema;
 
   try {
@@ -52,13 +52,13 @@ export const create = async (values: Prisma.AccountCreateInput) => {
     return response;
   }
 
-  const nameExists = await prisma.account.findFirst({
+  const nameExists = await prisma.transactionClient.findFirst({
     where: { name: values.name },
   });
 
   if (!nameExists) {
     try {
-      await prisma.account.create({ data: { ...values } });
+      await prisma.transactionClient.create({ data: { ...values } });
     } catch {
       const response: ActionResponse = { code: 500, message: "Server Error" };
       return response;
@@ -71,12 +71,12 @@ export const create = async (values: Prisma.AccountCreateInput) => {
     return response;
   }
 
-  revalidatePath("/accounts");
-  const response: ActionResponse = { code: 200, message: "Added Account" };
+  revalidatePath("/transaction-clients");
+  const response: ActionResponse = { code: 200, message: "Added Client" };
   return response;
 };
 
-export const update = async (values: Prisma.AccountCreateInput) => {
+export const update = async (values: Prisma.TransactionClientCreateInput) => {
   const schema = updateSchema;
 
   try {
@@ -92,23 +92,22 @@ export const update = async (values: Prisma.AccountCreateInput) => {
     return response;
   }
 
-  const nameExists = await prisma.account.findFirst({
+  const nameExists = await prisma.transactionClient.findFirst({
     where: { name: values.name },
   });
 
-  const account = await prisma.account.findFirst({
-    where: { id: values.id }
+  const transactionClient = await prisma.transactionClient.findFirst({
+    where: { id: values.id },
   });
 
-  if (!nameExists || account?.name == values.name) {
+  if (!nameExists || transactionClient?.name == values.name) {
     try {
-      await prisma.account.update({
+      await prisma.transactionClient.update({
         where: {
           id: values.id,
         },
         data: {
           name: values.name,
-          starting_balance: values.starting_balance,
         },
       });
     } catch {
@@ -123,7 +122,7 @@ export const update = async (values: Prisma.AccountCreateInput) => {
     return response;
   }
 
-  revalidatePath("/accounts");
+  revalidatePath("/transaction-clients");
   const response: ActionResponse = { code: 200, message: "Updated Account" };
   return response;
 };
@@ -145,7 +144,7 @@ export const destroy = async (values: { id: string }) => {
   }
 
   try {
-    await prisma.account.delete({
+    await prisma.transactionClient.delete({
       where: { id: values.id },
     });
   } catch {
@@ -153,10 +152,12 @@ export const destroy = async (values: { id: string }) => {
     return response;
   }
 
-  revalidatePath("/accounts");
+  revalidatePath("/transaction-clients");
   const response: ActionResponse = {
     code: 200,
     message: "Deleted Account",
   };
   return response;
 };
+
+

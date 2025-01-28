@@ -18,15 +18,24 @@ import {
   Pagination,
   Selection,
   SortDescriptor,
+  Chip,
 } from "@nextui-org/react";
 import {
-  FormattedAccount,
-} from "@/components/transactionMonitoring/types";
-import { formatNumber } from "@/components/globals/utils";
-import CreateModal from "@/components/transactionMonitoring/accounts/createModal";
-import UpdateModal from "@/components/transactionMonitoring/accounts/updateModal";
+  FormattedContract,
+  FormattedClient,
+} from "@/components/collectionMonitoring/types";
+import { formatDate, formatNumber } from "@/components/globals/utils";
+import CreateContractModal from "@/components/collectionMonitoring/collections/createModal";
+import UpdateModal from "@/components/collectionMonitoring/collections/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
-import { destroy } from "@/components/transactionMonitoring/accounts/actions";
+import PaymentModal from "@/components/collectionMonitoring/collections/paymentModal";
+// import PaymentsModal from "@/components/contractMonitoring/contracts/paymentsModal";
+import {
+  destroy,
+  markAsPaid,
+} from "@/components/collectionMonitoring/collections/actions";
+import CreateClientModal from "@/components/collectionMonitoring/collectionClients/createModal";
+import { differenceInDays, differenceInMonths } from "date-fns";
 
 type column = {
   name: string;
@@ -37,10 +46,15 @@ type column = {
 type Props = {
   model: string;
   columns: column[];
-  rows: FormattedAccount[];
+  rows: FormattedContract[];
   initialVisibleColumns: string[];
   searchKey: string;
   sortKey: string;
+  clients: FormattedClient[];
+  locations: {
+    key: string;
+    name: string;
+  }[];
 };
 
 const DataTable = ({
@@ -50,6 +64,8 @@ const DataTable = ({
   initialVisibleColumns,
   searchKey,
   sortKey,
+  clients,
+  locations,
 }: Props) => {
   type Row = (typeof rows)[0];
 
@@ -106,32 +122,75 @@ const DataTable = ({
     }
   }, [sortDescriptor, items]);
 
-  const renderCell = React.useCallback((row: Row, columnKey: string) => {
-    if (columnKey == "actions") {
-      return (
-        <div className="relative flex justify-end items-center gap-2">
-          <UpdateModal account={row} />
-          <DestroyModal title="Account" action={destroy} id={row.id} />
-        </div>
-      );
-    } else if (columnKey == "starting_balance") {
-      return formatNumber(row.starting_balance);
-    } else if (columnKey == "current_balance") {
-      let currentBalance = row.starting_balance;
-      row.transactions?.forEach((transaction) => {
-        if (transaction.type == "Credit") {
-          currentBalance += transaction.amount;
-        } else {
-          currentBalance -= transaction.amount;
+  const renderCell = React.useCallback(
+    (row: Row, columnKey: string) => {
+      const dateColumns = ["start", "end", "due"];
+      const moneyColumns = ["tenant_price", "owner_income", "abic_income"];
+
+      if (columnKey == "actions") {
+        return (
+          <div className="relative flex justify-end items-center gap-2">
+            <UpdateModal
+              contract={row}
+              clients={clients}
+              locations={locations}
+            />
+            <DestroyModal title="Contract" action={destroy} id={row.id} />
+            <PaymentModal action={markAsPaid} id={row.id} />
+            {/* <PaymentsModal /> */}
+          </div>
+        );
+      } else if (columnKey == "client") {
+        return row.client?.name;
+      } else if (dateColumns.includes(columnKey)) {
+        return formatDate(row[columnKey as keyof Row] as Date);
+      } else if (moneyColumns.includes(columnKey)) {
+        return formatNumber(row[columnKey as keyof Row] as number);
+      } else if (columnKey == "status") {
+        const today = new Date(new Date().setHours(0, 0, 0, 0));
+        const difference = differenceInDays(
+          row.due.setHours(0, 0, 0, 0),
+          today
+        );
+
+        type Color =
+          | "default"
+          | "primary"
+          | "secondary"
+          | "success"
+          | "warning"
+          | "danger";
+
+        let color;
+        let status;
+        if (difference > 0) {
+          color = "success";
+          status = `${difference} Days Remaining`;
+        } else if (difference < 0) {
+          color = "danger";
+          status = `${difference} Days Past Due`.replace("-", "");
+        } else if (difference == 0) {
+          color = "primary";
+          status = "Today";
         }
-      });
-      return formatNumber(currentBalance);
-    } else if (columnKey == "transactions") {
-      return row.transactions?.length;
-    } else {
-      return row[columnKey as keyof Row];
-    }
-  }, []);
+
+        return (
+          <Chip color={color as Color} size="sm" variant="flat">
+            {status}
+          </Chip>
+        );
+      } else if (columnKey == "payments") {
+        let payments = differenceInMonths(row.due, row.start) - 1;
+        if (payments < 0) {
+          payments = 0;
+        }
+        return payments;
+      } else {
+        return row[columnKey as keyof Row];
+      }
+    },
+    [clients, locations]
+  );
 
   const onNextPage = React.useCallback(() => {
     if (page < pages) {
@@ -203,7 +262,11 @@ const DataTable = ({
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <CreateModal />
+
+            <div className="hidden sm:flex">
+              <CreateClientModal />
+            </div>
+            <CreateContractModal clients={clients} locations={locations} />
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -233,6 +296,8 @@ const DataTable = ({
     columns,
     model,
     rows.length,
+    clients,
+    locations,
   ]);
 
   const bottomContent = React.useMemo(() => {

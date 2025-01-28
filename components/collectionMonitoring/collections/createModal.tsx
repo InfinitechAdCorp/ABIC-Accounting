@@ -14,23 +14,18 @@ import {
   Select,
   SelectItem,
 } from "@nextui-org/react";
-import {
-  FormattedContract,
-  FormattedClient,
-} from "@/components/contractMonitoring/types";
-import { update as updateSchema } from "@/components/contractMonitoring/contracts/schemas";
+import { FormattedClient } from "@/components/collectionMonitoring/types";
+import { create as createSchema } from "@/components/collectionMonitoring/collections/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
-import { update as updateAction } from "@/components/contractMonitoring/contracts/actions";
+import { create as createAction } from "@/components/collectionMonitoring/collections/actions";
 import { Prisma } from "@prisma/client";
 import {
   handlePostSubmit,
   dateToDateValue,
   dateValueToDate,
 } from "@/components/globals/utils";
-import { FaPenToSquare } from "react-icons/fa6";
 
 type Props = {
-  contract: FormattedContract;
   clients: FormattedClient[];
   locations: {
     key: string;
@@ -38,43 +33,36 @@ type Props = {
   }[];
 };
 
-const UpdateModal = ({ contract, clients, locations }: Props) => {
+const CreateModal = ({ clients, locations }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const initialValues = {
-    id: contract.id,
-    client_id: contract.client_id,
-    property: contract.property,
-    location: contract.location,
-    start: contract.start,
-    end: contract.end,
-    advance: contract.advance,
-    deposit: contract.deposit,
-    tenant_price: contract.tenant_price,
-    owner_income: contract.owner_income,
-    abic_income: contract.abic_income,
-    due: contract.due,
+    client_id: "",
+    property: "",
+    location: "",
+    start: "",
+    end: "",
+    advance: 0,
+    deposit: 0,
+    tenant_price: "",
+    owner_income: "",
+    abic_income: "",
+    due: "",
   };
 
   const onSubmit = async (
     values: Prisma.ContractCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    updateAction(values).then((response) =>
+    createAction(values).then((response) =>
       handlePostSubmit(response, actions, onClose)
     );
   };
 
   return (
     <>
-      <Button
-        size="sm"
-        color="primary"
-        isIconOnly={true}
-        title="Edit"
-        onPress={onOpen}
-      >
-        <FaPenToSquare size={14} />
+      <Button color="primary" onPress={onOpen}>
+        Add Contract
       </Button>
 
       <Modal size="lg" isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -83,16 +71,13 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
             <>
               <Formik
                 initialValues={initialValues}
-                validationSchema={updateSchema}
+                validationSchema={createSchema}
                 onSubmit={onSubmit}
-                enableReinitialize={true}
               >
                 {(props: FormikProps<any>) => (
                   <Form>
-                    <ModalHeader>Update Contract</ModalHeader>
+                    <ModalHeader>Add Contract</ModalHeader>
                     <ModalBody>
-                      <Field type="hidden" name="id" />
-
                       <div className="grid grid-cols-2 gap-3">
                         <Field name="client_id">
                           {({ field, meta }: FieldProps) => (
@@ -105,7 +90,6 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                                 labelPlacement="outside"
                                 placeholder="Select Client"
                                 items={clients}
-                                defaultSelectedKeys={[field.value]}
                               >
                                 {(client) => (
                                   <SelectItem key={client.id}>
@@ -135,7 +119,6 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                                 items={locations.filter(
                                   (location) => location.name != "All"
                                 )}
-                                defaultSelectedKeys={[field.value]}
                               >
                                 {(location) => (
                                   <SelectItem key={location.key}>
@@ -363,7 +346,7 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                         type="submit"
                         isLoading={props.isSubmitting}
                       >
-                        Update
+                        Save
                       </Button>
                       <Button color="danger" onPress={onClose}>
                         Cancel
@@ -380,4 +363,4 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
   );
 };
 
-export default UpdateModal;
+export default CreateModal;

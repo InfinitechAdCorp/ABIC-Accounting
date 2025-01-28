@@ -22,13 +22,13 @@ import {
 import {
   FormattedTransaction,
   FormattedAccount,
-} from "@/components/transactionMonitoring/types";
+} from "@/components/transactionHistory/types";
 import { formatDate, formatNumber } from "@/components/globals/utils";
-import CreateTransactionModal from "@/components/transactionMonitoring/transactions/createModal";
-import UpdateModal from "@/components/transactionMonitoring/transactions/updateModal";
+import CreateTransactionModal from "@/components/transactionHistory/transactions/createModal";
+import UpdateModal from "@/components/transactionHistory/transactions/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
-import { destroy } from "@/components/transactionMonitoring/transactions/actions";
-import CreateAccountModal from "@/components/transactionMonitoring/accounts/createModal";
+import { destroy } from "@/components/transactionHistory/transactions/actions";
+import CreateAccountModal from "@/components/transactionHistory/transactionClients/createModal";
 
 type column = {
   name: string;

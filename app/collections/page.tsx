@@ -1,12 +1,12 @@
 import React from "react";
-import { getAll as getContracts } from "@/components/contractMonitoring/contracts/actions";
-import { getAll as getClients } from "@/components/contractMonitoring/clients/actions";
+import { getAll as getContracts } from "@/components/collectionMonitoring/collections/actions";
+import { getAll as getClients } from "@/components/collectionMonitoring/collectionClients/actions";
 import { Card, CardBody } from "@nextui-org/react";
-import DataTable from "@/components/contractMonitoring/contracts/dataTable";
+import DataTable from "@/components/collectionMonitoring/collections/dataTable";
 import { formatClients, formatContracts } from "@/components/globals/utils";
 import Navbar from "@/components/globals/navbar";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 const Contracts = async () => {
   const locations = [
@@ -57,7 +57,7 @@ const Contracts = async () => {
   const formattedClients = formatClients(clients);
 
   return (
-    <>      
+    <>
       <Navbar />
 
       <div className="flex justify-center max-h-[93vh]">

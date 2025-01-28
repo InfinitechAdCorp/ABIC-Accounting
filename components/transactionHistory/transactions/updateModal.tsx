@@ -16,10 +16,10 @@ import {
 import {
   FormattedTransaction,
   FormattedAccount,
-} from "@/components/transactionMonitoring/types";
-import { update as updateSchema } from "@/components/transactionMonitoring/transactions/schemas";
+} from "@/components/transactionHistory/types";
+import { update as updateSchema } from "@/components/transactionHistory/transactions/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
-import { update as updateAction } from "@/components/transactionMonitoring/transactions/actions";
+import { update as updateAction } from "@/components/transactionHistory/transactions/actions";
 import { Prisma } from "@prisma/client";
 import {
   handlePostSubmit,

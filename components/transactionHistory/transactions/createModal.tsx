@@ -15,10 +15,10 @@ import {
   SelectItem,
   Textarea,
 } from "@nextui-org/react";
-import { FormattedAccount } from "@/components/transactionMonitoring/types";
-import { create as createSchema } from "@/components/transactionMonitoring/transactions/schemas";
+import { FormattedAccount } from "@/components/transactionHistory/types";
+import { create as createSchema } from "@/components/transactionHistory/transactions/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
-import { create as createAction } from "@/components/transactionMonitoring/transactions/actions";
+import { create as createAction } from "@/components/transactionHistory/transactions/actions";
 import { Prisma } from "@prisma/client";
 import {
   handlePostSubmit,

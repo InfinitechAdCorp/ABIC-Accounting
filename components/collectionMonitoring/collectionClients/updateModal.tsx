@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
   Modal,
@@ -11,33 +9,47 @@ import {
   useDisclosure,
   Input,
 } from "@nextui-org/react";
-import { create as createSchema } from "@/components/transactionMonitoring/accounts/schemas";
+import { FormattedClient } from "@/components/collectionMonitoring/types";
+import { update as updateSchema } from "@/components/collectionMonitoring/collectionClients/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
-import { create as createAction } from "@/components/transactionMonitoring/accounts/actions";
+import { update as updateAction } from "@/components/collectionMonitoring/collectionClients/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
+import { FaPenToSquare } from "react-icons/fa6";
 
-const CreateModal = () => {
+type Props = {
+  client: FormattedClient;
+};
+
+type ClientCreateInput = Prisma.ClientCreateInput & { id: string };
+
+const UpdateModal = ({ client }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const initialValues = {
-    name: "",
-    starting_balance: "",
+    id: client.id,
+    name: client.name,
   };
 
   const onSubmit = async (
-    values: Prisma.AccountCreateInput,
+    values: Prisma.ClientCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    createAction(values).then((response) =>
+    updateAction(values).then((response) =>
       handlePostSubmit(response, actions, onClose)
     );
   };
 
   return (
     <>
-      <Button color="primary" onPress={onOpen}>
-        Add Account
+      <Button
+        size="sm"
+        color="primary"
+        isIconOnly={true}
+        title="Edit"
+        onPress={onOpen}
+      >
+        <FaPenToSquare size={14} />
       </Button>
 
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -46,13 +58,15 @@ const CreateModal = () => {
             <>
               <Formik
                 initialValues={initialValues}
-                validationSchema={createSchema}
+                validationSchema={updateSchema}
                 onSubmit={onSubmit}
               >
-                {(props: FormikProps<any>) => (
+                {(props: FormikProps<ClientCreateInput>) => (
                   <Form>
-                    <ModalHeader>Add Account</ModalHeader>
+                    <ModalHeader>Update Client</ModalHeader>
                     <ModalBody>
+                      <Field type="hidden" name="id" />
+
                       <Field name="name">
                         {({ field, meta }: FieldProps) => (
                           <div>
@@ -73,27 +87,6 @@ const CreateModal = () => {
                           </div>
                         )}
                       </Field>
-
-                      <Field name="starting_balance">
-                        {({ field, meta }: FieldProps) => (
-                          <div>
-                            <Input
-                              {...field}
-                              type="text"
-                              size="md"
-                              variant="bordered"
-                              label="Starting Balance"
-                              labelPlacement="outside"
-                              placeholder="Enter Starting Balance"
-                            />
-                            {meta.touched && meta.error && (
-                              <small className="text-red-500">
-                                {meta.error}
-                              </small>
-                            )}
-                          </div>
-                        )}
-                      </Field>
                     </ModalBody>
                     <ModalFooter>
                       <Button
@@ -101,7 +94,7 @@ const CreateModal = () => {
                         type="submit"
                         isLoading={props.isSubmitting}
                       >
-                        Save
+                        Update
                       </Button>
                       <Button color="danger" onPress={onClose}>
                         Cancel
@@ -118,4 +111,4 @@ const CreateModal = () => {
   );
 };
 
-export default CreateModal;
+export default UpdateModal;

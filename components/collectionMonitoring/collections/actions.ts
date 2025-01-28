@@ -9,7 +9,7 @@ import {
   create as createSchema,
   update as updateSchema,
   markAsPaid as markAsPaidSchema,
-} from "@/components/contractMonitoring/contracts/schemas";
+} from "@/components/collectionMonitoring/collections/schemas";
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";

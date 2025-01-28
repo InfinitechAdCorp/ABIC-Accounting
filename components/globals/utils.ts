@@ -3,13 +3,13 @@ import {
   AccountWithTransactions,
   FormattedTransaction,
   TransactionWithAccount,
-} from "@/components/transactionMonitoring/types";
+} from "@/components/transactionHistory/types";
 import {
   FormattedClient,
   ClientWithContracts,
   FormattedContract,
   ContractWithClient,
-} from "@/components/contractMonitoring/types";
+} from "@/components/collectionMonitoring/types";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { ActionResponse } from "@/components/globals/types";
@@ -175,7 +175,9 @@ export const dateValueToDate = (dateValue: DateValue | null) => {
   let formattedDate;
 
   if (dateValue) {
-    formattedDate = new Date(new Date(dateValue.toString()).setUTCHours(0, 0, 0, 0));
+    formattedDate = new Date(
+      new Date(dateValue.toString()).setUTCHours(0, 0, 0, 0)
+    );
   }
 
   return formattedDate;

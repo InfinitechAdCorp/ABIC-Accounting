@@ -1,8 +1,8 @@
 import React from "react";
-import { getAll } from "@/components/contractMonitoring/clients/actions";
+import { getAll } from "@/components/collectionMonitoring/collectionClients/actions";
 import { Card, CardBody } from "@nextui-org/react";
 import { formatClients } from "@/components/globals/utils";
-import DataTable from "@/components/contractMonitoring/clients/dataTable";
+import DataTable from "@/components/collectionMonitoring/collectionClients/dataTable";
 import Navbar from "@/components/globals/navbar";
 
 export const dynamic = "force-dynamic";

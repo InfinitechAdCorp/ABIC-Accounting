@@ -1,12 +1,12 @@
 import React from "react";
-import { getAll as getTransactions } from "@/components/transactionMonitoring/transactions/actions";
-import { getAll as getAccounts } from "@/components/transactionMonitoring/accounts/actions";
+import { getAll as getTransactions } from "@/components/transactionHistory/transactions/actions";
+import { getAll as getAccounts } from "@/components/transactionHistory/transactionClients/actions";
 import { Card, CardBody } from "@nextui-org/react";
 import { formatAccounts, formatTransactions } from "@/components/globals/utils";
-import DataTable from "@/components/transactionMonitoring/transactions/dataTable";
+import DataTable from "@/components/transactionHistory/transactions/dataTable";
 import Navbar from "@/components/globals/navbar";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 const Transactions = async () => {
   const columns = [

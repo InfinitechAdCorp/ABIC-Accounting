@@ -11,7 +11,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { ActionResponse } from "@/components/globals/types";
-import { markAsPaid as markAsPaidSchema } from "@/components/contractMonitoring/contracts/schemas";
+import { markAsPaid as markAsPaidSchema } from "@/components/collectionMonitoring/collections/schemas";
 import { Formik, Form, Field, FormikProps } from "formik";
 import { handlePostSubmit } from "@/components/globals/utils";
 import { MdPayments } from "react-icons/md";
