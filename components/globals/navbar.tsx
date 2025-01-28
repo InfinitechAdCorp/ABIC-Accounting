@@ -19,7 +19,7 @@ const Navbar = () => {
   const isActive = (hrefs: string[]) => hrefs.includes(pathname);
 
   const logout = () => {
-    setIsLoggedIn(false)
+    setIsLoggedIn(false);
     toast.success("Logged Out");
   };
 
@@ -27,7 +27,7 @@ const Navbar = () => {
     if (!isLoggedIn) {
       sessionStorage.clear();
     }
-  }, []);
+  }, [isLoggedIn]);
 
   return (
     <>
@@ -111,7 +111,14 @@ const Navbar = () => {
           </Dropdown>
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-4">
+          <Link href="/loancalculator" className="text-center">
+            <h3
+              className={"text-sm md:text-base font-semibold text-white cursor-pointer"}
+            >
+              Loan Calculator
+            </h3>
+          </Link>
           <Link href="/" className="text-center">
             <h3
               className={"text-sm md:text-base font-semibold text-white cursor-pointer"}
