@@ -1,8 +1,8 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, Account } from "@prisma/client";
 
 export type FormattedTransactionClient = {
   id: string;
-  account?: Prisma.AccountSelect;
+  account?: Account;
   account_id?: string;
   transactions?: FormattedTransaction[];
   name: string;

@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
-import { Prisma, TransactionClient } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { ActionResponse } from "@/components/globals/types";
 import { revalidatePath } from "next/cache";
 import {
@@ -12,14 +12,11 @@ import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 
-export const getAll = async () => {
-  type Response = {
-    code: number;
-    message: string;
-    transactionClients: TransactionClient[];
-  };
+type TransactionClientCreateInput = Prisma.TransactionClientCreateInput & {
+  account_id?: string;
+};
 
-  let response: Response;
+export const getAll = async () => {
   let transactionClients = [];
 
   try {
@@ -27,24 +24,23 @@ export const getAll = async () => {
       include: { transactions: true },
     });
 
-    response = {
+    const response = {
       code: 200,
       message: "Fetched Clients",
       transactionClients: transactionClients,
     };
+    return response;
   } catch {
-    response = {
+    const response = {
       code: 500,
       message: "Server Error",
       transactionClients: [],
     };
+    return response;
   }
-
-  return response;
 };
 
-export const create = async (values: Prisma.TransactionClientCreateInput) => {
-  let response: ActionResponse;
+export const create = async (values: TransactionClientCreateInput) => {
   const schema = createSchema;
 
   try {
@@ -52,7 +48,7 @@ export const create = async (values: Prisma.TransactionClientCreateInput) => {
   } catch (errors) {
     const formattedErrors = formatErrors(errors as Yup.ValidationError);
 
-    response = {
+    const response = {
       code: 429,
       message: "Validation Error",
       errors: formattedErrors,
@@ -60,29 +56,24 @@ export const create = async (values: Prisma.TransactionClientCreateInput) => {
     return response;
   }
 
-  const nameExists = await prisma.transactionClient.findFirst({
-    where: { name: values.name },
-  });
-
-  if (!nameExists) {
-    try {
-      await prisma.transactionClient.create({ data: { ...values } });
-      revalidatePath("/transaction-clients");
-      response = { code: 200, message: "Added Client" };
-    } catch {
-      response = { code: 500, message: "Server Error" };
-    }
-  } else {
-    response = {
-      code: 429,
-      message: "Name Is Already Taken",
-    };
+  try {
+    await prisma.transactionClient.create({
+      data: {
+        account: { connect: { id: values.account_id } },
+        name: values.name,
+      },
+    });
+  } catch {
+    const response = { code: 500, message: "Server Error" };
+    return response;
   }
 
+  revalidatePath("/transaction-clients");
+  const response = { code: 200, message: "Added Client" };
   return response;
 };
 
-export const update = async (values: Prisma.TransactionClientCreateInput) => {
+export const update = async (values: TransactionClientCreateInput) => {
   const schema = updateSchema;
 
   try {
@@ -98,33 +89,18 @@ export const update = async (values: Prisma.TransactionClientCreateInput) => {
     return response;
   }
 
-  const nameExists = await prisma.transactionClient.findFirst({
-    where: { name: values.name },
-  });
-
-  const transactionClient = await prisma.transactionClient.findFirst({
-    where: { id: values.id },
-  });
-
-  if (!nameExists || transactionClient?.name == values.name) {
-    try {
-      await prisma.transactionClient.update({
-        where: {
-          id: values.id,
-        },
-        data: {
-          name: values.name,
-        },
-      });
-    } catch {
-      const response: ActionResponse = { code: 500, message: "Server Error" };
-      return response;
-    }
-  } else {
-    const response: ActionResponse = {
-      code: 429,
-      message: "Name Is Already Taken",
-    };
+  try {
+    await prisma.transactionClient.update({
+      where: {
+        id: values.id,
+      },
+      data: {
+        account: { connect: { id: values.account_id } },
+        name: values.name,
+      },
+    });
+  } catch {
+    const response: ActionResponse = { code: 500, message: "Server Error" };
     return response;
   }
 

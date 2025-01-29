@@ -14,7 +14,7 @@ import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 
 type TransactionCreateInput = Prisma.TransactionCreateInput & {
-  account_id?: string;
+  transaction_client_id?: string;
 };
 
 export const getAll = async () => {
@@ -59,51 +59,22 @@ export const create = async (values: TransactionCreateInput) => {
     return response;
   }
 
-  const voucherExists = await prisma.transaction.findFirst({
-    where: { voucher: values.voucher },
-  });
-
-  const checkExists = await prisma.transaction.findFirst({
-    where: { check: values.check },
-  });
-
-  if (voucherExists && checkExists) {
-    const response: ActionResponse = {
-      code: 429,
-      message: "Voucher and Check Numbers Are Already Taken",
-    };
+  try {
+    await prisma.transaction.create({
+      data: {
+        transaction_client: { connect: { id: values.transaction_client_id } },
+        date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
+        voucher: values.voucher,
+        check: values.check,
+        particulars: values.particulars,
+        type: values.type,
+        amount: values.amount,
+        status: values.status,
+      },
+    });
+  } catch {
+    const response: ActionResponse = { code: 500, message: "Server Error" };
     return response;
-  } else if (voucherExists || checkExists) {
-    if (voucherExists) {
-      const response: ActionResponse = {
-        code: 429,
-        message: "Voucher Number Is Already Taken",
-      };
-      return response;
-    } else if (checkExists) {
-      const response: ActionResponse = {
-        code: 429,
-        message: "Check Number Is Already Taken",
-      };
-      return response;
-    }
-  } else {
-    try {
-      await prisma.transaction.create({
-        data: {
-          date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
-          voucher: values.voucher,
-          check: values.check,
-          particulars: values.particulars,
-          type: values.type,
-          amount: values.amount,
-          account: { connect: { id: values.account_id } },
-        },
-      });
-    } catch {
-      const response: ActionResponse = { code: 500, message: "Server Error" };
-      return response;
-    }
   }
 
   revalidatePath("/transactions");
@@ -127,59 +98,23 @@ export const update = async (values: TransactionCreateInput) => {
     return response;
   }
 
-  const voucherExists = await prisma.transaction.findFirst({
-    where: { voucher: values.voucher },
-  });
-
-  const checkExists = await prisma.transaction.findFirst({
-    where: { check: values.check },
-  });
-
-  const transaction = await prisma.transaction.findFirst({
-    where: { id: values.id },
-  });
-
-  const validVoucher = !voucherExists || transaction?.voucher == values.voucher;
-  const validCheck = !checkExists || transaction?.check == values.check;
-
-  if (!validVoucher && !validCheck) {
-    const response: ActionResponse = {
-      code: 429,
-      message: "Voucher and Check Numbers Are Already Taken",
-    };
+  try {
+    await prisma.transaction.update({
+      where: { id: values.id },
+      data: {
+        transaction_client: { connect: { id: values.transaction_client_id } },
+        date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
+        voucher: values.voucher,
+        check: values.check,
+        particulars: values.particulars,
+        type: values.type,
+        amount: values.amount,
+        status: values.status,
+      },
+    });
+  } catch {
+    const response: ActionResponse = { code: 500, message: "Server Error" };
     return response;
-  } else if (!validVoucher || !validCheck) {
-    if (!validVoucher) {
-      const response: ActionResponse = {
-        code: 429,
-        message: "Voucher Number Is Already Taken",
-      };
-      return response;
-    } else if (!validCheck) {
-      const response: ActionResponse = {
-        code: 429,
-        message: "Check Number Is Already Taken",
-      };
-      return response;
-    }
-  } else {
-    try {
-      await prisma.transaction.update({
-        where: { id: values.id },
-        data: {
-          date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
-          voucher: values.voucher,
-          check: values.check,
-          particulars: values.particulars,
-          type: values.type,
-          amount: values.amount,
-          account: { connect: { id: values.account_id } },
-        },
-      });
-    } catch {
-      const response: ActionResponse = { code: 500, message: "Server Error" };
-      return response;
-    }
   }
 
   revalidatePath("/transactions");
