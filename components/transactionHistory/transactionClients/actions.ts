@@ -1,7 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
-import { Prisma } from "@prisma/client";
+import { Prisma, TransactionClient } from "@prisma/client";
 import { ActionResponse } from "@/components/globals/types";
 import { revalidatePath } from "next/cache";
 import {
@@ -13,30 +13,38 @@ import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 
 export const getAll = async () => {
+  type Response = {
+    code: number;
+    message: string;
+    transactionClients: TransactionClient[];
+  };
+
+  let response: Response;
   let transactionClients = [];
 
   try {
     transactionClients = await prisma.transactionClient.findMany({
       include: { transactions: true },
     });
+
+    response = {
+      code: 200,
+      message: "Fetched Clients",
+      transactionClients: transactionClients,
+    };
   } catch {
-    const response = {
+    response = {
       code: 500,
       message: "Server Error",
       transactionClients: [],
     };
-    return response;
   }
 
-  const response = {
-    code: 200,
-    message: "Fetched Clients",
-    transactionClients: transactionClients,
-  };
   return response;
 };
 
 export const create = async (values: Prisma.TransactionClientCreateInput) => {
+  let response: ActionResponse;
   const schema = createSchema;
 
   try {
@@ -44,7 +52,7 @@ export const create = async (values: Prisma.TransactionClientCreateInput) => {
   } catch (errors) {
     const formattedErrors = formatErrors(errors as Yup.ValidationError);
 
-    const response: ActionResponse = {
+    response = {
       code: 429,
       message: "Validation Error",
       errors: formattedErrors,
@@ -59,20 +67,18 @@ export const create = async (values: Prisma.TransactionClientCreateInput) => {
   if (!nameExists) {
     try {
       await prisma.transactionClient.create({ data: { ...values } });
+      revalidatePath("/transaction-clients");
+      response = { code: 200, message: "Added Client" };
     } catch {
-      const response: ActionResponse = { code: 500, message: "Server Error" };
-      return response;
+      response = { code: 500, message: "Server Error" };
     }
   } else {
-    const response: ActionResponse = {
+    response = {
       code: 429,
       message: "Name Is Already Taken",
     };
-    return response;
   }
 
-  revalidatePath("/transaction-clients");
-  const response: ActionResponse = { code: 200, message: "Added Client" };
   return response;
 };
 
