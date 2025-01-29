@@ -34,9 +34,9 @@ const CreateModal = () => {
     values: Prisma.AccountCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    createAction(values).then((response) =>
-      handlePostSubmit(response, actions, onClose)
-    );
+    createAction(values).then((response) => {
+      handlePostSubmit(response, actions, onClose);
+    });
   };
 
   return (

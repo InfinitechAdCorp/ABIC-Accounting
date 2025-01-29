@@ -2,7 +2,6 @@
 
 import prisma from "@/lib/db";
 import { Prisma } from "@prisma/client";
-import { revalidatePath } from "next/cache";
 import { ActionResponse } from "@/components/globals/types";
 import {
   create as createSchema,
@@ -28,6 +27,32 @@ export const getAll = async () => {
     code: 200,
     message: "Fetched Accounts",
     accounts: accounts,
+  };
+  return response;
+};
+
+export const get = async (accountID: string) => {
+  let account;
+
+  try {
+    account = await prisma.account.findUnique({
+      where: {
+        id: accountID
+      }
+    });
+  } catch {
+    const response = {
+      code: 500,
+      message: "Server Error",
+      account: account,
+    };
+    return response;
+  }
+
+  const response = {
+    code: 200,
+    message: "Fetched Account",
+    account: account,
   };
   return response;
 };
@@ -61,7 +86,6 @@ export const create = async (values: Prisma.AccountCreateInput) => {
     return response;
   }
 
-  revalidatePath("/accounts");
   const response: ActionResponse = { code: 200, message: "Added Account" };
   return response;
 };

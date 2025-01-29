@@ -9,17 +9,21 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 import { useRouter, usePathname } from "next/navigation";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
+import { Account } from "@prisma/client";
+import { get } from "@/components/accounts/actions";
 
 const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [accountID, setAccountID] = useState("");
+  const [account, setAccount] = useState<Account | null>();
 
   const isActive = (hrefs: string[]) => hrefs.includes(pathname);
 
   const logout = () => {
-    setIsLoggedIn(false)
+    setIsLoggedIn(false);
     toast.success("Logged Out");
   };
 
@@ -28,6 +32,21 @@ const Navbar = () => {
       sessionStorage.clear();
     }
   }, [isLoggedIn]);
+
+  useEffect(() => {
+    setAccountID(sessionStorage.getItem("accountID") as string);
+  }, []);
+
+  useEffect(() => {
+    if (accountID) {
+      const fetchAccount = async () => {
+        const response = await get(accountID);
+        setAccount(response.account);
+      };
+
+      fetchAccount();
+    }
+  }, [accountID]);
 
   return (
     <>
@@ -43,78 +62,86 @@ const Navbar = () => {
             </h3>
           </Link>
 
-          <Dropdown
-            classNames={{
-              content: "min-w-0",
-            }}
-          >
-            <DropdownTrigger className="text-center">
-              <h3
-                className={`text-sm md:text-base text-white cursor-pointer ${
-                  isActive(["/transaction-clients", "/transactions"])
-                    ? "font-black"
-                    : "font-semibold"
-                }`}
-              >
-                <span className="hidden lg:inline">Transaction History</span>
-                <span className="inline lg:hidden">Transactions</span>
-              </h3>
-            </DropdownTrigger>
+          {account?.transaction_history_access && (
+            <Dropdown
+              classNames={{
+                content: "min-w-0",
+              }}
+            >
+              <DropdownTrigger className="text-center">
+                <h3
+                  className={`text-sm md:text-base text-white cursor-pointer ${
+                    isActive(["/transaction-clients", "/transactions"])
+                      ? "font-black"
+                      : "font-semibold"
+                  }`}
+                >
+                  <span className="hidden lg:inline">Transaction History</span>
+                  <span className="inline lg:hidden">Transactions</span>
+                </h3>
+              </DropdownTrigger>
 
-            <DropdownMenu className="text-center">
-              <DropdownItem
-                onPress={() => router.push("/transaction-clients")}
-                key="Transaction Clients"
-              >
-                <h3 className="font-semibold">Clients</h3>
-              </DropdownItem>
-              <DropdownItem
-                onPress={() => router.push("/transactions")}
-                key="Transactions"
-              >
-                <h3 className="font-semibold">Transactions</h3>
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+              <DropdownMenu className="text-center">
+                <DropdownItem
+                  onPress={() => router.push("/transaction-clients")}
+                  key="Transaction Clients"
+                >
+                  <h3 className="font-semibold">Clients</h3>
+                </DropdownItem>
+                <DropdownItem
+                  onPress={() => router.push("/transactions")}
+                  key="Transactions"
+                >
+                  <h3 className="font-semibold">Transactions</h3>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          )}
 
-          <Dropdown
-            classNames={{
-              content: "min-w-0",
-            }}
-          >
-            <DropdownTrigger className="text-center">
-              <h3
-                className={`text-sm md:text-base text-white cursor-pointer ${
-                  isActive(["/collection-clients", "/collections"])
-                    ? "font-black"
-                    : "font-semibold"
-                }`}
-              >
-                <span className="hidden lg:inline">Collection Monitoring</span>
-                <span className="inline lg:hidden">Collections</span>
-              </h3>
-            </DropdownTrigger>
-            <DropdownMenu className="text-center">
-              <DropdownItem
-                onPress={() => router.push("/collection-clients")}
-                key="Collection Clients"
-              >
-                <h3 className="font-semibold">Clients</h3>
-              </DropdownItem>
-              <DropdownItem
-                onPress={() => router.push("/collections")}
-                key="Collections"
-              >
-                <h3 className="font-semibold">Collections</h3>
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          {account?.collection_monitoring_access && (
+            <Dropdown
+              classNames={{
+                content: "min-w-0",
+              }}
+            >
+              <DropdownTrigger className="text-center">
+                <h3
+                  className={`text-sm md:text-base text-white cursor-pointer ${
+                    isActive(["/collection-clients", "/collections"])
+                      ? "font-black"
+                      : "font-semibold"
+                  }`}
+                >
+                  <span className="hidden lg:inline">
+                    Collection Monitoring
+                  </span>
+                  <span className="inline lg:hidden">Collections</span>
+                </h3>
+              </DropdownTrigger>
+              <DropdownMenu className="text-center">
+                <DropdownItem
+                  onPress={() => router.push("/collection-clients")}
+                  key="Collection Clients"
+                >
+                  <h3 className="font-semibold">Clients</h3>
+                </DropdownItem>
+                <DropdownItem
+                  onPress={() => router.push("/collections")}
+                  key="Collections"
+                >
+                  <h3 className="font-semibold">Collections</h3>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          )}
         </div>
 
         <div className="flex justify-end">
           <Link href="/" className="text-center">
             <h3
-              className={"text-sm md:text-base font-semibold text-white cursor-pointer"}
+              className={
+                "text-sm md:text-base font-semibold text-white cursor-pointer"
+              }
               onClick={logout}
             >
               Logout

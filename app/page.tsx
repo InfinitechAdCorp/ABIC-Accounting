@@ -29,10 +29,6 @@ const Login = () => {
   };
 
   useEffect(() => {
-    sessionStorage.clear();
-  }, []);
-
-  useEffect(() => {
     if (isLoggedIn) {
       sessionStorage.setItem("isLoggedIn", "true");
     }
