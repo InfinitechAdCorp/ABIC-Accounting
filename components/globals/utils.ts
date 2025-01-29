@@ -11,7 +11,7 @@ import {
   CollectionWithCollectionClient,
 } from "@/components/collectionMonitoring/types";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
 import { ActionResponse } from "@/components/globals/types";
 import { DateValue, parseDate } from "@internationalized/date";
 

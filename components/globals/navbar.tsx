@@ -9,7 +9,7 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 import { useRouter, usePathname } from "next/navigation";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
 
 const Navbar = () => {
   const router = useRouter();

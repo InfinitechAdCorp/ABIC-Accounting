@@ -11,7 +11,7 @@ import {
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { login } from "@/components/globals/auth";
-import { toast } from "react-toastify";
+import toast from 'react-hot-toast';
 import Image from "next/image";
 
 const Login = () => {
@@ -22,7 +22,7 @@ const Login = () => {
     if (isValid) {
       setIsLoggedIn(true);
       toast.success("Logged In");
-      router.push("/dashboard");
+      router.push("/accounts");
     } else {
       toast.error("Invalid Credentials");
     }

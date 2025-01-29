@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { Providers } from "@/app/providers";
-import { ToastContainer } from "react-toastify";
-import Navbar from "@/components/globals/navbar";
+import { Toaster } from 'react-hot-toast';
 
 import "@/styles/globals.css";
-import "react-toastify/dist/ReactToastify.css";
 
 const montserrat = Montserrat({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -33,7 +31,7 @@ export default function RootLayout({
       <body>
         <Providers>
           {children}
-          <ToastContainer autoClose={1300} />
+          <Toaster position="top-center" />
         </Providers>
       </body>
     </html>
