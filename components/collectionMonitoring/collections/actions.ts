@@ -14,13 +14,13 @@ import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 
-type ContractCreateInput = Prisma.ContractCreateInput & { client_id?: string };
+type CollectionCreateInput = Prisma.CollectionCreateInput & { collection_client_id?: string };
 
 export const getAll = async () => {
-  let contracts = [];
+  let collections = [];
   try {
-    contracts = await prisma.contract.findMany({
-      include: { client: true },
+    collections = await prisma.collection.findMany({
+      include: { collection_client: true },
     });
   } catch {
     const response = {
@@ -33,13 +33,13 @@ export const getAll = async () => {
 
   const response = {
     code: 200,
-    message: "Fetched Contracts",
-    contracts: contracts,
+    message: "Fetched Collections",
+    collections: collections,
   };
   return response;
 };
 
-export const create = async (values: ContractCreateInput) => {
+export const create = async (values: CollectionCreateInput) => {
   const schema = createSchema;
 
   try {
@@ -56,8 +56,9 @@ export const create = async (values: ContractCreateInput) => {
   }
 
   try {
-    await prisma.contract.create({
+    await prisma.collection.create({
       data: {
+        collection_client: { connect: { id: values.collection_client_id } },
         property: values.property,
         location: values.location,
         start: new Date(new Date(values.start).setUTCHours(0, 0, 0, 0)),
@@ -68,7 +69,6 @@ export const create = async (values: ContractCreateInput) => {
         owner_income: values.owner_income,
         abic_income: values.abic_income,
         due: new Date(new Date(values.due).setUTCHours(0, 0, 0, 0)),
-        client: { connect: { id: values.client_id } },
       },
     });
   } catch {
@@ -76,12 +76,12 @@ export const create = async (values: ContractCreateInput) => {
     return response;
   }
 
-  revalidatePath("/contracts");
-  const response: ActionResponse = { code: 200, message: "Added Contract" };
+  revalidatePath("/collections");
+  const response: ActionResponse = { code: 200, message: "Added Collection" };
   return response;
 };
 
-export const update = async (values: ContractCreateInput) => {
+export const update = async (values: CollectionCreateInput) => {
   const schema = updateSchema;
 
   try {
@@ -98,9 +98,10 @@ export const update = async (values: ContractCreateInput) => {
   }
 
   try {
-    await prisma.contract.update({
+    await prisma.collection.update({
       where: { id: values.id },
       data: {
+        collection_client: { connect: { id: values.collection_client_id } },
         property: values.property,
         location: values.location,
         start: new Date(new Date(values.start).setUTCHours(0, 0, 0, 0)),
@@ -111,7 +112,6 @@ export const update = async (values: ContractCreateInput) => {
         owner_income: values.owner_income,
         abic_income: values.abic_income,
         due: new Date(new Date(values.due).setUTCHours(0, 0, 0, 0)),
-        client: { connect: { id: values.client_id } },
       },
     });
   } catch {
@@ -119,8 +119,8 @@ export const update = async (values: ContractCreateInput) => {
     return response;
   }
 
-  revalidatePath("/contracts");
-  const response: ActionResponse = { code: 200, message: "Updated Contract" };
+  revalidatePath("/collections");
+  const response: ActionResponse = { code: 200, message: "Updated Collection" };
   return response;
 };
 
@@ -141,7 +141,7 @@ export const destroy = async (values: { id: string }) => {
   }
 
   try {
-    await prisma.contract.delete({
+    await prisma.collection.delete({
       where: { id: values.id },
     });
   } catch {
@@ -149,8 +149,8 @@ export const destroy = async (values: { id: string }) => {
     return response;
   }
 
-  revalidatePath("/contracts");
-  const response: ActionResponse = { code: 200, message: "Deleted Contract" };
+  revalidatePath("/collections");
+  const response: ActionResponse = { code: 200, message: "Deleted Collection" };
   return response;
 };
 
@@ -171,14 +171,14 @@ export const markAsPaid = async (values: { id: string }) => {
   }
 
   const id = values.id;
-  const contract = await prisma.contract.findUnique({ where: { id: id } });
+  const collection = await prisma.collection.findUnique({ where: { id: id } });
 
-  const due_day = getDate(contract?.start as Date);
-  let due = addMonths(contract?.due as Date, 1);
+  const due_day = getDate(collection?.start as Date);
+  let due = addMonths(collection?.due as Date, 1);
   due = setDate(due, due_day);
 
   try {
-    await prisma.contract.update({
+    await prisma.collection.update({
       where: { id: id },
       data: { due: due },
     });
@@ -187,7 +187,7 @@ export const markAsPaid = async (values: { id: string }) => {
     return response;
   }
 
-  revalidatePath("/contracts");
+  revalidatePath("/collections");
   const response: ActionResponse = {
     code: 200,
     message: "Successfully Made Payment",
