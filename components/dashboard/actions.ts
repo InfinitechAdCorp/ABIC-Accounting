@@ -4,25 +4,39 @@ import prisma from "@/lib/db";
 
 export const getCounts = async (accountID: string) => {
   const counts = {
-    clients: 0,
+    transactionClients: 0,
     transactions: 0,
     collections: 0,
   };
 
   try {
-    const clients = await prisma.transactionClient.aggregate({
-      _count: { id: true },
-    });
-    const transactions = await prisma.transaction.aggregate({
-      _count: { id: true },
-    });
-    const collections = await prisma.collection.aggregate({
-      _count: { id: true },
+    const account = await prisma.account.findUnique({
+      where: { id: accountID },
+      include: {
+        transaction_clients: true,
+        collection_clients: true,
+      },
     });
 
-    counts.clients = clients._count.id;
-    counts.transactions = transactions._count.id;
-    counts.collections = collections._count.id;
+    const transactions = await prisma.transaction.findMany({
+      where: {
+        transaction_client: {
+          account_id: accountID,
+        }
+      }
+    })
+
+    const collections = await prisma.collection.findMany({
+      where: {
+        collection_client: {
+          account_id: accountID,
+        }
+      }
+    })
+
+    counts.transactionClients = account?.transaction_clients.length as number;
+    counts.transactions = transactions.length;
+    counts.collections = collections.length;
   } catch {
     const response = {
       code: 500,
@@ -39,4 +53,3 @@ export const getCounts = async (accountID: string) => {
   };
   return response;
 };
-

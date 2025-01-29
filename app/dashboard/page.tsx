@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 export const dynamic = "force-dynamic";
 
 export type Counts = {
-  clients: number;
+  transactionClients: number;
   transactions: number;
   collections: number;
 };
@@ -20,11 +20,7 @@ const Dashboard = () => {
   const router = useRouter();
   const [accountID, setAccountID] = useState("");
 
-  const [counts, setCounts] = useState<Counts>({
-    clients: 0,
-    transactions: 0,
-    collections: 0,
-  });
+  const [counts, setCounts] = useState<Counts>();
 
   useEffect(() => {
     setAccountID(sessionStorage.getItem("accountID") as string);
@@ -32,12 +28,12 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchCounts = async () => {
-      const countsResponse = await getCounts(accountID);
-      setCounts(countsResponse.counts);
+      const response = await getCounts(accountID);
+      setCounts(response.counts);
     };
 
     fetchCounts();
-  }, []);
+  }, [accountID]);
 
   return (
     <>
@@ -64,7 +60,9 @@ const Dashboard = () => {
               </div>
 
               <div className="flex flex-col justify-center items-center">
-                <h1 className="font-extrabold text-3xl">{counts.clients}</h1>
+                <h1 className="font-extrabold text-3xl">
+                  {counts?.transactionClients}
+                </h1>
                 <h4 className="text-neutral-500">Clients</h4>
               </div>
             </CardBody>
@@ -84,7 +82,7 @@ const Dashboard = () => {
 
               <div className="flex flex-col justify-center items-center">
                 <h1 className="font-extrabold text-3xl">
-                  {counts.transactions}
+                  {counts?.transactions}
                 </h1>
                 <h4 className="text-neutral-500">Transactions</h4>
               </div>
@@ -105,7 +103,7 @@ const Dashboard = () => {
 
               <div className="flex flex-col justify-center items-center">
                 <h1 className="font-extrabold text-3xl">
-                  {counts.collections}
+                  {counts?.collections}
                 </h1>
                 <h4 className="text-neutral-500">Collections</h4>
               </div>
