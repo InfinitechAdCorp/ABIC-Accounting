@@ -12,7 +12,6 @@ import {
   Button,
   useDisclosure,
   Input,
-  CheckboxGroup,
   Checkbox,
 } from "@nextui-org/react";
 import { create as createSchema } from "@/components/accounts/schemas";
@@ -35,15 +34,14 @@ const CreateModal = () => {
     values: Prisma.AccountCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    console.log(values);
-    // createAction(values).then((response) =>
-    //   handlePostSubmit(response, actions, onClose)
-    // );
+    createAction(values).then((response) =>
+      handlePostSubmit(response, actions, onClose)
+    );
   };
 
   return (
     <>
-      <Card className="mb-3" onPress={onOpen} isHoverable isPressable>
+      <Card className="mb-1" onPress={onOpen} isHoverable isPressable>
         <CardBody className="flex items-center justify-center h-60">
           <PlusIcon size={50} />
           <h3 className="text-sm md:text-xl font-bold">Add Account</h3>
@@ -84,6 +82,7 @@ const CreateModal = () => {
                         )}
                       </Field>
 
+                      <label>Select Access</label>
                       <div className="flex gap-3">
                         <Field name="transaction_history_access">
                           {({ field, meta }: FieldProps) => (

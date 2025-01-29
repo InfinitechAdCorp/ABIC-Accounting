@@ -38,7 +38,7 @@ const Accounts = () => {
           <div className="grid grid-cols-4 gap-5">
             <CreateModal />
             {accounts.map((account) => (
-              <Card className="mb-3" key={account.id}>
+              <Card className="mb-1" key={account.id}>
                 <CardBody className="flex items-center justify-center h-60">
                   <h3 className="text-sm md:text-xl font-bold">
                     {account.name}
