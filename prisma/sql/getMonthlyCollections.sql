@@ -1,0 +1,1 @@
+SELECT TO_CHAR(start, 'Month') AS month, CAST(Count(id) AS INTEGER) AS count FROM collections WHERE Extract(YEAR FROM start) = $1 GROUP BY month;

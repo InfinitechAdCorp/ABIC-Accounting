@@ -12,18 +12,17 @@ import { useRouter } from "next/navigation";
 export const dynamic = "force-dynamic";
 
 export type Counts = {
-  accounts: number;
-  transactions: number;
-  clients: number;
-  contracts: number;
+  clients: number,
+  transactions: number,
+  collections: number,
 };
 
 export type Charts = {
-  accountsWithTransactions: {
+  clientsWithTransactions: {
     name: string;
     count: number;
   }[];
-  clientsWithContracts: {
+  clientsWithCollections: {
     name: string;
     count: number;
   }[];
@@ -31,7 +30,7 @@ export type Charts = {
     month: string;
     count: number;
   }[];
-  monthlyContracts: {
+  monthlyCollections: {
     month: string;
     count: number;
   }[];
@@ -40,17 +39,16 @@ export type Charts = {
 const Dashboard = () => {
   const router = useRouter();
   const [counts, setCounts] = useState<Counts>({
-    accounts: 0,
-    transactions: 0,
     clients: 0,
-    contracts: 0,
+    transactions: 0,
+    collections: 0,
   });
 
   const [charts, setCharts] = useState<Charts>({
-    accountsWithTransactions: [],
-    clientsWithContracts: [],
+    clientsWithTransactions: [],
+    clientsWithCollections: [],
     monthlyTransactions: [],
-    monthlyContracts: [],
+    monthlyCollections: [],
   });
 
   useEffect(() => {
@@ -77,106 +75,79 @@ const Dashboard = () => {
           <h1 className="font-bold text-2xl mb-5">Dashboard</h1>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-          <div>
-            <div className="grid grid-cols-2 gap-3 mb-3">
-              <Card
-                className="cursor-pointer"
-                title="View Accounts"
-                isPressable
-                isHoverable
-                onPress={() => {router.push("/accounts")}}
-              >
-                <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
-                  <div className="flex justify-center items-center">
-                    <FaUsers size={56} />
-                  </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 px-5 lg:px-24 xl:px-60 gap-3 mb-3">
+          <Card
+            className="cursor-pointer"
+            title="View Clients"
+            isPressable
+            isHoverable
+            onPress={() => {
+              router.push("/transaction-clients");
+            }}
+          >
+            <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
+              <div className="flex justify-center items-center">
+                <FaUsers size={56} />
+              </div>
 
-                  <div className="flex flex-col justify-center items-center">
-                    <h1 className="font-extrabold text-3xl">
-                      {counts.accounts}
-                    </h1>
-                    <h4 className="text-neutral-500">Accounts</h4>
-                  </div>
-                </CardBody>
-              </Card>
+              <div className="flex flex-col justify-center items-center">
+                <h1 className="font-extrabold text-3xl">
+                  {counts.clients}
+                </h1>
+                <h4 className="text-neutral-500">Clients</h4>
+              </div>
+            </CardBody>
+          </Card>
 
-              <Card
-                className="cursor-pointer"
-                title="View Transactions"
-                isPressable
-                isHoverable
-                onPress={() => router.push("/transactions")}
-              >
-                <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
-                  <div className="flex justify-center items-center">
-                    <GrTransaction size={56} />
-                  </div>
+          <Card
+            className="cursor-pointer"
+            title="View Transactions"
+            isPressable
+            isHoverable
+            onPress={() => router.push("/transactions")}
+          >
+            <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
+              <div className="flex justify-center items-center">
+                <GrTransaction size={56} />
+              </div>
 
-                  <div className="flex flex-col justify-center items-center">
-                    <h1 className="font-extrabold text-3xl">
-                      {counts.transactions}
-                    </h1>
-                    <h4 className="text-neutral-500">Transactions</h4>
-                  </div>
-                </CardBody>
-              </Card>
-            </div>
-          </div>
+              <div className="flex flex-col justify-center items-center">
+                <h1 className="font-extrabold text-3xl">
+                  {counts.transactions}
+                </h1>
+                <h4 className="text-neutral-500">Transactions</h4>
+              </div>
+            </CardBody>
+          </Card>
 
-          <div>
-            <div className="grid grid-cols-2 gap-3 mb-3">
-              <Card
-                className="cursor-pointer"
-                title="View Clients"
-                isPressable
-                isHoverable
-                onPress={() => router.push("/clients")}
-              >
-                <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
-                  <div className="flex justify-center items-center">
-                    <FaUsers size={56} />
-                  </div>
+          <Card
+            className="cursor-pointer"
+            title="View Collections"
+            isPressable
+            isHoverable
+            onPress={() => router.push("/collections")}
+          >
+            <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
+              <div className="flex justify-center items-center">
+                <FaFileSignature size={56} />
+              </div>
 
-                  <div className="flex flex-col justify-center items-center">
-                    <h1 className="font-extrabold text-3xl">
-                      {counts.clients}
-                    </h1>
-                    <h4 className="text-neutral-500">Clients</h4>
-                  </div>
-                </CardBody>
-              </Card>
-
-              <Card
-                className="cursor-pointer"
-                title="View Contracts"
-                isPressable
-                isHoverable
-                onPress={() => router.push("/contracts")}
-              >
-                <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
-                  <div className="flex justify-center items-center">
-                    <FaFileSignature size={56} />
-                  </div>
-
-                  <div className="flex flex-col justify-center items-center">
-                    <h1 className="font-extrabold text-3xl">
-                      {counts.contracts}
-                    </h1>
-                    <h4 className="text-neutral-500">Contracts</h4>
-                  </div>
-                </CardBody>
-              </Card>
-            </div>
-          </div>
+              <div className="flex flex-col justify-center items-center">
+                <h1 className="font-extrabold text-3xl">
+                  {counts.collections}
+                </h1>
+                <h4 className="text-neutral-500">Collections</h4>
+              </div>
+            </CardBody>
+          </Card>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
           <Card className="mb-3 h-72">
             <CardBody className="text-center pt-7">
               <Barchart
-                title="Transactions Per Account"
-                data={charts.accountsWithTransactions}
+                title="Transactions Per Client"
+                data={charts.clientsWithTransactions}
               />
             </CardBody>
           </Card>
@@ -184,8 +155,8 @@ const Dashboard = () => {
           <Card className="mb-3 h-72">
             <CardBody className="text-center pt-7">
               <Barchart
-                title="Contracts Per Client"
-                data={charts.clientsWithContracts}
+                title="Collections Per Client"
+                data={charts.clientsWithCollections}
               />
             </CardBody>
           </Card>
@@ -202,8 +173,8 @@ const Dashboard = () => {
           <Card className="mb-3 h-72">
             <CardBody className="text-center pt-7">
               <Barchart
-                title="Contracts Per Month"
-                data={charts.monthlyContracts}
+                title="Collections Per Month"
+                data={charts.monthlyCollections}
               />
             </CardBody>
           </Card>

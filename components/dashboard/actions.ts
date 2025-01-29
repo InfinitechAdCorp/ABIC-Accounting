@@ -3,29 +3,30 @@
 import prisma from "@/lib/db";
 import {
   getMonthlyTransactions,
-  getMonthlyContracts,
+  getMonthlyCollections,
 } from "@prisma/client/sql";
 
 export const getCounts = async () => {
   const counts = {
-    accounts: 0,
-    transactions: 0,
     clients: 0,
-    contracts: 0,
+    transactions: 0,
+    collections: 0,
   };
 
   try {
-    const accounts = await prisma.account.aggregate({ _count: { id: true } });
+    const clients = await prisma.transactionClient.aggregate({
+      _count: { id: true },
+    });
     const transactions = await prisma.transaction.aggregate({
       _count: { id: true },
     });
-    const clients = await prisma.client.aggregate({ _count: { id: true } });
-    const contracts = await prisma.contract.aggregate({ _count: { id: true } });
+    const collections = await prisma.collection.aggregate({
+      _count: { id: true },
+    });
 
-    counts.accounts = accounts._count.id;
-    counts.transactions = transactions._count.id;
     counts.clients = clients._count.id;
-    counts.contracts = contracts._count.id;
+    counts.transactions = transactions._count.id;
+    counts.collections = collections._count.id;
   } catch {
     const response = {
       code: 500,
@@ -41,10 +42,10 @@ export const getCounts = async () => {
     counts: counts,
   };
   return response;
-}
+};
 
 export const getCharts = async () => {
-  const accounts = await prisma.account.findMany({
+  const transactionClients = await prisma.transactionClient.findMany({
     include: {
       _count: {
         select: {
@@ -62,17 +63,17 @@ export const getCharts = async () => {
     take: 7,
   });
 
-  const clients = await prisma.client.findMany({
+  const collectionClients = await prisma.collectionClient.findMany({
     include: {
       _count: {
         select: {
-          contracts: true,
+          collections: true,
         },
       },
     },
     orderBy: [
       {
-        contracts: {
+        collections: {
           _count: "desc",
         },
       },
@@ -80,32 +81,32 @@ export const getCharts = async () => {
     take: 7,
   });
 
-  type AccountWithTransactions = {
+  type ClientWithTransactions = {
     name: string;
     count: number;
   };
 
-  const accountsWithTransactions: AccountWithTransactions[] = [];
-  accounts.map((account) => {
-    const accountWithTransaction = {
-      name: account.name,
-      count: account._count.transactions,
+  const clientsWithTransactions: ClientWithTransactions[] = [];
+  transactionClients.map((transactionClient) => {
+    const clientWithTransactions = {
+      name: transactionClient.name,
+      count: transactionClient._count.transactions,
     };
-    accountsWithTransactions.push(accountWithTransaction);
+    clientsWithTransactions.push(clientWithTransactions);
   });
 
-  type ClientWithContracts = {
+  type ClientWithCollections = {
     name: string;
     count: number;
   };
 
-  const clientsWithContracts: ClientWithContracts[] = [];
-  clients.map((client) => {
-    const clientWithContracts = {
-      name: client.name,
-      count: client._count.contracts,
+  const clientsWithCollections: ClientWithCollections[] = [];
+  collectionClients.map((collectionClient) => {
+    const clientWithCollections = {
+      name: collectionClient.name,
+      count: collectionClient._count.collections,
     };
-    clientsWithContracts.push(clientWithContracts);
+    clientsWithCollections.push(clientWithCollections);
   });
 
   const today = new Date();
@@ -114,18 +115,18 @@ export const getCharts = async () => {
   const monthlyTransactions = await prisma.$queryRawTyped(
     getMonthlyTransactions(year)
   );
-  const monthlyContracts = await prisma.$queryRawTyped(
-    getMonthlyContracts(year)
+  const monthlyCollections = await prisma.$queryRawTyped(
+    getMonthlyCollections(year)
   );
 
   const formattedMonthlyTransactions = formatMonthlyData(monthlyTransactions);
-  const formattedMonthlyContracts = formatMonthlyData(monthlyContracts);
+  const formattedMonthlyCollections = formatMonthlyData(monthlyCollections);
 
   const charts = {
-    accountsWithTransactions: accountsWithTransactions,
-    clientsWithContracts: clientsWithContracts,
+    clientsWithTransactions: clientsWithTransactions,
+    clientsWithCollections: clientsWithCollections,
     monthlyTransactions: formattedMonthlyTransactions,
-    monthlyContracts: formattedMonthlyContracts,
+    monthlyCollections: formattedMonthlyCollections,
   };
 
   const response = {
@@ -134,16 +135,15 @@ export const getCharts = async () => {
     charts: charts,
   };
   return response;
-}
-
-type MonthData = {
-  month: string;
-  count: number;
 };
 
 const formatMonthlyData = (
-  records: getMonthlyTransactions.Result[] | getMonthlyContracts.Result[]
+  records: getMonthlyTransactions.Result[] | getMonthlyCollections.Result[]
 ) => {
+  type MonthData = {
+    month: string;
+    count: number;
+  };
   type Half = "firstHalf" | "secondHalf";
 
   const months = {
@@ -157,7 +157,6 @@ const formatMonthlyData = (
   }
 
   const formattedRecords: MonthData[] = [];
-
   months[half as Half].forEach((month) => {
     const monthData = { month: month, count: 0 };
     records.forEach((record) => {

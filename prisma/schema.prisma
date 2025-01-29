@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["typedSql"]
 }
 
@@ -16,58 +16,75 @@ datasource db {
 }
 
 model Account {
-  id               String        @id @default(cuid())
-  name             String        @unique
-  starting_balance Decimal       @db.Decimal(15, 2)
-  transactions     Transaction[]
-  created_at       DateTime      @default(now())
-  updated_at       DateTime      @updatedAt
+  id                           String              @id @default(cuid())
+  transaction_clients          TransactionClient[]
+  collection_clients           CollectionClient[]
+  name                         String              @unique
+  transaction_history_access   Boolean
+  collection_monitoring_access Boolean
+  created_at                   DateTime            @default(now())
+  updated_at                   DateTime            @updatedAt
 
   @@map(name: "accounts")
 }
 
+model TransactionClient {
+  id           String        @id @default(cuid())
+  account      Account?      @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  account_id   String?
+  transactions Transaction[]
+  name         String        @unique
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
+
+  @@map(name: "transaction_clients")
+}
+
 model Transaction {
-  id          String   @id @default(cuid())
-  date        DateTime @db.Date
-  voucher     String   @unique
-  check       String   @unique
-  account     Account? @relation(fields: [account_id], references: [id], onDelete: Cascade)
-  account_id  String?
-  particulars String   @db.Text
-  type        String
-  amount      Decimal  @db.Decimal(15, 2)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id                    String             @id @default(cuid())
+  transaction_client    TransactionClient? @relation(fields: [transaction_client_id], references: [id], onDelete: Cascade)
+  transaction_client_id String?
+  date                  DateTime           @db.Date
+  voucher               String             @unique
+  check                 String             @unique
+  particulars           String             @db.Text
+  type                  String
+  amount                Decimal            @db.Decimal(15, 2)
+  status                String
+  created_at            DateTime           @default(now())
+  updated_at            DateTime           @updatedAt
 
   @@map(name: "transactions")
 }
 
-model Client {
-  id         String     @id @default(cuid())
-  name       String     @unique
-  contracts  Contract[]
-  created_at DateTime   @default(now())
-  updated_at DateTime   @updatedAt
+model CollectionClient {
+  id          String       @id @default(cuid())
+  account     Account?     @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  account_id  String?
+  collections Collection[]
+  name        String       @unique
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
 
-  @@map(name: "clients")
+  @@map(name: "collection_clients")
 }
 
-model Contract {
-  id           String   @id @default(cuid())
-  client       Client?  @relation(fields: [client_id], references: [id], onDelete: Cascade)
-  client_id    String?
-  property     String
-  location     String
-  start        DateTime @db.Date
-  end          DateTime @db.Date
-  advance      Int
-  deposit      Int
-  tenant_price Decimal? @db.Decimal(15, 2)
-  owner_income Decimal? @db.Decimal(15, 2)
-  abic_income  Decimal? @db.Decimal(15, 2)
-  due          DateTime @db.Date
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
+model Collection {
+  id                   String            @id @default(cuid())
+  collection_client    CollectionClient? @relation(fields: [collection_client_id], references: [id], onDelete: Cascade)
+  collection_client_id String?
+  property             String
+  location             String
+  start                DateTime          @db.Date
+  end                  DateTime          @db.Date
+  advance              Int
+  deposit              Int
+  tenant_price         Decimal?          @db.Decimal(15, 2)
+  owner_income         Decimal?          @db.Decimal(15, 2)
+  abic_income          Decimal?          @db.Decimal(15, 2)
+  due                  DateTime          @db.Date
+  created_at           DateTime          @default(now())
+  updated_at           DateTime          @updatedAt
 
-  @@map(name: "contracts")
+  @@map(name: "collections")
 }

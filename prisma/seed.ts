@@ -3,73 +3,145 @@ import { Prisma, PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const accounts: Prisma.AccountCreateInput[] = [
-  { name: "Hu Yanchong", starting_balance: 5000000 },
-  { name: "Weiwei Chen", starting_balance: 3000000 },
-  { name: "Dan Li", starting_balance: 5000000 },
+  {
+    name: "SCB 443",
+    transaction_history_access: true,
+    collection_monitoring_access: true,
+  },
+  {
+    name: "SCB 483",
+    transaction_history_access: true,
+    collection_monitoring_access: false,
+  },
+  {
+    name: "SCB 202",
+    transaction_history_access: true,
+    collection_monitoring_access: false,
+  },
+];
+
+const transactionClients: Prisma.TransactionClientCreateInput[] = [
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    name: "Hu Yanchong",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    name: "Weiwei Chen",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    name: "Dan Li",
+  },
 ];
 
 const transactions: Prisma.TransactionCreateInput[] = [
   {
+    transaction_client: {
+      connectOrCreate: {
+        where: { name: transactionClients[0].name },
+        create: {
+          name: transactionClients[0].name,
+        },
+      },
+    },
     date: "2025-02-25T00:00:00.000Z",
     voucher: "5245",
     check: "24837",
     particulars: "Tivoli",
     type: "Credit",
     amount: 5000.5,
-    account: {
+    status: "Active",
+  },
+  {
+    transaction_client: {
       connectOrCreate: {
-        where: { name: "Hu Yanchong" },
+        where: { name: transactionClients[1].name },
         create: {
-          name: "Hu Yanchong",
-          starting_balance: 5000000,
+          name: transactionClients[1].name,
         },
       },
     },
-  },
-  {
     date: "2025-03-25T00:00:00.000Z",
     voucher: "4321",
     check: "76598",
     particulars: "Alea Residences",
     type: "Debit",
     amount: 3000.75,
-    account: {
+    status: "Active",
+  },
+  {
+    transaction_client: {
       connectOrCreate: {
-        where: { name: "Weiwei Chen" },
+        where: { name: transactionClients[2].name },
         create: {
-          name: "Weiwei Chen",
-          starting_balance: 3000000,
+          name: transactionClients[2].name,
         },
       },
     },
-  },
-  {
     date: "2025-04-20T00:00:00.000Z",
     voucher: "4256",
     check: "42783",
     particulars: "Jazz Residences",
     type: "Credit",
     amount: 4000.5,
-    account: {
-      connectOrCreate: {
-        where: { name: "Dan Li" },
-        create: {
-          name: "Dan Li",
-          starting_balance: 5000000,
-        },
-      },
-    },
+    status: "Active",
   },
 ];
 
-const clients: Prisma.ClientCreateInput[] = [
-  { name: "Jun Xie" },
-  { name: "Quan Long" },
-  { name: "Zong Guofeng" },
+const collectionClients: Prisma.CollectionClientCreateInput[] = [
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    name: "Jun Xie",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    name: "Quan Long",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    name: "Zong Guofeng",
+  },
 ];
 
-const contracts: Prisma.ContractCreateInput[] = [
+const collections: Prisma.CollectionCreateInput[] = [
   {
+    collection_client: {
+      connectOrCreate: {
+        where: { name: collectionClients[0].name },
+        create: collectionClients[0],
+      },
+    },
     property: "Alea Residences",
     location: "Bacoor",
     start: "2025-03-25T00:00:00.000Z",
@@ -80,16 +152,14 @@ const contracts: Prisma.ContractCreateInput[] = [
     owner_income: 3000,
     abic_income: 3000,
     due: "2025-05-25T00:00:00.000Z",
-    client: {
-      connectOrCreate: {
-        where: { name: "Jun Xie" },
-        create: {
-          name: "Jun Xie",
-        },
-      },
-    },
   },
   {
+    collection_client: {
+      connectOrCreate: {
+        where: { name: collectionClients[1].name },
+        create: collectionClients[1],
+      },
+    },
     property: "Tivoli Residences",
     location: "Makati",
     start: "2025-02-25T00:00:00.000Z",
@@ -100,16 +170,14 @@ const contracts: Prisma.ContractCreateInput[] = [
     owner_income: 5000,
     abic_income: 5000,
     due: "2025-04-25T00:00:00.000Z",
-    client: {
-      connectOrCreate: {
-        where: { name: "Quan Long" },
-        create: {
-          name: "Quan Long",
-        },
-      },
-    },
   },
   {
+    collection_client: {
+      connectOrCreate: {
+        where: { name: collectionClients[2].name },
+        create: collectionClients[2],
+      },
+    },
     property: "Oriental Place",
     location: "Makati",
     start: "2025-04-25T00:00:00.000Z",
@@ -120,49 +188,55 @@ const contracts: Prisma.ContractCreateInput[] = [
     owner_income: 7000,
     abic_income: 7000,
     due: "2025-06-25T00:00:00.000Z",
-    client: {
-      connectOrCreate: {
-        where: { name: "Zong Guofeng" },
-        create: {
-          name: "Zong Guofeng",
-        },
-      },
-    },
   },
 ];
 
 async function seeder() {
-  console.log("Started Seeding");
+  console.log("\nStarted Seeding\n");
 
-  await prisma.account.createMany({
-    data: accounts,
-  });
+  console.log("Seeding Accounts");
+  for (const account of accounts) {
+    await prisma.account.create({
+      data: account,
+    });
+  }
 
+  console.log("Seeding Transaction Clients");
+  for (const transactionClient of transactionClients) {
+    await prisma.transactionClient.create({
+      data: transactionClient,
+    });
+  }
+
+  console.log("Seeding Transactions");
   for (const transaction of transactions) {
     await prisma.transaction.create({
       data: transaction,
     });
   }
 
-  await prisma.client.createMany({
-    data: clients,
-  });
-
-  for (const contract of contracts) {
-    await prisma.contract.create({
-      data: contract,
+  console.log("Seeding Collection Clients");
+  for (const collectionClient of collectionClients) {
+    await prisma.collectionClient.create({
+      data: collectionClient,
     });
   }
 
-  console.log("Finished Seeding");
+  console.log("Seeding Collections");
+  for (const collection of collections) {
+    await prisma.collection.create({
+      data: collection,
+    });
+  }
+
+  console.log("\nFinished Seeding");
 }
 
 seeder()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
   .catch(async (e) => {
     console.error(e);
-    await prisma.$disconnect();
     process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
   });

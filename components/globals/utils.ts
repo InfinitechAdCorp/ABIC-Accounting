@@ -1,15 +1,15 @@
 import {
-  FormattedAccount,
-  AccountWithTransactions,
+  FormattedTransactionClient,
+  TransactionClientWithTransactions,
   FormattedTransaction,
-  TransactionWithAccount,
-} from "@/components/transactionMonitoring/types";
+  TransactionWithTransactionClient,
+} from "@/components/transactionHistory/types";
 import {
-  FormattedClient,
-  ClientWithContracts,
-  FormattedContract,
-  ContractWithClient,
-} from "@/components/contractMonitoring/types";
+  FormattedCollectionClient,
+  CollectionClientWithCollections,
+  FormattedCollection,
+  CollectionWithCollectionClient,
+} from "@/components/collectionMonitoring/types";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import { ActionResponse } from "@/components/globals/types";
@@ -35,48 +35,48 @@ export const handlePostSubmit = (
 
 // Data Formatters
 
-export const formatAccounts = (accounts: AccountWithTransactions[]) => {
-  const formattedAccounts: FormattedAccount[] = [];
+export const formatTransactionClients = (transactionClients: TransactionClientWithTransactions[]) => {
+  const formattedTransactionClients: FormattedTransactionClient[] = [];
 
-  if (accounts) {
-    accounts.forEach((account) => {
+  if (transactionClients) {
+    transactionClients.forEach((transactionClient) => {
       const formattedTransactions: FormattedTransaction[] = [];
-      account.transactions.forEach((transaction) => {
+      transactionClient.transactions.forEach((transaction) => {
         const formattedTransaction = {
           ...transaction,
-          account_id: transaction.account_id as string,
+          transaction_client_id: transaction.transaction_client_id as string,
           amount: transaction.amount.toNumber(),
         };
         formattedTransactions.push(formattedTransaction);
       });
 
-      const formattedAccount = {
-        ...account,
-        starting_balance: account.starting_balance.toNumber(),
+      const formattedTransactionClient = {
+        ...transactionClient,
+        account_id: transactionClient.account_id as string,
         transactions: formattedTransactions,
       };
-      formattedAccounts.push(formattedAccount);
+      formattedTransactionClients.push(formattedTransactionClient);
     });
   }
 
-  return formattedAccounts;
+  return formattedTransactionClients;
 };
 
-export const formatTransactions = (transactions: TransactionWithAccount[]) => {
+export const formatTransactions = (transactions: TransactionWithTransactionClient[]) => {
   const formattedTransactions: FormattedTransaction[] = [];
 
   transactions.forEach((transaction) => {
-    const account = transaction.account;
+    const transactionClient = transaction.transaction_client;
 
     const formattedTransaction = {
       ...transaction,
-      account: {
-        ...account,
-        id: account?.id as string,
-        name: account?.name as string,
-        starting_balance: account?.starting_balance.toNumber() as number,
+      transaction_client: {
+        ...transactionClient,
+        id: transactionClient?.id as string,
+        account_id: transactionClient?.account_id as string,
+        name: transactionClient?.name as string,
       },
-      account_id: transaction.account_id as string,
+      transaction_client_id: transaction.transaction_client_id as string,
       amount: transaction.amount.toNumber(),
     };
     formattedTransactions.push(formattedTransaction);
@@ -85,55 +85,57 @@ export const formatTransactions = (transactions: TransactionWithAccount[]) => {
   return formattedTransactions;
 };
 
-export const formatClients = (clients: ClientWithContracts[]) => {
-  const formattedClients: FormattedClient[] = [];
+export const formatCollectionClients = (collectionClients: CollectionClientWithCollections[]) => {
+  const formattedCollectionClients: FormattedCollectionClient[] = [];
 
-  clients.forEach((client) => {
-    const formattedContracts: FormattedContract[] = [];
-    client.contracts.forEach((contract) => {
-      const formattedContract = {
-        ...contract,
-        client_id: contract.client_id as string,
-        tenant_price: contract.tenant_price?.toNumber(),
-        owner_income: contract.owner_income?.toNumber(),
-        abic_income: contract.abic_income?.toNumber(),
+  collectionClients.forEach((collectionClient) => {
+    const formattedCollections: FormattedCollection[] = [];
+    collectionClient.collections.forEach((collection) => {
+      const formattedCollection = {
+        ...collection,
+        collection_client_id: collection.collection_client_id as string,
+        tenant_price: collection.tenant_price?.toNumber(),
+        owner_income: collection.owner_income?.toNumber(),
+        abic_income: collection.abic_income?.toNumber(),
       };
-      formattedContracts.push(formattedContract);
+      formattedCollections.push(formattedCollection);
     });
 
-    const formattedClient = {
-      ...client,
-      contracts: formattedContracts,
+    const formattedCollectionClient = {
+      ...collectionClient,
+      account_id: collectionClient.account_id as string,
+      collections: formattedCollections,
     };
-    formattedClients.push(formattedClient);
+    formattedCollectionClients.push(formattedCollectionClient);
   });
 
-  return formattedClients;
+  return formattedCollectionClients;
 };
 
-export const formatContracts = (contracts: ContractWithClient[]) => {
-  const formattedContracts: FormattedContract[] = [];
+export const formatCollections = (collections: CollectionWithCollectionClient[]) => {
+  const formattedCollections: FormattedCollection[] = [];
 
-  contracts.forEach((contract) => {
-    const client = contract.client;
+  collections.forEach((collection) => {
+    const collectionClient = collection.collection_client;
 
-    const formattedContract = {
-      ...contract,
-      client: {
-        ...client,
-        id: client?.id as string,
-        name: client?.name as string,
+    const formattedCollection = {
+      ...collection,
+      collection_client: {
+        ...collectionClient,
+        id: collectionClient?.id as string,
+        account_id: collectionClient?.account_id as string,
+        name: collectionClient?.name as string,
       },
-      client_id: contract.client_id as string,
-      tenant_price: contract.tenant_price?.toNumber() as number,
-      owner_income: contract.owner_income?.toNumber() as number,
-      abic_income: contract.abic_income?.toNumber() as number,
+      collection_client_id: collection.collection_client_id as string,
+      tenant_price: collection.tenant_price?.toNumber() as number,
+      owner_income: collection.owner_income?.toNumber() as number,
+      abic_income: collection.abic_income?.toNumber() as number,
     };
 
-    formattedContracts.push(formattedContract);
+    formattedCollections.push(formattedCollection);
   });
 
-  return formattedContracts;
+  return formattedCollections;
 };
 
 // Formatters
@@ -175,7 +177,9 @@ export const dateValueToDate = (dateValue: DateValue | null) => {
   let formattedDate;
 
   if (dateValue) {
-    formattedDate = new Date(new Date(dateValue.toString()).setUTCHours(0, 0, 0, 0));
+    formattedDate = new Date(
+      new Date(dateValue.toString()).setUTCHours(0, 0, 0, 0)
+    );
   }
 
   return formattedDate;
