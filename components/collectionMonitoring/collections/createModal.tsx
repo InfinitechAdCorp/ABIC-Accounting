@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -14,7 +14,7 @@ import {
   Select,
   SelectItem,
 } from "@nextui-org/react";
-import { FormattedClient } from "@/components/collectionMonitoring/types";
+import { FormattedCollectionClient } from "@/components/collectionMonitoring/types";
 import { create as createSchema } from "@/components/collectionMonitoring/collections/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
 import { create as createAction } from "@/components/collectionMonitoring/collections/actions";
@@ -26,18 +26,19 @@ import {
 } from "@/components/globals/utils";
 
 type Props = {
-  clients: FormattedClient[];
   locations: {
     key: string;
     name: string;
   }[];
+  collectionClients: FormattedCollectionClient[];
 };
 
-const CreateModal = ({ clients, locations }: Props) => {
+const CreateModal = ({ locations, collectionClients }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
-    client_id: "",
+    collection_client_id: "",
     property: "",
     location: "",
     start: "",
@@ -51,18 +52,20 @@ const CreateModal = ({ clients, locations }: Props) => {
   };
 
   const onSubmit = async (
-    values: Prisma.ContractCreateInput,
+    values: Prisma.CollectionCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    createAction(values).then((response) =>
-      handlePostSubmit(response, actions, onClose)
-    );
+    setSubmitting(true);
+    createAction(values).then((response) => {
+      setSubmitting(false);
+      handlePostSubmit(response, actions, onClose);
+    });
   };
 
   return (
     <>
       <Button color="primary" onPress={onOpen}>
-        Add Contract
+        Add Collection
       </Button>
 
       <Modal size="lg" isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -76,10 +79,10 @@ const CreateModal = ({ clients, locations }: Props) => {
               >
                 {(props: FormikProps<any>) => (
                   <Form>
-                    <ModalHeader>Add Contract</ModalHeader>
+                    <ModalHeader>Add Collection</ModalHeader>
                     <ModalBody>
                       <div className="grid grid-cols-2 gap-3">
-                        <Field name="client_id">
+                        <Field name="collection_client_id">
                           {({ field, meta }: FieldProps) => (
                             <div>
                               <Select
@@ -89,11 +92,11 @@ const CreateModal = ({ clients, locations }: Props) => {
                                 label="Client"
                                 labelPlacement="outside"
                                 placeholder="Select Client"
-                                items={clients}
+                                items={collectionClients}
                               >
-                                {(client) => (
-                                  <SelectItem key={client.id}>
-                                    {client.name}
+                                {(collectionClient) => (
+                                  <SelectItem key={collectionClient.id}>
+                                    {collectionClient.name}
                                   </SelectItem>
                                 )}
                               </Select>
@@ -344,7 +347,7 @@ const CreateModal = ({ clients, locations }: Props) => {
                       <Button
                         color="primary"
                         type="submit"
-                        isLoading={props.isSubmitting}
+                        isLoading={submitting}
                       >
                         Save
                       </Button>

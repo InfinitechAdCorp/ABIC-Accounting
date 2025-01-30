@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -11,7 +13,7 @@ import {
 } from "@nextui-org/react";
 import { FormattedCollectionClient } from "@/components/collectionMonitoring/types";
 import { update as updateSchema } from "@/components/collectionMonitoring/collectionClients/schemas";
-import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
+import { Formik, Form, Field, FieldProps } from "formik";
 import { update as updateAction } from "@/components/collectionMonitoring/collectionClients/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
@@ -23,6 +25,7 @@ type Props = {
 
 const UpdateModal = ({ collectionClient }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
     id: collectionClient.id,
@@ -34,9 +37,11 @@ const UpdateModal = ({ collectionClient }: Props) => {
     values: Prisma.CollectionClientCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    updateAction(values).then((response) =>
-      handlePostSubmit(response, actions, onClose)
-    );
+    setSubmitting(true);
+    updateAction(values).then((response) => {
+      setSubmitting(false);
+      handlePostSubmit(response, actions, onClose);
+    });
   };
 
   return (
@@ -60,7 +65,7 @@ const UpdateModal = ({ collectionClient }: Props) => {
                 validationSchema={updateSchema}
                 onSubmit={onSubmit}
               >
-                {(props: FormikProps<any>) => (
+                {() => (
                   <Form>
                     <ModalHeader>Update Client</ModalHeader>
                     <ModalBody>
@@ -92,7 +97,7 @@ const UpdateModal = ({ collectionClient }: Props) => {
                       <Button
                         color="primary"
                         type="submit"
-                        isLoading={props.isSubmitting}
+                        isLoading={submitting}
                       >
                         Update
                       </Button>

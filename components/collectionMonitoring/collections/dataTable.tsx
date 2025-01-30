@@ -21,15 +21,14 @@ import {
   Chip,
 } from "@nextui-org/react";
 import {
-  FormattedContract,
-  FormattedClient,
+  FormattedCollection,
+  FormattedCollectionClient,
 } from "@/components/collectionMonitoring/types";
 import { formatDate, formatNumber } from "@/components/globals/utils";
-import CreateContractModal from "@/components/collectionMonitoring/collections/createModal";
+import CreateCollectionModal from "@/components/collectionMonitoring/collections/createModal";
 import UpdateModal from "@/components/collectionMonitoring/collections/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
 import PaymentModal from "@/components/collectionMonitoring/collections/paymentModal";
-// import PaymentsModal from "@/components/contractMonitoring/contracts/paymentsModal";
 import {
   destroy,
   markAsPaid,
@@ -46,15 +45,16 @@ type column = {
 type Props = {
   model: string;
   columns: column[];
-  rows: FormattedContract[];
+  rows: FormattedCollection[];
   initialVisibleColumns: string[];
   searchKey: string;
   sortKey: string;
-  clients: FormattedClient[];
   locations: {
     key: string;
     name: string;
   }[];
+  accountID: string;
+  collectionClients: FormattedCollectionClient[];
 };
 
 const DataTable = ({
@@ -64,8 +64,9 @@ const DataTable = ({
   initialVisibleColumns,
   searchKey,
   sortKey,
-  clients,
   locations,
+  accountID,
+  collectionClients,
 }: Props) => {
   type Row = (typeof rows)[0];
 
@@ -131,17 +132,16 @@ const DataTable = ({
         return (
           <div className="relative flex justify-end items-center gap-2">
             <UpdateModal
-              contract={row}
-              clients={clients}
+              collection={row}
               locations={locations}
+              collectionClients={collectionClients}
             />
-            <DestroyModal title="Contract" action={destroy} id={row.id} />
+            <DestroyModal title="Collection" action={destroy} id={row.id} />
             <PaymentModal action={markAsPaid} id={row.id} />
-            {/* <PaymentsModal /> */}
           </div>
         );
       } else if (columnKey == "client") {
-        return row.client?.name;
+        return row.collection_client?.name;
       } else if (dateColumns.includes(columnKey)) {
         return formatDate(row[columnKey as keyof Row] as Date);
       } else if (moneyColumns.includes(columnKey)) {
@@ -189,7 +189,7 @@ const DataTable = ({
         return row[columnKey as keyof Row];
       }
     },
-    [clients, locations]
+    [locations, collectionClients]
   );
 
   const onNextPage = React.useCallback(() => {
@@ -264,9 +264,12 @@ const DataTable = ({
             </Dropdown>
 
             <div className="hidden sm:flex">
-              <CreateClientModal />
+              <CreateClientModal accountID={accountID} />
             </div>
-            <CreateContractModal clients={clients} locations={locations} />
+            <CreateCollectionModal
+              locations={locations}
+              collectionClients={collectionClients}
+            />
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -296,8 +299,9 @@ const DataTable = ({
     columns,
     model,
     rows.length,
-    clients,
     locations,
+    accountID,
+    collectionClients,
   ]);
 
   const bottomContent = React.useMemo(() => {
@@ -360,7 +364,7 @@ const DataTable = ({
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey: any) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
+                <TableCell>{renderCell(item, columnKey) as React.ReactNode}</TableCell>
               )}
             </TableRow>
           )}

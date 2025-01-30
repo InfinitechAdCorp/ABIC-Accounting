@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -15,8 +15,8 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 import {
-  FormattedContract,
-  FormattedClient,
+  FormattedCollection,
+  FormattedCollectionClient,
 } from "@/components/collectionMonitoring/types";
 import { update as updateSchema } from "@/components/collectionMonitoring/collections/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
@@ -30,39 +30,42 @@ import {
 import { FaPenToSquare } from "react-icons/fa6";
 
 type Props = {
-  contract: FormattedContract;
-  clients: FormattedClient[];
+  collection: FormattedCollection;
   locations: {
     key: string;
     name: string;
   }[];
+  collectionClients: FormattedCollectionClient[];
 };
 
-const UpdateModal = ({ contract, clients, locations }: Props) => {
+const UpdateModal = ({ collection, locations, collectionClients }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
-    id: contract.id,
-    client_id: contract.client_id,
-    property: contract.property,
-    location: contract.location,
-    start: contract.start,
-    end: contract.end,
-    advance: contract.advance,
-    deposit: contract.deposit,
-    tenant_price: contract.tenant_price,
-    owner_income: contract.owner_income,
-    abic_income: contract.abic_income,
-    due: contract.due,
+    id: collection.id,
+    collection_client_id: collection.collection_client_id,
+    property: collection.property,
+    location: collection.location,
+    start: collection.start,
+    end: collection.end,
+    advance: collection.advance,
+    deposit: collection.deposit,
+    tenant_price: collection.tenant_price,
+    owner_income: collection.owner_income,
+    abic_income: collection.abic_income,
+    due: collection.due,
   };
 
   const onSubmit = async (
-    values: Prisma.ContractCreateInput,
+    values: Prisma.CollectionCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    updateAction(values).then((response) =>
-      handlePostSubmit(response, actions, onClose)
-    );
+    setSubmitting(true);
+    updateAction(values).then((response) => {
+      setSubmitting(false)
+      handlePostSubmit(response, actions, onClose);
+    });
   };
 
   return (
@@ -89,12 +92,12 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
               >
                 {(props: FormikProps<any>) => (
                   <Form>
-                    <ModalHeader>Update Contract</ModalHeader>
+                    <ModalHeader>Update Collection</ModalHeader>
                     <ModalBody>
                       <Field type="hidden" name="id" />
 
                       <div className="grid grid-cols-2 gap-3">
-                        <Field name="client_id">
+                        <Field name="collection_client_id">
                           {({ field, meta }: FieldProps) => (
                             <div>
                               <Select
@@ -104,12 +107,12 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                                 label="Client"
                                 labelPlacement="outside"
                                 placeholder="Select Client"
-                                items={clients}
+                                items={collectionClients}
                                 defaultSelectedKeys={[field.value]}
                               >
-                                {(client) => (
-                                  <SelectItem key={client.id}>
-                                    {client.name}
+                                {(collectionClient) => (
+                                  <SelectItem key={collectionClient.id}>
+                                    {collectionClient.name}
                                   </SelectItem>
                                 )}
                               </Select>
@@ -361,7 +364,7 @@ const UpdateModal = ({ contract, clients, locations }: Props) => {
                       <Button
                         color="primary"
                         type="submit"
-                        isLoading={props.isSubmitting}
+                        isLoading={submitting}
                       >
                         Update
                       </Button>

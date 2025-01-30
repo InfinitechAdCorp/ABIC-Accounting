@@ -2,7 +2,6 @@
 
 import prisma from "@/lib/db";
 import { Prisma } from "@prisma/client";
-import { revalidatePath } from "next/cache";
 import { ActionResponse } from "@/components/globals/types";
 import { addMonths, getDate, setDate } from "date-fns";
 import {
@@ -13,24 +12,36 @@ import {
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
+import { formatCollections } from "@/components/globals/utils";
 
-type CollectionCreateInput = Prisma.CollectionCreateInput & { collection_client_id?: string };
+type CollectionCreateInput = Prisma.CollectionCreateInput & {
+  collection_client_id?: string;
+};
 
-export const getAll = async () => {
-  let collections = [];
+export const getAll = async (accountID: string) => {
+  let collections;
+
   try {
     collections = await prisma.collection.findMany({
-      include: { collection_client: true },
+      where: {
+        collection_client: {
+          account_id: accountID,
+        },
+      },
+      include: {
+        collection_client: true,
+      },
     });
   } catch {
     const response = {
       code: 500,
       message: "Server Error",
-      contracts: [],
+      collections: [],
     };
     return response;
   }
 
+  collections = formatCollections(collections || []);
   const response = {
     code: 200,
     message: "Fetched Collections",
@@ -76,7 +87,6 @@ export const create = async (values: CollectionCreateInput) => {
     return response;
   }
 
-  revalidatePath("/collections");
   const response: ActionResponse = { code: 200, message: "Added Collection" };
   return response;
 };
@@ -119,7 +129,6 @@ export const update = async (values: CollectionCreateInput) => {
     return response;
   }
 
-  revalidatePath("/collections");
   const response: ActionResponse = { code: 200, message: "Updated Collection" };
   return response;
 };
@@ -149,7 +158,6 @@ export const destroy = async (values: { id: string }) => {
     return response;
   }
 
-  revalidatePath("/collections");
   const response: ActionResponse = { code: 200, message: "Deleted Collection" };
   return response;
 };
@@ -187,7 +195,6 @@ export const markAsPaid = async (values: { id: string }) => {
     return response;
   }
 
-  revalidatePath("/collections");
   const response: ActionResponse = {
     code: 200,
     message: "Successfully Made Payment",

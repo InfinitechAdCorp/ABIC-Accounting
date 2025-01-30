@@ -1,14 +1,43 @@
-import React from "react";
-import { getAll as getContracts } from "@/components/collectionMonitoring/collections/actions";
-import { getAll as getClients } from "@/components/collectionMonitoring/collectionClients/actions";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { getAll as getCollections } from "@/components/collectionMonitoring/collections/actions";
+import { getAll as getCollectionClients } from "@/components/collectionMonitoring/collectionClients/actions";
 import { Card, CardBody } from "@nextui-org/react";
 import DataTable from "@/components/collectionMonitoring/collections/dataTable";
-import { formatClients, formatContracts } from "@/components/globals/utils";
 import Navbar from "@/components/globals/navbar";
+import {
+  FormattedCollection,
+  FormattedCollectionClient,
+} from "@/components/collectionMonitoring/types";
 
 export const dynamic = "force-dynamic";
 
-const Contracts = async () => {
+const Collections = () => {
+  const [accountID, setAccountID] = useState("");
+  const [collections, setCollections] = useState<FormattedCollection[]>();
+  const [collectionClients, setCollectionClients] =
+    useState<FormattedCollectionClient[]>();
+
+  useEffect(() => {
+    setAccountID(sessionStorage.getItem("accountID") || "");
+
+    const fetchCollections = async () => {
+      const response = await getCollections(accountID || "");
+      setCollections(response.collections);
+    };
+
+    const fetchCollectionClients = async () => {
+      const response = await getCollectionClients(accountID || "");
+      setCollectionClients(response.collectionClients);
+    };
+
+    if (accountID) {
+      fetchCollections();
+      fetchCollectionClients();
+    }
+  }, [accountID, collections, collectionClients]);
+
   const locations = [
     { key: "All", name: "All" },
     { key: "Bacoor", name: "Bacoor" },
@@ -50,12 +79,6 @@ const Contracts = async () => {
     "actions",
   ];
 
-  const { contracts } = await getContracts();
-  const formattedContracts = formatContracts(contracts);
-
-  const { clients } = await getClients();
-  const formattedClients = formatClients(clients);
-
   return (
     <>
       <Navbar />
@@ -63,16 +86,17 @@ const Contracts = async () => {
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
           <CardBody>
-            <h1 className="text-lg font-semibold mb-3">Contracts</h1>
+            <h1 className="text-lg font-semibold mb-3">Collections</h1>
             <DataTable
-              model="contracts"
+              model="collections"
               columns={columns}
-              rows={formattedContracts}
+              rows={collections || []}
               initialVisibleColumns={initialVisibleColumns}
               searchKey="property"
               sortKey="property"
-              clients={formattedClients}
               locations={locations}
+              accountID={accountID}
+              collectionClients={collectionClients || []}
             />
           </CardBody>
         </Card>
@@ -81,4 +105,4 @@ const Contracts = async () => {
   );
 };
 
-export default Contracts;
+export default Collections;

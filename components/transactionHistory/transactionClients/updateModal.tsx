@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -11,7 +13,7 @@ import {
 } from "@nextui-org/react";
 import { FormattedTransactionClient } from "@/components/transactionHistory/types";
 import { update as updateSchema } from "@/components/transactionHistory/transactionClients/schemas";
-import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
+import { Formik, Form, Field, FieldProps } from "formik";
 import { update as updateAction } from "@/components/transactionHistory/transactionClients/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
@@ -23,6 +25,7 @@ type Props = {
 
 const UpdateModal = ({ transactionClient }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
     id: transactionClient.id,
@@ -34,9 +37,11 @@ const UpdateModal = ({ transactionClient }: Props) => {
     values: Prisma.TransactionClientCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    updateAction(values).then((response) =>
-      handlePostSubmit(response, actions, onClose)
-    );
+    setSubmitting(true);
+    updateAction(values).then((response) => {
+      setSubmitting(false);
+      handlePostSubmit(response, actions, onClose);
+    });
   };
 
   return (
@@ -61,7 +66,7 @@ const UpdateModal = ({ transactionClient }: Props) => {
                 onSubmit={onSubmit}
                 enableReinitialize={true}
               >
-                {(props: FormikProps<any>) => (
+                {() => (
                   <Form>
                     <ModalHeader>Update Client</ModalHeader>
                     <ModalBody>
@@ -93,7 +98,7 @@ const UpdateModal = ({ transactionClient }: Props) => {
                       <Button
                         color="primary"
                         type="submit"
-                        isLoading={props.isSubmitting}
+                        isLoading={submitting}
                       >
                         Update
                       </Button>

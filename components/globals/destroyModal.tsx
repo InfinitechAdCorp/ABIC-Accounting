@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -12,7 +12,7 @@ import {
 } from "@nextui-org/react";
 import { ActionResponse } from "@/components/globals/types";
 import { destroy as destroySchema } from "@/components/globals/schemas";
-import { Formik, Form, Field, FormikProps } from "formik";
+import { Formik, Form, Field } from "formik";
 import { handlePostSubmit } from "@/components/globals/utils";
 import { FaTrash } from "react-icons/fa6";
 
@@ -24,6 +24,7 @@ type Props = {
 
 const DestroyModal = ({ title, action, id }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
     id: id,
@@ -33,9 +34,11 @@ const DestroyModal = ({ title, action, id }: Props) => {
     values: { id: string },
     actions: { resetForm: () => void }
   ) => {
-    action(values).then((response) =>
-      handlePostSubmit(response, actions, onClose)
-    );
+    setSubmitting(true);
+    action(values).then((response) => {
+      setSubmitting(false);
+      handlePostSubmit(response, actions, onClose);
+    });
   };
 
   return (
@@ -59,7 +62,7 @@ const DestroyModal = ({ title, action, id }: Props) => {
                 validationSchema={destroySchema}
                 onSubmit={onSubmit}
               >
-                {(props: FormikProps<{ id: string }>) => (
+                {() => (
                   <Form>
                     <ModalHeader>Delete {title}</ModalHeader>
                     <ModalBody>
@@ -72,7 +75,7 @@ const DestroyModal = ({ title, action, id }: Props) => {
                       <Button
                         color="primary"
                         type="submit"
-                        isLoading={props.isSubmitting}
+                        isLoading={submitting}
                       >
                         Yes
                       </Button>

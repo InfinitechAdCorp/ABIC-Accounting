@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -32,6 +32,7 @@ type Props = {
 
 const CreateModal = ({ transactionClients }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
     date: "",
@@ -48,9 +49,11 @@ const CreateModal = ({ transactionClients }: Props) => {
     values: Prisma.TransactionCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    createAction(values).then((response) =>
-      handlePostSubmit(response, actions, onClose)
-    );
+    setSubmitting(true);
+    createAction(values).then((response) => {
+      setSubmitting(false);
+      handlePostSubmit(response, actions, onClose);
+    });
   };
 
   return (
@@ -72,7 +75,7 @@ const CreateModal = ({ transactionClients }: Props) => {
                   <Form>
                     <ModalHeader>Add Transaction</ModalHeader>
                     <ModalBody>
-                       <Field type="hidden" name="status" />
+                      <Field type="hidden" name="status" />
 
                       <Field name="date">
                         {({ field, meta }: FieldProps) => (
@@ -239,7 +242,7 @@ const CreateModal = ({ transactionClients }: Props) => {
                       <Button
                         color="primary"
                         type="submit"
-                        isLoading={props.isSubmitting}
+                        isLoading={submitting}
                       >
                         Save
                       </Button>

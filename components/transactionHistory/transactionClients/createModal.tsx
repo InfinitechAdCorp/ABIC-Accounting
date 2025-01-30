@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -12,7 +12,7 @@ import {
   Input,
 } from "@nextui-org/react";
 import { create as createSchema } from "@/components/transactionHistory/transactionClients/schemas";
-import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
+import { Formik, Form, Field, FieldProps } from "formik";
 import { create as createAction } from "@/components/transactionHistory/transactionClients/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
@@ -23,6 +23,7 @@ type Props = {
 
 const CreateModal = ({ accountID }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
     account_id: accountID,
@@ -33,9 +34,11 @@ const CreateModal = ({ accountID }: Props) => {
     values: Prisma.TransactionClientCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    createAction(values).then((response) =>
-      handlePostSubmit(response, actions, onClose)
-    );
+    setSubmitting(true);
+    createAction(values).then((response) => {
+      setSubmitting(false);
+      handlePostSubmit(response, actions, onClose);
+    });
   };
 
   return (
@@ -53,7 +56,7 @@ const CreateModal = ({ accountID }: Props) => {
                 validationSchema={createSchema}
                 onSubmit={onSubmit}
               >
-                {(props: FormikProps<any>) => (
+                {() => (
                   <Form>
                     <ModalHeader>Add Client</ModalHeader>
                     <ModalBody>
@@ -84,7 +87,7 @@ const CreateModal = ({ accountID }: Props) => {
                       <Button
                         color="primary"
                         type="submit"
-                        isLoading={props.isSubmitting}
+                        isLoading={submitting}
                       >
                         Save
                       </Button>
