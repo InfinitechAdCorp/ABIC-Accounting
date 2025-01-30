@@ -60,32 +60,27 @@ const Transactions = () => {
     "actions",
   ];
 
-  // const { transactions } = await getTransactions();
-  // const formattedTransactions = formatTransactions(transactions);
-
-  // const { transactionClients } = await getTransactionClients();
-  // const formattedTransactionClients = formatTransactionClients(transactionClients);
-
   return (
     <>
       <Navbar />
 
-      {/* <div className="flex justify-center max-h-[93vh]">
+      <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
           <CardBody>
             <h1 className="text-lg font-semibold mb-3">Transactions</h1>
             <DataTable
               model="transactions"
               columns={columns}
-              rows={formattedTransactions}
+              rows={transactions || []}
               initialVisibleColumns={initialVisibleColumns}
               searchKey="particulars"
               sortKey="date"
-              transactionClients={formattedTransactionClients}
+              accountID={accountID}
+              transactionClients={transactionClients || []}
             />
           </CardBody>
         </Card>
-      </div> */}
+      </div>
     </>
   );
 };

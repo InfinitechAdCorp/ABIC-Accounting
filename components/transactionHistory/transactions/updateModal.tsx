@@ -15,11 +15,11 @@ import {
 } from "@nextui-org/react";
 import {
   FormattedTransaction,
-  FormattedAccount,
-} from "@/components/transactionMonitoring/types";
-import { update as updateSchema } from "@/components/transactionMonitoring/transactions/schemas";
+  FormattedTransactionClient,
+} from "@/components/transactionHistory/types";
+import { update as updateSchema } from "@/components/transactionHistory/transactions/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
-import { update as updateAction } from "@/components/transactionMonitoring/transactions/actions";
+import { update as updateAction } from "@/components/transactionHistory/transactions/actions";
 import { Prisma } from "@prisma/client";
 import {
   handlePostSubmit,
@@ -30,10 +30,10 @@ import { FaPenToSquare } from "react-icons/fa6";
 
 type Props = {
   transaction: FormattedTransaction;
-  accounts: FormattedAccount[];
+  transactionClients: FormattedTransactionClient[];
 };
 
-const UpdateModal = ({ transaction, accounts }: Props) => {
+const UpdateModal = ({ transaction, transactionClients }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const initialValues = {
@@ -41,10 +41,11 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
     date: transaction.date,
     voucher: transaction.voucher,
     check: transaction.check,
-    account_id: transaction.account_id,
+    transaction_client_id: transaction.transaction_client_id,
     particulars: transaction.particulars,
     type: transaction.type,
     amount: transaction.amount,
+    status: transaction.status,
   };
 
   const onSubmit = async (
@@ -83,6 +84,7 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
                     <ModalHeader>Update Transaction</ModalHeader>
                     <ModalBody>
                       <Field type="hidden" name="id" />
+                      <Field type="hidden" name="status" />
 
                       <Field name="date">
                         {({ field, meta }: FieldProps) => (
@@ -152,22 +154,22 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
                         </Field>
                       </div>
 
-                      <Field name="account_id">
+                      <Field name="transaction_client_id">
                         {({ field, meta }: FieldProps) => (
                           <div>
                             <Select
                               {...field}
                               size="md"
                               variant="bordered"
-                              label="Account"
+                              label="Client"
                               labelPlacement="outside"
-                              placeholder="Select Account"
-                              items={accounts}
+                              placeholder="Select Client"
+                              items={transactionClients}
                               defaultSelectedKeys={[field.value]}
                             >
-                              {(account) => (
-                                <SelectItem key={account.id}>
-                                  {account.name}
+                              {(transactionClient) => (
+                                <SelectItem key={transactionClient.id}>
+                                  {transactionClient.name}
                                 </SelectItem>
                               )}
                             </Select>

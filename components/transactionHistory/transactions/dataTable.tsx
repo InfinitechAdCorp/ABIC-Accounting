@@ -43,6 +43,7 @@ type Props = {
   initialVisibleColumns: string[];
   searchKey: string;
   sortKey: string;
+  accountID: string;
   transactionClients: FormattedTransactionClient[];
 };
 
@@ -53,6 +54,7 @@ const DataTable = ({
   initialVisibleColumns,
   searchKey,
   sortKey,
+  accountID,
   transactionClients,
 }: Props) => {
   type Row = (typeof rows)[0];
@@ -115,8 +117,8 @@ const DataTable = ({
       if (columnKey == "actions") {
         return (
           <div className="relative flex justify-end items-center gap-2">
-            {/* <UpdateModal transaction={row} transactionClients={transactionClients} /> */}
-            {/* <DestroyModal title="Transaction" action={destroy} id={row.id} /> */}
+            <UpdateModal transaction={row} transactionClients={transactionClients} />
+            <DestroyModal title="Transaction" action={destroy} id={row.id} />
           </div>
         );
       } else if (columnKey == "date") {
@@ -135,7 +137,7 @@ const DataTable = ({
         return row[columnKey as keyof Row];
       }
     },
-    []
+    [transactionClients]
   );
 
   const onNextPage = React.useCallback(() => {
@@ -210,10 +212,10 @@ const DataTable = ({
             </Dropdown>
 
             <div className="hidden sm:flex">
-              <CreateTransactionClientModal />
+              <CreateTransactionClientModal accountID={accountID} />
             </div>
 
-            {/* <CreateTransactionModal accounts={accounts} /> */}
+            <CreateTransactionModal transactionClients={transactionClients} />
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -243,6 +245,8 @@ const DataTable = ({
     columns,
     model,
     rows.length,
+    accountID,
+    transactionClients,
   ]);
 
   const bottomContent = React.useMemo(() => {
@@ -305,7 +309,7 @@ const DataTable = ({
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey: any) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
+                <TableCell>{renderCell(item, columnKey) as React.ReactNode}</TableCell>
               )}
             </TableRow>
           )}

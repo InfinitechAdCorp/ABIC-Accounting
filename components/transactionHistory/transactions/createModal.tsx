@@ -15,7 +15,7 @@ import {
   SelectItem,
   Textarea,
 } from "@nextui-org/react";
-import { FormattedAccount } from "@/components/transactionHistory/types";
+import { FormattedTransactionClient } from "@/components/transactionHistory/types";
 import { create as createSchema } from "@/components/transactionHistory/transactions/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
 import { create as createAction } from "@/components/transactionHistory/transactions/actions";
@@ -27,20 +27,21 @@ import {
 } from "@/components/globals/utils";
 
 type Props = {
-  accounts: FormattedAccount[];
+  transactionClients: FormattedTransactionClient[];
 };
 
-const CreateModal = ({ accounts }: Props) => {
+const CreateModal = ({ transactionClients }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const initialValues = {
     date: "",
     voucher: "",
     check: "",
-    account_id: "",
+    transaction_client_id: "",
     particulars: "",
     type: "",
     amount: "",
+    status: "Active",
   };
 
   const onSubmit = async (
@@ -71,6 +72,8 @@ const CreateModal = ({ accounts }: Props) => {
                   <Form>
                     <ModalHeader>Add Transaction</ModalHeader>
                     <ModalBody>
+                       <Field type="hidden" name="status" />
+
                       <Field name="date">
                         {({ field, meta }: FieldProps) => (
                           <div>
@@ -139,21 +142,21 @@ const CreateModal = ({ accounts }: Props) => {
                         </Field>
                       </div>
 
-                      <Field name="account_id">
+                      <Field name="transaction_client_id">
                         {({ field, meta }: FieldProps) => (
                           <div>
                             <Select
                               {...field}
                               size="md"
                               variant="bordered"
-                              label="Account"
+                              label="Client"
                               labelPlacement="outside"
-                              placeholder="Select Account"
-                              items={accounts}
+                              placeholder="Select Client"
+                              items={transactionClients}
                             >
-                              {(account) => (
-                                <SelectItem key={account.id}>
-                                  {account.name}
+                              {(transactionClient) => (
+                                <SelectItem key={transactionClient.id}>
+                                  {transactionClient.name}
                                 </SelectItem>
                               )}
                             </Select>

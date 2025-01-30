@@ -3,7 +3,6 @@
 import prisma from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { ActionResponse } from "@/components/globals/types";
-import { revalidatePath } from "next/cache";
 import {
   create as createSchema,
   update as updateSchema,
@@ -84,7 +83,6 @@ export const create = async (values: TransactionCreateInput) => {
     return response;
   }
 
-  revalidatePath("/transactions");
   const response: ActionResponse = { code: 200, message: "Added Transaction" };
   return response;
 };
@@ -124,7 +122,6 @@ export const update = async (values: TransactionCreateInput) => {
     return response;
   }
 
-  revalidatePath("/transactions");
   const response: ActionResponse = {
     code: 200,
     message: "Updated Transaction",
@@ -157,7 +154,6 @@ export const destroy = async (values: { id: string }) => {
     return response;
   }
 
-  revalidatePath("/transactions");
   const response: ActionResponse = {
     code: 200,
     message: "Deleted Transaction",
@@ -193,7 +189,6 @@ export const cancel = async (values: TransactionCreateInput) => {
     return response;
   }
 
-  revalidatePath("/transactions");
   const response: ActionResponse = {
     code: 200,
     message: "Cancelled Transaction",
