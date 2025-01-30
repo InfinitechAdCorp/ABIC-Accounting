@@ -11,8 +11,6 @@ import {
   FormattedTransactionClient,
 } from "@/components/transactionHistory/types";
 
-export const dynamic = "force-dynamic";
-
 const Transactions = () => {
   const [accountID, setAccountID] = useState("");
   const [transactions, setTransactions] = useState<FormattedTransaction[]>();

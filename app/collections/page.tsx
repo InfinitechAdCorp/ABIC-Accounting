@@ -11,8 +11,6 @@ import {
   FormattedCollectionClient,
 } from "@/components/collectionMonitoring/types";
 
-export const dynamic = "force-dynamic";
-
 const Collections = () => {
   const [accountID, setAccountID] = useState("");
   const [collections, setCollections] = useState<FormattedCollection[]>();

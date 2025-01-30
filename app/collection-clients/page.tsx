@@ -7,8 +7,6 @@ import DataTable from "@/components/collectionMonitoring/collectionClients/dataT
 import Navbar from "@/components/globals/navbar";
 import { FormattedCollectionClient } from "@/components/collectionMonitoring/types";
 
-export const dynamic = "force-dynamic";
-
 const CollectionClients = () => {
   const [accountID, setAccountID] = useState("");
   const [collectionClients, setCollectionClients] =

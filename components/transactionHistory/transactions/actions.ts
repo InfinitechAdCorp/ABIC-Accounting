@@ -161,7 +161,7 @@ export const destroy = async (values: { id: string }) => {
   return response;
 };
 
-export const cancel = async (values: TransactionCreateInput) => {
+export const cancel = async (values: { id: string }) => {
   const schema = cancelSchema;
 
   try {

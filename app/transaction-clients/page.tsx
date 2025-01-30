@@ -7,8 +7,6 @@ import DataTable from "@/components/transactionHistory/transactionClients/dataTa
 import Navbar from "@/components/globals/navbar";
 import { FormattedTransactionClient } from "@/components/transactionHistory/types";
 
-export const dynamic = "force-dynamic";
-
 const TransactionClients = () => {
   const [accountID, setAccountID] = useState("");
   const [transactionClients, setTransactionClients] =

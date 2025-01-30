@@ -27,7 +27,8 @@ import { formatDate, formatNumber } from "@/components/globals/utils";
 import CreateTransactionModal from "@/components/transactionHistory/transactions/createModal";
 import UpdateModal from "@/components/transactionHistory/transactions/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
-import { destroy } from "@/components/transactionHistory/transactions/actions";
+import CancelModal from "@/components/transactionHistory/transactions/cancelModal";
+import { destroy, cancel } from "@/components/transactionHistory/transactions/actions";
 import CreateTransactionClientModal from "@/components/transactionHistory/transactionClients/createModal";
 
 type column = {
@@ -119,6 +120,7 @@ const DataTable = ({
           <div className="relative flex justify-end items-center gap-2">
             <UpdateModal transaction={row} transactionClients={transactionClients} />
             <DestroyModal title="Transaction" action={destroy} id={row.id} />
+            <CancelModal action={cancel} id={row.id} />
           </div>
         );
       } else if (columnKey == "date") {

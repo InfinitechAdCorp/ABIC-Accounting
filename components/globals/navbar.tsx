@@ -87,12 +87,14 @@ const Navbar = () => {
                 <DropdownItem
                   onPress={() => router.push("/transaction-clients")}
                   key="Transaction Clients"
+                  textValue="Transaction Clients"
                 >
                   <h3 className="font-semibold">Clients</h3>
                 </DropdownItem>
                 <DropdownItem
                   onPress={() => router.push("/transactions")}
                   key="Transactions"
+                  textValue="Transactions"
                 >
                   <h3 className="font-semibold">Transactions</h3>
                 </DropdownItem>
@@ -122,14 +124,19 @@ const Navbar = () => {
               </DropdownTrigger>
               <DropdownMenu className="text-center">
                 <DropdownItem
-                  onPress={() => router.push("/collection-clients")}
+                  onPress={() => {
+                    alert(1)
+                    router.push("/collection-clients")
+                  }}
                   key="Collection Clients"
+                  textValue="Collection Clients"
                 >
                   <h3 className="font-semibold">Clients</h3>
                 </DropdownItem>
                 <DropdownItem
                   onPress={() => router.push("/collections")}
                   key="Collections"
+                  textValue="Collections"
                 >
                   <h3 className="font-semibold">Collections</h3>
                 </DropdownItem>

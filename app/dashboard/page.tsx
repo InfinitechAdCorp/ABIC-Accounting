@@ -8,8 +8,6 @@ import { FaUsers, FaFileSignature } from "react-icons/fa6";
 import Navbar from "@/components/globals/navbar";
 import { useRouter } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-
 export type Counts = {
   transactionClients: number;
   transactions: number;
