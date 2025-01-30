@@ -19,7 +19,7 @@ import {
   Selection,
   SortDescriptor,
 } from "@nextui-org/react";
-import { FormattedClient } from "@/components/collectionMonitoring/types";
+import { FormattedCollectionClient } from "@/components/collectionMonitoring/types";
 import CreateModal from "@/components/collectionMonitoring/collectionClients/createModal";
 import UpdateModal from "@/components/collectionMonitoring/collectionClients/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
@@ -34,10 +34,11 @@ type column = {
 type Props = {
   model: string;
   columns: column[];
-  rows: FormattedClient[];
+  rows: FormattedCollectionClient[];
   initialVisibleColumns: string[];
   searchKey: string;
   sortKey: string;
+  accountID: string;
 };
 
 const DataTable = ({
@@ -47,6 +48,7 @@ const DataTable = ({
   initialVisibleColumns,
   searchKey,
   sortKey,
+  accountID,
 }: Props) => {
   type Row = (typeof rows)[0];
 
@@ -107,12 +109,12 @@ const DataTable = ({
     if (columnKey == "actions") {
       return (
         <div className="relative flex justify-end items-center gap-2">
-          <UpdateModal client={row} />
+          <UpdateModal collectionClient={row} />
           <DestroyModal title="Client" action={destroy} id={row.id} />
         </div>
       );
-    } else if (columnKey == "contracts") {
-      return row.contracts?.length;
+    } else if (columnKey == "collections") {
+      return row.collections?.length;
     } else {
       return row[columnKey as keyof Row];
     }
@@ -188,7 +190,7 @@ const DataTable = ({
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <CreateModal />
+            <CreateModal accountID={accountID} />
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -218,6 +220,7 @@ const DataTable = ({
     columns,
     model,
     rows.length,
+    accountID,
   ]);
 
   const bottomContent = React.useMemo(() => {
@@ -280,7 +283,7 @@ const DataTable = ({
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey: any) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
+                <TableCell>{renderCell(item, columnKey) as React.ReactNode}</TableCell>
               )}
             </TableRow>
           )}

@@ -9,7 +9,7 @@ import {
   useDisclosure,
   Input,
 } from "@nextui-org/react";
-import { FormattedClient } from "@/components/collectionMonitoring/types";
+import { FormattedCollectionClient } from "@/components/collectionMonitoring/types";
 import { update as updateSchema } from "@/components/collectionMonitoring/collectionClients/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
 import { update as updateAction } from "@/components/collectionMonitoring/collectionClients/actions";
@@ -18,21 +18,20 @@ import { handlePostSubmit } from "@/components/globals/utils";
 import { FaPenToSquare } from "react-icons/fa6";
 
 type Props = {
-  client: FormattedClient;
+  collectionClient: FormattedCollectionClient;
 };
 
-type ClientCreateInput = Prisma.ClientCreateInput & { id: string };
-
-const UpdateModal = ({ client }: Props) => {
+const UpdateModal = ({ collectionClient }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const initialValues = {
-    id: client.id,
-    name: client.name,
+    id: collectionClient.id,
+    account_id: collectionClient.account_id,
+    name: collectionClient.name,
   };
 
   const onSubmit = async (
-    values: Prisma.ClientCreateInput,
+    values: Prisma.CollectionClientCreateInput,
     actions: { resetForm: () => void }
   ) => {
     updateAction(values).then((response) =>
@@ -61,11 +60,12 @@ const UpdateModal = ({ client }: Props) => {
                 validationSchema={updateSchema}
                 onSubmit={onSubmit}
               >
-                {(props: FormikProps<ClientCreateInput>) => (
+                {(props: FormikProps<any>) => (
                   <Form>
                     <ModalHeader>Update Client</ModalHeader>
                     <ModalBody>
                       <Field type="hidden" name="id" />
+                      <Field type="hidden" name="account_id" />
 
                       <Field name="name">
                         {({ field, meta }: FieldProps) => (

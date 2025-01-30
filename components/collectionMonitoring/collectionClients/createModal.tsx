@@ -17,15 +17,20 @@ import { create as createAction } from "@/components/collectionMonitoring/collec
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
 
-const CreateModal = () => {
+type Props = {
+  accountID: string;
+};
+
+const CreateModal = ({ accountID }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const initialValues = {
+    account_id: accountID,
     name: "",
   };
 
   const onSubmit = async (
-    values: Prisma.ClientCreateInput,
+    values: Prisma.CollectionClientCreateInput,
     actions: { resetForm: () => void }
   ) => {
     createAction(values).then((response) =>
@@ -48,10 +53,12 @@ const CreateModal = () => {
                 validationSchema={createSchema}
                 onSubmit={onSubmit}
               >
-                {(props: FormikProps<Prisma.ClientCreateInput>) => (
+                {(props: FormikProps<any>) => (
                   <Form>
                     <ModalHeader>Add Client</ModalHeader>
                     <ModalBody>
+                      <Field type="hidden" name="account_id" />
+
                       <Field name="name">
                         {({ field, meta }: FieldProps) => (
                           <div>

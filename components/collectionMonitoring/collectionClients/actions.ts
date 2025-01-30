@@ -2,7 +2,6 @@
 
 import prisma from "@/lib/db";
 import { Prisma } from "@prisma/client";
-import { revalidatePath } from "next/cache";
 import { ActionResponse } from "@/components/globals/types";
 import {
   create as createSchema,
@@ -11,27 +10,38 @@ import {
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
+import { formatCollectionClients } from "@/components/globals/utils";
 
 type CollectionClientCreateInput = Prisma.CollectionClientCreateInput & {
   account_id?: string;
 };
 
-export const getAll = async () => {
-  let collectionClients = [];
+export const getAll = async (accountID: string) => {
+  let account;
 
   try {
-    collectionClients = await prisma.collectionClient.findMany({
-      include: { collections: true },
+    account = await prisma.account.findUnique({
+      where: { id: accountID },
+      include: {
+        collection_clients: {
+          include: {
+            collections: true,
+          },
+        },
+      },
     });
   } catch {
     const response = {
       code: 500,
       message: "Server Error",
-      clients: [],
+      collectionClients: [],
     };
     return response;
   }
 
+  const collectionClients = formatCollectionClients(
+    account?.collection_clients || []
+  );
   const response = {
     code: 200,
     message: "Fetched Clients",
@@ -68,7 +78,6 @@ export const create = async (values: CollectionClientCreateInput) => {
     return response;
   }
 
-  revalidatePath("/collection-clients");
   const response: ActionResponse = { code: 200, message: "Added Client" };
   return response;
 };
@@ -104,7 +113,6 @@ export const update = async (values: CollectionClientCreateInput) => {
     return response;
   }
 
-  revalidatePath("/collection-clients");
   const response: ActionResponse = { code: 200, message: "Updated Client" };
   return response;
 };
@@ -134,7 +142,6 @@ export const destroy = async (values: { id: string }) => {
     return response;
   }
 
-  revalidatePath("/collection-clients");
   const response: ActionResponse = { code: 200, message: "Deleted Client" };
   return response;
 };
