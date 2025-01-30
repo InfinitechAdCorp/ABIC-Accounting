@@ -34,9 +34,9 @@ const LoginForm = () => {
         <form
           action={(formData) => {
             setSubmitting(true);
-            login(formData).then(({ isValid }) => {
+            login(formData).then((response) => {
               setSubmitting(false);
-              handlePostSubmit(isValid);
+              handlePostSubmit(response.isValid);
             });
           }}
         >
