@@ -24,7 +24,7 @@ const CollectionClients = () => {
     if (accountID) {
       fetchCollectionClients();
     }
-  }, [accountID, collectionClients]);
+  }, [accountID]);
 
   const columns = [
     { name: "NAME", key: "name", sortable: true },

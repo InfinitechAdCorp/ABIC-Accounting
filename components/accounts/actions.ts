@@ -8,6 +8,7 @@ import {
 } from "@/components/accounts/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
+import { revalidatePath } from "next/cache";
 
 export const getAll = async () => {
   let accounts = [];
@@ -86,6 +87,7 @@ export const create = async (values: Prisma.AccountCreateInput) => {
     return response;
   }
 
+  revalidatePath("/accounts")
   const response: ActionResponse = { code: 200, message: "Added Account" };
   return response;
 };

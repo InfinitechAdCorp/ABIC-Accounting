@@ -36,7 +36,7 @@ const Collections = () => {
       fetchCollections();
       fetchCollectionClients();
     }
-  }, [accountID, collections, collectionClients]);
+  }, [accountID]);
 
   const locations = [
     { key: "All", name: "All" },

@@ -36,7 +36,7 @@ const Transactions = () => {
       fetchTransactions();
       fetchTransactionClients();
     }
-  }, [accountID, transactions, transactionClients]);
+  }, [accountID]);
 
   const columns = [
     { name: "DATE", key: "date", sortable: true },

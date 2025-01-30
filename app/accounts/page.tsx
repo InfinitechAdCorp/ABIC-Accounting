@@ -1,47 +1,12 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
-import { Card, CardBody } from "@nextui-org/react";
+import React from "react";
 import { getAll } from "@/components/accounts/actions";
 import Image from "next/image";
-import { Account } from "@prisma/client";
 import CreateModal from "@/components/accounts/createModal";
 import Link from "next/link";
-import toast from "react-hot-toast";
-import { PressEvent } from "@react-types/shared";
-import { useRouter } from "next/navigation";
+import AccountCard from "@/components/accounts/accountCard";
 
-const Accounts = () => {
-  const router = useRouter();
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [accounts, setAccounts] = useState<Account[]>([]);
-
-  const setAccount = (e: PressEvent) => {
-    const account_id = e.target.dataset.pressed;
-    sessionStorage.setItem("accountID", account_id);
-    router.push("/dashboard");
-  };
-
-  const logout = () => {
-    setIsLoggedIn(false);
-    toast.success("Logged Out");
-  };
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      sessionStorage.clear();
-    }
-  }, [isLoggedIn]);
-
-  useEffect(() => {
-    const fetchAccounts = async () => {
-      getAll().then((response) => {
-        setAccounts(response.accounts);
-      });
-    };
-
-    fetchAccounts();
-  }, [accounts]);
+const Accounts = async () => {
+  const { accounts } = await getAll();
 
   return (
     <>
@@ -59,7 +24,6 @@ const Accounts = () => {
               className={
                 "text-sm md:text-base font-semibold text-white cursor-pointer"
               }
-              onClick={logout}
             >
               Logout
             </h3>
@@ -74,20 +38,7 @@ const Accounts = () => {
           <div className="grid grid-cols-4 gap-5">
             <CreateModal />
             {accounts.map((account) => (
-              <Card
-                className="mb-1"
-                key={account.id}
-                data-pressed={account.id}
-                isHoverable
-                isPressable
-                onPress={setAccount}
-              >
-                <CardBody className="flex items-center justify-center h-60">
-                  <h3 className="text-sm md:text-xl font-bold">
-                    {account.name}
-                  </h3>
-                </CardBody>
-              </Card>
+              <AccountCard key={account.id} account={account} />
             ))}
           </div>
         </div>

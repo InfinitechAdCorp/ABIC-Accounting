@@ -29,7 +29,7 @@ const Dashboard = () => {
     if (accountID) {
       fetchCounts();
     }
-  }, [counts]);
+  }, []);
 
   return (
     <>

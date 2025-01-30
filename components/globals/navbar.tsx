@@ -125,7 +125,6 @@ const Navbar = () => {
               <DropdownMenu className="text-center">
                 <DropdownItem
                   onPress={() => {
-                    alert(1)
                     router.push("/collection-monitoring/collection-clients")
                   }}
                   key="Collection Clients"

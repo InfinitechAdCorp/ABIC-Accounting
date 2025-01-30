@@ -24,7 +24,7 @@ const TransactionClients = () => {
     if (accountID) {
       fetchTransactionClients();
     }
-  }, [accountID, transactionClients]);
+  }, [accountID]);
 
   const columns = [
     { name: "NAME", key: "name", sortable: true },
