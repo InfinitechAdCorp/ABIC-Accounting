@@ -12,16 +12,22 @@ import {
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
+import { formatTransactions } from "@/components/globals/utils";
 
 type TransactionCreateInput = Prisma.TransactionCreateInput & {
   transaction_client_id?: string;
 };
 
-export const getAll = async () => {
-  let transactions = [];
+export const getAll = async (accountID: string) => {
+  let transactions;
 
   try {
     transactions = await prisma.transaction.findMany({
+      where: {
+        transaction_client: {
+          account_id: accountID,
+        },
+      },
       include: {
         transaction_client: true,
       },
@@ -35,6 +41,7 @@ export const getAll = async () => {
     return response;
   }
 
+  transactions = formatTransactions(transactions || []);
   const response = {
     code: 200,
     message: "Fetched Transactions",
