@@ -1,8 +1,8 @@
 import React from "react";
 import { getAll } from "@/components/accounts/actions";
 import Image from "next/image";
+import LogoutBtn from "@/components/globals/logoutBtn";
 import CreateModal from "@/components/accounts/createModal";
-import Link from "next/link";
 import AccountCard from "@/components/accounts/accountCard";
 
 const Accounts = async () => {
@@ -19,15 +19,7 @@ const Accounts = async () => {
         </div>
 
         <div className="flex justify-end items-center">
-          <Link href="/" className="text-center">
-            <h3
-              className={
-                "text-sm md:text-base font-semibold text-white cursor-pointer"
-              }
-            >
-              Logout
-            </h3>
-          </Link>
+          <LogoutBtn />
         </div>
       </div>
 
