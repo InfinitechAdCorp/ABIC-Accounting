@@ -19,7 +19,7 @@ const Navbar = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [accountID, setAccountID] = useState("");
-  const [account, setAccount] = useState<Account| null>();
+  const [account, setAccount] = useState<Account | null>();
 
   const isActive = (hrefs: string[]) => hrefs.includes(pathname);
 
@@ -41,8 +41,9 @@ const Navbar = () => {
   useEffect(() => {
     if (accountID) {
       const fetchAccount = async () => {
-        const response = await get(accountID);
-        setAccount(response.account);
+        get(accountID).then((response) => {
+          setAccount(response.account);
+        });
       };
 
       fetchAccount();
@@ -137,32 +138,57 @@ const Navbar = () => {
           )}
         </div>
         <div className="flex justify-end gap-4">
-  <Dropdown classNames={{ content: "min-w-0" }}>
-    <DropdownTrigger className="text-center">
-      <h3 className={`text-sm md:text-base text-white cursor-pointer ${isActive(["/loancalculator", "/currencyconverter", "/taxcomputation"]) ? "font-black" : "font-semibold"}`}>
-        <span className="hidden lg:inline">Tools</span>
-        <span className="inline lg:hidden">More</span>
-      </h3>
-    </DropdownTrigger>
-    <DropdownMenu className="text-center">
-      <DropdownItem onPress={() => router.push("/loancalculator")} key="LoanCalculator">
-        <h3 className="font-semibold">Loan Calculator</h3>
-      </DropdownItem>
-      <DropdownItem onPress={() => router.push("/currencyconverter")} key="CurrencyConverter">
-        <h3 className="font-semibold">Currency Converter</h3>
-      </DropdownItem>
-      <DropdownItem onPress={() => router.push("/taxcomputation")} key="TaxComputation">
-        <h3 className="font-semibold">Tax Computation</h3>
-      </DropdownItem>
-      <DropdownItem onPress={() => router.push("/acknowledgementreceipt")} key="AcknowledgementReceipt">
-        <h3 className="font-semibold">Acknowledgement</h3>
-      </DropdownItem>
-      <DropdownItem onPress={() => router.push("/billingstatement")} key="BillingStatement">
-        <h3 className="font-semibold">Billing Statement</h3>
-      </DropdownItem>
-    </DropdownMenu>
-  </Dropdown>
-  <Link href="/" className="text-end">
+          <Dropdown classNames={{ content: "min-w-0" }}>
+            <DropdownTrigger className="text-center">
+              <h3
+                className={`text-sm md:text-base text-white cursor-pointer ${
+                  isActive([
+                    "/loancalculator",
+                    "/currencyconverter",
+                    "/taxcomputation",
+                  ])
+                    ? "font-black"
+                    : "font-semibold"
+                }`}
+              >
+                <span className="hidden lg:inline">Tools</span>
+                <span className="inline lg:hidden">More</span>
+              </h3>
+            </DropdownTrigger>
+            <DropdownMenu className="text-center">
+              <DropdownItem
+                onPress={() => router.push("/loancalculator")}
+                key="LoanCalculator"
+              >
+                <h3 className="font-semibold">Loan Calculator</h3>
+              </DropdownItem>
+              <DropdownItem
+                onPress={() => router.push("/currencyconverter")}
+                key="CurrencyConverter"
+              >
+                <h3 className="font-semibold">Currency Converter</h3>
+              </DropdownItem>
+              <DropdownItem
+                onPress={() => router.push("/taxcomputation")}
+                key="TaxComputation"
+              >
+                <h3 className="font-semibold">Tax Computation</h3>
+              </DropdownItem>
+              <DropdownItem
+                onPress={() => router.push("/acknowledgementreceipt")}
+                key="AcknowledgementReceipt"
+              >
+                <h3 className="font-semibold">Acknowledgement</h3>
+              </DropdownItem>
+              <DropdownItem
+                onPress={() => router.push("/billingstatement")}
+                key="BillingStatement"
+              >
+                <h3 className="font-semibold">Billing Statement</h3>
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+          <Link href="/" className="text-end">
             <h3
               className={
                 "text-sm md:text-base font-semibold text-white cursor-pointer"
@@ -172,10 +198,7 @@ const Navbar = () => {
               Logout
             </h3>
           </Link>
-  
-</div>
-
-        
+        </div>
       </div>
     </>
   );
