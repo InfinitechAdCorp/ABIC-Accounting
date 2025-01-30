@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -12,7 +12,7 @@ import {
 } from "@nextui-org/react";
 import { ActionResponse } from "@/components/globals/types";
 import { markAsPaid as markAsPaidSchema } from "@/components/collectionMonitoring/collections/schemas";
-import { Formik, Form, Field, FormikProps } from "formik";
+import { Formik, Form, Field } from "formik";
 import { handlePostSubmit } from "@/components/globals/utils";
 import { MdPayments } from "react-icons/md";
 
@@ -23,6 +23,7 @@ type Props = {
 
 const PaymentModal = ({ action, id }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
     id: id,
@@ -32,9 +33,11 @@ const PaymentModal = ({ action, id }: Props) => {
     values: { id: string },
     actions: { resetForm: () => void }
   ) => {
-    action(values).then((response) =>
-      handlePostSubmit(response, actions, onClose)
-    );
+    setSubmitting(true);
+    action(values).then((response) => {
+      setSubmitting(false);
+      handlePostSubmit(response, actions, onClose);
+    });
   };
 
   return (
@@ -59,7 +62,7 @@ const PaymentModal = ({ action, id }: Props) => {
                 validationSchema={markAsPaidSchema}
                 onSubmit={onSubmit}
               >
-                {(props: FormikProps<{ id: string }>) => (
+                {() => (
                   <Form>
                     <ModalHeader>Mark As Paid</ModalHeader>
                     <ModalBody>
@@ -70,7 +73,7 @@ const PaymentModal = ({ action, id }: Props) => {
                       <Button
                         color="primary"
                         type="submit"
-                        isLoading={props.isSubmitting}
+                        isLoading={submitting}
                       >
                         Yes
                       </Button>
