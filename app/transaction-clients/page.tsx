@@ -30,10 +30,12 @@ const TransactionClients = () => {
   const columns = [
     { name: "NAME", key: "name", sortable: true },
     { name: "TRANSACTIONS", key: "transactions", sortable: true },
+    { name: "STARTING BALANCE", key: "starting_balance", sortable: true },
+    { name: "CURRENT BALANCE", key: "current_balance", sortable: true },
     { name: "ACTIONS", key: "actions" },
   ];
 
-  const initialVisibleColumns = ["name", "transactions", "actions"];
+  const initialVisibleColumns = ["name", "transactions", "starting_balance", "current_balance", "actions"];
 
   return (
     <>

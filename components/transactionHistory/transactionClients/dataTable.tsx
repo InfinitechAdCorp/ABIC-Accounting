@@ -52,7 +52,6 @@ const DataTable = ({
   accountID,
 }: Props) => {
   type Row = (typeof rows)[0];
-  console.log(rows)
 
   const [filterValue, setFilterValue] = React.useState("");
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
@@ -108,24 +107,37 @@ const DataTable = ({
   }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback((row: Row, columnKey: string) => {
+    const transactions = row.transactions || [];
+
     if (columnKey == "actions") {
       return (
         <div className="relative flex justify-end items-center gap-2">
-          <UpdateModal account={row} />
-          <DestroyModal title="Account" action={destroy} id={row.id} />
+          <UpdateModal transactionClient={row} />
+          <DestroyModal title="Client" action={destroy} id={row.id} />
         </div>
       );
     } else if (columnKey == "starting_balance") {
-      return formatNumber(row.starting_balance);
-    } else if (columnKey == "current_balance") {
-      let currentBalance = row.starting_balance;
-      row.transactions?.forEach((transaction) => {
+      let startingBalance = 0;
+      const transaction = transactions[0];
+      if (transaction) {
         if (transaction.type == "Credit") {
-          currentBalance += transaction.amount;
+          startingBalance += transaction.amount;
         } else {
-          currentBalance -= transaction.amount;
+          startingBalance -= transaction.amount;
         }
-      });
+      }
+      return formatNumber(startingBalance);
+    } else if (columnKey == "current_balance") {
+      let currentBalance = 0;
+      if (transactions) {
+        transactions.forEach((transaction) => {
+          if (transaction.type == "Credit") {
+            currentBalance += transaction.amount;
+          } else {
+            currentBalance -= transaction.amount;
+          }
+        });
+      }
       return formatNumber(currentBalance);
     } else if (columnKey == "transactions") {
       return row.transactions?.length;
@@ -234,6 +246,7 @@ const DataTable = ({
     columns,
     model,
     rows.length,
+    accountID,
   ]);
 
   const bottomContent = React.useMemo(() => {
@@ -296,7 +309,9 @@ const DataTable = ({
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey: any) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
+                <TableCell>
+                  {renderCell(item, columnKey) as React.ReactNode}
+                </TableCell>
               )}
             </TableRow>
           )}

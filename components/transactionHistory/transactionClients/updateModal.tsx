@@ -9,7 +9,7 @@ import {
   useDisclosure,
   Input,
 } from "@nextui-org/react";
-import { FormattedAccount } from "@/components/transactionHistory/types";
+import { FormattedTransactionClient } from "@/components/transactionHistory/types";
 import { update as updateSchema } from "@/components/transactionHistory/transactionClients/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
 import { update as updateAction } from "@/components/transactionHistory/transactionClients/actions";
@@ -18,20 +18,20 @@ import { handlePostSubmit } from "@/components/globals/utils";
 import { FaPenToSquare } from "react-icons/fa6";
 
 type Props = {
-  account: FormattedAccount;
+  transactionClient: FormattedTransactionClient;
 };
 
-const UpdateModal = ({ account }: Props) => {
+const UpdateModal = ({ transactionClient }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const initialValues = {
-    id: account.id,
-    name: account.name,
-    starting_balance: account.starting_balance,
+    id: transactionClient.id,
+    account_id: transactionClient.account_id,
+    name: transactionClient.name,
   };
 
   const onSubmit = async (
-    values: Prisma.AccountCreateInput,
+    values: Prisma.TransactionClientCreateInput,
     actions: { resetForm: () => void }
   ) => {
     updateAction(values).then((response) =>
@@ -63,9 +63,10 @@ const UpdateModal = ({ account }: Props) => {
               >
                 {(props: FormikProps<any>) => (
                   <Form>
-                    <ModalHeader>Update Account</ModalHeader>
+                    <ModalHeader>Update Client</ModalHeader>
                     <ModalBody>
                       <Field type="hidden" name="id" />
+                      <Field type="hidden" name="account_id" />
 
                       <Field name="name">
                         {({ field, meta }: FieldProps) => (
@@ -78,27 +79,6 @@ const UpdateModal = ({ account }: Props) => {
                               label="Name"
                               labelPlacement="outside"
                               placeholder="Enter Name"
-                            />
-                            {meta.touched && meta.error && (
-                              <small className="text-red-500">
-                                {meta.error}
-                              </small>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-
-                      <Field name="starting_balance">
-                        {({ field, meta }: FieldProps) => (
-                          <div>
-                            <Input
-                              {...field}
-                              type="text"
-                              size="md"
-                              variant="bordered"
-                              label="Starting Balance"
-                              labelPlacement="outside"
-                              placeholder="Enter Starting Balance"
                             />
                             {meta.touched && meta.error && (
                               <small className="text-red-500">
