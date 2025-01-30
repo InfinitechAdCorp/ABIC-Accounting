@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardBody,
@@ -15,7 +15,7 @@ import {
   Checkbox,
 } from "@nextui-org/react";
 import { create as createSchema } from "@/components/accounts/schemas";
-import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
+import { Formik, Form, Field, FieldProps } from "formik";
 import { create as createAction } from "@/components/accounts/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
@@ -23,6 +23,7 @@ import { PlusIcon } from "@/components/globals/icons";
 
 const CreateModal = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
     name: "",
@@ -34,7 +35,9 @@ const CreateModal = () => {
     values: Prisma.AccountCreateInput,
     actions: { resetForm: () => void }
   ) => {
+    setSubmitting(true)
     createAction(values).then((response) => {
+      setSubmitting(false)
       handlePostSubmit(response, actions, onClose);
     });
   };
@@ -57,7 +60,7 @@ const CreateModal = () => {
                 validationSchema={createSchema}
                 onSubmit={onSubmit}
               >
-                {(props: FormikProps<Prisma.AccountCreateInput>) => (
+                {() => (
                   <Form>
                     <ModalHeader>Add Account</ModalHeader>
                     <ModalBody>
@@ -118,7 +121,7 @@ const CreateModal = () => {
                       <Button
                         color="primary"
                         type="submit"
-                        isLoading={props.isSubmitting}
+                        isLoading={submitting}
                       >
                         Save
                       </Button>
