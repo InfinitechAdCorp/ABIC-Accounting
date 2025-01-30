@@ -73,7 +73,7 @@ const Navbar = () => {
               <DropdownTrigger className="text-center">
                 <h3
                   className={`text-sm md:text-base text-white cursor-pointer ${
-                    isActive(["/transaction-clients", "/transactions"])
+                    isActive(["/transaction-history/transaction-clients", "/transaction-history/transactions"])
                       ? "font-black"
                       : "font-semibold"
                   }`}
@@ -85,14 +85,14 @@ const Navbar = () => {
 
               <DropdownMenu className="text-center">
                 <DropdownItem
-                  onPress={() => router.push("/transaction-clients")}
+                  onPress={() => router.push("/transaction-history/transaction-clients")}
                   key="Transaction Clients"
                   textValue="Transaction Clients"
                 >
                   <h3 className="font-semibold">Clients</h3>
                 </DropdownItem>
                 <DropdownItem
-                  onPress={() => router.push("/transactions")}
+                  onPress={() => router.push("/transaction-history/transactions")}
                   key="Transactions"
                   textValue="Transactions"
                 >
@@ -111,7 +111,7 @@ const Navbar = () => {
               <DropdownTrigger className="text-center">
                 <h3
                   className={`text-sm md:text-base text-white cursor-pointer ${
-                    isActive(["/collection-clients", "/collections"])
+                    isActive(["/collection-monitoring/collection-clients", "/collection-monitoring/collections"])
                       ? "font-black"
                       : "font-semibold"
                   }`}
@@ -126,7 +126,7 @@ const Navbar = () => {
                 <DropdownItem
                   onPress={() => {
                     alert(1)
-                    router.push("/collection-clients")
+                    router.push("/collection-monitoring/collection-clients")
                   }}
                   key="Collection Clients"
                   textValue="Collection Clients"
@@ -134,7 +134,7 @@ const Navbar = () => {
                   <h3 className="font-semibold">Clients</h3>
                 </DropdownItem>
                 <DropdownItem
-                  onPress={() => router.push("/collections")}
+                  onPress={() => router.push("/collection-monitoring/collections")}
                   key="Collections"
                   textValue="Collections"
                 >
@@ -150,9 +150,9 @@ const Navbar = () => {
               <h3
                 className={`text-sm md:text-base text-white cursor-pointer ${
                   isActive([
-                    "/loancalculator",
-                    "/currencyconverter",
-                    "/taxcomputation",
+                    "/tools/loan-calculator",
+                    "/tools/currency-converter",
+                    "/tools/tax-computation",
                   ])
                     ? "font-black"
                     : "font-semibold"
@@ -164,32 +164,32 @@ const Navbar = () => {
             </DropdownTrigger>
             <DropdownMenu className="text-center">
               <DropdownItem
-                onPress={() => router.push("/loancalculator")}
-                key="LoanCalculator"
+                onPress={() => router.push("/tools/loan-calculator")}
+                key="Loan Calculator"
               >
                 <h3 className="font-semibold">Loan Calculator</h3>
               </DropdownItem>
               <DropdownItem
-                onPress={() => router.push("/currencyconverter")}
-                key="CurrencyConverter"
+                onPress={() => router.push("/tools/currency-converter")}
+                key="Currency Converter"
               >
                 <h3 className="font-semibold">Currency Converter</h3>
               </DropdownItem>
               <DropdownItem
-                onPress={() => router.push("/taxcomputation")}
-                key="TaxComputation"
+                onPress={() => router.push("/tools/tax-computation")}
+                key="Tax Computation"
               >
                 <h3 className="font-semibold">Tax Computation</h3>
               </DropdownItem>
               <DropdownItem
-                onPress={() => router.push("/acknowledgementreceipt")}
-                key="AcknowledgementReceipt"
+                onPress={() => router.push("/tools/acknowledgement-receipt")}
+                key="Acknowledgement Receipt"
               >
                 <h3 className="font-semibold">Acknowledgement</h3>
               </DropdownItem>
               <DropdownItem
-                onPress={() => router.push("/billingstatement")}
-                key="BillingStatement"
+                onPress={() => router.push("/tools/billing-statement")}
+                key="Billing Statement"
               >
                 <h3 className="font-semibold">Billing Statement</h3>
               </DropdownItem>

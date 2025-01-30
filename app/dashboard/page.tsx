@@ -47,7 +47,7 @@ const Dashboard = () => {
             isPressable
             isHoverable
             onPress={() => {
-              router.push("/transaction-clients");
+              router.push("/transaction-history/transaction-clients");
             }}
           >
             <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
@@ -69,7 +69,7 @@ const Dashboard = () => {
             title="View Transactions"
             isPressable
             isHoverable
-            onPress={() => router.push("/transactions")}
+            onPress={() => router.push("/transaction-history/transactions")}
           >
             <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
               <div className="flex justify-center items-center">
@@ -90,7 +90,7 @@ const Dashboard = () => {
             title="View Collections"
             isPressable
             isHoverable
-            onPress={() => router.push("/collections")}
+            onPress={() => router.push("/collection-monitoring/collections")}
           >
             <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
               <div className="flex justify-center items-center">
