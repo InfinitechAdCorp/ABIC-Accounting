@@ -11,6 +11,7 @@ import {
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
+import { formatTransactionClients } from "@/components/globals/utils";
 
 type TransactionClientCreateInput = Prisma.TransactionClientCreateInput & {
   account_id?: string;
@@ -25,7 +26,11 @@ export const getAll = async (accountID: string) => {
       include: {
         transaction_clients: {
           include: {
-            transactions: true,
+            transactions: {
+              orderBy: {
+                date: "asc",
+              },
+            },
           },
         },
       },
@@ -39,10 +44,13 @@ export const getAll = async (accountID: string) => {
     return response;
   }
 
+  const transactionClients = formatTransactionClients(
+    account?.transaction_clients || []
+  );
   const response = {
     code: 200,
     message: "Fetched Clients",
-    transactionClients: account?.transaction_clients,
+    transactionClients: transactionClients,
   };
   return response;
 };

@@ -17,16 +17,20 @@ import { create as createAction } from "@/components/transactionHistory/transact
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
 
-const CreateModal = () => {
+type Props = {
+  accountID: string;
+};
+
+const CreateModal = ({ accountID }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const initialValues = {
+    account_id: accountID,
     name: "",
-    starting_balance: "",
   };
 
   const onSubmit = async (
-    values: Prisma.AccountCreateInput,
+    values: Prisma.TransactionClientCreateInput,
     actions: { resetForm: () => void }
   ) => {
     createAction(values).then((response) =>
@@ -53,6 +57,8 @@ const CreateModal = () => {
                   <Form>
                     <ModalHeader>Add Client</ModalHeader>
                     <ModalBody>
+                      <Field type="hidden" name="account_id" />
+
                       <Field name="name">
                         {({ field, meta }: FieldProps) => (
                           <div>
@@ -64,27 +70,6 @@ const CreateModal = () => {
                               label="Name"
                               labelPlacement="outside"
                               placeholder="Enter Name"
-                            />
-                            {meta.touched && meta.error && (
-                              <small className="text-red-500">
-                                {meta.error}
-                              </small>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-
-                      <Field name="starting_balance">
-                        {({ field, meta }: FieldProps) => (
-                          <div>
-                            <Input
-                              {...field}
-                              type="text"
-                              size="md"
-                              variant="bordered"
-                              label="Starting Balance"
-                              labelPlacement="outside"
-                              placeholder="Enter Starting Balance"
                             />
                             {meta.touched && meta.error && (
                               <small className="text-red-500">

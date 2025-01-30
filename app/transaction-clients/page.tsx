@@ -3,61 +3,58 @@
 import React, { useState, useEffect } from "react";
 import { getAll } from "@/components/transactionHistory/transactionClients/actions";
 import { Card, CardBody } from "@nextui-org/react";
-import { formatTransactionClients } from "@/components/globals/utils";
 import DataTable from "@/components/transactionHistory/transactionClients/dataTable";
 import Navbar from "@/components/globals/navbar";
-import {
-  FormattedTransactionClient,
-} from "@/components/transactionHistory/types";
+import { FormattedTransactionClient } from "@/components/transactionHistory/types";
 
 export const dynamic = "force-dynamic";
 
 const TransactionClients = () => {
-  const [transactionClients, setTransactionClients] = useState<FormattedTransactionClient[]>();
+  const [accountID, setAccountID] = useState("");
+  const [transactionClients, setTransactionClients] =
+    useState<FormattedTransactionClient[]>();
 
   useEffect(() => {
-    const accountID = sessionStorage.getItem("accountID");
+    setAccountID(sessionStorage.getItem("accountID") || "");
+
     const fetchTransactionClients = async () => {
-      const response = await getAll(accountID as string);
-      const formattedTransactionClients = formatTransactionClients(
-        response.transactionClients
-      );
-      console.log(formattedTransactionClients)
-      setTransactionClients(formattedTransactionClients);
+      const response = await getAll(accountID || "");
+      setTransactionClients(response.transactionClients);
     };
 
     if (accountID) {
       fetchTransactionClients();
     }
-  }, [transactionClients]);
+  }, [accountID, transactionClients]);
 
-  // const columns = [
-  //   { name: "NAME", key: "name", sortable: true },
-  //   { name: "TRANSACTIONS", key: "transactions", sortable: true },
-  //   { name: "ACTIONS", key: "actions" },
-  // ];
+  const columns = [
+    { name: "NAME", key: "name", sortable: true },
+    { name: "TRANSACTIONS", key: "transactions", sortable: true },
+    { name: "ACTIONS", key: "actions" },
+  ];
 
-  // const initialVisibleColumns = ["name", "transactions", "actions"];
+  const initialVisibleColumns = ["name", "transactions", "actions"];
 
   return (
     <>
       <Navbar />
 
-      {/* <div className="flex justify-center max-h-[93vh]">
+      <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
           <CardBody>
             <h1 className="text-lg font-semibold mb-3">Clients</h1>
             <DataTable
               model="clients"
               columns={columns}
-              rows={formattedTransactionClients}
+              rows={transactionClients || []}
               initialVisibleColumns={initialVisibleColumns}
               searchKey="name"
               sortKey="name"
+              accountID={accountID}
             />
           </CardBody>
         </Card>
-      </div> */}
+      </div>
     </>
   );
 };

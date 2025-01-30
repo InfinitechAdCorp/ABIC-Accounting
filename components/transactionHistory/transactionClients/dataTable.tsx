@@ -19,7 +19,7 @@ import {
   Selection,
   SortDescriptor,
 } from "@nextui-org/react";
-import { FormattedAccount } from "@/components/transactionHistory/types";
+import { FormattedTransactionClient } from "@/components/transactionHistory/types";
 import { formatNumber } from "@/components/globals/utils";
 import CreateModal from "@/components/transactionHistory/transactionClients/createModal";
 import UpdateModal from "@/components/transactionHistory/transactionClients/updateModal";
@@ -35,10 +35,11 @@ type column = {
 type Props = {
   model: string;
   columns: column[];
-  rows: FormattedAccount[];
+  rows: FormattedTransactionClient[];
   initialVisibleColumns: string[];
   searchKey: string;
   sortKey: string;
+  accountID: string;
 };
 
 const DataTable = ({
@@ -48,8 +49,10 @@ const DataTable = ({
   initialVisibleColumns,
   searchKey,
   sortKey,
+  accountID,
 }: Props) => {
   type Row = (typeof rows)[0];
+  console.log(rows)
 
   const [filterValue, setFilterValue] = React.useState("");
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
@@ -201,7 +204,7 @@ const DataTable = ({
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <CreateModal />
+            <CreateModal accountID={accountID} />
           </div>
         </div>
         <div className="flex justify-between items-center">
