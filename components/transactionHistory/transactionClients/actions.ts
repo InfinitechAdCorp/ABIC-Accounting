@@ -16,20 +16,20 @@ type TransactionClientCreateInput = Prisma.TransactionClientCreateInput & {
   account_id?: string;
 };
 
-export const getAll = async () => {
-  let transactionClients = [];
+export const getAll = async (accountID: string) => {
+  let account;
 
   try {
-    transactionClients = await prisma.transactionClient.findMany({
-      include: { transactions: true },
+    account = await prisma.account.findUnique({
+      where: { id: accountID },
+      include: {
+        transaction_clients: {
+          include: {
+            transactions: true,
+          },
+        },
+      },
     });
-
-    const response = {
-      code: 200,
-      message: "Fetched Clients",
-      transactionClients: transactionClients,
-    };
-    return response;
   } catch {
     const response = {
       code: 500,
@@ -38,6 +38,13 @@ export const getAll = async () => {
     };
     return response;
   }
+
+  const response = {
+    code: 200,
+    message: "Fetched Clients",
+    transactionClients: account?.transaction_clients,
+  };
+  return response;
 };
 
 export const create = async (values: TransactionClientCreateInput) => {
