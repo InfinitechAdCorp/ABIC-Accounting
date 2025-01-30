@@ -16,9 +16,10 @@ import { get } from "@/components/accounts/actions";
 const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
+
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [accountID, setAccountID] = useState("");
-  const [account, setAccount] = useState<Account | null>();
+  const [account, setAccount] = useState<Account| null>();
 
   const isActive = (hrefs: string[]) => hrefs.includes(pathname);
 

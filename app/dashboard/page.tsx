@@ -18,22 +18,19 @@ export type Counts = {
 
 const Dashboard = () => {
   const router = useRouter();
-  const [accountID, setAccountID] = useState("");
-
   const [counts, setCounts] = useState<Counts>();
 
   useEffect(() => {
-    setAccountID(sessionStorage.getItem("accountID") as string);
-  }, []);
-
-  useEffect(() => {
+    const accountID = sessionStorage.getItem("accountID");
     const fetchCounts = async () => {
-      const response = await getCounts(accountID);
+      const response = await getCounts(accountID as string);
       setCounts(response.counts);
     };
 
-    fetchCounts();
-  }, [accountID]);
+    if (accountID) {
+      fetchCounts();
+    }
+  }, [counts]);
 
   return (
     <>

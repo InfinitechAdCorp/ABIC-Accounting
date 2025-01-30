@@ -14,7 +14,6 @@ export const getCounts = async (accountID: string) => {
       where: { id: accountID },
       include: {
         transaction_clients: true,
-        collection_clients: true,
       },
     });
 
@@ -22,17 +21,17 @@ export const getCounts = async (accountID: string) => {
       where: {
         transaction_client: {
           account_id: accountID,
-        }
-      }
-    })
+        },
+      },
+    });
 
     const collections = await prisma.collection.findMany({
       where: {
         collection_client: {
           account_id: accountID,
-        }
-      }
-    })
+        },
+      },
+    });
 
     counts.transactionClients = account?.transaction_clients.length as number;
     counts.transactions = transactions.length;
