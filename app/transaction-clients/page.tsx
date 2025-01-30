@@ -18,8 +18,9 @@ const TransactionClients = () => {
     setAccountID(sessionStorage.getItem("accountID") || "");
 
     const fetchTransactionClients = async () => {
-      const response = await getAll(accountID || "");
-      setTransactionClients(response.transactionClients);
+      getAll(accountID || "").then((response) => {
+        setTransactionClients(response.transactionClients);
+      });
     };
 
     if (accountID) {
@@ -35,7 +36,13 @@ const TransactionClients = () => {
     { name: "ACTIONS", key: "actions" },
   ];
 
-  const initialVisibleColumns = ["name", "transactions", "starting_balance", "current_balance", "actions"];
+  const initialVisibleColumns = [
+    "name",
+    "transactions",
+    "starting_balance",
+    "current_balance",
+    "actions",
+  ];
 
   return (
     <>

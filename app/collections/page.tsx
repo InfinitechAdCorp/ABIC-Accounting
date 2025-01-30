@@ -23,13 +23,15 @@ const Collections = () => {
     setAccountID(sessionStorage.getItem("accountID") || "");
 
     const fetchCollections = async () => {
-      const response = await getCollections(accountID || "");
-      setCollections(response.collections);
+      getCollections(accountID || "").then((response) => {
+        setCollections(response.collections);
+      });
     };
 
     const fetchCollectionClients = async () => {
-      const response = await getCollectionClients(accountID || "");
-      setCollectionClients(response.collectionClients);
+      getCollectionClients(accountID || "").then((response) => {
+        setCollectionClients(response.collectionClients);
+      });
     };
 
     if (accountID) {

@@ -18,8 +18,9 @@ const CollectionClients = () => {
     setAccountID(sessionStorage.getItem("accountID") || "");
 
     const fetchCollectionClients = async () => {
-      const response = await getAll(accountID || "");
-      setCollectionClients(response.collectionClients);
+      getAll(accountID || "").then((response) => {
+        setCollectionClients(response.collectionClients);
+      });
     };
 
     if (accountID) {

@@ -23,13 +23,15 @@ const Transactions = () => {
     setAccountID(sessionStorage.getItem("accountID") || "");
 
     const fetchTransactions = async () => {
-      const response = await getTransactions(accountID || "");
-      setTransactions(response.transactions);
+      getTransactions(accountID || "").then((response) => {
+        setTransactions(response.transactions);
+      });
     };
 
     const fetchTransactionClients = async () => {
-      const response = await getTransactionClients(accountID || "");
-      setTransactionClients(response.transactionClients);
+      getTransactionClients(accountID || "").then((response) => {
+        setTransactionClients(response.transactionClients);
+      });
     };
 
     if (accountID) {

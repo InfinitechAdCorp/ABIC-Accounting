@@ -23,8 +23,9 @@ const Dashboard = () => {
   useEffect(() => {
     const accountID = sessionStorage.getItem("accountID");
     const fetchCounts = async () => {
-      const response = await getCounts(accountID || "");
-      setCounts(response.counts);
+      getCounts(accountID || "").then((response) => {
+        setCounts(response.counts);
+      });
     };
 
     if (accountID) {

@@ -19,7 +19,7 @@ const Accounts = () => {
   const setAccount = (e: PressEvent) => {
     const account_id = e.target.dataset.pressed;
     sessionStorage.setItem("accountID", account_id);
-    router.push("/dashboard")
+    router.push("/dashboard");
   };
 
   const logout = () => {
@@ -35,8 +35,9 @@ const Accounts = () => {
 
   useEffect(() => {
     const fetchAccounts = async () => {
-      const response = await getAll();
-      setAccounts(response.accounts);
+      getAll().then((response) => {
+        setAccounts(response.accounts);
+      });
     };
 
     fetchAccounts();
