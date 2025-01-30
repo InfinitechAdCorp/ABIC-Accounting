@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 export const create = Yup.object().shape({
-  client_id: Yup.string().required("Client ID is a required field"),
+  collection_client_id: Yup.string().required("Collection Client ID is a required field"),
   property: Yup.string().required("Property is a required field"),
   location: Yup.string().required("Location is a required field"),
   start: Yup.date()
@@ -35,7 +35,7 @@ export const create = Yup.object().shape({
 
 export const update = Yup.object().shape({
   id: Yup.string().required("ID is a required field"),
-  client_id: Yup.string().required("Client ID is a required field"),
+  collection_client_id: Yup.string().required("Collection Client ID is a required field"),
   property: Yup.string().required("Property is a required field"),
   location: Yup.string().required("Location is a required field"),
   start: Yup.date()

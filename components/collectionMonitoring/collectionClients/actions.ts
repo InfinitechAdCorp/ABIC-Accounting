@@ -12,12 +12,16 @@ import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 
+type CollectionClientCreateInput = Prisma.CollectionClientCreateInput & {
+  account_id?: string;
+};
+
 export const getAll = async () => {
-  let clients = [];
+  let collectionClients = [];
 
   try {
-    clients = await prisma.client.findMany({
-      include: { contracts: true },
+    collectionClients = await prisma.collectionClient.findMany({
+      include: { collections: true },
     });
   } catch {
     const response = {
@@ -28,11 +32,15 @@ export const getAll = async () => {
     return response;
   }
 
-  const response = { code: 200, message: "Fetched Clients", clients: clients };
+  const response = {
+    code: 200,
+    message: "Fetched Clients",
+    collectionClients: collectionClients,
+  };
   return response;
 };
 
-export const create = async (values: Prisma.ClientCreateInput) => {
+export const create = async (values: CollectionClientCreateInput) => {
   const schema = createSchema;
 
   try {
@@ -48,31 +56,24 @@ export const create = async (values: Prisma.ClientCreateInput) => {
     return response;
   }
 
-  const nameExists = await prisma.client.findFirst({
-    where: { name: values.name },
-  });
-
-  if (!nameExists) {
-    try {
-      await prisma.client.create({ data: { ...values } });
-    } catch {
-      const response: ActionResponse = { code: 500, message: "Server Error" };
-      return response;
-    }
-  } else {
-    const response: ActionResponse = {
-      code: 429,
-      message: "Name Is Already Taken",
-    };
+  try {
+    await prisma.collectionClient.create({
+      data: {
+        account: { connect: { id: values.account_id } },
+        name: values.name,
+      },
+    });
+  } catch {
+    const response: ActionResponse = { code: 500, message: "Server Error" };
     return response;
   }
 
-  revalidatePath("/clients");
+  revalidatePath("/collection-clients");
   const response: ActionResponse = { code: 200, message: "Added Client" };
   return response;
 };
 
-export const update = async (values: Prisma.ClientCreateInput) => {
+export const update = async (values: CollectionClientCreateInput) => {
   const schema = updateSchema;
 
   try {
@@ -88,37 +89,22 @@ export const update = async (values: Prisma.ClientCreateInput) => {
     return response;
   }
 
-  const nameExists = await prisma.client.findFirst({
-    where: { name: values.name },
-  });
-
-  const client = await prisma.client.findFirst({
-    where: { id: values.id },
-  });
-
-  if (!nameExists || client?.name == values.name) {
-    try {
-      await prisma.client.update({
-        where: {
-          id: values.id,
-        },
-        data: {
-          name: values.name,
-        },
-      });
-    } catch {
-      const response: ActionResponse = { code: 500, message: "Server Error" };
-      return response;
-    }
-  } else {
-    const response: ActionResponse = {
-      code: 429,
-      message: "Name Is Already Taken",
-    };
+  try {
+    await prisma.collectionClient.update({
+      where: {
+        id: values.id,
+      },
+      data: {
+        account: { connect: { id: values.account_id } },
+        name: values.name,
+      },
+    });
+  } catch {
+    const response: ActionResponse = { code: 500, message: "Server Error" };
     return response;
   }
 
-  revalidatePath("/clients");
+  revalidatePath("/collection-clients");
   const response: ActionResponse = { code: 200, message: "Updated Client" };
   return response;
 };
@@ -140,7 +126,7 @@ export const destroy = async (values: { id: string }) => {
   }
 
   try {
-    await prisma.client.delete({
+    await prisma.collectionClient.delete({
       where: { id: values.id },
     });
   } catch {
@@ -148,7 +134,7 @@ export const destroy = async (values: { id: string }) => {
     return response;
   }
 
-  revalidatePath("/clients");
+  revalidatePath("/collection-clients");
   const response: ActionResponse = { code: 200, message: "Deleted Client" };
   return response;
 };
