@@ -22,8 +22,8 @@ const LoginForm = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
-    username: "",
-    password: "",
+    username: "admin",
+    password: "admin",
   };
 
   const onSubmit = async (
@@ -35,11 +35,11 @@ const LoginForm = () => {
       setSubmitting(false);
       actions.resetForm();
       if (response.isValid) {
-        toast.success("Logged In");
+        toast.success(response.message);
         sessionStorage.setItem("isLoggedIn", "true");
         router.push("/accounts");
       } else {
-        toast.error("Invalid Credentials");
+        toast.error(response.message);
       }
     });
   };
@@ -67,7 +67,7 @@ const LoginForm = () => {
               <CardBody>
                 <Field name="username">
                   {({ field, meta }: FieldProps) => (
-                    <div>
+                    <div className="mb-3">
                       <Input
                         {...field}
                         type="text"
