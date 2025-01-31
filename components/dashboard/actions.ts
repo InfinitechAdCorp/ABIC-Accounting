@@ -1,8 +1,12 @@
 "use server";
 
 import prisma from "@/lib/db";
+import { cookies } from "next/headers";
 
-export const getCounts = async (accountID: string) => {
+export const getCounts = async () => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value
+  
   const counts = {
     transactionClients: 0,
     transactions: 0,

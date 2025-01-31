@@ -1,12 +1,9 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
-import { Card, CardBody } from "@nextui-org/react";
+import React from "react";
 import { getCounts } from "@/components/dashboard/actions";
+import Navbar from "@/components/globals/navbar";
+import CountCard from "@/components/dashboard/countCard";
 import { GrTransaction } from "react-icons/gr";
 import { FaUsers, FaFileSignature } from "react-icons/fa6";
-import Navbar from "@/components/globals/navbar";
-import { useRouter } from "next/navigation";
 
 export type Counts = {
   transactionClients: number;
@@ -14,22 +11,8 @@ export type Counts = {
   collections: number;
 };
 
-const Dashboard = () => {
-  const router = useRouter();
-  const [counts, setCounts] = useState<Counts>();
-
-  useEffect(() => {
-    const accountID = sessionStorage.getItem("accountID");
-    const fetchCounts = async () => {
-      getCounts(accountID || "").then((response) => {
-        setCounts(response.counts);
-      });
-    };
-
-    if (accountID) {
-      fetchCounts();
-    }
-  }, []);
+const Dashboard = async () => {
+  const { counts } = await getCounts();
 
   return (
     <>
@@ -41,70 +24,27 @@ const Dashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 px-5 lg:px-24 xl:px-60 gap-3 mb-3">
-          <Card
-            className="cursor-pointer"
-            title="View Clients"
-            isPressable
-            isHoverable
-            onPress={() => {
-              router.push("/transaction-history/transaction-clients");
-            }}
+          <CountCard
+            model="Clients"
+            link="/transaction-history/transaction-clients"
+            count={counts.transactionClients}
           >
-            <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
-              <div className="flex justify-center items-center">
-                <FaUsers size={56} />
-              </div>
-
-              <div className="flex flex-col justify-center items-center">
-                <h1 className="font-extrabold text-3xl">
-                  {counts?.transactionClients}
-                </h1>
-                <h4 className="text-neutral-500">Clients</h4>
-              </div>
-            </CardBody>
-          </Card>
-
-          <Card
-            className="cursor-pointer"
-            title="View Transactions"
-            isPressable
-            isHoverable
-            onPress={() => router.push("/transaction-history/transactions")}
+            <FaUsers size={56} />
+          </CountCard>
+          <CountCard
+            model="Transactions"
+            link="/transaction-history/transactions"
+            count={counts.transactions}
           >
-            <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
-              <div className="flex justify-center items-center">
-                <GrTransaction size={56} />
-              </div>
-
-              <div className="flex flex-col justify-center items-center">
-                <h1 className="font-extrabold text-3xl">
-                  {counts?.transactions}
-                </h1>
-                <h4 className="text-neutral-500">Transactions</h4>
-              </div>
-            </CardBody>
-          </Card>
-
-          <Card
-            className="cursor-pointer"
-            title="View Collections"
-            isPressable
-            isHoverable
-            onPress={() => router.push("/collection-monitoring/collections")}
+            <GrTransaction size={56} />
+          </CountCard>
+          <CountCard
+            model="Collections"
+            link="/collection-monitoring/collections"
+            count={counts.collections}
           >
-            <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
-              <div className="flex justify-center items-center">
-                <FaFileSignature size={56} />
-              </div>
-
-              <div className="flex flex-col justify-center items-center">
-                <h1 className="font-extrabold text-3xl">
-                  {counts?.collections}
-                </h1>
-                <h4 className="text-neutral-500">Collections</h4>
-              </div>
-            </CardBody>
-          </Card>
+            <FaFileSignature size={56} />
+          </CountCard>
         </div>
       </div>
     </>
