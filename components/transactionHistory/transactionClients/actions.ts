@@ -11,12 +11,13 @@ import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { formatTransactionClients } from "@/components/globals/utils";
+import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 
-type TransactionClientCreateInput = Prisma.TransactionClientCreateInput & {
-  account_id?: string;
-};
+const session = await cookies();
+const accountID = session.get("accountID")?.value || "";
 
-export const getAll = async (accountID: string) => {
+export const getAll = async () => {
   let account;
 
   try {
@@ -39,6 +40,7 @@ export const getAll = async (accountID: string) => {
       code: 500,
       message: "Server Error",
       transactionClients: [],
+      accountID: accountID,
     };
     return response;
   }
@@ -50,11 +52,12 @@ export const getAll = async (accountID: string) => {
     code: 200,
     message: "Fetched Clients",
     transactionClients: transactionClients,
+    accountID: accountID,
   };
   return response;
 };
 
-export const create = async (values: TransactionClientCreateInput) => {
+export const create = async (values: Prisma.TransactionClientCreateInput) => {
   const schema = createSchema;
 
   try {
@@ -73,7 +76,7 @@ export const create = async (values: TransactionClientCreateInput) => {
   try {
     await prisma.transactionClient.create({
       data: {
-        account: { connect: { id: values.account_id } },
+        account: { connect: { id: accountID } },
         name: values.name,
       },
     });
@@ -82,11 +85,12 @@ export const create = async (values: TransactionClientCreateInput) => {
     return response;
   }
 
+  revalidatePath("/transaction-history/transaction-clients");
   const response = { code: 200, message: "Added Client" };
   return response;
 };
 
-export const update = async (values: TransactionClientCreateInput) => {
+export const update = async (values: Prisma.TransactionClientCreateInput) => {
   const schema = updateSchema;
 
   try {
@@ -108,7 +112,7 @@ export const update = async (values: TransactionClientCreateInput) => {
         id: values.id,
       },
       data: {
-        account: { connect: { id: values.account_id } },
+        account: { connect: { id: accountID } },
         name: values.name,
       },
     });
@@ -117,6 +121,7 @@ export const update = async (values: TransactionClientCreateInput) => {
     return response;
   }
 
+  revalidatePath("/transaction-history/transaction-clients");
   const response: ActionResponse = { code: 200, message: "Updated Client" };
   return response;
 };
@@ -146,6 +151,7 @@ export const destroy = async (values: { id: string }) => {
     return response;
   }
 
+  revalidatePath("/transaction-history/transaction-clients");
   const response: ActionResponse = {
     code: 200,
     message: "Deleted Client",

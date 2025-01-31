@@ -17,16 +17,12 @@ import { create as createAction } from "@/components/transactionHistory/transact
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
 
-type Props = {
-  accountID: string;
-};
 
-const CreateModal = ({ accountID }: Props) => {
+const CreateModal = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
-    account_id: accountID,
     name: "",
   };
 
@@ -60,8 +56,6 @@ const CreateModal = ({ accountID }: Props) => {
                   <Form>
                     <ModalHeader>Add Client</ModalHeader>
                     <ModalBody>
-                      <Field type="hidden" name="account_id" />
-
                       <Field name="name">
                         {({ field, meta }: FieldProps) => (
                           <div>
