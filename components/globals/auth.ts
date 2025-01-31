@@ -38,3 +38,32 @@ export const login = async (values: Login) => {
 
   return response;
 };
+
+export const set = async (accountID: string) => {
+  const session = await cookies();
+  session.set("accountID", accountID);
+
+  const response = {
+    code: 200,
+    message: "Account Set",
+  };
+
+  return response;
+};
+
+export const logout = async () => {
+  const session = await cookies();
+
+  const keys = ["isLoggedIn", "accountID"];
+  keys.forEach((key) => {
+    session.delete(key);
+  });
+
+  const response = {
+    code: 200,
+    message: "Logged Out",
+    test: session.getAll(),
+  };
+
+  return response;
+};

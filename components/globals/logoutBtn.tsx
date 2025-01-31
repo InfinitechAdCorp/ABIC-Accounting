@@ -1,22 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { logout as logoutUser } from "@/components/globals/auth";
 
 const LogoutBtn = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-
-  const logout = () => {
-    setIsLoggedIn(false);
-    toast.success("Logged Out");
+  const logout = async () => {
+    logoutUser().then((response) => {
+      toast.success(response.message);
+    });
   };
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      sessionStorage.clear();
-    }
-  }, [isLoggedIn]);
 
   return (
     <>

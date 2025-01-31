@@ -3,9 +3,7 @@
 import prisma from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { ActionResponse } from "@/components/globals/types";
-import {
-  create as createSchema,
-} from "@/components/accounts/schemas";
+import { create as createSchema } from "@/components/accounts/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { revalidatePath } from "next/cache";
@@ -38,8 +36,8 @@ export const get = async (accountID: string) => {
   try {
     account = await prisma.account.findUnique({
       where: {
-        id: accountID
-      }
+        id: accountID,
+      },
     });
   } catch {
     const response = {
@@ -87,7 +85,7 @@ export const create = async (values: Prisma.AccountCreateInput) => {
     return response;
   }
 
-  revalidatePath("/accounts")
+  revalidatePath("/accounts");
   const response: ActionResponse = { code: 200, message: "Added Account" };
   return response;
 };
