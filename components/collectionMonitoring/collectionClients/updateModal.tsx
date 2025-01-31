@@ -29,7 +29,6 @@ const UpdateModal = ({ collectionClient }: Props) => {
 
   const initialValues = {
     id: collectionClient.id,
-    account_id: collectionClient.account_id,
     name: collectionClient.name,
   };
 
@@ -70,8 +69,7 @@ const UpdateModal = ({ collectionClient }: Props) => {
                     <ModalHeader>Update Client</ModalHeader>
                     <ModalBody>
                       <Field type="hidden" name="id" />
-                      <Field type="hidden" name="account_id" />
-
+                      
                       <Field name="name">
                         {({ field, meta }: FieldProps) => (
                           <div>

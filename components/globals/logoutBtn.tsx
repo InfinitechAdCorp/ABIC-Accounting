@@ -1,20 +1,23 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
 import toast from "react-hot-toast";
 import { logout as logoutUser } from "@/components/globals/auth";
+import { useRouter } from "next/navigation";
 
 const LogoutBtn = () => {
+  const router = useRouter();
+
   const logout = async () => {
     logoutUser().then((response) => {
+      router.push("/");
       toast.success(response.message);
     });
   };
 
   return (
     <>
-      <Link href="/" className="text-center" onClick={logout}>
+      <div className="text-center" onClick={logout}>
         <h3
           className={
             "text-sm md:text-base font-semibold text-white cursor-pointer"
@@ -22,7 +25,7 @@ const LogoutBtn = () => {
         >
           Logout
         </h3>
-      </Link>
+      </div>
     </>
   );
 };
