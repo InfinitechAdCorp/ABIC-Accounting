@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import {
   Modal,
@@ -47,6 +49,7 @@ const UpdateModal = ({ transaction, transactionClients }: Props) => {
     type: transaction.type,
     amount: transaction.amount,
     status: transaction.status,
+    proof: transaction.proof,
   };
 
   const onSubmit = async (

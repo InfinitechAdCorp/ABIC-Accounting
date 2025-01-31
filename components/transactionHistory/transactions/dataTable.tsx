@@ -28,7 +28,10 @@ import CreateTransactionModal from "@/components/transactionHistory/transactions
 import UpdateModal from "@/components/transactionHistory/transactions/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
 import CancelModal from "@/components/transactionHistory/transactions/cancelModal";
-import { destroy, cancel } from "@/components/transactionHistory/transactions/actions";
+import {
+  destroy,
+  cancel,
+} from "@/components/transactionHistory/transactions/actions";
 import CreateTransactionClientModal from "@/components/transactionHistory/transactionClients/createModal";
 
 type column = {
@@ -118,7 +121,10 @@ const DataTable = ({
       if (columnKey == "actions") {
         return (
           <div className="relative flex justify-end items-center gap-2">
-            <UpdateModal transaction={row} transactionClients={transactionClients} />
+            <UpdateModal
+              transaction={row}
+              transactionClients={transactionClients}
+            />
             <DestroyModal title="Transaction" action={destroy} id={row.id} />
             <CancelModal action={cancel} id={row.id} />
           </div>
@@ -309,9 +315,14 @@ const DataTable = ({
         </TableHeader>
         <TableBody emptyContent={`No ${model} found`} items={sortedItems}>
           {(item) => (
-            <TableRow key={item.id}>
+            <TableRow
+              key={item.id}
+              className={item.status == "Cancelled" ? "text-red-600" : ""}
+            >
               {(columnKey: any) => (
-                <TableCell>{renderCell(item, columnKey) as React.ReactNode}</TableCell>
+                <TableCell>
+                  {renderCell(item, columnKey) as React.ReactNode}
+                </TableCell>
               )}
             </TableRow>
           )}
