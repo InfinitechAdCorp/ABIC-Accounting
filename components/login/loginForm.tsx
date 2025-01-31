@@ -9,74 +9,113 @@ import {
   Input,
   Button,
 } from "@nextui-org/react";
-import { login } from "@/components/globals/auth";
+import { login as loginAction } from "@/components/globals/auth";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Formik, Form, Field, FieldProps } from "formik";
+import { login as loginSchema } from "@/components/globals/schemas";
+import { Login } from "@/components/globals/types";
 
 const LoginForm = () => {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 
-  const handlePostSubmit = (isValid: boolean) => {
-    if (isValid) {
-      toast.success("Logged In");
-      sessionStorage.setItem("isLoggedIn", "true");
-      router.push("/accounts");
-    } else {
-      toast.error("Invalid Credentials");
-    }
+  const initialValues = {
+    username: "",
+    password: "",
+  };
+
+  const onSubmit = async (
+    values: Login,
+    actions: { resetForm: () => void }
+  ) => {
+    setSubmitting(true);
+    loginAction(values).then((response) => {
+      setSubmitting(false);
+      actions.resetForm();
+      if (response.isValid) {
+        toast.success("Logged In");
+        sessionStorage.setItem("isLoggedIn", "true");
+        router.push("/accounts");
+      } else {
+        toast.error("Invalid Credentials");
+      }
+    });
   };
 
   return (
     <>
       <Card className="m-5 md:m-7 p-5 w-[30rem]">
-        <form
-          action={(formData) => {
-            setSubmitting(true);
-            login(formData).then((response) => {
-              setSubmitting(false);
-              handlePostSubmit(response.isValid);
-            });
-          }}
+        <Formik
+          initialValues={initialValues}
+          validationSchema={loginSchema}
+          onSubmit={onSubmit}
         >
-          <CardHeader>
-            <div className="flex w-full justify-center">
-              <Image src={"/logo.jpg"} width={200} height={200} alt="logo" />
-            </div>
-          </CardHeader>
-          <CardBody>
-            <Input
-              className="mb-3"
-              type="text"
-              size="lg"
-              variant="bordered"
-              label="Username"
-              labelPlacement="outside"
-              placeholder="Enter Username"
-              name="username"
-            />
-            <Input
-              type="password"
-              size="lg"
-              variant="bordered"
-              label="Password"
-              labelPlacement="outside"
-              placeholder="Enter Password"
-              name="password"
-            />
-          </CardBody>
-          <CardFooter className="justify-end">
-            <Button
-              size="lg"
-              color="primary"
-              type="submit"
-              isLoading={submitting}
-            >
-              Login
-            </Button>
-          </CardFooter>
-        </form>
+          {() => (
+            <Form>
+              <CardHeader>
+                <div className="flex w-full justify-center">
+                  <Image
+                    src={"/logo.jpg"}
+                    width={200}
+                    height={200}
+                    alt="logo"
+                  />
+                </div>
+              </CardHeader>
+              <CardBody>
+                <Field name="username">
+                  {({ field, meta }: FieldProps) => (
+                    <div>
+                      <Input
+                        {...field}
+                        type="text"
+                        size="md"
+                        variant="bordered"
+                        label="Username"
+                        labelPlacement="outside"
+                        placeholder="Enter Username"
+                      />
+                      {meta.touched && meta.error && (
+                        <small className="text-red-500">{meta.error}</small>
+                      )}
+                    </div>
+                  )}
+                </Field>
+
+                <Field name="password">
+                  {({ field, meta }: FieldProps) => (
+                    <div>
+                      <Input
+                        {...field}
+                        type="password"
+                        size="md"
+                        variant="bordered"
+                        label="Password"
+                        labelPlacement="outside"
+                        placeholder="Enter Password"
+                      />
+                      {meta.touched && meta.error && (
+                        <small className="text-red-500">{meta.error}</small>
+                      )}
+                    </div>
+                  )}
+                </Field>
+              </CardBody>
+              <CardFooter className="justify-end">
+                <Button
+                  size="lg"
+                  color="primary"
+                  type="submit"
+                  isLoading={submitting}
+                >
+                  Login
+                </Button>
+              </CardFooter>
+            </Form>
+          )}
+        </Formik>
       </Card>
     </>
   );

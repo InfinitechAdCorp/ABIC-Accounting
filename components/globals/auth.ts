@@ -1,16 +1,11 @@
 "use server";
 
-export const login = async (formData: FormData) => {
-  const response = { isValid: false };
-  const username = formData.get("username");
-  const password = formData.get("password");
+import { Login } from "@/components/globals/types";
 
-  if (
-    username == process.env.LOGIN_USERNAME &&
-    password == process.env.LOGIN_PASSWORD
-  ) {
-    response.isValid = true;
-  }
-
+export const login = async (values: Login) => {
+  const isValid =
+    values.username == process.env.LOGIN_USERNAME &&
+    values.password == process.env.LOGIN_PASSWORD;
+  const response = { isValid: isValid };
   return response;
 };

@@ -1,5 +1,10 @@
 import { SVGProps } from "react";
 
+export type Login = {
+  username: string,
+  password: string,
+}
+
 export type ActionResponse = {
   code: number;
   message: string;
