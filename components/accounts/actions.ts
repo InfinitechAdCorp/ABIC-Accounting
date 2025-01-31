@@ -9,9 +9,6 @@ import * as Yup from "yup";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
-const session = await cookies();
-const accountID = session.get("accountID")?.value;
-
 export const getAll = async () => {
   let accounts = [];
 
@@ -35,6 +32,9 @@ export const getAll = async () => {
 };
 
 export const get = async () => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value;
+
   let account;
 
   try {

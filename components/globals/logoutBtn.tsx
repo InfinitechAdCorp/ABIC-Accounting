@@ -9,10 +9,9 @@ const LogoutBtn = () => {
   const router = useRouter();
 
   const logout = async () => {
-    logoutUser().then((response) => {
-      router.push("/");
-      toast.success(response.message);
-    });
+    const response = await logoutUser();
+    toast.success(response.message)
+    router.push("/")
   };
 
   return (

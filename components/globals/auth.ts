@@ -62,7 +62,6 @@ export const logout = async () => {
   const response = {
     code: 200,
     message: "Logged Out",
-    test: session.getAll(),
   };
 
   return response;

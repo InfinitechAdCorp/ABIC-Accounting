@@ -3,8 +3,10 @@ import { getAll } from "@/components/transactionHistory/transactionClients/actio
 import { Card, CardBody } from "@nextui-org/react";
 import DataTable from "@/components/transactionHistory/transactionClients/dataTable";
 import Navbar from "@/components/globals/navbar";
+import { get as getAccount } from "@/components/accounts/actions";
 
 const TransactionClients = async () => {
+  const { account } = await getAccount();
 const { transactionClients } = await getAll();
 
   const columns = [
@@ -25,7 +27,7 @@ const { transactionClients } = await getAll();
 
   return (
     <>
-      <Navbar />
+      <Navbar account={account} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">

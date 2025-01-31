@@ -14,10 +14,10 @@ import { formatCollectionClients } from "@/components/globals/utils";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 
-const session = await cookies();
+export const getAll = async () => {
+  const session = await cookies();
 const accountID = session.get("accountID")?.value || "";
 
-export const getAll = async () => {
   let account;
 
   try {
@@ -52,6 +52,9 @@ export const getAll = async () => {
 };
 
 export const create = async (values: Prisma.CollectionClientCreateInput) => {
+  const session = await cookies();
+const accountID = session.get("accountID")?.value || "";
+
   const schema = createSchema;
 
   try {
@@ -85,6 +88,9 @@ export const create = async (values: Prisma.CollectionClientCreateInput) => {
 };
 
 export const update = async (values: Prisma.CollectionClientCreateInput) => {
+  const session = await cookies();
+const accountID = session.get("accountID")?.value || "";
+
   const schema = updateSchema;
 
   try {

@@ -1,4 +1,5 @@
 import React from "react";
+import { get as getAccount } from "@/components/accounts/actions";
 import { getCounts } from "@/components/dashboard/actions";
 import Navbar from "@/components/globals/navbar";
 import CountCard from "@/components/dashboard/countCard";
@@ -12,11 +13,12 @@ export type Counts = {
 };
 
 const Dashboard = async () => {
+  const { account } = await getAccount();
   const { counts } = await getCounts();
 
   return (
     <>
-      <Navbar />
+      <Navbar account={account} />
 
       <div className="m-5 md:mx-7 xl:mx-14 2xl:mx-60">
         <div className="text-center">

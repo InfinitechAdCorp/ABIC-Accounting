@@ -13,11 +13,10 @@ type Props = {
 const AccountCard = ({ account }: Props) => {
   const router = useRouter();
 
-  const set = (e: any) => {
+  const set = async (e: any) => {
     const accountID = e.target.dataset.pressed;
-    setAccount(accountID).then(() => {
-      router.push("/dashboard");
-    });
+    await setAccount(accountID);
+    router.replace("/dashboard");
   };
 
   return (

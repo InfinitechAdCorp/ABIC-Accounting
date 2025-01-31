@@ -3,8 +3,10 @@ import { getAll } from "@/components/collectionMonitoring/collectionClients/acti
 import { Card, CardBody } from "@nextui-org/react";
 import DataTable from "@/components/collectionMonitoring/collectionClients/dataTable";
 import Navbar from "@/components/globals/navbar";
+import { get as getAccount } from "@/components/accounts/actions";
 
 const CollectionClients = async () => {
+  const { account } = await getAccount();
   const { collectionClients } = await getAll();
 
   const columns = [
@@ -17,7 +19,7 @@ const CollectionClients = async () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar account={account} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">

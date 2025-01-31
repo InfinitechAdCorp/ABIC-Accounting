@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import {
   Dropdown,
@@ -9,24 +9,16 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 import { useRouter, usePathname } from "next/navigation";
-import { get as getAccount } from "@/components/accounts/actions";
 import LogoutBtn from "@/components/globals/logoutBtn";
 import { Account } from "@prisma/client";
 
-const Navbar = () => {
+type Props = {
+  account: Account | undefined | null;
+};
+
+const Navbar = ({ account }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
-
-  const [account, setAccount] = useState<Account | null>();
-
-  useEffect(() => {
-    const get = async () => {
-      const response = await getAccount();
-      setAccount(response.account);
-    };
-
-    get();
-  }, []);
 
   const isActive = (hrefs: string[]) => hrefs.includes(pathname);
 

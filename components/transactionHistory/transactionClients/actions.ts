@@ -14,10 +14,10 @@ import { formatTransactionClients } from "@/components/globals/utils";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 
-const session = await cookies();
-const accountID = session.get("accountID")?.value || "";
-
 export const getAll = async () => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value;
+
   let account;
 
   try {
@@ -58,6 +58,9 @@ export const getAll = async () => {
 };
 
 export const create = async (values: Prisma.TransactionClientCreateInput) => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value;
+
   const schema = createSchema;
 
   try {
@@ -91,6 +94,9 @@ export const create = async (values: Prisma.TransactionClientCreateInput) => {
 };
 
 export const update = async (values: Prisma.TransactionClientCreateInput) => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value;
+
   const schema = updateSchema;
 
   try {
