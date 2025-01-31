@@ -36,7 +36,6 @@ const LoginForm = () => {
       actions.resetForm();
       if (response.isValid) {
         toast.success(response.message);
-        sessionStorage.setItem("isLoggedIn", "true");
         router.push("/accounts");
       } else {
         toast.error(response.message);

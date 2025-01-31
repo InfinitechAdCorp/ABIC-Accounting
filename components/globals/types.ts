@@ -5,15 +5,6 @@ export type Login = {
   password: string;
 };
 
-export type LoginResponse = {
-  code: number;
-  message: string;
-  isValid: boolean;
-  errors?: {
-    [key: string]: string;
-  };
-};
-
 export type ActionResponse = {
   code: number;
   message: string;

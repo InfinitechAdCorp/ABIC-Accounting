@@ -4,6 +4,7 @@ import { Login } from "@/components/globals/types";
 import { login as loginSchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
+import { cookies } from "next/headers";
 
 export const login = async (values: Login) => {
   const schema = loginSchema;
@@ -25,6 +26,9 @@ export const login = async (values: Login) => {
   const isValid =
     values.username == process.env.LOGIN_USERNAME &&
     values.password == process.env.LOGIN_PASSWORD;
+
+  const session = await cookies();
+  session.set("isLoggedIn", `${isValid}`);
 
   const response = {
     code: isValid ? 200 : 401,
