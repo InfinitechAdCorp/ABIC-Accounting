@@ -9,46 +9,26 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 import { useRouter, usePathname } from "next/navigation";
-import toast from "react-hot-toast";
+import { get as getAccount } from "@/components/accounts/actions";
+import LogoutBtn from "@/components/globals/logoutBtn";
 import { Account } from "@prisma/client";
-import { get } from "@/components/accounts/actions";
 
 const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [accountID, setAccountID] = useState("");
   const [account, setAccount] = useState<Account | null>();
 
-  const isActive = (hrefs: string[]) => hrefs.includes(pathname);
-
-  const logout = () => {
-    setIsLoggedIn(false);
-    toast.success("Logged Out");
-  };
-
   useEffect(() => {
-    if (!isLoggedIn) {
-      sessionStorage.clear();
-    }
-  }, [isLoggedIn]);
+    const get = async () => {
+      const response = await getAccount();
+      setAccount(response.account);
+    };
 
-  useEffect(() => {
-    setAccountID(sessionStorage.getItem("accountID") as string);
+    get();
   }, []);
 
-  useEffect(() => {
-    if (accountID) {
-      const fetchAccount = async () => {
-        get(accountID).then((response) => {
-          setAccount(response.account);
-        });
-      };
-
-      fetchAccount();
-    }
-  }, [accountID]);
+  const isActive = (hrefs: string[]) => hrefs.includes(pathname);
 
   return (
     <>
@@ -73,7 +53,10 @@ const Navbar = () => {
               <DropdownTrigger className="text-center">
                 <h3
                   className={`text-sm md:text-base text-white cursor-pointer ${
-                    isActive(["/transaction-history/transaction-clients", "/transaction-history/transactions"])
+                    isActive([
+                      "/transaction-history/transaction-clients",
+                      "/transaction-history/transactions",
+                    ])
                       ? "font-black"
                       : "font-semibold"
                   }`}
@@ -85,14 +68,18 @@ const Navbar = () => {
 
               <DropdownMenu className="text-center">
                 <DropdownItem
-                  onPress={() => router.push("/transaction-history/transaction-clients")}
+                  onPress={() =>
+                    router.push("/transaction-history/transaction-clients")
+                  }
                   key="Transaction Clients"
                   textValue="Transaction Clients"
                 >
                   <h3 className="font-semibold">Clients</h3>
                 </DropdownItem>
                 <DropdownItem
-                  onPress={() => router.push("/transaction-history/transactions")}
+                  onPress={() =>
+                    router.push("/transaction-history/transactions")
+                  }
                   key="Transactions"
                   textValue="Transactions"
                 >
@@ -111,7 +98,10 @@ const Navbar = () => {
               <DropdownTrigger className="text-center">
                 <h3
                   className={`text-sm md:text-base text-white cursor-pointer ${
-                    isActive(["/collection-monitoring/collection-clients", "/collection-monitoring/collections"])
+                    isActive([
+                      "/collection-monitoring/collection-clients",
+                      "/collection-monitoring/collections",
+                    ])
                       ? "font-black"
                       : "font-semibold"
                   }`}
@@ -125,7 +115,7 @@ const Navbar = () => {
               <DropdownMenu className="text-center">
                 <DropdownItem
                   onPress={() => {
-                    router.push("/collection-monitoring/collection-clients")
+                    router.push("/collection-monitoring/collection-clients");
                   }}
                   key="Collection Clients"
                   textValue="Collection Clients"
@@ -133,7 +123,9 @@ const Navbar = () => {
                   <h3 className="font-semibold">Clients</h3>
                 </DropdownItem>
                 <DropdownItem
-                  onPress={() => router.push("/collection-monitoring/collections")}
+                  onPress={() =>
+                    router.push("/collection-monitoring/collections")
+                  }
                   key="Collections"
                   textValue="Collections"
                 >
@@ -194,16 +186,8 @@ const Navbar = () => {
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-          <Link href="/" className="text-end">
-            <h3
-              className={
-                "text-sm md:text-base font-semibold text-white cursor-pointer"
-              }
-              onClick={logout}
-            >
-              Logout
-            </h3>
-          </Link>
+
+          <LogoutBtn />
         </div>
       </div>
     </>

@@ -7,6 +7,7 @@ import { create as createSchema } from "@/components/accounts/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
 export const getAll = async () => {
   let accounts = [];
@@ -30,7 +31,10 @@ export const getAll = async () => {
   return response;
 };
 
-export const get = async (accountID: string) => {
+export const get = async () => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value
+
   let account;
 
   try {

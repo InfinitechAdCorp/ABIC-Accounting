@@ -54,7 +54,6 @@ export const getAll = async (accountID: string) => {
   return response;
 };
 
-
 export const create = async (values: TransactionClientCreateInput) => {
   const schema = createSchema;
 
