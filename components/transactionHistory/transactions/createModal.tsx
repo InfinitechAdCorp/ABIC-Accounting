@@ -43,6 +43,7 @@ const CreateModal = ({ transactionClients }: Props) => {
     type: "",
     amount: "",
     status: "Active",
+    proof: "",
   };
 
   const onSubmit = async (
@@ -227,6 +228,29 @@ const CreateModal = ({ transactionClients }: Props) => {
                                 label="Amount"
                                 labelPlacement="outside"
                                 placeholder="Enter Amount"
+                              />
+                              {meta.touched && meta.error && (
+                                <small className="text-red-500">
+                                  {meta.error}
+                                </small>
+                              )}
+                            </div>
+                          )}
+                        </Field>
+                      </div>
+
+                      <div>
+                        <Field name="proof">
+                          {({ field, meta }: FieldProps) => (
+                            <div>
+                              <Input
+                                {...field}
+                                type="text"
+                                size="md"
+                                variant="bordered"
+                                label="Proof"
+                                labelPlacement="outside"
+                                placeholder="Enter Proof"
                               />
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">

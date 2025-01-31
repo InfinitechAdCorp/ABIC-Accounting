@@ -46,6 +46,7 @@ const Transactions = () => {
     { name: "PARTICULARS", key: "particulars", sortable: true },
     { name: "CREDIT", key: "credit", sortable: true },
     { name: "DEBIT", key: "debit", sortable: true },
+    { name: "PROOF", key: "proof", sortable: true },
     { name: "ACTIONS", key: "actions" },
   ];
 
@@ -58,6 +59,7 @@ const Transactions = () => {
     "credit",
     "debit",
     "actions",
+    "proof",
   ];
 
   return (

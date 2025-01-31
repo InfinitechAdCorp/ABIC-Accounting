@@ -67,6 +67,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
     type: "Credit",
     amount: 5000.5,
     status: "Active",
+    proof: "no-image.jpg",
   },
   {
     transaction_client: {
@@ -84,6 +85,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
     type: "Debit",
     amount: 3000.75,
     status: "Active",
+    proof: "no-image.jpg",
   },
   {
     transaction_client: {
@@ -101,6 +103,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
     type: "Credit",
     amount: 4000.5,
     status: "Active",
+    proof: "no-image.jpg",
   },
 ];
 

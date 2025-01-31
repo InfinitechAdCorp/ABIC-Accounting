@@ -251,6 +251,29 @@ const UpdateModal = ({ transaction, transactionClients }: Props) => {
                           )}
                         </Field>
                       </div>
+
+                      <div>
+                        <Field name="proof">
+                          {({ field, meta }: FieldProps) => (
+                            <div>
+                              <Input
+                                {...field}
+                                type="text"
+                                size="md"
+                                variant="bordered"
+                                label="Proof"
+                                labelPlacement="outside"
+                                placeholder="Enter Proof"
+                              />
+                              {meta.touched && meta.error && (
+                                <small className="text-red-500">
+                                  {meta.error}
+                                </small>
+                              )}
+                            </div>
+                          )}
+                        </Field>
+                      </div>
                     </ModalBody>
                     <ModalFooter>
                       <Button

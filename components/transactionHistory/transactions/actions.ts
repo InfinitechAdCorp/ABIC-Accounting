@@ -76,6 +76,7 @@ export const create = async (values: TransactionCreateInput) => {
         type: values.type,
         amount: values.amount,
         status: values.status,
+        proof: values.proof,
       },
     });
   } catch {
@@ -115,6 +116,7 @@ export const update = async (values: TransactionCreateInput) => {
         type: values.type,
         amount: values.amount,
         status: values.status,
+        proof: values.proof,
       },
     });
   } catch {
