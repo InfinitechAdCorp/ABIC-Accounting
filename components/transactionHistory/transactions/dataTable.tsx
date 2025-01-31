@@ -47,7 +47,6 @@ type Props = {
   initialVisibleColumns: string[];
   searchKey: string;
   sortKey: string;
-  accountID: string;
   transactionClients: FormattedTransactionClient[];
 };
 
@@ -58,7 +57,6 @@ const DataTable = ({
   initialVisibleColumns,
   searchKey,
   sortKey,
-  accountID,
   transactionClients,
 }: Props) => {
   type Row = (typeof rows)[0];
@@ -184,65 +182,68 @@ const DataTable = ({
 
   const topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
-          <Input
-            isClearable
-            className="w-full sm:max-w-[44%]"
-            placeholder="Search"
-            startContent={<SearchIcon />}
-            value={filterValue}
-            onClear={() => onClear()}
-            onValueChange={onSearchChange}
-          />
-          <div className="flex gap-3">
-            <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
-                <Button
-                  endContent={<ChevronDownIcon className="text-small" />}
-                  variant="flat"
+      <>
+        <h1 className="text-lg font-semibold mb-3">Transactions</h1>
+        <div className="flex flex-col gap-4">
+          <div className="flex justify-between gap-3 items-end">
+            <Input
+              isClearable
+              className="w-full sm:max-w-[44%]"
+              placeholder="Search"
+              startContent={<SearchIcon />}
+              value={filterValue}
+              onClear={() => onClear()}
+              onValueChange={onSearchChange}
+            />
+            <div className="flex gap-3">
+              <Dropdown>
+                <DropdownTrigger className="hidden sm:flex">
+                  <Button
+                    endContent={<ChevronDownIcon className="text-small" />}
+                    variant="flat"
+                  >
+                    Columns
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  disallowEmptySelection
+                  aria-label="Table Columns"
+                  closeOnSelect={false}
+                  selectedKeys={visibleColumns}
+                  selectionMode="multiple"
+                  onSelectionChange={setVisibleColumns}
                 >
-                  Columns
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                disallowEmptySelection
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={visibleColumns}
-                selectionMode="multiple"
-                onSelectionChange={setVisibleColumns}
-              >
-                {columns.map((column) => (
-                  <DropdownItem key={column.key}>{column.name}</DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
+                  {columns.map((column) => (
+                    <DropdownItem key={column.key}>{column.name}</DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
 
-            <div className="hidden sm:flex">
-              <CreateTransactionClientModal accountID={accountID} />
+              <div className="hidden sm:flex">
+                <CreateTransactionClientModal />
+              </div>
+
+              <CreateTransactionModal transactionClients={transactionClients} />
             </div>
-
-            <CreateTransactionModal transactionClients={transactionClients} />
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-default-400 text-small">
+              Total {rows.length} {model}
+            </span>
+            <label className="flex items-center text-default-400 text-small">
+              Rows per page:
+              <select
+                className="bg-transparent outline-none text-default-400 text-small"
+                onChange={onRowsPerPageChange}
+              >
+                <option>5</option>
+                <option>10</option>
+                <option>15</option>
+              </select>
+            </label>
           </div>
         </div>
-        <div className="flex justify-between items-center">
-          <span className="text-default-400 text-small">
-            Total {rows.length} {model}
-          </span>
-          <label className="flex items-center text-default-400 text-small">
-            Rows per page:
-            <select
-              className="bg-transparent outline-none text-default-400 text-small"
-              onChange={onRowsPerPageChange}
-            >
-              <option>5</option>
-              <option>10</option>
-              <option>15</option>
-            </select>
-          </label>
-        </div>
-      </div>
+      </>
     );
   }, [
     filterValue,
@@ -253,7 +254,6 @@ const DataTable = ({
     columns,
     model,
     rows.length,
-    accountID,
     transactionClients,
   ]);
 
@@ -313,7 +313,7 @@ const DataTable = ({
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={`No ${model} found`} items={sortedItems}>
+        <TableBody emptyContent={`No ${model} Found`} items={sortedItems}>
           {(item) => (
             <TableRow
               key={item.id}

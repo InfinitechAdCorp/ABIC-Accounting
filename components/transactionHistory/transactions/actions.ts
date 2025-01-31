@@ -12,12 +12,17 @@ import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { formatTransactions } from "@/components/globals/utils";
+import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 type TransactionCreateInput = Prisma.TransactionCreateInput & {
   transaction_client_id?: string;
 };
 
-export const getAll = async (accountID: string) => {
+export const getAll = async () => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value;
+
   let transactions;
 
   try {
@@ -84,6 +89,7 @@ export const create = async (values: TransactionCreateInput) => {
     return response;
   }
 
+  revalidatePath("/transaction-history/transactions");
   const response: ActionResponse = { code: 200, message: "Added Transaction" };
   return response;
 };
@@ -124,6 +130,7 @@ export const update = async (values: TransactionCreateInput) => {
     return response;
   }
 
+  revalidatePath("/transaction-history/transactions");
   const response: ActionResponse = {
     code: 200,
     message: "Updated Transaction",
@@ -155,7 +162,8 @@ export const destroy = async (values: { id: string }) => {
     const response: ActionResponse = { code: 500, message: "Server Error" };
     return response;
   }
-
+  
+  revalidatePath("/transaction-history/transactions");
   const response: ActionResponse = {
     code: 200,
     message: "Deleted Transaction",
@@ -191,6 +199,7 @@ export const cancel = async (values: { id: string }) => {
     return response;
   }
 
+  revalidatePath("/transaction-history/transactions");
   const response: ActionResponse = {
     code: 200,
     message: "Cancelled Transaction",

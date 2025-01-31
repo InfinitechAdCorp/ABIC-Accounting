@@ -7,7 +7,7 @@ import { get as getAccount } from "@/components/accounts/actions";
 
 const TransactionClients = async () => {
   const { account } = await getAccount();
-const { transactionClients } = await getAll();
+  const { transactionClients } = await getAll();
 
   const columns = [
     { name: "NAME", key: "name", sortable: true },
