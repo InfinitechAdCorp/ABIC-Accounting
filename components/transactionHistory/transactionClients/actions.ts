@@ -75,13 +75,13 @@ export const get = async (id: string) => {
     const response = {
       code: 500,
       message: "Server Error",
-      transactionClient: {},
+      transactionClient: null,
     };
     return response;
   }
 
   const formattedTransactionClients = formatTransactionClients(
-    [transactionClient]
+    [transactionClient],
   );
   const response = {
     code: 200,

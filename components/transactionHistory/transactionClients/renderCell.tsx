@@ -4,7 +4,7 @@ import React from "react";
 import { formatNumber } from "@/components/globals/utils";
 import UpdateModal from "@/components/transactionHistory/transactionClients/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
-import ViewBtn from "@/components/transactionHistory/transactionClients/viewBtn";
+import ViewBtn from "@/components/globals/viewBtn";
 import { destroy } from "@/components/transactionHistory/transactionClients/actions";
 import { FormattedTransactionClient } from "@/components/transactionHistory/types";
 
@@ -19,7 +19,10 @@ const RenderCell = (row: Row, columnKey: string) => {
         <div className="relative flex justify-end items-center gap-2">
           <UpdateModal transactionClient={row} />
           <DestroyModal title="Client" action={destroy} id={row.id} />
-          <ViewBtn id={row.id} />
+          <ViewBtn
+            title="View Transactions"
+            link={`/transaction-history/transaction-clients/${row.id}`}
+          />
         </div>
       );
     case "starting_balance":

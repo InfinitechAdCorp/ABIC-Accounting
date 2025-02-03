@@ -41,9 +41,9 @@ const TransactionClient = async ({
         <Card className="m-5 md:m-7 p-3">
           <CardBody>
             <DataTable
-              model={`Transactions of ${transactionClient.name}`}
+              model={`Transactions of ${transactionClient?.name}`}
               columns={columns}
-              rows={transactionClient.transactions}
+              rows={transactionClient?.transactions || []}
               searchKey="name"
               RenderCell={RenderCell}
               dependencies={{ transactionClients: transactionClients }}

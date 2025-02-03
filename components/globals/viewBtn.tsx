@@ -6,10 +6,11 @@ import { FaEye } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
 type Props = {
-  id: string;
+  title: string;
+  link: string;
 };
 
-const ViewBtn = ({ id }: Props) => {
+const ViewBtn = ({ title, link }: Props) => {
   const router = useRouter();
 
   return (
@@ -18,10 +19,8 @@ const ViewBtn = ({ id }: Props) => {
         size="sm"
         color="primary"
         isIconOnly={true}
-        title="View Transactions"
-        onPress={() =>
-          router.push(`/transaction-history/transaction-clients/${id}`)
-        }
+        title={title}
+        onPress={() => router.push(link)}
       >
         <FaEye size={14} />
       </Button>
