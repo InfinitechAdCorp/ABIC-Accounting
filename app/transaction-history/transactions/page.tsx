@@ -12,27 +12,15 @@ const Transactions = async () => {
   const { transactionClients } = await getTransactionClients();
 
   const columns = [
-    { name: "DATE", key: "date", sortable: true },
-    { name: "VOUCHER", key: "voucher", sortable: true },
-    { name: "CHECK", key: "check", sortable: true },
-    { name: "CLIENT", key: "client", sortable: true },
-    { name: "PARTICULARS", key: "particulars", sortable: true },
-    { name: "CREDIT", key: "credit", sortable: true },
-    { name: "DEBIT", key: "debit", sortable: true },
-    { name: "PROOF", key: "proof", sortable: true },
-    { name: "ACTIONS", key: "actions" },
-  ];
-
-  const initialVisibleColumns = [
-    "date",
-    "voucher",
-    "check",
-    "client",
-    "particulars",
-    "credit",
-    "debit",
-    "actions",
-    "proof",
+    { key: "date", name: "DATE" },
+    { key: "voucher", name: "VOUCHER" },
+    { key: "check", name: "CHECK" },
+    { key: "client", name: "CLIENT" },
+    { key: "particulars", name: "PARTICULARS" },
+    { key: "credit", name: "CREDIT" },
+    { key: "debit", name: "DEBIT" },
+    { key: "proof", name: "PROOF" },
+    { key: "actions", name: "ACTIONS" },
   ];
 
   return (
@@ -46,9 +34,7 @@ const Transactions = async () => {
               model="Transactions"
               columns={columns}
               rows={transactions || []}
-              initialVisibleColumns={initialVisibleColumns}
               searchKey="particulars"
-              sortKey="date"
               transactionClients={transactionClients || []}
             />
           </CardBody>

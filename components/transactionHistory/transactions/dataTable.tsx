@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { SearchIcon, ChevronDownIcon } from "@/components/globals/icons";
+import { SearchIcon } from "@/components/globals/icons";
 import {
   Table,
   TableHeader,
@@ -10,14 +10,7 @@ import {
   TableRow,
   TableCell,
   Input,
-  Button,
-  DropdownTrigger,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
   Pagination,
-  Selection,
-  SortDescriptor,
 } from "@nextui-org/react";
 import {
   FormattedTransaction,
@@ -44,9 +37,7 @@ type Props = {
   model: string;
   columns: column[];
   rows: FormattedTransaction[];
-  initialVisibleColumns: string[];
   searchKey: string;
-  sortKey: string;
   transactionClients: FormattedTransactionClient[];
 };
 
@@ -54,34 +45,15 @@ const DataTable = ({
   model,
   columns,
   rows,
-  initialVisibleColumns,
   searchKey,
-  sortKey,
   transactionClients,
 }: Props) => {
   type Row = (typeof rows)[0];
 
-  const [filterValue, setFilterValue] = React.useState("");
-  const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
-    new Set(initialVisibleColumns)
-  );
+  const [filterValue, setFilterValue] = React.useState("");;
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-    column: sortKey,
-    direction: "ascending",
-  });
-
   const [page, setPage] = React.useState(1);
-
   const hasSearchFilter = Boolean(filterValue);
-
-  const headerColumns = React.useMemo(() => {
-    if (visibleColumns === "all") return columns;
-
-    return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.key)
-    );
-  }, [columns, visibleColumns]);
 
   const filteredItems = React.useMemo(() => {
     let filteredRows = [...rows];
@@ -105,14 +77,6 @@ const DataTable = ({
 
     return filteredItems.slice(start, end);
   }, [page, filteredItems, rowsPerPage]);
-
-  const sortedItems = React.useMemo(() => {
-    if (sortDescriptor.direction == "ascending") {
-      return [...items].sort();
-    } else {
-      return [...items].sort().reverse();
-    }
-  }, [sortDescriptor, items]);
 
   const renderCell = React.useCallback(
     (row: Row, columnKey: string) => {
@@ -145,18 +109,6 @@ const DataTable = ({
     },
     [transactionClients]
   );
-
-  const onNextPage = React.useCallback(() => {
-    if (page < pages) {
-      setPage(page + 1);
-    }
-  }, [page, pages]);
-
-  const onPreviousPage = React.useCallback(() => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
-  }, [page]);
 
   const onRowsPerPageChange = React.useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -196,29 +148,6 @@ const DataTable = ({
               onValueChange={onSearchChange}
             />
             <div className="flex gap-3">
-              <Dropdown>
-                <DropdownTrigger className="hidden sm:flex">
-                  <Button
-                    endContent={<ChevronDownIcon className="text-small" />}
-                    variant="flat"
-                  >
-                    Columns
-                  </Button>
-                </DropdownTrigger>
-                <DropdownMenu
-                  disallowEmptySelection
-                  aria-label="Table Columns"
-                  closeOnSelect={false}
-                  selectedKeys={visibleColumns}
-                  selectionMode="multiple"
-                  onSelectionChange={setVisibleColumns}
-                >
-                  {columns.map((column) => (
-                    <DropdownItem key={column.key}>{column.name}</DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
-
               <div className="hidden sm:flex">
                 <CreateTransactionClientModal />
               </div>
@@ -247,11 +176,9 @@ const DataTable = ({
     );
   }, [
     filterValue,
-    visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
     onClear,
-    columns,
     model,
     rows.length,
     transactionClients,
@@ -259,7 +186,7 @@ const DataTable = ({
 
   const bottomContent = React.useMemo(() => {
     return (
-      <div className="p2 flex justify-between items-center">
+      <div className="p2 flex justify-center items-center">
         <Pagination
           isCompact
           showControls
@@ -269,27 +196,9 @@ const DataTable = ({
           total={pages}
           onChange={setPage}
         />
-        <div className="hidden sm:flex w-[30%] justify-end gap-2">
-          <Button
-            isDisabled={pages === 1}
-            size="sm"
-            variant="flat"
-            onPress={onPreviousPage}
-          >
-            Previous
-          </Button>
-          <Button
-            isDisabled={pages === 1}
-            size="sm"
-            variant="flat"
-            onPress={onNextPage}
-          >
-            Next
-          </Button>
-        </div>
       </div>
     );
-  }, [page, pages, onNextPage, onPreviousPage]);
+  }, [page, pages]);
 
   return (
     <>
@@ -301,19 +210,17 @@ const DataTable = ({
         classNames={{
           wrapper: "max-h-[400px]",
         }}
-        sortDescriptor={sortDescriptor}
         topContent={topContent}
         topContentPlacement="outside"
-        onSortChange={setSortDescriptor}
       >
-        <TableHeader columns={headerColumns}>
+        <TableHeader columns={columns}>
           {(column) => (
             <TableColumn key={column.key} allowsSorting={column.sortable}>
               {column.name}
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={`No ${model} Found`} items={sortedItems}>
+        <TableBody emptyContent={`No ${model} Found`} items={items}>
           {(item) => (
             <TableRow
               key={item.id}

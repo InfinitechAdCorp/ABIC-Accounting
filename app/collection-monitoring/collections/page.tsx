@@ -7,9 +7,9 @@ import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
 
 const Collections = async () => {
-    const { account } = await getAccount();
-    const { collections } = await getCollections();
-    const { collectionClients } = await getCollectionClients();
+  const { account } = await getAccount();
+  const { collections } = await getCollections();
+  const { collectionClients } = await getCollectionClients();
 
   const locations = [
     { key: "All", name: "All" },
@@ -24,32 +24,20 @@ const Collections = async () => {
   ];
 
   const columns = [
-    { name: "CLIENT", key: "client", sortable: true },
-    { name: "PROPERTY", key: "property", sortable: true },
-    { name: "LOCATION", key: "location", sortable: true },
-    { name: "CONTRACT START", key: "start", sortable: true },
-    { name: "CONTRACT END", key: "end", sortable: true },
-    { name: "ADVANCE", key: "advance", sortable: true },
-    { name: "DEPOSIT", key: "deposit", sortable: true },
-    { name: "TENANT PRICE", key: "tenant_price", sortable: true },
-    { name: "OWNER INCOME", key: "owner_income", sortable: true },
-    { name: "ABIC INCOME", key: "abic_income", sortable: true },
-    { name: "DUE DATE", key: "due", sortable: true },
-    { name: "STATUS", key: "status", sortable: true },
-    { name: "PAYMENTS", key: "payments", sortable: true },
-    { name: "ACTIONS", key: "actions" },
-  ];
-
-  const initialVisibleColumns = [
-    "client",
-    "property",
-    "location",
-    "start",
-    "end",
-    "due",
-    "status",
-    "payments",
-    "actions",
+    { key: "client", name: "CLIENT" },
+    { key: "property", name: "PROPERTY" },
+    { key: "location", name: "LOCATION" },
+    { key: "start", name: "CONTRACT START" },
+    { key: "end", name: "CONTRACT END" },
+    { key: "advance", name: "ADVANCE" },
+    { key: "deposit", name: "DEPOSIT" },
+    { key: "tenant_price", name: "TENANT PRICE" },
+    { key: "owner_income", name: "OWNER INCOME" },
+    { key: "abic_income", name: "ABIC INCOME" },
+    { key: "due", name: "DUE DATE" },
+    { key: "status", name: "STATUS" },
+    { key: "payments", name: "PAYMENTS" },
+    { key: "actions", name: "ACTIONS" },
   ];
 
   return (
@@ -63,9 +51,7 @@ const Collections = async () => {
               model="Collections"
               columns={columns}
               rows={collections || []}
-              initialVisibleColumns={initialVisibleColumns}
               searchKey="property"
-              sortKey="property"
               locations={locations}
               collectionClients={collectionClients || []}
             />

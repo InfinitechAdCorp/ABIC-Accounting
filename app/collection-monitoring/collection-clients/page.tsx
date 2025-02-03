@@ -10,12 +10,10 @@ const CollectionClients = async () => {
   const { collectionClients } = await getAll();
 
   const columns = [
-    { name: "NAME", key: "name", sortable: true },
-    { name: "COLLECTIONS", key: "collections", sortable: true },
-    { name: "ACTIONS", key: "actions" },
+    { key: "name", name: "NAME" },
+    { key: "collections", name: "COLLECTIONS" },
+    { key: "actions", name: "ACTIONS" },
   ];
-
-  const initialVisibleColumns = ["name", "collections", "actions"];
 
   return (
     <>
@@ -28,9 +26,7 @@ const CollectionClients = async () => {
               model="Clients"
               columns={columns}
               rows={collectionClients}
-              initialVisibleColumns={initialVisibleColumns}
               searchKey="name"
-              sortKey="name"
             />
           </CardBody>
         </Card>
