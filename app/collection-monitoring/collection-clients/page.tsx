@@ -1,9 +1,11 @@
 import React from "react";
 import { getAll } from "@/components/collectionMonitoring/collectionClients/actions";
 import { Card, CardBody } from "@nextui-org/react";
-import DataTable from "@/components/collectionMonitoring/collectionClients/dataTable";
 import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
+import DataTable from "@/components/globals/dataTable";
+import renderCell from "@/components/collectionMonitoring/collectionClients/renderCell";
+import CreateModal from "@/components/collectionMonitoring/collectionClients/createModal";
 
 const CollectionClients = async () => {
   const { account } = await getAccount();
@@ -27,7 +29,10 @@ const CollectionClients = async () => {
               columns={columns}
               rows={collectionClients}
               searchKey="name"
-            />
+              renderCell={renderCell}
+            >
+              <CreateModal />
+            </DataTable>
           </CardBody>
         </Card>
       </div>
