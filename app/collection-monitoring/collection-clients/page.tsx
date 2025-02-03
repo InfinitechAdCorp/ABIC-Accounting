@@ -4,7 +4,7 @@ import { Card, CardBody } from "@nextui-org/react";
 import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";
-import renderCell from "@/components/collectionMonitoring/collectionClients/renderCell";
+import RenderCell from "@/components/collectionMonitoring/collectionClients/renderCell";
 import CreateModal from "@/components/collectionMonitoring/collectionClients/createModal";
 
 const CollectionClients = async () => {
@@ -29,7 +29,7 @@ const CollectionClients = async () => {
               columns={columns}
               rows={collectionClients}
               searchKey="name"
-              renderCell={renderCell}
+              RenderCell={RenderCell}
             >
               <CreateModal />
             </DataTable>

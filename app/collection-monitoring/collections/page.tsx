@@ -5,7 +5,7 @@ import { getAll as getCollectionClients } from "@/components/collectionMonitorin
 import { Card, CardBody } from "@nextui-org/react";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
-import renderCell from "@/components/collectionMonitoring/collections/renderCell";
+import RenderCell from "@/components/collectionMonitoring/collections/renderCell";
 import CreateCollectionModal from "@/components/collectionMonitoring/collections/createModal";
 import CreateClientModal from "@/components/collectionMonitoring/collectionClients/createModal";
 
@@ -55,7 +55,7 @@ const Collections = async () => {
               columns={columns}
               rows={collections || []}
               searchKey="property"
-              renderCell={renderCell}
+              RenderCell={RenderCell}
               dependencies={{
                 locations: locations,
                 collectionClients: collectionClients,

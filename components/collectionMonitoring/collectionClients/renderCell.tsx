@@ -8,7 +8,7 @@ import { FormattedCollectionClient } from "@/components/collectionMonitoring/typ
 
 type Row = FormattedCollectionClient;
 
-const renderCell = (row: Row, columnKey: string) => {
+const RenderCell = (row: Row, columnKey: string) => {
   switch (columnKey) {
     case "actions":
       return (
@@ -24,4 +24,4 @@ const renderCell = (row: Row, columnKey: string) => {
   }
 };
 
-export default renderCell;
+export default RenderCell;

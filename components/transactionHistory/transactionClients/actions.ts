@@ -57,6 +57,40 @@ export const getAll = async () => {
   return response;
 };
 
+export const get = async (id: string) => {
+  let transactionClient;
+
+  try {
+    transactionClient = await prisma.transactionClient.findUnique({
+      where: { id: id },
+      include: {
+        transactions: {
+          orderBy: {
+            date: "asc",
+          },
+        },
+      },
+    });
+  } catch {
+    const response = {
+      code: 500,
+      message: "Server Error",
+      transactionClient: {},
+    };
+    return response;
+  }
+
+  const formattedTransactionClients = formatTransactionClients(
+    [transactionClient]
+  );
+  const response = {
+    code: 200,
+    message: "Fetched Client",
+    transactionClient: formattedTransactionClients[0],
+  };
+  return response;
+};
+
 export const create = async (values: Prisma.TransactionClientCreateInput) => {
   const session = await cookies();
   const accountID = session.get("accountID")?.value;

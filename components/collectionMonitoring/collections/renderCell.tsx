@@ -18,7 +18,7 @@ import {
 
 type Row = FormattedCollection;
 
-const renderCell = (
+const RenderCell = (
   row: Row,
   columnKey: string,
   dependencies: {
@@ -88,4 +88,4 @@ const renderCell = (
   }
 };
 
-export default renderCell;
+export default RenderCell;

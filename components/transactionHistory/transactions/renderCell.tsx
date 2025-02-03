@@ -16,7 +16,7 @@ import {
 
 type Row = FormattedTransaction;
 
-const renderCell = (
+const RenderCell = (
   row: Row,
   columnKey: string,
   dependencies: { transactionClients: FormattedTransactionClient[] }
@@ -49,4 +49,4 @@ const renderCell = (
   }
 };
 
-export default renderCell;
+export default RenderCell;

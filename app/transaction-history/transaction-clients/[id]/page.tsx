@@ -1,17 +1,24 @@
 import React from "react";
+import {
+  get as getTransactionClient,
+  getAll as getTransactionClients,
+} from "@/components/transactionHistory/transactionClients/actions";
 import { get as getAccount } from "@/components/accounts/actions";
-import { getAll as getTransactions } from "@/components/transactionHistory/transactions/actions";
-import { getAll as getTransactionClients } from "@/components/transactionHistory/transactionClients/actions";
 import { Card, CardBody } from "@nextui-org/react";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import RenderCell from "@/components/transactionHistory/transactions/renderCell";
-import CreateTransactionModal from "@/components/transactionHistory/transactions/createModal";
-import CreateTransactionClientModal from "@/components/transactionHistory/transactionClients/createModal";
+import CreateModal from "@/components/transactionHistory/transactions/createModal";
 
-const Transactions = async () => {
+const TransactionClient = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const id = (await params).id;
+
   const { account } = await getAccount();
-  const { transactions } = await getTransactions();
+  const { transactionClient } = await getTransactionClient(id);
   const { transactionClients } = await getTransactionClients();
 
   const columns = [
@@ -34,22 +41,14 @@ const Transactions = async () => {
         <Card className="m-5 md:m-7 p-3">
           <CardBody>
             <DataTable
-              model="Transactions"
+              model={`Transactions of ${transactionClient.name}`}
               columns={columns}
-              rows={transactions || []}
-              searchKey="particulars"
+              rows={transactionClient.transactions}
+              searchKey="name"
               RenderCell={RenderCell}
               dependencies={{ transactionClients: transactionClients }}
             >
-              <>
-                <div className="hidden sm:flex">
-                  <CreateTransactionClientModal />
-                </div>
-
-                <CreateTransactionModal
-                  transactionClients={transactionClients}
-                />
-              </>
+              <CreateModal transactionClients={transactionClients} />
             </DataTable>
           </CardBody>
         </Card>
@@ -58,4 +57,4 @@ const Transactions = async () => {
   );
 };
 
-export default Transactions;
+export default TransactionClient;

@@ -36,7 +36,7 @@ export const handlePostSubmit = (
 // Data Formatters
 
 export const formatTransactionClients = (
-  transactionClients: TransactionClientWithTransactions[]
+  transactionClients: TransactionClientWithTransactions[],
 ) => {
   const formattedTransactionClients: FormattedTransactionClient[] = [];
 

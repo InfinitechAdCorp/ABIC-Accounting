@@ -55,6 +55,7 @@ const CreateModal = ({ locations, collectionClients }: Props) => {
     values: Prisma.CollectionCreateInput,
     actions: { resetForm: () => void }
   ) => {
+    console.log(values)
     setSubmitting(true);
     createAction(values).then((response) => {
       setSubmitting(false);
