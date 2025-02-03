@@ -12,70 +12,79 @@ import {
   markAsPaid,
 } from "@/components/collectionMonitoring/collections/actions";
 import {
-    FormattedCollection,
-    FormattedTransactionClient,
-  } from "@/components/transactionHistory/types";
+  FormattedCollection,
+  FormattedCollectionClient,
+} from "@/components/collectionMonitoring/types";
 
-const renderCell = (row: Row, columnKey: string) => {
-  const dateColumns = ["start", "end", "due"];
-  const moneyColumns = ["tenant_price", "owner_income", "abic_income"];
+type Row = FormattedCollection;
 
-  if (columnKey == "actions") {
-    return (
-      <div className="relative flex justify-end items-center gap-2">
-        <UpdateModal
-          collection={row}
-          locations={locations}
-          collectionClients={collectionClients}
-        />
-        <DestroyModal title="Collection" action={destroy} id={row.id} />
-        <PaymentModal action={markAsPaid} id={row.id} />
-      </div>
-    );
-  } else if (columnKey == "client") {
-    return row.collection_client?.name;
-  } else if (dateColumns.includes(columnKey)) {
-    return formatDate(row[columnKey as keyof Row] as Date);
-  } else if (moneyColumns.includes(columnKey)) {
-    return formatNumber(row[columnKey as keyof Row] as number);
-  } else if (columnKey == "status") {
-    const today = new Date(new Date().setHours(0, 0, 0, 0));
-    const difference = differenceInDays(row.due.setHours(0, 0, 0, 0), today);
+const renderCell = (
+  row: Row,
+  columnKey: string,
+  dependencies: {
+    locations: {
+      key: string;
+      name: string;
+    }[];
+    collectionClients: FormattedCollectionClient[];
+  }
+) => {
+  switch (columnKey) {
+    case "actions":
+      return (
+        <div className="relative flex justify-end items-center gap-2">
+          <UpdateModal
+            collection={row}
+            locations={dependencies.locations}
+            collectionClients={dependencies.collectionClients}
+          />
+          <DestroyModal title="Collection" action={destroy} id={row.id} />
+          <PaymentModal action={markAsPaid} id={row.id} />
+        </div>
+      );
+    case "client":
+      return row.collection_client?.name;
+    case "start":
+    case "end":
+    case "due":
+      return formatDate(row[columnKey as keyof Row] as Date);
+    case "tenant_price":
+    case "owner_income":
+    case "abic_income":
+      return formatNumber(row[columnKey as keyof Row] as number);
+    case "status":
+      const today = new Date(new Date().setHours(0, 0, 0, 0));
+      const difference = differenceInDays(row.due.setHours(0, 0, 0, 0), today);
 
-    type Color =
-      | "default"
-      | "primary"
-      | "secondary"
-      | "success"
-      | "warning"
-      | "danger";
+      type Color = "success" | "danger" | "primary";
 
-    let color;
-    let status;
-    if (difference > 0) {
-      color = "success";
-      status = `${difference} Days Remaining`;
-    } else if (difference < 0) {
-      color = "danger";
-      status = `${difference} Days Past Due`.replace("-", "");
-    } else if (difference == 0) {
-      color = "primary";
-      status = "Today";
-    }
+      let color;
+      let status;
 
-    return (
-      <Chip color={color as Color} size="sm" variant="flat">
-        {status}
-      </Chip>
-    );
-  } else if (columnKey == "payments") {
-    let payments = differenceInMonths(row.due, row.start) - 1;
-    if (payments < 0) {
-      payments = 0;
-    }
-    return payments;
-  } else {
-    return row[columnKey as keyof Row];
+      if (difference > 0) {
+        color = "success";
+        status = `${difference} Days Remaining`;
+      } else if (difference < 0) {
+        color = "danger";
+        status = `${difference} Days Past Due`.replace("-", "");
+      } else if (difference == 0) {
+        color = "primary";
+        status = "Today";
+      }
+
+      return (
+        <Chip color={color as Color} size="sm" variant="flat">
+          {status}
+        </Chip>
+      );
+    case "payments":
+      let payments = differenceInMonths(row.due, row.start) - 1;
+      if (payments < 0) {
+        payments = 0;
+      }
+      return payments;
+    default:
+      return row[columnKey as keyof Row];
   }
 };
 
