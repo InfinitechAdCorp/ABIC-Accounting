@@ -5,13 +5,13 @@ import { useRouter } from "next/navigation";
 import { Card, CardBody } from "@nextui-org/react";
 
 type Props = {
+  Icon: React.ReactElement;
   model: string;
   link: string;
   count: number;
-  children: React.ReactNode,
 };
 
-const CountCard = ({ model, link, count, children }: Props) => {
+const CountCard = ({ Icon, model, link, count }: Props) => {
   const router = useRouter();
 
   return (
@@ -27,7 +27,7 @@ const CountCard = ({ model, link, count, children }: Props) => {
       >
         <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
           <div className="flex justify-center items-center">
-            {children}
+            <Icon.type {...Icon.props} />
           </div>
 
           <div className="flex flex-col justify-center items-center">
