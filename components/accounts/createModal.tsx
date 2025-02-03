@@ -28,6 +28,7 @@ const CreateModal = () => {
   const initialValues = {
     name: "",
     transaction_history_access: false,
+    income_expenses_access: false,
     collection_monitoring_access: false,
   };
 
@@ -92,6 +93,20 @@ const CreateModal = () => {
                             <div>
                               <Checkbox {...field}>
                                 Transaction History
+                              </Checkbox>
+                              {meta.touched && meta.error && (
+                                <small className="text-red-500">
+                                  {meta.error}
+                                </small>
+                              )}
+                            </div>
+                          )}
+                        </Field>
+                        <Field name="income_expenses_access">
+                          {({ field, meta }: FieldProps) => (
+                            <div>
+                              <Checkbox {...field}>
+                                Income & Expenses
                               </Checkbox>
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">

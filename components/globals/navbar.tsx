@@ -81,6 +81,48 @@ const Navbar = ({ account }: Props) => {
             </Dropdown>
           )}
 
+          {account?.income_expenses_access && (
+            <Dropdown
+              classNames={{
+                content: "min-w-0",
+              }}
+            >
+              <DropdownTrigger className="text-center">
+                <h3
+                  className={`text-sm md:text-base text-white cursor-pointer ${
+                    isActive([
+                      "/income-expenses/clients",
+                      "/income-expenses/transactions",
+                    ])
+                      ? "font-black"
+                      : "font-semibold"
+                  }`}
+                >
+                  <span className="hidden lg:inline">Income & Expenses</span>
+                  <span className="inline lg:hidden">Income & Expenses</span>
+                </h3>
+              </DropdownTrigger>
+              <DropdownMenu className="text-center">
+                <DropdownItem
+                  onPress={() => {
+                    router.push("/income-expenses/clients");
+                  }}
+                  key="Clients"
+                  textValue="Clients"
+                >
+                  <h3 className="font-semibold">Clients</h3>
+                </DropdownItem>
+                <DropdownItem
+                  onPress={() => router.push("/income-expenses/transactions")}
+                  key="Transactions"
+                  textValue="Transactions"
+                >
+                  <h3 className="font-semibold">Transactions</h3>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          )}
+
           {account?.collection_monitoring_access && (
             <Dropdown
               classNames={{

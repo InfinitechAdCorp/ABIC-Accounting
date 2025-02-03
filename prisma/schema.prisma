@@ -26,6 +26,7 @@ model Account {
   collection_clients           CollectionClient[]
   name                         String              @unique
   transaction_history_access   Boolean
+  income_expenses_access       Boolean
   collection_monitoring_access Boolean
   created_at                   DateTime            @default(now())
   updated_at                   DateTime            @updatedAt

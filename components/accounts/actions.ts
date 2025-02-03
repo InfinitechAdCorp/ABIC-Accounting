@@ -81,6 +81,7 @@ export const create = async (values: Prisma.AccountCreateInput) => {
       data: {
         name: values.name,
         transaction_history_access: values.transaction_history_access,
+        income_expenses_access: values.income_expenses_access,
         collection_monitoring_access: values.collection_monitoring_access,
       },
     });

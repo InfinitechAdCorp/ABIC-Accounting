@@ -6,16 +6,19 @@ const accounts: Prisma.AccountCreateInput[] = [
   {
     name: "SCB 443",
     transaction_history_access: true,
+    income_expenses_access: false,
     collection_monitoring_access: true,
   },
   {
     name: "SCB 483",
-    transaction_history_access: true,
+    transaction_history_access: false,
+    income_expenses_access: true,
     collection_monitoring_access: false,
   },
   {
     name: "SCB 202",
     transaction_history_access: true,
+    income_expenses_access: false,
     collection_monitoring_access: false,
   },
 ];
