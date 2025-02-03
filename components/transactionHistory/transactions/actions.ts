@@ -6,7 +6,7 @@ import { ActionResponse } from "@/components/globals/types";
 import {
   create as createSchema,
   update as updateSchema,
-  cancel as cancelSchema,
+  changeStatus as changeStatusSchema,
 } from "@/components/transactionHistory/transactions/schemas";
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
@@ -162,7 +162,7 @@ export const destroy = async (values: { id: string }) => {
     const response: ActionResponse = { code: 500, message: "Server Error" };
     return response;
   }
-  
+
   revalidatePath("/transaction-history/transactions");
   const response: ActionResponse = {
     code: 200,
@@ -171,8 +171,8 @@ export const destroy = async (values: { id: string }) => {
   return response;
 };
 
-export const cancel = async (values: { id: string }) => {
-  const schema = cancelSchema;
+export const changeStatus = async (values: { id: string; status: string }) => {
+  const schema = changeStatusSchema;
 
   try {
     await schema.validate(values, { abortEarly: false });
@@ -191,7 +191,7 @@ export const cancel = async (values: { id: string }) => {
     await prisma.transaction.update({
       where: { id: values.id },
       data: {
-        status: "Cancelled",
+        status: values.status,
       },
     });
   } catch {
@@ -202,7 +202,9 @@ export const cancel = async (values: { id: string }) => {
   revalidatePath("/transaction-history/transactions");
   const response: ActionResponse = {
     code: 200,
-    message: "Cancelled Transaction",
+    message: `${
+      values.status == "Active" ? "Restored" : "Cancelled"
+    } Transaction`,
   };
   return response;
 };

@@ -57,7 +57,7 @@ const TransactionClient = async ({
         <Card className="m-5 md:m-7 p-3">
           <CardBody>
             <DataTable
-              model={`Collections of ${collectionClient?.name}`}
+              model={`${collectionClient?.name}'s Collections`}
               columns={columns}
               rows={collectionClient?.collections || []}
               searchKey="name"

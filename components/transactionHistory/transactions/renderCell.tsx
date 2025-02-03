@@ -4,10 +4,10 @@ import React from "react";
 import { formatDate, formatNumber } from "@/components/globals/utils";
 import UpdateModal from "@/components/transactionHistory/transactions/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
-import CancelModal from "@/components/transactionHistory/transactions/cancelModal";
+import ChangeStatusModal from "@/components/transactionHistory/transactions/changeStatuslModal";
 import {
   destroy,
-  cancel,
+  changeStatus,
 } from "@/components/transactionHistory/transactions/actions";
 import {
   FormattedTransaction,
@@ -29,7 +29,7 @@ const RenderCell = (
           transactionClients={dependencies.transactionClients}
         />
         <DestroyModal title="Transaction" action={destroy} id={row.id} />
-        <CancelModal action={cancel} id={row.id} />
+        <ChangeStatusModal action={changeStatus} id={row.id} status={row.status} />
       </div>
     );
   } else if (columnKey == "date") {

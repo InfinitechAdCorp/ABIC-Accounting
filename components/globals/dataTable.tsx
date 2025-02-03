@@ -107,7 +107,7 @@ const DataTable = ({
           </div>
           <div className="flex justify-between items-center">
             <span className="text-default-400 text-small">
-              Total {rows.length} {model}
+              Total {rows.length}
             </span>
             <label className="flex items-center text-default-400 text-small">
               Rows per page:
@@ -172,10 +172,13 @@ const DataTable = ({
         </TableHeader>
         <TableBody emptyContent={`No ${model} Found`} items={items}>
           {(item) => (
-            <TableRow key={item.id}>
+            <TableRow
+              key={item.id}
+              className={item.status == "Cancelled" ? "text-red-500" : ""}
+            >
               {(columnKey: any) => (
                 <TableCell>
-                  {RenderCell(item, columnKey, dependencies) as React.ReactNode}
+                  {RenderCell(item, columnKey, dependencies)}
                 </TableCell>
               )}
             </TableRow>

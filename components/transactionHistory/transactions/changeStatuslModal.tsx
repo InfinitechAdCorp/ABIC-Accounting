@@ -11,26 +11,29 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { ActionResponse } from "@/components/globals/types";
-import { cancel as cancelSchema } from "@/components/transactionHistory/transactions/schemas";
+import { changeStatus as changeStatusSchema } from "@/components/transactionHistory/transactions/schemas";
 import { Formik, Form, Field } from "formik";
 import { handlePostSubmit } from "@/components/globals/utils";
 import { FaXmark } from "react-icons/fa6";
+import { FaCheck } from "react-icons/fa";
 
 type Props = {
-  action: (values: { id: string }) => Promise<ActionResponse>;
+  action: (values: { id: string; status: string }) => Promise<ActionResponse>;
   id: string;
+  status: string;
 };
 
-const CancelModal = ({ action, id }: Props) => {
+const ChangeStatusModal = ({ action, id, status }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
     id: id,
+    status: status == "Active" ? "Cancelled" : "Active",
   };
 
   const onSubmit = async (
-    values: { id: string },
+    values: { id: string; status: string },
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
@@ -45,12 +48,12 @@ const CancelModal = ({ action, id }: Props) => {
       <Button
         className="text-white"
         size="sm"
-        color="danger"
+        color={status == "Active" ? "danger" : "success"}
         isIconOnly={true}
-        title="Cancel"
+        title={status == "Active" ? "Cancel" : "Restore"}
         onPress={onOpen}
       >
-        <FaXmark size={14} />
+        {status == "Active" ? <FaXmark size={14} /> : <FaCheck size={14} />}
       </Button>
 
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -59,16 +62,19 @@ const CancelModal = ({ action, id }: Props) => {
             <>
               <Formik
                 initialValues={initialValues}
-                validationSchema={cancelSchema}
+                validationSchema={changeStatusSchema}
                 onSubmit={onSubmit}
               >
                 {() => (
                   <Form>
-                    <ModalHeader>Cancel Transaction</ModalHeader>
+                    <ModalHeader>
+                      {status == "Active" ? "Cancel" : "Restore"} Transaction
+                    </ModalHeader>
                     <ModalBody>
                       <Field type="hidden" name="id" />
+                      <Field type="hidden" name="status" />
                       <h6>
-                        Are you sure that you want to cancel this transaction?
+                        Are you sure that you want to {status == "Active" ? "cancel" : "restore"} this transaction?
                       </h6>
                     </ModalBody>
                     <ModalFooter>
@@ -94,4 +100,4 @@ const CancelModal = ({ action, id }: Props) => {
   );
 };
 
-export default CancelModal;
+export default ChangeStatusModal;
