@@ -1,10 +1,11 @@
 import React from "react";
+import { get as getAccount } from "@/components/accounts/actions";
 import { getAll as getCollections } from "@/components/collectionMonitoring/collections/actions";
 import { getAll as getCollectionClients } from "@/components/collectionMonitoring/collectionClients/actions";
 import { Card, CardBody } from "@nextui-org/react";
-import DataTable from "@/components/collectionMonitoring/collections/dataTable";
 import Navbar from "@/components/globals/navbar";
-import { get as getAccount } from "@/components/accounts/actions";
+import DataTable from "@/components/globals/dataTable";
+
 
 const Collections = async () => {
   const { account } = await getAccount();

@@ -24,7 +24,8 @@ type Props = {
   columns: column[];
   rows: any[];
   searchKey: string;
-  renderCell: (row: any, columnKey: string) => any;
+  renderCell: (row: any, columnKey: string, dependencies?: any) => any;
+  dependencies?: any;
   children: React.ReactElement;
 };
 
@@ -34,6 +35,7 @@ const DataTable = ({
   rows,
   searchKey,
   renderCell,
+  dependencies,
   children,
 }: Props) => {
   const [filterValue, setFilterValue] = React.useState("");
@@ -173,7 +175,7 @@ const DataTable = ({
             <TableRow key={item.id}>
               {(columnKey: any) => (
                 <TableCell>
-                  {renderCell(item, columnKey) as React.ReactNode}
+                  {renderCell(item, columnKey, dependencies) as React.ReactNode}
                 </TableCell>
               )}
             </TableRow>

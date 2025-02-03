@@ -1,10 +1,13 @@
 import React from "react";
+import { get as getAccount } from "@/components/accounts/actions";
 import { getAll as getTransactions } from "@/components/transactionHistory/transactions/actions";
 import { getAll as getTransactionClients } from "@/components/transactionHistory/transactionClients/actions";
 import { Card, CardBody } from "@nextui-org/react";
-import DataTable from "@/components/transactionHistory/transactions/dataTable";
 import Navbar from "@/components/globals/navbar";
-import { get as getAccount } from "@/components/accounts/actions";
+import DataTable from "@/components/globals/dataTable";
+import renderCell from "@/components/transactionHistory/transactions/renderCell";
+import CreateTransactionModal from "@/components/transactionHistory/transactions/createModal";
+import CreateTransactionClientModal from "@/components/transactionHistory/transactionClients/createModal";
 
 const Transactions = async () => {
   const { account } = await getAccount();
@@ -35,8 +38,19 @@ const Transactions = async () => {
               columns={columns}
               rows={transactions || []}
               searchKey="particulars"
-              transactionClients={transactionClients || []}
-            />
+              renderCell={renderCell}
+              dependencies={{ transactionClients: transactionClients }}
+            >
+              <>
+                <div className="hidden sm:flex">
+                  <CreateTransactionClientModal />
+                </div>
+
+                <CreateTransactionModal
+                  transactionClients={transactionClients}
+                />
+              </>
+            </DataTable>
           </CardBody>
         </Card>
       </div>
