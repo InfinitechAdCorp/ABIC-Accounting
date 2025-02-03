@@ -80,13 +80,13 @@ export const get = async (id: string) => {
     return response;
   }
 
-  const formattedTransactionClients = formatTransactionClients(
+  const formattedTransactionClient = formatTransactionClients(
     [transactionClient],
-  );
+  )[0];
   const response = {
     code: 200,
     message: "Fetched Client",
-    transactionClient: formattedTransactionClients[0],
+    transactionClient: formattedTransactionClient,
   };
   return response;
 };

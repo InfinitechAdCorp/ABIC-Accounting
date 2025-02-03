@@ -51,6 +51,36 @@ const accountID = session.get("accountID")?.value || "";
   return response;
 };
 
+export const get = async (id: string) => {
+  let collectionClient;
+
+  try {
+    collectionClient = await prisma.collectionClient.findUnique({
+      where: { id: id },
+      include: {
+        collections: true,
+      },
+    });
+  } catch {
+    const response = {
+      code: 500,
+      message: "Server Error",
+      collectionClient: null,
+    };
+    return response;
+  }
+
+  const formattedCollectionClient = formatCollectionClients(
+    [collectionClient],
+  )[0];
+  const response = {
+    code: 200,
+    message: "Fetched Client",
+    collectionClient: formattedCollectionClient,
+  };
+  return response;
+};
+
 export const create = async (values: Prisma.CollectionClientCreateInput) => {
   const session = await cookies();
 const accountID = session.get("accountID")?.value || "";

@@ -25,7 +25,6 @@ const TransactionClient = async ({
     { key: "date", name: "DATE" },
     { key: "voucher", name: "VOUCHER" },
     { key: "check", name: "CHECK" },
-    { key: "client", name: "CLIENT" },
     { key: "particulars", name: "PARTICULARS" },
     { key: "credit", name: "CREDIT" },
     { key: "debit", name: "DEBIT" },
