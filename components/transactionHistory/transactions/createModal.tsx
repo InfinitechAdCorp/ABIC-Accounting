@@ -245,12 +245,20 @@ const CreateModal = ({ transactionClients }: Props) => {
                             <div>
                               <Input
                                 {...field}
-                                type="text"
+                                type="file"
                                 size="md"
                                 variant="bordered"
                                 label="Proof"
                                 labelPlacement="outside"
                                 placeholder="Enter Proof"
+                                onChange={(e) => {
+                                  if (e.target.files) {
+                                    props.setFieldValue(
+                                      "proof",
+                                      e.target.files[0]
+                                    );
+                                  }
+                                }}
                               />
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">

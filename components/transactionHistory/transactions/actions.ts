@@ -14,6 +14,7 @@ import * as Yup from "yup";
 import { formatTransactions } from "@/components/globals/utils";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { put } from "@vercel/blob";
 
 type TransactionCreateInput = Prisma.TransactionCreateInput & {
   transaction_client_id?: string;
@@ -70,6 +71,11 @@ export const create = async (values: TransactionCreateInput) => {
     return response;
   }
 
+  const proof = values.proof;
+  await put(proof.name, proof, {
+    access: "public",
+  });
+
   try {
     await prisma.transaction.create({
       data: {
@@ -81,7 +87,7 @@ export const create = async (values: TransactionCreateInput) => {
         type: values.type,
         amount: values.amount,
         status: values.status,
-        proof: values.proof,
+        proof: proof.name,
       },
     });
   } catch {

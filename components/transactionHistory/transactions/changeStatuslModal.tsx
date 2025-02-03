@@ -74,7 +74,9 @@ const ChangeStatusModal = ({ action, id, status }: Props) => {
                       <Field type="hidden" name="id" />
                       <Field type="hidden" name="status" />
                       <h6>
-                        Are you sure that you want to {status == "Active" ? "cancel" : "restore"} this transaction?
+                        Are you sure that you want to{" "}
+                        {status == "Active" ? "cancel" : "restore"} this
+                        transaction?
                       </h6>
                     </ModalBody>
                     <ModalFooter>
