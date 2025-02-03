@@ -1,42 +1,15 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { getAll as getCollections } from "@/components/collectionMonitoring/collections/actions";
 import { getAll as getCollectionClients } from "@/components/collectionMonitoring/collectionClients/actions";
 import { Card, CardBody } from "@nextui-org/react";
 import DataTable from "@/components/collectionMonitoring/collections/dataTable";
 import Navbar from "@/components/globals/navbar";
-import {
-  FormattedCollection,
-  FormattedCollectionClient,
-} from "@/components/collectionMonitoring/types";
+import { get as getAccount } from "@/components/accounts/actions";
 
-const Collections = () => {
-  const [accountID, setAccountID] = useState("");
-  const [collections, setCollections] = useState<FormattedCollection[]>();
-  const [collectionClients, setCollectionClients] =
-    useState<FormattedCollectionClient[]>();
-
-  useEffect(() => {
-    setAccountID(sessionStorage.getItem("accountID") || "");
-
-    const fetchCollections = async () => {
-      getCollections(accountID || "").then((response) => {
-        setCollections(response.collections);
-      });
-    };
-
-    const fetchCollectionClients = async () => {
-      getCollectionClients(accountID || "").then((response) => {
-        setCollectionClients(response.collectionClients);
-      });
-    };
-
-    if (accountID) {
-      fetchCollections();
-      fetchCollectionClients();
-    }
-  }, [accountID]);
+const Collections = async () => {
+    const { account } = await getAccount();
+    const { collections } = await getCollections();
+    const { collectionClients } = await getCollectionClients();
 
   const locations = [
     { key: "All", name: "All" },
@@ -81,21 +54,19 @@ const Collections = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar account={account} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
           <CardBody>
-            <h1 className="text-lg font-semibold mb-3">Collections</h1>
             <DataTable
-              model="collections"
+              model="Collections"
               columns={columns}
               rows={collections || []}
               initialVisibleColumns={initialVisibleColumns}
               searchKey="property"
               sortKey="property"
               locations={locations}
-              accountID={accountID}
               collectionClients={collectionClients || []}
             />
           </CardBody>

@@ -13,12 +13,17 @@ import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { formatCollections } from "@/components/globals/utils";
+import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 type CollectionCreateInput = Prisma.CollectionCreateInput & {
   collection_client_id?: string;
 };
 
-export const getAll = async (accountID: string) => {
+export const getAll = async () => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value;
+
   let collections;
 
   try {
@@ -87,6 +92,7 @@ export const create = async (values: CollectionCreateInput) => {
     return response;
   }
 
+  revalidatePath("/collection-monitoring/collections");
   const response: ActionResponse = { code: 200, message: "Added Collection" };
   return response;
 };
@@ -129,6 +135,7 @@ export const update = async (values: CollectionCreateInput) => {
     return response;
   }
 
+  revalidatePath("/collection-monitoring/collections");
   const response: ActionResponse = { code: 200, message: "Updated Collection" };
   return response;
 };
@@ -158,6 +165,7 @@ export const destroy = async (values: { id: string }) => {
     return response;
   }
 
+  revalidatePath("/collection-monitoring/collections");
   const response: ActionResponse = { code: 200, message: "Deleted Collection" };
   return response;
 };
@@ -195,6 +203,7 @@ export const markAsPaid = async (values: { id: string }) => {
     return response;
   }
 
+  revalidatePath("/collection-monitoring/collections");
   const response: ActionResponse = {
     code: 200,
     message: "Successfully Made Payment",
