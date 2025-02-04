@@ -29,6 +29,9 @@ export const handlePostSubmit = (
     if (response.code == 429) {
       console.log(response.errors);
     }
+    else {
+      console.log(response.error)
+    }
     toast.error(response.message);
   }
 };

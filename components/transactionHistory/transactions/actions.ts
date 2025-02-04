@@ -16,7 +16,6 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { list, put, del } from "@vercel/blob";
 import { ulid } from "ulidx";
-import { Resend } from "resend";
 
 type TransactionCreateInput = Prisma.TransactionCreateInput & {
   proof: File;
@@ -136,7 +135,9 @@ export const update = async (values: TransactionCreateInput) => {
       return oldProofName == blob.pathname;
     });
 
-    await del(blob?.url || "");
+    if (blob) {
+      await del(blob.url || "");
+    }
 
     const proof = values.proof;
     const proofName = `${ulid()}.${proof.name.split(".").at(-1)}`;
@@ -200,23 +201,21 @@ export const destroy = async (values: { id: string }) => {
       return proofName == blob.pathname;
     });
 
-    await del(blob?.url || "");
+    if (blob) {
+      await del(blob.url || "");
+    }
 
     await prisma.transaction.delete({
       where: { id: values.id },
     });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  } catch (error) {
+    const response: ActionResponse = {
+      code: 500,
+      message: "Server Error",
+      error: error,
+    };
     return response;
   }
-
-  const resend = new Resend(process.env.RESEND_KEY);
-  resend.emails.send({
-    from: "abic-accounting.vercel.app",
-    to: "mosesalcantara123@gmail.com",
-    subject: "Deleted Transaction",
-    html: "<p>A User Deleted a Transaction!</p>",
-  });
 
   revalidatePath("/transaction-history/transactions");
   const response: ActionResponse = {

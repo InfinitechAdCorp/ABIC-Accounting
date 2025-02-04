@@ -11,6 +11,7 @@ export type ActionResponse = {
   errors?: {
     [key: string]: string;
   };
+  error?: any;
 };
 
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
