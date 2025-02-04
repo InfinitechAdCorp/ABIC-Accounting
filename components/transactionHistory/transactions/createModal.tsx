@@ -47,7 +47,7 @@ const CreateModal = ({ transactionClients }: Props) => {
   };
 
   const onSubmit = async (
-    values: Prisma.TransactionCreateInput,
+    values: Prisma.TransactionCreateInput & { proof: File },
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
@@ -90,7 +90,7 @@ const CreateModal = ({ transactionClients }: Props) => {
                               value={dateToDateValue(field.value)}
                               onChange={(value) => {
                                 const date = dateValueToDate(value);
-                                props.setFieldValue("date", date);
+                                props.setFieldValue(field.name, date);
                               }}
                             />
                             {meta.touched && meta.error && (
@@ -244,7 +244,6 @@ const CreateModal = ({ transactionClients }: Props) => {
                           {({ field, meta }: FieldProps) => (
                             <div>
                               <Input
-                                {...field}
                                 type="file"
                                 size="md"
                                 variant="bordered"
@@ -254,11 +253,12 @@ const CreateModal = ({ transactionClients }: Props) => {
                                 onChange={(e) => {
                                   if (e.target.files) {
                                     props.setFieldValue(
-                                      "proof",
+                                      field.name,
                                       e.target.files[0]
                                     );
                                   }
                                 }}
+                                onBlur={field.onBlur}
                               />
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">

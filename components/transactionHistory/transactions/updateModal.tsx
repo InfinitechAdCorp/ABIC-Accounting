@@ -104,7 +104,7 @@ const UpdateModal = ({ transaction, transactionClients }: Props) => {
                               value={dateToDateValue(field.value)}
                               onChange={(value) => {
                                 const date = dateValueToDate(value);
-                                props.setFieldValue("date", date);
+                                props.setFieldValue(field.name, date);
                               }}
                             />
                             {meta.touched && meta.error && (

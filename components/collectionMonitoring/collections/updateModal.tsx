@@ -190,7 +190,7 @@ const UpdateModal = ({ collection, locations, collectionClients }: Props) => {
                                 value={dateToDateValue(field.value)}
                                 onChange={(value) => {
                                   const date = dateValueToDate(value);
-                                  props.setFieldValue("start", date);
+                                  props.setFieldValue(field.name, date);
                                 }}
                               />
                               {meta.touched && meta.error && (
@@ -214,7 +214,7 @@ const UpdateModal = ({ collection, locations, collectionClients }: Props) => {
                                 value={dateToDateValue(field.value)}
                                 onChange={(value) => {
                                   const date = dateValueToDate(value);
-                                  props.setFieldValue("end", date);
+                                  props.setFieldValue(field.name, date);
                                 }}
                               />
                               {meta.touched && meta.error && (
@@ -348,7 +348,7 @@ const UpdateModal = ({ collection, locations, collectionClients }: Props) => {
                               value={dateToDateValue(field.value)}
                               onChange={(value) => {
                                 const date = dateValueToDate(value);
-                                props.setFieldValue("due", date);
+                                props.setFieldValue(field.name, date);
                               }}
                             />
                             {meta.touched && meta.error && (

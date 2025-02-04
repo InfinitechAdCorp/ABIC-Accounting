@@ -15,8 +15,10 @@ import { formatTransactions } from "@/components/globals/utils";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { put } from "@vercel/blob";
+import { ulid } from "ulidx";
 
 type TransactionCreateInput = Prisma.TransactionCreateInput & {
+  proof: File;
   transaction_client_id?: string;
 };
 
@@ -71,12 +73,13 @@ export const create = async (values: TransactionCreateInput) => {
     return response;
   }
 
-  const proof = values.proof;
-  await put(proof.name, proof, {
-    access: "public",
-  });
-
   try {
+    const proof = values.proof;
+    const proofName = `${ulid()}.${proof.name.split(".").at(-1)}`;
+    await put(proofName, proof, {
+      access: "public",
+    });
+
     await prisma.transaction.create({
       data: {
         transaction_client: { connect: { id: values.transaction_client_id } },
@@ -87,7 +90,7 @@ export const create = async (values: TransactionCreateInput) => {
         type: values.type,
         amount: values.amount,
         status: values.status,
-        proof: proof.name,
+        proof: proofName,
       },
     });
   } catch {
