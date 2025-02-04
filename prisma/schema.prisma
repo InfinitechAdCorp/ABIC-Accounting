@@ -15,11 +15,6 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-// datasource db {
-//   provider  = "mysql"
-//   url       = env("DATABASE_URL")
-// }
-
 model Account {
   id                           String              @id @default(cuid())
   transaction_clients          TransactionClient[]
