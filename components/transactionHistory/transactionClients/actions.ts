@@ -80,9 +80,9 @@ export const get = async (id: string) => {
     return response;
   }
 
-  const formattedTransactionClient = formatTransactionClients(
-    [transactionClient],
-  )[0];
+  const formattedTransactionClient = formatTransactionClients([
+    transactionClient,
+  ])[0];
   const response = {
     code: 200,
     message: "Fetched Client",
@@ -166,7 +166,10 @@ export const update = async (values: Prisma.TransactionClientCreateInput) => {
   return response;
 };
 
-export const destroy = async (values: { id: string }) => {
+export const destroy = async (values: { id: string; otp: string }) => {
+  const session = await cookies();
+  const otp = session.get("otp")?.value;
+
   const schema = destroySchema;
 
   try {
@@ -182,12 +185,20 @@ export const destroy = async (values: { id: string }) => {
     return response;
   }
 
-  try {
-    await prisma.transactionClient.delete({
-      where: { id: values.id },
-    });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  if (otp == values.otp) {
+    try {
+      await prisma.transactionClient.delete({
+        where: { id: values.id },
+      });
+    } catch {
+      const response: ActionResponse = { code: 500, message: "Server Error" };
+      return response;
+    }
+  } else {
+    const response: ActionResponse = {
+      code: 401,
+      message: "Invalid Token",
+    };
     return response;
   }
 

@@ -8,13 +8,15 @@ import {
   ModalBody,
   ModalFooter,
   Button,
+  InputOtp,
   useDisclosure,
 } from "@nextui-org/react";
 import { ActionResponse } from "@/components/globals/types";
 import { destroy as destroySchema } from "@/components/globals/schemas";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, FieldProps } from "formik";
 import { handlePostSubmit } from "@/components/globals/utils";
 import { FaTrash } from "react-icons/fa6";
+import { sendOTP } from "@/components/globals/serverUtils";
 
 type Props = {
   title: string;
@@ -26,8 +28,14 @@ const DestroyModal = ({ title, action, id }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
 
+  const openModal = async () => {
+    await sendOTP();
+    onOpen();
+  };
+
   const initialValues = {
     id: id,
+    otp: "",
   };
 
   const onSubmit = async (
@@ -48,7 +56,7 @@ const DestroyModal = ({ title, action, id }: Props) => {
         color="danger"
         isIconOnly={true}
         title="Delete"
-        onPress={onOpen}
+        onPress={openModal}
       >
         <FaTrash />
       </Button>
@@ -67,9 +75,22 @@ const DestroyModal = ({ title, action, id }: Props) => {
                     <ModalHeader>Delete {title}</ModalHeader>
                     <ModalBody>
                       <Field type="hidden" name="id" />
-                      <h6>
-                        Are you sure that you want to delete this {title}?
-                      </h6>
+                      <h6>Enter OTP to Confirm {title} Deletion:</h6>
+
+                      <div className="flex justify-center">
+                        <Field name="otp">
+                          {({ field, meta }: FieldProps) => (
+                            <div>
+                              <InputOtp {...field} length={6} />
+                              {meta.touched && meta.error && (
+                                <small className="text-red-500">
+                                  {meta.error}
+                                </small>
+                              )}
+                            </div>
+                          )}
+                        </Field>
+                      </div>
                     </ModalBody>
                     <ModalFooter>
                       <Button
@@ -77,10 +98,10 @@ const DestroyModal = ({ title, action, id }: Props) => {
                         type="submit"
                         isLoading={submitting}
                       >
-                        Yes
+                        Submit
                       </Button>
                       <Button color="danger" onPress={onClose}>
-                        No
+                        Cancel
                       </Button>
                     </ModalFooter>
                   </Form>

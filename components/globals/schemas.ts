@@ -7,4 +7,5 @@ export const login = Yup.object().shape({
 
 export const destroy = Yup.object().shape({
   id: Yup.string().required("ID is a required field"),
+  otp: Yup.string().required("OTP is a required field"),
 });

@@ -218,7 +218,6 @@ export const destroy = async (values: { id: string }) => {
     return response;
   }
 
-  sendOTP();
   revalidatePath("/transaction-history/transactions");
   const response: ActionResponse = {
     code: 200,
