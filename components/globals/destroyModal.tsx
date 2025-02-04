@@ -17,19 +17,23 @@ import { Formik, Form, Field, FieldProps } from "formik";
 import { handlePostSubmit } from "@/components/globals/utils";
 import { FaTrash } from "react-icons/fa6";
 import { sendOTP } from "@/components/globals/serverUtils";
+import { Destroy } from "@/components/globals/types";
 
 type Props = {
   title: string;
-  action: (values: { id: string }) => Promise<ActionResponse>;
+  action: (values: Destroy) => Promise<ActionResponse>;
   id: string;
 };
 
 const DestroyModal = ({ title, action, id }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
+  const [opening, setOpening] = useState(false);
 
   const openModal = async () => {
+    setOpening(true);
     await sendOTP();
+    setOpening(false);
     onOpen();
   };
 
@@ -39,7 +43,7 @@ const DestroyModal = ({ title, action, id }: Props) => {
   };
 
   const onSubmit = async (
-    values: { id: string },
+    values: Destroy,
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
@@ -57,6 +61,7 @@ const DestroyModal = ({ title, action, id }: Props) => {
         isIconOnly={true}
         title="Delete"
         onPress={openModal}
+        isLoading={opening}
       >
         <FaTrash />
       </Button>

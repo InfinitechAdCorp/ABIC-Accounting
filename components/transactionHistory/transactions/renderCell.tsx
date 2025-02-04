@@ -61,6 +61,7 @@ const RenderCell = (
       const blob = dependencies.blobs.find((blob) => {
         return name == blob.pathname;
       });
+
       return <ViewProofModal url={blob?.url || "/no-image.png"} />;
     default:
       return row[columnKey as keyof Row];

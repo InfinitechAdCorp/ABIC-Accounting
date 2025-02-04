@@ -1,5 +1,10 @@
 import { SVGProps } from "react";
 
+export type Destroy = {
+  id: string,
+  otp: string,
+}
+
 export type Login = {
   username: string;
   password: string;

@@ -13,6 +13,7 @@ import * as Yup from "yup";
 import { formatTransactionClients } from "@/components/globals/utils";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { Destroy } from "@/components/globals/types";
 
 export const getAll = async () => {
   const session = await cookies();
@@ -166,10 +167,9 @@ export const update = async (values: Prisma.TransactionClientCreateInput) => {
   return response;
 };
 
-export const destroy = async (values: { id: string; otp: string }) => {
+export const destroy = async (values: Destroy) => {
   const session = await cookies();
   const otp = session.get("otp")?.value;
-
   const schema = destroySchema;
 
   try {
@@ -194,6 +194,8 @@ export const destroy = async (values: { id: string; otp: string }) => {
       const response: ActionResponse = { code: 500, message: "Server Error" };
       return response;
     }
+
+    session.delete("otp");
   } else {
     const response: ActionResponse = {
       code: 401,

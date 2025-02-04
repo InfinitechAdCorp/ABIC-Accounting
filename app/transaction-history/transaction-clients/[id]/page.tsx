@@ -9,6 +9,7 @@ import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import RenderCell from "@/components/transactionHistory/transactions/renderCell";
 import CreateModal from "@/components/transactionHistory/transactions/createModal";
+import { list } from "@vercel/blob";
 
 const TransactionClient = async ({
   params,
@@ -20,6 +21,7 @@ const TransactionClient = async ({
   const { account } = await getAccount();
   const { transactionClient } = await getTransactionClient(id);
   const { transactionClients } = await getTransactionClients();
+    const { blobs } = await list();
 
   const columns = [
     { key: "date", name: "DATE" },
@@ -45,7 +47,7 @@ const TransactionClient = async ({
               rows={transactionClient?.transactions || []}
               searchKey="name"
               RenderCell={RenderCell}
-              dependencies={{ transactionClients: transactionClients }}
+              dependencies={{ blobs: blobs, transactionClients: transactionClients }}
             >
               <CreateModal transactionClients={transactionClients} />
             </DataTable>

@@ -13,10 +13,11 @@ import * as Yup from "yup";
 import { formatCollectionClients } from "@/components/globals/utils";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { Destroy } from "@/components/globals/types";
 
 export const getAll = async () => {
   const session = await cookies();
-const accountID = session.get("accountID")?.value || "";
+  const accountID = session.get("accountID")?.value || "";
 
   let account;
 
@@ -70,9 +71,9 @@ export const get = async (id: string) => {
     return response;
   }
 
-  const formattedCollectionClient = formatCollectionClients(
-    [collectionClient],
-  )[0];
+  const formattedCollectionClient = formatCollectionClients([
+    collectionClient,
+  ])[0];
   const response = {
     code: 200,
     message: "Fetched Client",
@@ -83,7 +84,7 @@ export const get = async (id: string) => {
 
 export const create = async (values: Prisma.CollectionClientCreateInput) => {
   const session = await cookies();
-const accountID = session.get("accountID")?.value || "";
+  const accountID = session.get("accountID")?.value || "";
 
   const schema = createSchema;
 
@@ -119,7 +120,7 @@ const accountID = session.get("accountID")?.value || "";
 
 export const update = async (values: Prisma.CollectionClientCreateInput) => {
   const session = await cookies();
-const accountID = session.get("accountID")?.value || "";
+  const accountID = session.get("accountID")?.value || "";
 
   const schema = updateSchema;
 
@@ -156,7 +157,9 @@ const accountID = session.get("accountID")?.value || "";
   return response;
 };
 
-export const destroy = async (values: { id: string }) => {
+export const destroy = async (values: Destroy) => {
+  const session = await cookies();
+  const otp = session.get("otp")?.value;
   const schema = destroySchema;
 
   try {
@@ -172,12 +175,22 @@ export const destroy = async (values: { id: string }) => {
     return response;
   }
 
-  try {
-    await prisma.collectionClient.delete({
-      where: { id: values.id },
-    });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  if (otp == values.otp) {
+    try {
+      await prisma.collectionClient.delete({
+        where: { id: values.id },
+      });
+    } catch {
+      const response: ActionResponse = { code: 500, message: "Server Error" };
+      return response;
+    }
+
+    session.delete("otp");
+  } else {
+    const response: ActionResponse = {
+      code: 401,
+      message: "Invalid Token",
+    };
     return response;
   }
 
