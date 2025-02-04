@@ -14,7 +14,7 @@ import * as Yup from "yup";
 import { formatTransactions } from "@/components/globals/utils";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { put } from "@vercel/blob";
+import { list, put, del } from "@vercel/blob";
 import { ulid } from "ulidx";
 
 type TransactionCreateInput = Prisma.TransactionCreateInput & {
@@ -37,6 +37,9 @@ export const getAll = async () => {
       },
       include: {
         transaction_client: true,
+      },
+      orderBy: {
+        date: "desc",
       },
     });
   } catch {
@@ -120,6 +123,26 @@ export const update = async (values: TransactionCreateInput) => {
   }
 
   try {
+    const transaction = await prisma.transaction.findUnique({
+      where: {
+        id: values.id,
+      },
+    });
+    const oldProofName = transaction?.proof;
+
+    const { blobs } = await list();
+    const blob = blobs.find((blob) => {
+      return oldProofName == blob.pathname;
+    });
+
+    await del(blob?.url || "");
+
+    const proof = values.proof;
+    const proofName = `${ulid()}.${proof.name.split(".").at(-1)}`;
+    await put(proofName, proof, {
+      access: "public",
+    });
+
     await prisma.transaction.update({
       where: { id: values.id },
       data: {
@@ -131,7 +154,7 @@ export const update = async (values: TransactionCreateInput) => {
         type: values.type,
         amount: values.amount,
         status: values.status,
-        proof: values.proof,
+        proof: proofName,
       },
     });
   } catch {
@@ -164,6 +187,20 @@ export const destroy = async (values: { id: string }) => {
   }
 
   try {
+    const transaction = await prisma.transaction.findUnique({
+      where: {
+        id: values.id,
+      },
+    });
+    const proofName = transaction?.proof;
+
+    const { blobs } = await list();
+    const blob = blobs.find((blob) => {
+      return proofName == blob.pathname;
+    });
+
+    await del(blob?.url || "");
+
     await prisma.transaction.delete({
       where: { id: values.id },
     });

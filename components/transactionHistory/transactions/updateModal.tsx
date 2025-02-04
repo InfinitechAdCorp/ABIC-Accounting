@@ -35,6 +35,10 @@ type Props = {
   transactionClients: FormattedTransactionClient[];
 };
 
+type TransactionCreateInput = Prisma.TransactionCreateInput & {
+  proof: File;
+};
+
 const UpdateModal = ({ transaction, transactionClients }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
@@ -49,11 +53,11 @@ const UpdateModal = ({ transaction, transactionClients }: Props) => {
     type: transaction.type,
     amount: transaction.amount,
     status: transaction.status,
-    proof: transaction.proof,
+    proof: "",
   };
 
   const onSubmit = async (
-    values: Prisma.TransactionCreateInput,
+    values: TransactionCreateInput,
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
@@ -260,13 +264,21 @@ const UpdateModal = ({ transaction, transactionClients }: Props) => {
                           {({ field, meta }: FieldProps) => (
                             <div>
                               <Input
-                                {...field}
-                                type="text"
+                                type="file"
                                 size="md"
                                 variant="bordered"
                                 label="Proof"
                                 labelPlacement="outside"
                                 placeholder="Enter Proof"
+                                onChange={(e) => {
+                                  if (e.target.files) {
+                                    props.setFieldValue(
+                                      field.name,
+                                      e.target.files[0]
+                                    );
+                                  }
+                                }}
+                                onBlur={field.onBlur}
                               />
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">
