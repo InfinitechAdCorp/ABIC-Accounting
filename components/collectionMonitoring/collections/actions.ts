@@ -15,6 +15,7 @@ import * as Yup from "yup";
 import { formatCollections } from "@/components/globals/utils";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { Destroy } from "@/components/globals/types";
 
 type CollectionCreateInput = Prisma.CollectionCreateInput & {
   collection_client_id?: string;
@@ -143,7 +144,9 @@ export const update = async (values: CollectionCreateInput) => {
   return response;
 };
 
-export const destroy = async (values: { id: string }) => {
+export const destroy = async (values: Destroy) => {
+  const session = await cookies();
+  const otp = session.get("otp")?.value;
   const schema = destroySchema;
 
   try {
@@ -159,14 +162,25 @@ export const destroy = async (values: { id: string }) => {
     return response;
   }
 
-  try {
-    await prisma.collection.delete({
-      where: { id: values.id },
-    });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  if (otp == values.otp) {
+    try {
+      await prisma.collection.delete({
+        where: { id: values.id },
+      });
+    } catch {
+      const response: ActionResponse = { code: 500, message: "Server Error" };
+      return response;
+    }
+
+    session.delete("otp");
+  } else {
+    const response: ActionResponse = {
+      code: 401,
+      message: "Invalid Token",
+    };
     return response;
   }
+
 
   revalidatePath("/collection-monitoring/collections");
   const response: ActionResponse = { code: 200, message: "Deleted Collection" };

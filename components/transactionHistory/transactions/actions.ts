@@ -16,7 +16,7 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { list, put, del } from "@vercel/blob";
 import { ulid } from "ulidx";
-import { sendOTP } from "@/components/globals/serverUtils";
+import { Destroy } from "@/components/globals/types";
 
 type TransactionCreateInput = Prisma.TransactionCreateInput & {
   proof: File;
@@ -173,7 +173,9 @@ export const update = async (values: TransactionCreateInput) => {
   return response;
 };
 
-export const destroy = async (values: { id: string }) => {
+export const destroy = async (values: Destroy) => {
+  const session = await cookies();
+  const otp = session.get("otp")?.value;
   const schema = destroySchema;
 
   try {
@@ -189,31 +191,41 @@ export const destroy = async (values: { id: string }) => {
     return response;
   }
 
-  try {
-    const transaction = await prisma.transaction.findUnique({
-      where: {
-        id: values.id,
-      },
-    });
-    const proofName = transaction?.proof;
+  if (otp == values.otp) {
+    try {
+      const transaction = await prisma.transaction.findUnique({
+        where: {
+          id: values.id,
+        },
+      });
+      const proofName = transaction?.proof;
 
-    const { blobs } = await list();
-    const blob = blobs.find((blob) => {
-      return proofName == blob.pathname;
-    });
+      const { blobs } = await list();
+      const blob = blobs.find((blob) => {
+        return proofName == blob.pathname;
+      });
 
-    if (blob) {
-      await del(blob.url || "");
+      if (blob) {
+        await del(blob.url || "");
+      }
+
+      await prisma.transaction.delete({
+        where: { id: values.id },
+      });
+    } catch (error) {
+      const response: ActionResponse = {
+        code: 500,
+        message: "Server Error",
+        error: error,
+      };
+      return response;
     }
 
-    await prisma.transaction.delete({
-      where: { id: values.id },
-    });
-  } catch (error) {
+    session.delete("otp");
+  } else {
     const response: ActionResponse = {
-      code: 500,
-      message: "Server Error",
-      error: error,
+      code: 401,
+      message: "Invalid Token",
     };
     return response;
   }
