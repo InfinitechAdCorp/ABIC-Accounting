@@ -8,11 +8,13 @@ import DataTable from "@/components/globals/dataTable";
 import RenderCell from "@/components/transactionHistory/transactions/renderCell";
 import CreateTransactionModal from "@/components/transactionHistory/transactions/createModal";
 import CreateTransactionClientModal from "@/components/transactionHistory/transactionClients/createModal";
+import { list } from '@vercel/blob';
 
 const Transactions = async () => {
   const { account } = await getAccount();
   const { transactions } = await getTransactions();
   const { transactionClients } = await getTransactionClients();
+  const { blobs } = await list();
 
   const columns = [
     { key: "date", name: "DATE" },
@@ -39,7 +41,7 @@ const Transactions = async () => {
               rows={transactions || []}
               searchKey="particulars"
               RenderCell={RenderCell}
-              dependencies={{ transactionClients: transactionClients }}
+              dependencies={{ blobs: blobs, transactionClients: transactionClients }}
             >
               <>
                 <div className="hidden sm:flex">

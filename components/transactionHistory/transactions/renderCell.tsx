@@ -13,39 +13,57 @@ import {
   FormattedTransaction,
   FormattedTransactionClient,
 } from "@/components/transactionHistory/types";
+import Image from "next/image";
+import { ListBlobResultBlob } from "@vercel/blob";
 
 type Row = FormattedTransaction;
 
 const RenderCell = (
   row: Row,
   columnKey: string,
-  dependencies: { transactionClients: FormattedTransactionClient[] }
+  dependencies: {
+    blobs: ListBlobResultBlob[];
+    transactionClients: FormattedTransactionClient[];
+  }
 ) => {
-  if (columnKey == "actions") {
-    return (
-      <div className="relative flex justify-end items-center gap-2">
-        <UpdateModal
-          transaction={row}
-          transactionClients={dependencies.transactionClients}
-        />
-        <DestroyModal title="Transaction" action={destroy} id={row.id} />
-        <ChangeStatusModal action={changeStatus} id={row.id} status={row.status} />
-      </div>
-    );
-  } else if (columnKey == "date") {
-    return formatDate(row.date);
-  } else if (columnKey == "client") {
-    return row.transaction_client?.name;
-  } else if (columnKey == "credit") {
-    if (row.type == "Credit") {
-      return formatNumber(row.amount);
-    }
-  } else if (columnKey == "debit") {
-    if (row.type == "Debit") {
-      return formatNumber(row.amount);
-    }
-  } else {
-    return row[columnKey as keyof Row];
+  switch (columnKey) {
+    case "actions":
+      return (
+        <div className="relative flex justify-end items-center gap-2">
+          <UpdateModal
+            transaction={row}
+            transactionClients={dependencies.transactionClients}
+          />
+          <DestroyModal title="Transaction" action={destroy} id={row.id} />
+          <ChangeStatusModal
+            action={changeStatus}
+            id={row.id}
+            status={row.status}
+          />
+        </div>
+      );
+    case "date":
+      return formatDate(row.date);
+    case "client":
+      return row.transaction_client?.name;
+    case "credit":
+      if (row.type == "Credit") {
+        return formatNumber(row.amount);
+      }
+      return "";
+    case "debit":
+      if (row.type == "Debit") {
+        return formatNumber(row.amount);
+      }
+      return "";
+    case "proof":
+      const name = row[columnKey as keyof Row];
+      const blob = dependencies.blobs.find((blob) => {
+        return name == blob.pathname;
+      });
+      return <Image width={100} height={100} src={blob?.url || ""} alt="Proof" unoptimized />;
+    default:
+      return row[columnKey as keyof Row];
   }
 };
 

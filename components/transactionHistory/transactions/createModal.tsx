@@ -30,6 +30,10 @@ type Props = {
   transactionClients: FormattedTransactionClient[];
 };
 
+type TransactionCreateInput = Prisma.TransactionCreateInput & {
+  proof: File;
+};
+
 const CreateModal = ({ transactionClients }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
@@ -47,7 +51,7 @@ const CreateModal = ({ transactionClients }: Props) => {
   };
 
   const onSubmit = async (
-    values: Prisma.TransactionCreateInput & { proof: File },
+    values: TransactionCreateInput,
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
