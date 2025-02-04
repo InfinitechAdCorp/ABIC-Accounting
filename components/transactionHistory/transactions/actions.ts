@@ -16,6 +16,7 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { list, put, del } from "@vercel/blob";
 import { ulid } from "ulidx";
+import { Resend } from "resend";
 
 type TransactionCreateInput = Prisma.TransactionCreateInput & {
   proof: File;
@@ -208,6 +209,14 @@ export const destroy = async (values: { id: string }) => {
     const response: ActionResponse = { code: 500, message: "Server Error" };
     return response;
   }
+
+  const resend = new Resend(process.env.RESEND_KEY);
+  resend.emails.send({
+    from: "abic-accounting.vercel.app",
+    to: "mosesalcantara123@gmail.com",
+    subject: "Deleted Transaction",
+    html: "<p>A User Deleted a Transaction!</p>",
+  });
 
   revalidatePath("/transaction-history/transactions");
   const response: ActionResponse = {
