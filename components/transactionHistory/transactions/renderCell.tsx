@@ -5,6 +5,7 @@ import { formatDate, formatNumber } from "@/components/globals/utils";
 import UpdateModal from "@/components/transactionHistory/transactions/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
 import ChangeStatusModal from "@/components/transactionHistory/transactions/changeStatuslModal";
+import ViewProofModal from "@/components/transactionHistory/transactions/viewProofModal";
 import {
   destroy,
   changeStatus,
@@ -13,7 +14,6 @@ import {
   FormattedTransaction,
   FormattedTransactionClient,
 } from "@/components/transactionHistory/types";
-import Image from "next/image";
 import { ListBlobResultBlob } from "@vercel/blob";
 
 type Row = FormattedTransaction;
@@ -61,7 +61,7 @@ const RenderCell = (
       const blob = dependencies.blobs.find((blob) => {
         return name == blob.pathname;
       });
-      return <Image width={100} height={100} src={blob?.url || ""} alt="Proof" unoptimized />;
+      return <ViewProofModal url={blob?.url || ""} />;
     default:
       return row[columnKey as keyof Row];
   }
