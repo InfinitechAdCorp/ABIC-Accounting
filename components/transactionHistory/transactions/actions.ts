@@ -16,6 +16,7 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { list, put, del } from "@vercel/blob";
 import { ulid } from "ulidx";
+import { sendOTP } from "@/components/globals/serverUtils";
 
 type TransactionCreateInput = Prisma.TransactionCreateInput & {
   proof: File;
@@ -217,6 +218,7 @@ export const destroy = async (values: { id: string }) => {
     return response;
   }
 
+  sendOTP();
   revalidatePath("/transaction-history/transactions");
   const response: ActionResponse = {
     code: 200,

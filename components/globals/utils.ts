@@ -28,9 +28,8 @@ export const handlePostSubmit = (
   } else {
     if (response.code == 429) {
       console.log(response.errors);
-    }
-    else {
-      console.log(response.error)
+    } else {
+      console.log(response.error);
     }
     toast.error(response.message);
   }
@@ -39,7 +38,7 @@ export const handlePostSubmit = (
 // Data Formatters
 
 export const formatTransactionClients = (
-  transactionClients: TransactionClientWithTransactions[],
+  transactionClients: TransactionClientWithTransactions[]
 ) => {
   const formattedTransactionClients: FormattedTransactionClient[] = [];
 
