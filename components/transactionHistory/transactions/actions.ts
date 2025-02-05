@@ -40,7 +40,7 @@ export const getAll = async () => {
         transaction_client: true,
       },
       orderBy: {
-        date: "desc",
+        date: 'desc',
       },
     });
   } catch {

@@ -21,7 +21,7 @@ const TransactionClient = async ({
   const { account } = await getAccount();
   const { transactionClient } = await getTransactionClient(id);
   const { transactionClients } = await getTransactionClients();
-    const { blobs } = await list();
+  const { blobs } = await list();
 
   const columns = [
     { key: "date", name: "DATE" },
@@ -34,6 +34,8 @@ const TransactionClient = async ({
     { key: "actions", name: "ACTIONS" },
   ];
 
+  const model = `${transactionClient?.name}'s Transactions`;
+
   return (
     <>
       <Navbar account={account} />
@@ -41,13 +43,17 @@ const TransactionClient = async ({
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
           <CardBody>
+            <h1 className="text-lg font-semibold mb-3">{model.toUpperCase()}</h1>
             <DataTable
-              model={`${transactionClient?.name}'s Transactions`}
+              model={model}
               columns={columns}
               rows={transactionClient?.transactions || []}
               searchKey="name"
               RenderCell={RenderCell}
-              dependencies={{ blobs: blobs, transactionClients: transactionClients }}
+              dependencies={{
+                blobs: blobs,
+                transactionClients: transactionClients,
+              }}
             >
               <CreateModal transactionClients={transactionClients} />
             </DataTable>

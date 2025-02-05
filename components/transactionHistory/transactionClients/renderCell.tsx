@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { formatNumber } from "@/components/globals/utils";
+import { computeBalance, formatNumber } from "@/components/globals/utils";
 import UpdateModal from "@/components/transactionHistory/transactionClients/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
 import ViewBtn from "@/components/globals/viewBtn";
@@ -36,18 +36,9 @@ const RenderCell = (row: Row, columnKey: string) => {
         }
       }
       return formatNumber(startingBalance);
-    case "current_balance":
-      let currentBalance = 0;
-      if (transactions) {
-        transactions.forEach((transaction) => {
-          if (transaction.type == "Credit") {
-            currentBalance += transaction.amount;
-          } else {
-            currentBalance -= transaction.amount;
-          }
-        });
-      }
-      return formatNumber(currentBalance);
+    case "running_balance":
+      const runningBalance = computeBalance(transactions);
+      return formatNumber(runningBalance);
     case "transactions":
       return row.transactions?.length;
     default:

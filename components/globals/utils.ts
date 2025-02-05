@@ -206,3 +206,15 @@ export const formatErrors = (errors: Yup.ValidationError) => {
   });
   return formattedErrors;
 };
+
+export const computeBalance = (transactions: FormattedTransaction[]) => {
+  let total = 0;
+  transactions.forEach((transaction) => {
+    if (transaction.type == "Credit") {
+      total += transaction.amount;
+    } else {
+      total -= transaction.amount;
+    }
+  });
+  return total;
+};

@@ -28,6 +28,8 @@ const Transactions = async () => {
     { key: "actions", name: "ACTIONS" },
   ];
 
+  const model = "Transactions";
+
   return (
     <>
       <Navbar account={account} />
@@ -35,8 +37,9 @@ const Transactions = async () => {
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
           <CardBody>
+            <h1 className="text-lg font-semibold mb-3">{model.toUpperCase()}</h1>
             <DataTable
-              model="Transactions"
+              model={model}
               columns={columns}
               rows={transactions || []}
               searchKey="particulars"

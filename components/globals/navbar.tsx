@@ -14,7 +14,7 @@ import AccountsBtn from "@/components/globals/accountsBtn";
 import { Account } from "@prisma/client";
 
 type Props = {
-  account: Account;
+  account: Account | undefined | null;
 };
 
 const Navbar = ({ account }: Props) => {
