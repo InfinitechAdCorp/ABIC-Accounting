@@ -13,9 +13,8 @@ import {
   Pagination,
   Button,
 } from "@heroui/react";
-import {jsPDF} from "jspdf";
-import html2canvas from "html2canvas";
-import { m } from "framer-motion";
+import jsPDF from "jspdf";
+import autoTable from 'jspdf-autotable'
 
 type column = {
   name: string;
@@ -93,13 +92,18 @@ const DataTable = ({
   }, []);
 
   const test = () => {
-    const input = document.getElementById("testRef");
-    html2canvas(input).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF();
-      pdf.addImage(imgData, "PNG", 0, 0, 500, 500);
-      pdf.save("download.pdf");
-    });
+    const doc = new jsPDF()
+    autoTable(doc, { html: '#testRef' })
+    
+    // autoTable(doc, {
+    //   head: [['Name', 'Email', 'Country']],
+    //   body: [
+    //     ['David', 'david@example.com', 'Sweden'],
+    //     ['Castille', 'castille@example.com', 'Spain'],
+    //   ],
+    // })
+
+    doc.save('table.pdf')
   };
 
   const topContent = React.useMemo(() => {
@@ -176,7 +180,7 @@ const DataTable = ({
         }}
         topContent={topContent}
         topContentPlacement="outside"
-        id="testRef"
+        id='testRef'
       >
         <TableHeader columns={columns}>
           {(column) => (
