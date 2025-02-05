@@ -51,6 +51,18 @@ export const set = async (accountID: string) => {
   return response;
 };
 
+export const unset = async () => {
+  const session = await cookies();
+  session.delete('accountID');
+
+  const response = {
+    code: 200,
+    message: "Account Unset",
+  };
+
+  return response;
+};
+
 export const logout = async () => {
   const session = await cookies();
 

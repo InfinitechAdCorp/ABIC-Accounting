@@ -10,10 +10,11 @@ import {
 } from "@heroui/react";
 import { useRouter, usePathname } from "next/navigation";
 import LogoutBtn from "@/components/globals/logoutBtn";
+import AccountsBtn from "@/components/globals/accountsBtn";
 import { Account } from "@prisma/client";
 
 type Props = {
-  account: Account | undefined | null;
+  account: Account;
 };
 
 const Navbar = ({ account }: Props) => {
@@ -221,6 +222,7 @@ const Navbar = ({ account }: Props) => {
             </DropdownMenu>
           </Dropdown>
 
+          <AccountsBtn />
           <LogoutBtn />
         </div>
       </div>
