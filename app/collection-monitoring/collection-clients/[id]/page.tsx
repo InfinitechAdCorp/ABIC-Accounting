@@ -21,6 +21,8 @@ const TransactionClient = async ({
   const { collectionClient } = await getCollectionClient(id);
   const { collectionClients } = await getCollectionClients();
 
+  const model = `${collectionClient?.name}'s Collections`;
+
   const locations = [
     { key: "All", name: "All" },
     { key: "Bacoor", name: "Bacoor" },
@@ -48,8 +50,6 @@ const TransactionClient = async ({
     { key: "payments", name: "PAYMENTS" },
     { key: "actions", name: "ACTIONS" },
   ];
-
-  const model = `${collectionClient?.name}'s Collections`;
 
   return (
     <>

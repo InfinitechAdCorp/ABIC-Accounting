@@ -14,17 +14,16 @@ const TransactionClients = async () => {
   const { transactionClients } = await getTransactionClients();
   const { transactions } = await getTransactions();
 
+  const model = "Clients";
+  const runningBalance = computeBalance([...transactions].reverse());
+
   const columns = [
     { key: "name", name: "NAME" },
     { key: "transactions", name: "TRANSACTIONS" },
-    { key: "starting_balance", name: "STARTING BALANCE" },
+    { key: "starting_fund", name: "STARTING FUND" },
     { key: "running_balance", name: "RUNNING BALANCE" },
     { key: "actions", name: "ACTIONS" },
   ];
-
-  const model = "Clients";
-
-  const runningBalance = computeBalance(transactions.reverse());
 
   return (
     <>

@@ -210,10 +210,12 @@ export const formatErrors = (errors: Yup.ValidationError) => {
 export const computeBalance = (transactions: FormattedTransaction[]) => {
   let total = 0;
   transactions.forEach((transaction) => {
-    if (transaction.type == "Credit") {
-      total += transaction.amount;
-    } else {
-      total -= transaction.amount;
+    if (transaction.status != "Cancelled") {
+      if (transaction.type == "Credit") {
+        total += transaction.amount;
+      } else {
+        total -= transaction.amount;
+      }
     }
   });
   return total;

@@ -11,13 +11,13 @@ const CollectionClients = async () => {
   const { account } = await getAccount();
   const { collectionClients } = await getAll();
 
+  const model = "Clients";
+
   const columns = [
     { key: "name", name: "NAME" },
     { key: "collections", name: "COLLECTIONS" },
     { key: "actions", name: "ACTIONS" },
   ];
-
-  const model = "Clients";
 
   return (
     <>

@@ -11,7 +11,7 @@ import { FormattedTransactionClient } from "@/components/transactionHistory/type
 type Row = FormattedTransactionClient;
 
 const RenderCell = (row: Row, columnKey: string) => {
-  const transactions = row.transactions || [];
+  const transactions = row.transactions?.reverse() || [];
 
   switch (columnKey) {
     case "actions":
@@ -25,17 +25,24 @@ const RenderCell = (row: Row, columnKey: string) => {
           />
         </div>
       );
-    case "starting_balance":
-      let startingBalance = 0;
-      const transaction = transactions[0];
+    case "starting_fund":
+      let startingFund = 0;
+
+      const transaction = transactions.find((transaction) => {
+        if (transaction.status != "Cancelled") {
+          return transaction;
+        }
+      });
+
       if (transaction) {
         if (transaction.type == "Credit") {
-          startingBalance += transaction.amount;
+          startingFund += transaction.amount;
         } else {
-          startingBalance -= transaction.amount;
+          startingFund -= transaction.amount;
         }
       }
-      return formatNumber(startingBalance);
+
+      return formatNumber(startingFund);
     case "running_balance":
       const runningBalance = computeBalance(transactions);
       return formatNumber(runningBalance);

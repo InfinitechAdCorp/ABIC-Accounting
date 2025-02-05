@@ -29,7 +29,7 @@ const ViewProofModal = ({ url }: Props) => {
         title="View Proof"
         onPress={onOpen}
       >
-        <FaEye />
+        <FaEye size={14} />
       </Button>
 
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>

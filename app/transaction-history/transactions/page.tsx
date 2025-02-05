@@ -9,12 +9,16 @@ import RenderCell from "@/components/transactionHistory/transactions/renderCell"
 import CreateTransactionModal from "@/components/transactionHistory/transactions/createModal";
 import CreateTransactionClientModal from "@/components/transactionHistory/transactionClients/createModal";
 import { list } from "@vercel/blob";
+import { computeBalance, formatNumber } from "@/components/globals/utils";
 
 const Transactions = async () => {
   const { account } = await getAccount();
   const { transactions } = await getTransactions();
   const { transactionClients } = await getTransactionClients();
   const { blobs } = await list();
+
+  const model = "Transactions";
+  const runningBalance = computeBalance([...transactions].reverse());
 
   const columns = [
     { key: "date", name: "DATE" },
@@ -28,8 +32,6 @@ const Transactions = async () => {
     { key: "actions", name: "ACTIONS" },
   ];
 
-  const model = "Transactions";
-
   return (
     <>
       <Navbar account={account} />
@@ -37,7 +39,15 @@ const Transactions = async () => {
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
           <CardBody>
-            <h1 className="text-lg font-semibold mb-3">{model.toUpperCase()}</h1>
+            <div className="flex justify-between">
+              <h1 className="text-lg font-semibold mb-3">
+                {model.toUpperCase()}
+              </h1>
+              <h1 className="text-md font-semibold mb-3">
+                RUNNING BALANCE: {formatNumber(runningBalance)}
+              </h1>
+            </div>
+
             <DataTable
               model={model}
               columns={columns}

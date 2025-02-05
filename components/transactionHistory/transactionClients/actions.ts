@@ -29,7 +29,7 @@ export const getAll = async () => {
           include: {
             transactions: {
               orderBy: {
-                date: "asc",
+                date: "desc",
               },
             },
           },
@@ -67,7 +67,7 @@ export const get = async (id: string) => {
       include: {
         transactions: {
           orderBy: {
-            date: "asc",
+            date: "desc",
           },
         },
       },
