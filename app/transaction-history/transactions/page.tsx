@@ -11,6 +11,7 @@ import CreateTransactionClientModal from "@/components/transactionHistory/transa
 import { list } from "@vercel/blob";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
 import { Account } from "@prisma/client";
+import ExportBtn from "@/components/globals/exportBtn";
 
 const Transactions = async () => {
   const { account } = await getAccount();
@@ -68,6 +69,8 @@ const Transactions = async () => {
                 <CreateTransactionModal
                   transactionClients={transactionClients}
                 />
+
+                <ExportBtn />
               </>
             </DataTable>
           </CardBody>

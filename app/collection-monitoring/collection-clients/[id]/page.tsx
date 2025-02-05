@@ -10,6 +10,7 @@ import DataTable from "@/components/globals/dataTable";
 import RenderCell from "@/components/collectionMonitoring/collections/renderCell";
 import CreateModal from "@/components/collectionMonitoring/collections/createModal";
 import { Account } from "@prisma/client";
+import ExportBtn from "@/components/globals/exportBtn";
 
 const TransactionClient = async ({
   params,
@@ -59,7 +60,9 @@ const TransactionClient = async ({
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
           <CardBody>
-            <h1 className="text-lg font-semibold mb-3">{model.toUpperCase()}</h1>
+            <h1 className="text-lg font-semibold mb-3">
+              {model.toUpperCase()}
+            </h1>
             <DataTable
               model={model}
               columns={columns}
@@ -71,10 +74,14 @@ const TransactionClient = async ({
                 collectionClients: collectionClients,
               }}
             >
-              <CreateModal
-                locations={locations}
-                collectionClients={collectionClients}
-              />
+              <>
+                <CreateModal
+                  locations={locations}
+                  collectionClients={collectionClients}
+                />
+
+                <ExportBtn />
+              </>
             </DataTable>
           </CardBody>
         </Card>

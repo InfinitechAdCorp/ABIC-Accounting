@@ -11,10 +11,7 @@ import {
   TableCell,
   Input,
   Pagination,
-  Button,
 } from "@heroui/react";
-import jsPDF from "jspdf";
-import autoTable from 'jspdf-autotable'
 
 type column = {
   name: string;
@@ -91,26 +88,9 @@ const DataTable = ({
     setPage(1);
   }, []);
 
-  const test = () => {
-    const doc = new jsPDF()
-    autoTable(doc, { html: '#testRef' })
-    
-    // autoTable(doc, {
-    //   head: [['Name', 'Email', 'Country']],
-    //   body: [
-    //     ['David', 'david@example.com', 'Sweden'],
-    //     ['Castille', 'castille@example.com', 'Spain'],
-    //   ],
-    // })
-
-    doc.save('table.pdf')
-  };
-
   const topContent = React.useMemo(() => {
     return (
       <>
-        <Button onPress={test}>Test</Button>
-
         <div className="flex flex-col gap-4">
           <div className="flex justify-between gap-3 items-end">
             <Input
@@ -180,7 +160,7 @@ const DataTable = ({
         }}
         topContent={topContent}
         topContentPlacement="outside"
-        id='testRef'
+        id="dataTable"
       >
         <TableHeader columns={columns}>
           {(column) => (

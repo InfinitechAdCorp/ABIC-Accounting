@@ -7,6 +7,7 @@ import DataTable from "@/components/globals/dataTable";
 import RenderCell from "@/components/collectionMonitoring/collectionClients/renderCell";
 import CreateModal from "@/components/collectionMonitoring/collectionClients/createModal";
 import { Account } from "@prisma/client";
+import ExportBtn from "@/components/globals/exportBtn";
 
 const CollectionClients = async () => {
   const { account } = await getAccount();
@@ -35,7 +36,11 @@ const CollectionClients = async () => {
               searchKey="name"
               RenderCell={RenderCell}
             >
+              <>
               <CreateModal />
+              
+              <ExportBtn />
+              </>
             </DataTable>
           </CardBody>
         </Card>

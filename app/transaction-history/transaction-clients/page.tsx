@@ -9,6 +9,7 @@ import RenderCell from "@/components/transactionHistory/transactionClients/rende
 import CreateModal from "@/components/transactionHistory/transactionClients/createModal";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
 import { Account } from "@prisma/client";
+import ExportBtn from "@/components/globals/exportBtn";
 
 const TransactionClients = async () => {
   const { account } = await getAccount();
@@ -49,7 +50,10 @@ const TransactionClients = async () => {
               searchKey="name"
               RenderCell={RenderCell}
             >
-              <CreateModal />
+              <>
+                <CreateModal />
+                <ExportBtn />
+              </>
             </DataTable>
           </CardBody>
         </Card>
