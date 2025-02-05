@@ -74,6 +74,8 @@ model Detail {
   extension   DateTime? @db.Date
   closed_date DateTime? @db.Date
   type        String
+
+  @@map(name: "details")
 }
 
 model CollectionClient {
