@@ -59,10 +59,10 @@ const Navbar = ({ account }: Props) => {
               <DropdownMenu className="text-center">
                 <DropdownItem
                   onPress={() =>
-                    router.push("/transaction-history/transaction-clients")
+                    router.push("/transaction-history/clients")
                   }
-                  key="Transaction Clients"
-                  textValue="Transaction Clients"
+                  key="Clients"
+                  textValue="Clients"
                 >
                   <h3 className="font-semibold">Clients</h3>
                 </DropdownItem>
@@ -141,10 +141,10 @@ const Navbar = ({ account }: Props) => {
               <DropdownMenu className="text-center">
                 <DropdownItem
                   onPress={() => {
-                    router.push("/collection-monitoring/collection-clients");
+                    router.push("/collection-monitoring/clients");
                   }}
-                  key="Collection Clients"
-                  textValue="Collection Clients"
+                  key="Clients"
+                  textValue="Clients"
                 >
                   <h3 className="font-semibold">Clients</h3>
                 </DropdownItem>

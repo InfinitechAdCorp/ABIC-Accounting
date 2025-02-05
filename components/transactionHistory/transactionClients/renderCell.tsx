@@ -21,7 +21,7 @@ const RenderCell = (row: Row, columnKey: string) => {
           <DestroyModal title="Client" action={destroy} id={row.id} />
           <ViewBtn
             title="View Transactions"
-            link={`/transaction-history/transaction-clients/${row.id}`}
+            link={`/transaction-history/clients/${row.id}`}
           />
         </div>
       );
