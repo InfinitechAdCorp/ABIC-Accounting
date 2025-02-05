@@ -12,6 +12,7 @@ import { list } from "@vercel/blob";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
 import { Account } from "@prisma/client";
 import ExportBtn from "@/components/globals/exportBtn";
+import { FormattedTransaction } from "@/components/transactionHistory/types";
 
 const Transactions = async () => {
   const { account } = await getAccount();
@@ -33,6 +34,18 @@ const Transactions = async () => {
     { key: "proof", name: "PROOF" },
     { key: "actions", name: "ACTIONS" },
   ];
+
+  const setVoucher = (transaction: FormattedTransaction) => {
+    let id = 1;
+    if (transaction) {
+      id = Number(transaction.voucher.split("-").at(-1)) + 1;
+    }
+    const year = new Date().getFullYear();
+    const voucher = `${year}-VN-${id.toString().padStart(5, "0")}`;
+    return voucher;
+  };
+
+  const voucher = setVoucher(transactions[0]);
 
   return (
     <>
@@ -67,6 +80,7 @@ const Transactions = async () => {
                 </div>
 
                 <CreateTransactionModal
+                  voucher={voucher}
                   transactionClients={transactionClients}
                 />
 

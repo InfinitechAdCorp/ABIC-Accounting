@@ -27,6 +27,7 @@ import {
 } from "@/components/globals/utils";
 
 type Props = {
+  voucher: string;
   transactionClients: FormattedTransactionClient[];
 };
 
@@ -34,13 +35,14 @@ type TransactionCreateInput = Prisma.TransactionCreateInput & {
   proof: File;
 };
 
-const CreateModal = ({ transactionClients }: Props) => {
+const CreateModal = ({ voucher, transactionClients }: Props) => {
+  console.log(voucher)
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
     date: "",
-    voucher: "",
+    voucher: voucher,
     check: "",
     transaction_client_id: "",
     particulars: "",
