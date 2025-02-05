@@ -59,6 +59,23 @@ model Transaction {
   @@map(name: "transactions")
 }
 
+model Detail {
+  id          String    @id @default(cuid())
+  project     String
+  unit        String
+  date_res    DateTime  @db.Date
+  terms       String
+  consultant  String
+  manager     String
+  price       Decimal   @db.Decimal(15, 2)
+  list_price  Decimal   @db.Decimal(15, 2)
+  status      String
+  source      String
+  extension   DateTime? @db.Date
+  closed_date DateTime? @db.Date
+  type        String
+}
+
 model CollectionClient {
   id          String       @id @default(cuid())
   account     Account?     @relation(fields: [account_id], references: [id], onDelete: Cascade)
