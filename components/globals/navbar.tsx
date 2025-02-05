@@ -138,25 +138,25 @@ const Navbar = () => {
         <div className="flex justify-end gap-4">
   <Dropdown classNames={{ content: "min-w-0" }}>
     <DropdownTrigger className="text-center">
-      <h3 className={`text-sm md:text-base text-white cursor-pointer ${isActive(["/loancalculator", "/currencyconverter", "/taxcomputation"]) ? "font-black" : "font-semibold"}`}>
+      <h3 className={`text-sm md:text-base text-white cursor-pointer ${isActive(["/tools/loancalculator", "/tools/currencyconverter", "/tools/taxcomputation","/tools/acknowledgementreceipt","/tools/billingstatement"]) ? "font-black" : "font-semibold"}`}>
         <span className="hidden lg:inline">Tools</span>
         <span className="inline lg:hidden">More</span>
       </h3>
     </DropdownTrigger>
     <DropdownMenu className="text-center">
-      <DropdownItem onPress={() => router.push("/loancalculator")} key="LoanCalculator">
+      <DropdownItem onPress={() => router.push("/tools/loancalculator")} key="LoanCalculator">
         <h3 className="font-semibold">Loan Calculator</h3>
       </DropdownItem>
-      <DropdownItem onPress={() => router.push("/currencyconverter")} key="CurrencyConverter">
+      <DropdownItem onPress={() => router.push("/tools/currencyconverter")} key="CurrencyConverter">
         <h3 className="font-semibold">Currency Converter</h3>
       </DropdownItem>
-      <DropdownItem onPress={() => router.push("/taxcomputation")} key="TaxComputation">
+      <DropdownItem onPress={() => router.push("/tools/taxcomputation")} key="TaxComputation">
         <h3 className="font-semibold">Tax Computation</h3>
       </DropdownItem>
-      <DropdownItem onPress={() => router.push("/acknowledgementreceipt")} key="AcknowledgementReceipt">
+      <DropdownItem onPress={() => router.push("/tools/acknowledgementreceipt")} key="AcknowledgementReceipt">
         <h3 className="font-semibold">Acknowledgement</h3>
       </DropdownItem>
-      <DropdownItem onPress={() => router.push("/billingstatement")} key="BillingStatement">
+      <DropdownItem onPress={() => router.push("/tools/billingstatement")} key="BillingStatement">
         <h3 className="font-semibold">Billing Statement</h3>
       </DropdownItem>
     </DropdownMenu>
