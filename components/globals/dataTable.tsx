@@ -11,7 +11,11 @@ import {
   TableCell,
   Input,
   Pagination,
+  Button,
 } from "@heroui/react";
+import {jsPDF} from "jspdf";
+import html2canvas from "html2canvas";
+import { m } from "framer-motion";
 
 type column = {
   name: string;
@@ -88,9 +92,21 @@ const DataTable = ({
     setPage(1);
   }, []);
 
+  const test = () => {
+    const input = document.getElementById("testRef");
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, "PNG", 0, 0, 500, 500);
+      pdf.save("download.pdf");
+    });
+  };
+
   const topContent = React.useMemo(() => {
     return (
       <>
+        <Button onPress={test}>Test</Button>
+
         <div className="flex flex-col gap-4">
           <div className="flex justify-between gap-3 items-end">
             <Input
@@ -128,7 +144,6 @@ const DataTable = ({
     onSearchChange,
     onRowsPerPageChange,
     onClear,
-    model,
     rows.length,
     children,
   ]);
@@ -161,6 +176,7 @@ const DataTable = ({
         }}
         topContent={topContent}
         topContentPlacement="outside"
+        id="testRef"
       >
         <TableHeader columns={columns}>
           {(column) => (
