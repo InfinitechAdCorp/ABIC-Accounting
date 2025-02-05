@@ -9,7 +9,6 @@ const ExportBtn = () => {
   const exportPDF = () => {
     const doc = new jsPDF();
     autoTable(doc, { html: "#dataTable", theme: "grid" });
-
     doc.save("table.pdf");
   };
 

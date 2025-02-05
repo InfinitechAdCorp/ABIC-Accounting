@@ -34,7 +34,7 @@ export const update = Yup.object().shape({
     .typeError("Amount must be a number")
     .moreThan(-1, "Amount must be a positive number"),
   status: Yup.string().required("Status is a required field"),
-  proof: Yup.mixed().required("Proof is a required field")
+  proof: Yup.mixed().nullable()
 });
 
 export const changeStatus = Yup.object().shape({

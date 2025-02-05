@@ -40,7 +40,7 @@ export const getAll = async () => {
         transaction_client: true,
       },
       orderBy: {
-        date: 'desc',
+        date: "desc",
       },
     });
   } catch {
@@ -79,7 +79,8 @@ export const create = async (values: TransactionCreateInput) => {
 
   try {
     const proof = values.proof;
-    const proofName = `${ulid()}.${proof.name.split(".").at(-1)}`;
+    const extension = proof.name.split(".").at(-1);
+    const proofName = `${ulid()}.${extension}`;
     await put(proofName, proof, {
       access: "public",
     });
@@ -124,41 +125,52 @@ export const update = async (values: TransactionCreateInput) => {
   }
 
   try {
-    const transaction = await prisma.transaction.findUnique({
-      where: {
-        id: values.id,
-      },
-    });
-    const oldProofName = transaction?.proof;
+    const proof = values.proof;
+    let proofName;
 
-    const { blobs } = await list();
-    const blob = blobs.find((blob) => {
-      return oldProofName == blob.pathname;
-    });
+    if (proof) {
+      const transaction = await prisma.transaction.findUnique({
+        where: {
+          id: values.id,
+        },
+      });
+      const oldProofName = transaction?.proof;
 
-    if (blob) {
-      await del(blob.url || "");
+      const { blobs } = await list();
+      const blob = blobs.find((blob) => {
+        return oldProofName == blob.pathname;
+      });
+
+      if (blob) {
+        await del(blob.url || "");
+      }
+
+      const extension = proof.name.split(".").at(-1);
+      proofName = `${ulid()}.${extension}`;
+      await put(proofName, proof, {
+        access: "public",
+      });
     }
 
-    const proof = values.proof;
-    const proofName = `${ulid()}.${proof.name.split(".").at(-1)}`;
-    await put(proofName, proof, {
-      access: "public",
-    });
+    const data = {
+      transaction_client: { connect: { id: values.transaction_client_id } },
+      date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
+      voucher: values.voucher,
+      check: values.check,
+      particulars: values.particulars,
+      type: values.type,
+      amount: values.amount,
+      status: values.status,
+      proof: proofName,
+    };
+
+    if (proofName) {
+      delete data.proof;
+    }
 
     await prisma.transaction.update({
       where: { id: values.id },
-      data: {
-        transaction_client: { connect: { id: values.transaction_client_id } },
-        date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
-        voucher: values.voucher,
-        check: values.check,
-        particulars: values.particulars,
-        type: values.type,
-        amount: values.amount,
-        status: values.status,
-        proof: proofName,
-      },
+      data: data,
     });
   } catch {
     const response: ActionResponse = { code: 500, message: "Server Error" };
