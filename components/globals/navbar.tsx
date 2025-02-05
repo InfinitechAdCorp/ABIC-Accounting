@@ -21,7 +21,7 @@ const Navbar = ({ account }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const isActive = (hrefs: string[]) => hrefs.includes(pathname);
+  const isActive = (url: string) => pathname.startsWith(url);
 
   return (
     <>
@@ -30,7 +30,7 @@ const Navbar = ({ account }: Props) => {
           <Link href="/dashboard" className="text-center">
             <h3
               className={`text-sm md:text-base text-white cursor-pointer ${
-                isActive(["/dashboard"]) ? "font-black" : "font-semibold"
+                isActive("/dashboard") ? "font-black" : "font-semibold"
               }`}
             >
               Dashboard
@@ -46,10 +46,7 @@ const Navbar = ({ account }: Props) => {
               <DropdownTrigger className="text-center">
                 <h3
                   className={`text-sm md:text-base text-white cursor-pointer ${
-                    isActive([
-                      "/transaction-history/transaction-clients",
-                      "/transaction-history/transactions",
-                    ])
+                    isActive("/transaction-history")
                       ? "font-black"
                       : "font-semibold"
                   }`}
@@ -91,10 +88,7 @@ const Navbar = ({ account }: Props) => {
               <DropdownTrigger className="text-center">
                 <h3
                   className={`text-sm md:text-base text-white cursor-pointer ${
-                    isActive([
-                      "/income-expenses/clients",
-                      "/income-expenses/transactions",
-                    ])
+                    isActive("/income-expenses")
                       ? "font-black"
                       : "font-semibold"
                   }`}
@@ -133,10 +127,7 @@ const Navbar = ({ account }: Props) => {
               <DropdownTrigger className="text-center">
                 <h3
                   className={`text-sm md:text-base text-white cursor-pointer ${
-                    isActive([
-                      "/collection-monitoring/collection-clients",
-                      "/collection-monitoring/collections",
-                    ])
+                    isActive("/collection-monitoring")
                       ? "font-black"
                       : "font-semibold"
                   }`}
@@ -175,11 +166,7 @@ const Navbar = ({ account }: Props) => {
             <DropdownTrigger className="text-center">
               <h3
                 className={`text-sm md:text-base text-white cursor-pointer ${
-                  isActive([
-                    "/tools/loan-calculator",
-                    "/tools/currency-converter",
-                    "/tools/tax-computation",
-                  ])
+                  isActive("/tools")
                     ? "font-black"
                     : "font-semibold"
                 }`}
