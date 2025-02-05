@@ -8,7 +8,7 @@ import {
   CardFooter,
   Input,
   Button,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { login as loginAction } from "@/components/globals/auth";
 import toast from "react-hot-toast";
 import Image from "next/image";

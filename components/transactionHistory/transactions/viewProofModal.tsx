@@ -9,7 +9,7 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { FaEye } from "react-icons/fa";
 import Image from "next/image";
 

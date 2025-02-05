@@ -10,7 +10,7 @@ import {
   Button,
   useDisclosure,
   Input,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { FormattedCollectionClient } from "@/components/collectionMonitoring/types";
 import { update as updateSchema } from "@/components/collectionMonitoring/collectionClients/schemas";
 import { Formik, Form, Field, FieldProps } from "formik";

@@ -7,7 +7,7 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useRouter, usePathname } from "next/navigation";
 import LogoutBtn from "@/components/globals/logoutBtn";
 import { Account } from "@prisma/client";

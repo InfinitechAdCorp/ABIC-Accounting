@@ -10,7 +10,7 @@ import {
   Button,
   useDisclosure,
   Input,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { create as createSchema } from "@/components/transactionHistory/transactionClients/schemas";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { create as createAction } from "@/components/transactionHistory/transactionClients/actions";

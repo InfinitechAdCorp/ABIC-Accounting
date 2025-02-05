@@ -11,7 +11,7 @@ import {
   TableCell,
   Input,
   Pagination,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 type column = {
   name: string;

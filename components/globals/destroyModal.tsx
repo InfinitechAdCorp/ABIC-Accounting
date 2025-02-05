@@ -10,7 +10,7 @@ import {
   Button,
   InputOtp,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { ActionResponse } from "@/components/globals/types";
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { Formik, Form, Field, FieldProps } from "formik";

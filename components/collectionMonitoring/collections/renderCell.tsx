@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Chip } from "@nextui-org/react";
+import { Chip } from "@heroui/react";
 import { formatDate, formatNumber } from "@/components/globals/utils";
 import { differenceInDays, differenceInMonths } from "date-fns";
 import UpdateModal from "@/components/collectionMonitoring/collections/updateModal";

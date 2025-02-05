@@ -13,7 +13,7 @@ import {
   DatePicker,
   Select,
   SelectItem,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { FormattedCollectionClient } from "@/components/collectionMonitoring/types";
 import { create as createSchema } from "@/components/collectionMonitoring/collections/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";

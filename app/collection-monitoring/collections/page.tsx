@@ -2,7 +2,7 @@ import React from "react";
 import { get as getAccount } from "@/components/accounts/actions";
 import { getAll as getCollections } from "@/components/collectionMonitoring/collections/actions";
 import { getAll as getCollectionClients } from "@/components/collectionMonitoring/collectionClients/actions";
-import { Card, CardBody } from "@nextui-org/react";
+import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import RenderCell from "@/components/collectionMonitoring/collections/renderCell";

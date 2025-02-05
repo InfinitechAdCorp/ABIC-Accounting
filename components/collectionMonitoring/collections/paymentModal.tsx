@@ -9,7 +9,7 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { ActionResponse } from "@/components/globals/types";
 import { markAsPaid as markAsPaidSchema } from "@/components/collectionMonitoring/collections/schemas";
 import { Formik, Form, Field } from "formik";

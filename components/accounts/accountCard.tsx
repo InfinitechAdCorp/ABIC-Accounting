@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Card, CardBody } from "@nextui-org/react";
+import { Card, CardBody } from "@heroui/react";
 import { Account } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { set as setAccount } from "@/components/globals/auth";

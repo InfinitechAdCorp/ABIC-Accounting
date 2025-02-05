@@ -1,6 +1,6 @@
 import React from "react";
 import { getAll } from "@/components/collectionMonitoring/collectionClients/actions";
-import { Card, CardBody } from "@nextui-org/react";
+import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";

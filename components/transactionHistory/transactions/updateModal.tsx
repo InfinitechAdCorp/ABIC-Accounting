@@ -14,7 +14,7 @@ import {
   Select,
   SelectItem,
   Textarea,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import {
   FormattedTransaction,
   FormattedTransactionClient,

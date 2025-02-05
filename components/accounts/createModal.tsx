@@ -13,7 +13,7 @@ import {
   useDisclosure,
   Input,
   Checkbox,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { create as createSchema } from "@/components/accounts/schemas";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { create as createAction } from "@/components/accounts/actions";
