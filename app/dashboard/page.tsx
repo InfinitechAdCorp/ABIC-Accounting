@@ -22,7 +22,7 @@ const Dashboard = async () => {
 
       <div className="m-5 md:mx-7 xl:mx-14 2xl:mx-60">
         <div className="text-center">
-          <h1 className="font-bold text-2xl mb-5">Dashboard</h1>
+          <h1 className="font-bold text-2xl mb-5">DASHBOARD</h1>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 px-5 lg:px-24 xl:px-60 gap-3 mb-3">

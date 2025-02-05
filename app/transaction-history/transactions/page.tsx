@@ -10,6 +10,7 @@ import CreateTransactionModal from "@/components/transactionHistory/transactions
 import CreateTransactionClientModal from "@/components/transactionHistory/transactionClients/createModal";
 import { list } from "@vercel/blob";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
+import { Account } from "@prisma/client";
 
 const Transactions = async () => {
   const { account } = await getAccount();
@@ -34,7 +35,7 @@ const Transactions = async () => {
 
   return (
     <>
-      <Navbar account={account} />
+      <Navbar account={account as Account} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">

@@ -8,6 +8,7 @@ import DataTable from "@/components/globals/dataTable";
 import RenderCell from "@/components/collectionMonitoring/collections/renderCell";
 import CreateCollectionModal from "@/components/collectionMonitoring/collections/createModal";
 import CreateClientModal from "@/components/collectionMonitoring/collectionClients/createModal";
+import { Account } from "@prisma/client";
 
 const Collections = async () => {
   const { account } = await getAccount();
@@ -47,12 +48,14 @@ const Collections = async () => {
 
   return (
     <>
-      <Navbar account={account} />
+      <Navbar account={account as Account} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
           <CardBody>
-            <h1 className="text-lg font-semibold mb-3">{model.toUpperCase()}</h1>
+            <h1 className="text-lg font-semibold mb-3">
+              {model.toUpperCase()}
+            </h1>
             <DataTable
               model={model}
               columns={columns}

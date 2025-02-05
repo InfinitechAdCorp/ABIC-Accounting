@@ -8,6 +8,7 @@ import DataTable from "@/components/globals/dataTable";
 import RenderCell from "@/components/transactionHistory/transactionClients/renderCell";
 import CreateModal from "@/components/transactionHistory/transactionClients/createModal";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
+import { Account } from "@prisma/client";
 
 const TransactionClients = async () => {
   const { account } = await getAccount();
@@ -27,7 +28,7 @@ const TransactionClients = async () => {
 
   return (
     <>
-      <Navbar account={account} />
+      <Navbar account={account as Account} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">

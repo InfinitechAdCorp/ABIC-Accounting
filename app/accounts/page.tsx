@@ -25,7 +25,7 @@ const Accounts = async () => {
 
       <div className="m-5 md:mx-7 xl:mx-14 2xl:mx-60">
         <div className="text-center">
-          <h1 className="font-bold text-2xl mb-5">Bank Accounts</h1>
+          <h1 className="font-bold text-2xl mb-5">BANK ACCOUNTS</h1>
 
           <div className="grid grid-cols-4 gap-5">
             <CreateModal />

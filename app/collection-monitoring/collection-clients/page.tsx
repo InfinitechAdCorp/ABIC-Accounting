@@ -6,6 +6,7 @@ import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";
 import RenderCell from "@/components/collectionMonitoring/collectionClients/renderCell";
 import CreateModal from "@/components/collectionMonitoring/collectionClients/createModal";
+import { Account } from "@prisma/client";
 
 const CollectionClients = async () => {
   const { account } = await getAccount();
@@ -21,7 +22,7 @@ const CollectionClients = async () => {
 
   return (
     <>
-      <Navbar account={account} />
+      <Navbar account={account as Account} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
