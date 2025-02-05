@@ -40,12 +40,12 @@ const ViewProofModal = ({ url }: Props) => {
               <ModalBody>
                 <div className="flex justify-center">
                   <Image
+                    className="w-full"
                     width={0}
                     height={0}
                     src={url}
                     alt="Proof"
                     unoptimized
-                    className="w-full"
                   />
                 </div>
               </ModalBody>

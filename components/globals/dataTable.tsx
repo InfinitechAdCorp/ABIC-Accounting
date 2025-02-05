@@ -164,7 +164,7 @@ const DataTable = ({
       >
         <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn key={column.key} allowsSorting={column.sortable}>
+            <TableColumn key={column.key}>
               {column.name}
             </TableColumn>
           )}

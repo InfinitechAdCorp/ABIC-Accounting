@@ -36,7 +36,6 @@ type TransactionCreateInput = Prisma.TransactionCreateInput & {
 };
 
 const CreateModal = ({ voucher, transactionClients }: Props) => {
-  console.log(voucher)
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
 
