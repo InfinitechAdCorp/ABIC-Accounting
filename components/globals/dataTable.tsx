@@ -160,7 +160,6 @@ const DataTable = ({
         }}
         topContent={topContent}
         topContentPlacement="outside"
-        id="datatable"
       >
         <TableHeader columns={columns}>
           {(column) => (

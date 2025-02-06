@@ -75,12 +75,13 @@ export const displayFormatTransactionClients = (
     columnnNames.push(column.name);
   });
 
-  const rows: string[][] = [];
+  const rows = [];
   transactionClients.forEach((transactionClient) => {
-    const row: string[] = [];
+    const row = {};
     columns.forEach((column) => {
+      const key = column.key
       let value;
-      switch (column.key) {
+      switch (key) {
         case "transactions":
           value = transactionClient.transactions?.length;
           break;
@@ -92,10 +93,10 @@ export const displayFormatTransactionClients = (
           break;
         default:
           value =
-            transactionClient[column.key as keyof FormattedTransactionClient];
+            transactionClient[key as keyof FormattedTransactionClient];
           break;
       }
-      row.push(value as string);
+      row[key] = value;
     });
     rows.push(row);
   });

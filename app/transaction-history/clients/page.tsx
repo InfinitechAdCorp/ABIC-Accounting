@@ -31,10 +31,21 @@ const TransactionClients = async () => {
     { key: "actions", name: "ACTIONS" },
   ];
 
+
+
   const { columnNames, rows } = displayFormatTransactionClients(
     columns.slice(0, -1),
     transactionClients
   );
+
+  const pdfRows = [];
+  rows.forEach((row) => {
+    pdfRows.push(Object.values(row))
+  })
+
+  console.log(transactionClients)
+  console.log(rows)
+  console.log(pdfRows)
 
   return (
     <>
