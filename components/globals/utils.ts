@@ -12,7 +12,7 @@ import {
 } from "@/components/collectionMonitoring/types";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
-import { ActionResponse } from "@/components/globals/types";
+import { Column, ActionResponse } from "@/components/globals/types";
 import { DateValue, parseDate } from "@internationalized/date";
 
 // Event Handlers
@@ -64,6 +64,37 @@ export const formatTransactionClients = (
   }
 
   return formattedTransactionClients;
+};
+
+export const displayFormatTransactionClients = (
+  columns: Column[],
+  transactionClients: TransactionClientWithTransactions[]
+) => {
+
+  const columnNames: string[] = [];
+  const rows = [];
+
+  columns.forEach((column) => {
+    columnNames.push(columnOb.name)
+  })
+
+  transactionClients.forEach((transactionClient) => {
+    const row: string[] = [];
+    columnNames.forEach((columnName) => {
+      switch (columnName) {
+        default:
+          const key = columnName.toLowerCase().replace(' ', '_');
+          row.push(transactionClient[key])
+      }
+    })
+    rows.push(row)
+  })
+
+  const data = {
+    columns: columns,
+    rows: rows,
+  }
+  return data;
 };
 
 export const formatTransactions = (

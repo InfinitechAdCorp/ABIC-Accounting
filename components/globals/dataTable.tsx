@@ -151,7 +151,6 @@ const DataTable = ({
   return (
     <>
       <Table
-        aria-label="DataTable"
         isHeaderSticky
         bottomContent={bottomContent}
         bottomContentPlacement="outside"

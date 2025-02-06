@@ -27,6 +27,8 @@ const TransactionClients = async () => {
     { key: "actions", name: "ACTIONS" },
   ];
 
+  console.log(transactionClients)
+
   return (
     <>
       <Navbar account={account as Account} />

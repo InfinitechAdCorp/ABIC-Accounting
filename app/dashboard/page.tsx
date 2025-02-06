@@ -5,6 +5,7 @@ import Navbar from "@/components/globals/navbar";
 import CountCard from "@/components/dashboard/countCard";
 import { GrTransaction } from "react-icons/gr";
 import { FaUsers, FaFileSignature } from "react-icons/fa6";
+import { Account } from "@prisma/client";
 
 export type Counts = {
   transactionClients: number;
@@ -18,7 +19,7 @@ const Dashboard = async () => {
 
   return (
     <>
-      <Navbar account={account} />
+      <Navbar account={account as Account} />
 
       <div className="m-5 md:mx-7 xl:mx-14 2xl:mx-60">
         <div className="text-center">
@@ -29,7 +30,7 @@ const Dashboard = async () => {
           <CountCard
             Icon={<FaUsers size={56} />}
             model="Clients"
-            link="/transaction-history/transaction-clients"
+            link="/transaction-history/clients"
             count={counts.transactionClients}
           ></CountCard>
           <CountCard

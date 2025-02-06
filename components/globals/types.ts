@@ -6,19 +6,24 @@ export type Destroy = {
 }
 
 export type Login = {
-  username: string;
-  password: string;
+  username: string,
+  password: string,
 };
 
+export type Column = {
+  key: string,
+  name: string,
+}
+
 export type ActionResponse = {
-  code: number;
-  message: string;
+  code: number,
+  message: string,
   errors?: {
-    [key: string]: string;
-  };
-  error?: any;
+    [key: string]: string,
+  },
+  error?: any,
 };
 
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
-  size?: number;
+  size?: number,
 };
