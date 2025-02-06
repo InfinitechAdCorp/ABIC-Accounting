@@ -8,13 +8,6 @@ export type FormattedTransactionClient = {
   name: string;
 };
 
-export type DisplayFormatTransactionClient = {
-  name: string,
-  transactions: string,
-  starting_fund: string,
-  running_balance: string,
-};
-
 export type FormattedTransaction = {
   id: string;
   transaction_client?: FormattedTransactionClient;

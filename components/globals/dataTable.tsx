@@ -13,10 +13,15 @@ import {
   Pagination,
 } from "@heroui/react";
 
+type column = {
+  name: string;
+  key: string;
+  sortable?: boolean;
+};
+
 type Props = {
   model: string;
-  records: any[];
-  columns: string[];
+  columns: column[];
   rows: any[];
   searchKey: string;
   RenderCell: (row: any, columnKey: string, dependencies?: any) => any;
@@ -26,7 +31,6 @@ type Props = {
 
 const DataTable = ({
   model,
-  records,
   columns,
   rows,
   searchKey,
@@ -38,28 +42,6 @@ const DataTable = ({
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [page, setPage] = React.useState(1);
   const hasSearchFilter = Boolean(filterValue);
-
-  const formatColumns = (columns: string[]) => {
-    const formattedColumns: {
-      key: string;
-      name: string;
-    }[] = [];
-
-    columns.forEach((column) => {
-      const key = column.toLowerCase().replace(" ", "_");
-
-      const formattedColumn = {
-        key: key, 
-        name: column,
-      }
-
-      formattedColumns.push(formattedColumn)
-    })
-
-    return formattedColumns;
-  };
-
-  const columnsObj = formatColumns([...columns, "ACTIONS"]);
 
   const filteredItems = React.useMemo(() => {
     let filteredRows = [...rows];
@@ -169,6 +151,7 @@ const DataTable = ({
   return (
     <>
       <Table
+        aria-label="DataTable"
         isHeaderSticky
         bottomContent={bottomContent}
         bottomContentPlacement="outside"
@@ -179,14 +162,19 @@ const DataTable = ({
         topContentPlacement="outside"
         id="dataTable"
       >
-        <TableHeader columns={columnsObj}>
+        <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn key={column.key}>{column.name}</TableColumn>
+            <TableColumn key={column.key}>
+              {column.name}
+            </TableColumn>
           )}
         </TableHeader>
         <TableBody emptyContent={`No ${model} Found`} items={items}>
           {(item) => (
-            <TableRow>
+            <TableRow
+              key={item.id}
+              className={item.status == "Cancelled" ? "text-red-500" : ""}
+            >
               {(columnKey: any) => (
                 <TableCell>
                   {RenderCell(item, columnKey, dependencies)}

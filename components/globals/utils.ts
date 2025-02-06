@@ -3,7 +3,6 @@ import {
   TransactionClientWithTransactions,
   FormattedTransaction,
   TransactionWithTransactionClient,
-  DisplayFormatTransactionClient,
 } from "@/components/transactionHistory/types";
 import {
   FormattedCollectionClient,
@@ -13,9 +12,8 @@ import {
 } from "@/components/collectionMonitoring/types";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
-import { Column, ActionResponse } from "@/components/globals/types";
+import { ActionResponse } from "@/components/globals/types";
 import { DateValue, parseDate } from "@internationalized/date";
-import { computeBalance, formatNumber } from "@/components/globals/utils";
 
 // Event Handlers
 export const handlePostSubmit = (
@@ -66,48 +64,6 @@ export const formatTransactionClients = (
   }
 
   return formattedTransactionClients;
-};
-
-export const displayFormatTransactionClients = (
-  columns: string[],
-  transactionClients: FormattedTransactionClient[]
-) => {
-  const rows: DisplayFormatTransactionClient[] = [];
-
-  transactionClients.forEach((transactionClient) => {
-    const row: DisplayFormatTransactionClient = {
-      name: "",
-      transactions: "",
-      starting_fund: "",
-      running_balance: "",
-    };
-
-    columns.forEach((column) => {
-      const key = column.toLowerCase().replace(" ", "_");
-      let value;
-
-      switch (key) {
-        case "transactions":
-          value = transactionClient.transactions?.length;
-          break;
-        case "starting_fund":
-          value = 0;
-          break;
-        case "running_balance":
-          value = 0;
-          break;
-        default:
-          value = transactionClient[key as keyof DisplayFormatTransactionClient];
-          break;
-      }
-
-      row[key as keyof DisplayFormatTransactionClient] = value;
-    });
-
-    rows.push(row);
-  });
-
-  return rows;
 };
 
 export const formatTransactions = (

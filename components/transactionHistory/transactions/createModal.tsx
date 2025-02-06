@@ -48,7 +48,7 @@ const CreateModal = ({ voucher, transactionClients }: Props) => {
     type: "",
     amount: "",
     status: "Active",
-    proof: "",
+    proof: null,
   };
 
   const onSubmit = async (
