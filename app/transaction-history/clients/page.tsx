@@ -20,14 +20,11 @@ const TransactionClients = async () => {
   const runningBalance = computeBalance([...transactions].reverse());
 
   const columns = [
-    { key: "name", name: "NAME" },
-    { key: "transactions", name: "TRANSACTIONS" },
-    { key: "starting_fund", name: "STARTING FUND" },
-    { key: "running_balance", name: "RUNNING BALANCE" },
-    { key: "actions", name: "ACTIONS" },
+    "name",
+    "transactions",
+    "starting_fund",
+    "running_balance",
   ];
-
-  console.log(transactionClients)
 
   return (
     <>

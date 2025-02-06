@@ -13,15 +13,9 @@ import {
   Pagination,
 } from "@heroui/react";
 
-type column = {
-  name: string;
-  key: string;
-  sortable?: boolean;
-};
-
 type Props = {
   model: string;
-  columns: column[];
+  columns: string[];
   rows: any[];
   searchKey: string;
   RenderCell: (row: any, columnKey: string, dependencies?: any) => any;
@@ -42,6 +36,28 @@ const DataTable = ({
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [page, setPage] = React.useState(1);
   const hasSearchFilter = Boolean(filterValue);
+
+  const formatColumns = (columns: string[]) => {
+    const formattedColumns: {
+      key: string;
+      name: string;
+    }[] = [];
+
+    columns.forEach((column) => {
+      const name = column.toUpperCase().replace("_", " ");
+
+      const formattedColumn = {
+        key: column, 
+        name: name,
+      }
+
+      formattedColumns.push(formattedColumn)
+    })
+
+    return formattedColumns;
+  };
+
+  const formattedColumns = formatColumns([...columns, "actions"]);
 
   const filteredItems = React.useMemo(() => {
     let filteredRows = [...rows];
@@ -161,11 +177,9 @@ const DataTable = ({
         topContentPlacement="outside"
         id="dataTable"
       >
-        <TableHeader columns={columns}>
+        <TableHeader columns={formattedColumns}>
           {(column) => (
-            <TableColumn key={column.key}>
-              {column.name}
-            </TableColumn>
+            <TableColumn key={column.key}>{column.name}</TableColumn>
           )}
         </TableHeader>
         <TableBody emptyContent={`No ${model} Found`} items={items}>

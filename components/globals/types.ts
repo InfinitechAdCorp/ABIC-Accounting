@@ -10,11 +10,6 @@ export type Login = {
   password: string,
 };
 
-export type Column = {
-  key: string,
-  name: string,
-}
-
 export type ActionResponse = {
   code: number,
   message: string,
