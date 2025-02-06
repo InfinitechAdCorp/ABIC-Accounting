@@ -38,10 +38,9 @@ const Transactions = async () => {
   const setVoucher = (transaction: FormattedTransaction) => {
     let id = 1;
     if (transaction) {
-      id = Number(transaction.voucher.split("-").at(-1)) + 1;
+      id = Number(transaction.voucher) + 1;
     }
-    const year = new Date().getFullYear();
-    const voucher = `${year}-VN-${id.toString().padStart(5, "0")}`;
+    const voucher = id.toString().padStart(5, "0");
     return voucher;
   };
 

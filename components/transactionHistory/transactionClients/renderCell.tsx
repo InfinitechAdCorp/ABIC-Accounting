@@ -8,20 +8,20 @@ import ViewBtn from "@/components/globals/viewBtn";
 import { destroy } from "@/components/transactionHistory/transactionClients/actions";
 import { FormattedTransactionClient } from "@/components/transactionHistory/types";
 
-type Row = FormattedTransactionClient;
+type Item = FormattedTransactionClient;
 
-const RenderCell = (row: Row, columnKey: string) => {
-  const transactions = row.transactions?.reverse() || [];
+const RenderCell = (item: Item, columnKey: string) => {
+  const transactions = item.transactions?.reverse() || [];
 
   switch (columnKey) {
     case "actions":
       return (
         <div className="relative flex justify-end items-center gap-2">
-          <UpdateModal transactionClient={row} />
-          <DestroyModal title="Client" action={destroy} id={row.id} />
+          <UpdateModal transactionClient={item} />
+          <DestroyModal title="Client" action={destroy} id={item.id} />
           <ViewBtn
             title="View Transactions"
-            link={`/transaction-history/clients/${row.id}`}
+            link={`/transaction-history/clients/${item.id}`}
           />
         </div>
       );
@@ -47,9 +47,9 @@ const RenderCell = (row: Row, columnKey: string) => {
       const runningBalance = computeBalance(transactions);
       return formatNumber(runningBalance);
     case "transactions":
-      return row.transactions?.length;
+      return item.transactions?.length;
     default:
-      return row[columnKey as keyof Row];
+      return item[columnKey as keyof Item];
   }
 };
 

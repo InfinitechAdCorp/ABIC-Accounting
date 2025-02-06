@@ -39,9 +39,14 @@ export const getAll = async () => {
       include: {
         transaction_client: true,
       },
-      orderBy: {
-        date: "desc",
-      },
+      orderBy: [
+        {
+          date: "desc",
+        },
+        {
+          created_at: "desc",
+        }
+      ],
     });
   } catch {
     const response = {
