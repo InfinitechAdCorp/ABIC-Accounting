@@ -66,6 +66,48 @@ export const formatTransactionClients = (
   return formattedTransactionClients;
 };
 
+export const displayFormatTransactionClients = (
+  columns: { key: string; name: string }[],
+  transactionClients: FormattedTransactionClient[]
+) => {
+  const columnnNames: string[] = [];
+  columns.forEach((column) => {
+    columnnNames.push(column.name);
+  });
+
+  const rows: string[][] = [];
+  transactionClients.forEach((transactionClient) => {
+    const row: string[] = [];
+    columns.forEach((column) => {
+      let value;
+      switch (column.key) {
+        case "transactions":
+          value = transactionClient.transactions?.length;
+          break;
+        case "starting_fund":
+          value = 0;
+          break;
+        case "running_balance":
+          value = 0;
+          break;
+        default:
+          value =
+            transactionClient[column.key as keyof FormattedTransactionClient];
+          break;
+      }
+      row.push(value as string);
+    });
+    rows.push(row);
+  });
+
+  const data = {
+    columnNames: columnnNames,
+    rows: rows,
+  };
+
+  return data;
+};
+
 export const formatTransactions = (
   transactions: TransactionWithTransactionClient[]
 ) => {

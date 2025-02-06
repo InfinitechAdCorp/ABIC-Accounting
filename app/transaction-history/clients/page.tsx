@@ -7,7 +7,11 @@ import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import RenderCell from "@/components/transactionHistory/transactionClients/renderCell";
 import CreateModal from "@/components/transactionHistory/transactionClients/createModal";
-import { computeBalance, formatNumber } from "@/components/globals/utils";
+import {
+  computeBalance,
+  displayFormatTransactionClients,
+  formatNumber,
+} from "@/components/globals/utils";
 import { Account } from "@prisma/client";
 import ExportBtn from "@/components/globals/exportBtn";
 
@@ -26,6 +30,11 @@ const TransactionClients = async () => {
     { key: "running_balance", name: "RUNNING BALANCE" },
     { key: "actions", name: "ACTIONS" },
   ];
+
+  const { columnNames, rows } = displayFormatTransactionClients(
+    columns.slice(0, -1),
+    transactionClients
+  );
 
   return (
     <>
@@ -52,7 +61,7 @@ const TransactionClients = async () => {
             >
               <>
                 <CreateModal />
-                <ExportBtn />
+                <ExportBtn columns={columnNames} rows={rows} />
               </>
             </DataTable>
           </CardBody>
