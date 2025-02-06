@@ -14,18 +14,19 @@ import {
 } from "@heroui/react";
 
 type Props = {
-  model: string,
-  records: any[],
-  columns: string[],
-  rows: any[],
-  searchKey: string,
-  RenderCell: (row: any, columnKey: string, dependencies?: any) => any,
-  dependencies?: any,
-  children: React.ReactElement,
+  model: string;
+  records: any[];
+  columns: string[];
+  rows: any[];
+  searchKey: string;
+  RenderCell: (row: any, columnKey: string, dependencies?: any) => any;
+  dependencies?: any;
+  children: React.ReactElement;
 };
 
 const DataTable = ({
   model,
+  records,
   columns,
   rows,
   searchKey,
@@ -185,10 +186,7 @@ const DataTable = ({
         </TableHeader>
         <TableBody emptyContent={`No ${model} Found`} items={items}>
           {(item) => (
-            <TableRow
-              key={item.id}
-              className={item.status == "Cancelled" ? "text-red-500" : ""}
-            >
+            <TableRow>
               {(columnKey: any) => (
                 <TableCell>
                   {RenderCell(item, columnKey, dependencies)}

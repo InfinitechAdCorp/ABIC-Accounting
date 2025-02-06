@@ -75,7 +75,12 @@ export const displayFormatTransactionClients = (
   const rows: DisplayFormatTransactionClient[] = [];
 
   transactionClients.forEach((transactionClient) => {
-    const row: DisplayFormatTransactionClient = {};
+    const row: DisplayFormatTransactionClient = {
+      name: "",
+      transactions: "",
+      starting_fund: "",
+      running_balance: "",
+    };
 
     columns.forEach((column) => {
       const key = column.toLowerCase().replace(" ", "_");
@@ -92,11 +97,11 @@ export const displayFormatTransactionClients = (
           value = 0;
           break;
         default:
-          value = transactionClient[key as keyof FormattedTransactionClient];
+          value = transactionClient[key as keyof DisplayFormatTransactionClient];
           break;
       }
 
-      row[key] = value;
+      row[key as keyof DisplayFormatTransactionClient] = value;
     });
 
     rows.push(row);
