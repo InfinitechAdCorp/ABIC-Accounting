@@ -10,6 +10,7 @@ import CreateModal from "@/components/transactionHistory/transactionClients/crea
 import { computeBalance, formatNumber } from "@/components/globals/utils";
 import { Account } from "@prisma/client";
 import ExportBtn from "@/components/globals/exportBtn";
+import { displayFormatTransactionClients } from "@/components/globals/utils";
 
 const TransactionClients = async () => {
   const { account } = await getAccount();
@@ -20,11 +21,13 @@ const TransactionClients = async () => {
   const runningBalance = computeBalance([...transactions].reverse());
 
   const columns = [
-    "name",
-    "transactions",
-    "starting_fund",
-    "running_balance",
+    "NAME",
+    "TRANSACTIONS",
+    "STARTING FUND",
+    "RUNNING BALANCE",
   ];
+
+  const rows = displayFormatTransactionClients(columns, transactionClients); 
 
   return (
     <>
@@ -44,8 +47,9 @@ const TransactionClients = async () => {
 
             <DataTable
               model={model}
+              records={transactionClients}
               columns={columns}
-              rows={transactionClients}
+              rows={rows}
               searchKey="name"
               RenderCell={RenderCell}
             >

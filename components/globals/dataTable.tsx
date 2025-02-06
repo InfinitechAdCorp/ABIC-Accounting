@@ -14,13 +14,14 @@ import {
 } from "@heroui/react";
 
 type Props = {
-  model: string;
-  columns: string[];
-  rows: any[];
-  searchKey: string;
-  RenderCell: (row: any, columnKey: string, dependencies?: any) => any;
-  dependencies?: any;
-  children: React.ReactElement;
+  model: string,
+  records: any[],
+  columns: string[],
+  rows: any[],
+  searchKey: string,
+  RenderCell: (row: any, columnKey: string, dependencies?: any) => any,
+  dependencies?: any,
+  children: React.ReactElement,
 };
 
 const DataTable = ({
@@ -44,11 +45,11 @@ const DataTable = ({
     }[] = [];
 
     columns.forEach((column) => {
-      const name = column.toUpperCase().replace("_", " ");
+      const key = column.toLowerCase().replace(" ", "_");
 
       const formattedColumn = {
-        key: column, 
-        name: name,
+        key: key, 
+        name: column,
       }
 
       formattedColumns.push(formattedColumn)
@@ -57,7 +58,7 @@ const DataTable = ({
     return formattedColumns;
   };
 
-  const formattedColumns = formatColumns([...columns, "actions"]);
+  const columnsObj = formatColumns([...columns, "ACTIONS"]);
 
   const filteredItems = React.useMemo(() => {
     let filteredRows = [...rows];
@@ -177,7 +178,7 @@ const DataTable = ({
         topContentPlacement="outside"
         id="dataTable"
       >
-        <TableHeader columns={formattedColumns}>
+        <TableHeader columns={columnsObj}>
           {(column) => (
             <TableColumn key={column.key}>{column.name}</TableColumn>
           )}

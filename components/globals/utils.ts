@@ -3,6 +3,7 @@ import {
   TransactionClientWithTransactions,
   FormattedTransaction,
   TransactionWithTransactionClient,
+  DisplayFormatTransactionClient,
 } from "@/components/transactionHistory/types";
 import {
   FormattedCollectionClient,
@@ -67,59 +68,42 @@ export const formatTransactionClients = (
   return formattedTransactionClients;
 };
 
-// export const displayFormatTransactionClients = (
-//   columns: string[],
-//   transactionClients: FormattedTransactionClient[]
-// ) => {
-//   const columnNames: string[] = [];
-//   const rows = [];
+export const displayFormatTransactionClients = (
+  columns: string[],
+  transactionClients: FormattedTransactionClient[]
+) => {
+  const rows: DisplayFormatTransactionClient[] = [];
 
-//   columns.forEach((column) => {
-//     columnNames.push(columnOb.name);
-//   });
+  transactionClients.forEach((transactionClient) => {
+    const row: DisplayFormatTransactionClient = {};
 
-//   transactionClients.forEach((transactionClient) => {
-//     const row: string[] = [];
-//     columnNames.forEach((columnName) => {
-//       const key = columnName.toLowerCase().replace(" ", "_");
-//       let value = "";
+    columns.forEach((column) => {
+      const key = column.toLowerCase().replace(" ", "_");
+      let value;
 
-//       switch (key) {
-//         case "starting_fund":
-//           let startingFund = 0;
+      switch (key) {
+        case "transactions":
+          value = transactionClient.transactions?.length;
+          break;
+        case "starting_fund":
+          value = 0;
+          break;
+        case "running_balance":
+          value = 0;
+          break;
+        default:
+          value = transactionClient[key as keyof FormattedTransactionClient];
+          break;
+      }
 
-//           const transaction = transactionClient.transactions?.find(
-//             (transaction) => {
-//               if (transaction.status != "Cancelled") {
-//                 return transaction;
-//               }
-//             }
-//           );
+      row[key] = value;
+    });
 
-//           if (transaction) {
-//             if (transaction.type == "Credit") {
-//               startingFund += transaction.amount;
-//             } else {
-//               startingFund -= transaction.amount;
-//             }
-//           }
+    rows.push(row);
+  });
 
-//           value = formatNumber(startingFund);
-//         default:
-//           value = transactionClient[key];
-//       }
-
-//       row.push(value);
-//     });
-//     rows.push(row);
-//   });
-
-//   const data = {
-//     columns: columns,
-//     rows: rows,
-//   };
-//   return data;
-// };
+  return rows;
+};
 
 export const formatTransactions = (
   transactions: TransactionWithTransactionClient[]
