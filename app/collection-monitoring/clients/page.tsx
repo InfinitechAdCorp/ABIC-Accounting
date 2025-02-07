@@ -1,11 +1,11 @@
 import React from "react";
-import { getAll } from "@/components/collectionMonitoring/collectionClients/actions";
+import { getAll } from "@/components/collectionMonitoring/cClients/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";
-import RenderCell from "@/components/collectionMonitoring/collectionClients/renderCell";
-import CreateModal from "@/components/collectionMonitoring/collectionClients/createModal";
+import RenderCell from "@/components/collectionMonitoring/cClients/renderCell";
+import CreateModal from "@/components/collectionMonitoring/cClients/createModal";
 import { Account } from "@prisma/client";
 import ExportBtn from "@/components/globals/exportBtn";
 
@@ -28,7 +28,9 @@ const CollectionClients = async () => {
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
           <CardBody>
-            <h1 className="text-lg font-semibold mb-3">{model.toUpperCase()}</h1>
+            <h1 className="text-lg font-semibold mb-3">
+              {model.toUpperCase()}
+            </h1>
             <DataTable
               model={model}
               columns={columns}
@@ -37,9 +39,9 @@ const CollectionClients = async () => {
               RenderCell={RenderCell}
             >
               <>
-              <CreateModal />
-              
-              <ExportBtn />
+                <CreateModal />
+
+                <ExportBtn />
               </>
             </DataTable>
           </CardBody>

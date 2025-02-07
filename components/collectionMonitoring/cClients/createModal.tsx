@@ -11,25 +11,18 @@ import {
   useDisclosure,
   Input,
 } from "@heroui/react";
-import { FormattedCollectionClient } from "@/components/collectionMonitoring/types";
-import { update as updateSchema } from "@/components/collectionMonitoring/collectionClients/schemas";
+import { create as createSchema } from "@/components/collectionMonitoring/cClients/schemas";
 import { Formik, Form, Field, FieldProps } from "formik";
-import { update as updateAction } from "@/components/collectionMonitoring/collectionClients/actions";
+import { create as createAction } from "@/components/collectionMonitoring/cClients/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
-import { FaPenToSquare } from "react-icons/fa6";
 
-type Props = {
-  collectionClient: FormattedCollectionClient;
-};
-
-const UpdateModal = ({ collectionClient }: Props) => {
+const CreateModal = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
-    id: collectionClient.id,
-    name: collectionClient.name,
+    name: "",
   };
 
   const onSubmit = async (
@@ -37,7 +30,7 @@ const UpdateModal = ({ collectionClient }: Props) => {
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
-    updateAction(values).then((response) => {
+    createAction(values).then((response) => {
       setSubmitting(false);
       handlePostSubmit(response, actions, onClose);
     });
@@ -45,14 +38,8 @@ const UpdateModal = ({ collectionClient }: Props) => {
 
   return (
     <>
-      <Button
-        size="sm"
-        color="primary"
-        isIconOnly={true}
-        title="Edit"
-        onPress={onOpen}
-      >
-        <FaPenToSquare size={14} />
+      <Button color="primary" onPress={onOpen}>
+        Add Client
       </Button>
 
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -61,15 +48,13 @@ const UpdateModal = ({ collectionClient }: Props) => {
             <>
               <Formik
                 initialValues={initialValues}
-                validationSchema={updateSchema}
+                validationSchema={createSchema}
                 onSubmit={onSubmit}
               >
                 {() => (
                   <Form>
-                    <ModalHeader>Update Client</ModalHeader>
+                    <ModalHeader>Add Client</ModalHeader>
                     <ModalBody>
-                      <Field type="hidden" name="id" />
-                      
                       <Field name="name">
                         {({ field, meta }: FieldProps) => (
                           <div>
@@ -97,7 +82,7 @@ const UpdateModal = ({ collectionClient }: Props) => {
                         type="submit"
                         isLoading={submitting}
                       >
-                        Update
+                        Save
                       </Button>
                       <Button color="danger" onPress={onClose}>
                         Cancel
@@ -114,4 +99,4 @@ const UpdateModal = ({ collectionClient }: Props) => {
   );
 };
 
-export default UpdateModal;
+export default CreateModal;

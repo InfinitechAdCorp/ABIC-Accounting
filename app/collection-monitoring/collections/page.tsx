@@ -1,13 +1,13 @@
 import React from "react";
 import { get as getAccount } from "@/components/accounts/actions";
 import { getAll as getCollections } from "@/components/collectionMonitoring/collections/actions";
-import { getAll as getCollectionClients } from "@/components/collectionMonitoring/collectionClients/actions";
+import { getAll as getCollectionClients } from "@/components/collectionMonitoring/cClients/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import RenderCell from "@/components/collectionMonitoring/collections/renderCell";
 import CreateCollectionModal from "@/components/collectionMonitoring/collections/createModal";
-import CreateClientModal from "@/components/collectionMonitoring/collectionClients/createModal";
+import CreateClientModal from "@/components/collectionMonitoring/cClients/createModal";
 import { Account } from "@prisma/client";
 import ExportBtn from "@/components/globals/exportBtn";
 

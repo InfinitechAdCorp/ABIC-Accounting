@@ -11,18 +11,25 @@ import {
   useDisclosure,
   Input,
 } from "@heroui/react";
-import { create as createSchema } from "@/components/collectionMonitoring/collectionClients/schemas";
+import { FormattedCollectionClient } from "@/components/collectionMonitoring/types";
+import { update as updateSchema } from "@/components/collectionMonitoring/cClients/schemas";
 import { Formik, Form, Field, FieldProps } from "formik";
-import { create as createAction } from "@/components/collectionMonitoring/collectionClients/actions";
+import { update as updateAction } from "@/components/collectionMonitoring/cClients/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
+import { FaPenToSquare } from "react-icons/fa6";
 
-const CreateModal = () => {
+type Props = {
+  collectionClient: FormattedCollectionClient;
+};
+
+const UpdateModal = ({ collectionClient }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
-    name: "",
+    id: collectionClient.id,
+    name: collectionClient.name,
   };
 
   const onSubmit = async (
@@ -30,7 +37,7 @@ const CreateModal = () => {
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
-    createAction(values).then((response) => {
+    updateAction(values).then((response) => {
       setSubmitting(false);
       handlePostSubmit(response, actions, onClose);
     });
@@ -38,8 +45,14 @@ const CreateModal = () => {
 
   return (
     <>
-      <Button color="primary" onPress={onOpen}>
-        Add Client
+      <Button
+        size="sm"
+        color="primary"
+        isIconOnly={true}
+        title="Edit"
+        onPress={onOpen}
+      >
+        <FaPenToSquare size={14} />
       </Button>
 
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -48,13 +61,15 @@ const CreateModal = () => {
             <>
               <Formik
                 initialValues={initialValues}
-                validationSchema={createSchema}
+                validationSchema={updateSchema}
                 onSubmit={onSubmit}
               >
                 {() => (
                   <Form>
-                    <ModalHeader>Add Client</ModalHeader>
+                    <ModalHeader>Update Client</ModalHeader>
                     <ModalBody>
+                      <Field type="hidden" name="id" />
+
                       <Field name="name">
                         {({ field, meta }: FieldProps) => (
                           <div>
@@ -82,7 +97,7 @@ const CreateModal = () => {
                         type="submit"
                         isLoading={submitting}
                       >
-                        Save
+                        Update
                       </Button>
                       <Button color="danger" onPress={onClose}>
                         Cancel
@@ -99,4 +114,4 @@ const CreateModal = () => {
   );
 };
 
-export default CreateModal;
+export default UpdateModal;

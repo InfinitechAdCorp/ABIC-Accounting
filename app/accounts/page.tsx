@@ -6,7 +6,7 @@ import CreateModal from "@/components/accounts/createModal";
 import AccountCard from "@/components/accounts/accountCard";
 
 const Accounts = async () => {
-  const { accounts } = await getAll();
+  const { records } = await getAll();
 
   return (
     <>
@@ -29,8 +29,8 @@ const Accounts = async () => {
 
           <div className="grid grid-cols-4 gap-5">
             <CreateModal />
-            {accounts.map((account) => (
-              <AccountCard key={account.id} account={account} />
+            {records.map((record) => (
+              <AccountCard key={record.id} record={record} />
             ))}
           </div>
         </div>

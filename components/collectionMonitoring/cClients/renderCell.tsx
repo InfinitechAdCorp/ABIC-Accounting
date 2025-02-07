@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import UpdateModal from "@/components/collectionMonitoring/collectionClients/updateModal";
+import UpdateModal from "@/components/collectionMonitoring/cClients/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
 import ViewBtn from "@/components/globals/viewBtn";
-import { destroy } from "@/components/collectionMonitoring/collectionClients/actions";
+import { destroy } from "@/components/collectionMonitoring/cClients/actions";
 import { FormattedCollectionClient } from "@/components/collectionMonitoring/types";
 
 type Row = FormattedCollectionClient;

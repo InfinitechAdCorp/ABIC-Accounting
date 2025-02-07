@@ -2,7 +2,7 @@ import React from "react";
 import {
   get as getCollectionClient,
   getAll as getCollectionClients,
-} from "@/components/collectionMonitoring/collectionClients/actions";
+} from "@/components/collectionMonitoring/cClients/actions";
 import { get as getAccount } from "@/components/accounts/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";

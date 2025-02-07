@@ -6,7 +6,7 @@ import { ActionResponse } from "@/components/globals/types";
 import {
   create as createSchema,
   update as updateSchema,
-} from "@/components/collectionMonitoring/collectionClients/schemas";
+} from "@/components/collectionMonitoring/cClients/schemas";
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";

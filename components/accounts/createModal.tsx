@@ -27,18 +27,18 @@ const CreateModal = () => {
 
   const initialValues = {
     name: "",
-    transaction_history_access: false,
-    income_expenses_access: false,
-    collection_monitoring_access: false,
+    th_access: false,
+    ie_access: false,
+    cm_access: false,
   };
 
   const onSubmit = async (
     values: Prisma.AccountCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    setSubmitting(true)
+    setSubmitting(true);
     createAction(values).then((response) => {
-      setSubmitting(false)
+      setSubmitting(false);
       handlePostSubmit(response, actions, onClose);
     });
   };
@@ -88,7 +88,7 @@ const CreateModal = () => {
 
                       <label>Select Access</label>
                       <div className="flex gap-3">
-                        <Field name="transaction_history_access">
+                        <Field name="th_access">
                           {({ field, meta }: FieldProps) => (
                             <div>
                               <Checkbox {...field}>
@@ -102,12 +102,10 @@ const CreateModal = () => {
                             </div>
                           )}
                         </Field>
-                        <Field name="income_expenses_access">
+                        <Field name="ie_access">
                           {({ field, meta }: FieldProps) => (
                             <div>
-                              <Checkbox {...field}>
-                                Income & Expenses
-                              </Checkbox>
+                              <Checkbox {...field}>Income & Expenses</Checkbox>
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">
                                   {meta.error}
@@ -116,7 +114,7 @@ const CreateModal = () => {
                             </div>
                           )}
                         </Field>
-                        <Field name="collection_monitoring_access">
+                        <Field name="cm_access">
                           {({ field, meta }: FieldProps) => (
                             <div>
                               <Checkbox {...field}>

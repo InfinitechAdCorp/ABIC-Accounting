@@ -5,25 +5,25 @@ const prisma = new PrismaClient();
 const accounts: Prisma.AccountCreateInput[] = [
   {
     name: "SCB 443",
-    transaction_history_access: true,
-    income_expenses_access: false,
-    collection_monitoring_access: true,
+    th_access: true,
+    ie_access: false,
+    cm_access: true,
   },
   {
     name: "SCB 483",
-    transaction_history_access: false,
-    income_expenses_access: true,
-    collection_monitoring_access: false,
+    th_access: false,
+    ie_access: true,
+    cm_access: false,
   },
   {
     name: "SCB 202",
-    transaction_history_access: true,
-    income_expenses_access: false,
-    collection_monitoring_access: false,
+    th_access: true,
+    ie_access: false,
+    cm_access: false,
   },
 ];
 
-const transactionClients: Prisma.TransactionClientCreateInput[] = [
+const tClients: Prisma.TClientCreateInput[] = [
   {
     account: {
       connectOrCreate: {
@@ -55,11 +55,11 @@ const transactionClients: Prisma.TransactionClientCreateInput[] = [
 
 const transactions: Prisma.TransactionCreateInput[] = [
   {
-    transaction_client: {
+    t_client: {
       connectOrCreate: {
-        where: { name: transactionClients[0].name },
+        where: { name: tClients[0].name },
         create: {
-          name: transactionClients[0].name,
+          name: tClients[0].name,
         },
       },
     },
@@ -73,11 +73,11 @@ const transactions: Prisma.TransactionCreateInput[] = [
     proof: "no-image.jpg",
   },
   {
-    transaction_client: {
+    t_client: {
       connectOrCreate: {
-        where: { name: transactionClients[1].name },
+        where: { name: tClients[1].name },
         create: {
-          name: transactionClients[1].name,
+          name: tClients[1].name,
         },
       },
     },
@@ -91,11 +91,11 @@ const transactions: Prisma.TransactionCreateInput[] = [
     proof: "no-image.jpg",
   },
   {
-    transaction_client: {
+    t_client: {
       connectOrCreate: {
-        where: { name: transactionClients[2].name },
+        where: { name: tClients[2].name },
         create: {
-          name: transactionClients[2].name,
+          name: tClients[2].name,
         },
       },
     },
@@ -110,7 +110,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
   },
 ];
 
-const collectionClients: Prisma.CollectionClientCreateInput[] = [
+const cClients: Prisma.CClientCreateInput[] = [
   {
     account: {
       connectOrCreate: {
@@ -142,10 +142,10 @@ const collectionClients: Prisma.CollectionClientCreateInput[] = [
 
 const collections: Prisma.CollectionCreateInput[] = [
   {
-    collection_client: {
+    c_client: {
       connectOrCreate: {
-        where: { name: collectionClients[0].name },
-        create: collectionClients[0],
+        where: { name: cClients[0].name },
+        create: cClients[0],
       },
     },
     property: "Alea Residences",
@@ -160,10 +160,10 @@ const collections: Prisma.CollectionCreateInput[] = [
     due: "2025-05-25T00:00:00.000Z",
   },
   {
-    collection_client: {
+    c_client: {
       connectOrCreate: {
-        where: { name: collectionClients[1].name },
-        create: collectionClients[1],
+        where: { name: cClients[1].name },
+        create: cClients[1],
       },
     },
     property: "Tivoli Residences",
@@ -178,10 +178,10 @@ const collections: Prisma.CollectionCreateInput[] = [
     due: "2025-04-25T00:00:00.000Z",
   },
   {
-    collection_client: {
+    c_client: {
       connectOrCreate: {
-        where: { name: collectionClients[2].name },
-        create: collectionClients[2],
+        where: { name: cClients[2].name },
+        create: cClients[2],
       },
     },
     property: "Oriental Place",
@@ -208,9 +208,9 @@ async function seeder() {
   }
 
   console.log("Seeding Transaction Clients");
-  for (const transactionClient of transactionClients) {
-    await prisma.transactionClient.create({
-      data: transactionClient,
+  for (const tClient of tClients) {
+    await prisma.tClient.create({
+      data: tClient,
     });
   }
 
@@ -222,9 +222,9 @@ async function seeder() {
   }
 
   console.log("Seeding Collection Clients");
-  for (const collectionClient of collectionClients) {
-    await prisma.collectionClient.create({
-      data: collectionClient,
+  for (const cClient of cClients) {
+    await prisma.cClient.create({
+      data: cClient,
     });
   }
 

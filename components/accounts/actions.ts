@@ -9,53 +9,55 @@ import * as Yup from "yup";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
+const model = "Account";
+
 export const getAll = async () => {
-  let accounts = [];
+  let records = [];
 
   try {
-    accounts = await prisma.account.findMany();
+    records = await prisma.account.findMany();
   } catch {
     const response = {
       code: 500,
       message: "Server Error",
-      accounts: [],
+      records: [],
     };
     return response;
   }
 
   const response = {
     code: 200,
-    message: "Fetched Accounts",
-    accounts: accounts,
+    message: `Fetched ${model}s`,
+    records: records,
   };
   return response;
 };
 
 export const get = async () => {
   const session = await cookies();
-  const accountID = session.get("accountID")?.value;
+  const id = session.get("accountID")?.value;
 
-  let account;
+  let record;
 
   try {
-    account = await prisma.account.findUnique({
+    record = await prisma.account.findUnique({
       where: {
-        id: accountID,
+        id: id,
       },
     });
   } catch {
     const response = {
       code: 500,
       message: "Server Error",
-      account: account,
+      record: record,
     };
     return response;
   }
 
   const response = {
     code: 200,
-    message: "Fetched Account",
-    account: account,
+    message: `Fetched ${model}`,
+    record: record,
   };
   return response;
 };
@@ -80,9 +82,9 @@ export const create = async (values: Prisma.AccountCreateInput) => {
     await prisma.account.create({
       data: {
         name: values.name,
-        transaction_history_access: values.transaction_history_access,
-        income_expenses_access: values.income_expenses_access,
-        collection_monitoring_access: values.collection_monitoring_access,
+        th_access: values.th_access,
+        ie_access: values.ie_access,
+        cm_access: values.cm_access,
       },
     });
   } catch {
@@ -91,6 +93,6 @@ export const create = async (values: Prisma.AccountCreateInput) => {
   }
 
   revalidatePath("/accounts");
-  const response: ActionResponse = { code: 200, message: "Added Account" };
+  const response: ActionResponse = { code: 200, message: `Added ${model}` };
   return response;
 };
