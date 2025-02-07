@@ -8,7 +8,7 @@ export const getCounts = async () => {
   const accountID = session.get("accountID")?.value
   
   const counts = {
-    transactionClients: 0,
+    tClients: 0,
     transactions: 0,
     collections: 0,
   };
@@ -17,13 +17,13 @@ export const getCounts = async () => {
     const account = await prisma.account.findUnique({
       where: { id: accountID },
       include: {
-        transaction_clients: true,
+        t_clients: true,
       },
     });
 
     const transactions = await prisma.transaction.findMany({
       where: {
-        transaction_client: {
+        t_client: {
           account_id: accountID,
         },
       },
@@ -31,13 +31,13 @@ export const getCounts = async () => {
 
     const collections = await prisma.collection.findMany({
       where: {
-        collection_client: {
+        c_client: {
           account_id: accountID,
         },
       },
     });
 
-    counts.transactionClients = account?.transaction_clients.length as number;
+    counts.tClients = account?.t_clients.length as number;
     counts.transactions = transactions.length;
     counts.collections = collections.length;
   } catch {

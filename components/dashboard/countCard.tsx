@@ -5,13 +5,13 @@ import { useRouter } from "next/navigation";
 import { Card, CardBody } from "@heroui/react";
 
 type Props = {
-  Icon: React.ReactElement;
+  icon: React.ReactElement;
   model: string;
-  link: string;
+  url: string;
   count: number;
 };
 
-const CountCard = ({ Icon, model, link, count }: Props) => {
+const CountCard = ({ icon, model, url, count }: Props) => {
   const router = useRouter();
 
   return (
@@ -22,12 +22,12 @@ const CountCard = ({ Icon, model, link, count }: Props) => {
         isPressable
         isHoverable
         onPress={() => {
-          router.push(link);
+          router.push(url);
         }}
       >
         <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
           <div className="flex justify-center items-center">
-            <Icon.type {...Icon.props} />
+            <icon.type {...icon.props} />
           </div>
 
           <div className="flex flex-col justify-center items-center">
