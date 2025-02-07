@@ -1,8 +1,12 @@
 "use server";
 
 import prisma from "@/lib/db";
+import { cookies } from "next/headers";
 
-export const getCounts = async (accountID: string) => {
+export const getCounts = async () => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value
+  
   const counts = {
     transactionClients: 0,
     transactions: 0,
@@ -14,7 +18,6 @@ export const getCounts = async (accountID: string) => {
       where: { id: accountID },
       include: {
         transaction_clients: true,
-        collection_clients: true,
       },
     });
 
@@ -22,17 +25,17 @@ export const getCounts = async (accountID: string) => {
       where: {
         transaction_client: {
           account_id: accountID,
-        }
-      }
-    })
+        },
+      },
+    });
 
     const collections = await prisma.collection.findMany({
       where: {
         collection_client: {
           account_id: accountID,
-        }
-      }
-    })
+        },
+      },
+    });
 
     counts.transactionClients = account?.transaction_clients.length as number;
     counts.transactions = transactions.length;

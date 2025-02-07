@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -8,34 +8,49 @@ import {
   ModalBody,
   ModalFooter,
   Button,
+  InputOtp,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { ActionResponse } from "@/components/globals/types";
 import { destroy as destroySchema } from "@/components/globals/schemas";
-import { Formik, Form, Field, FormikProps } from "formik";
+import { Formik, Form, Field, FieldProps } from "formik";
 import { handlePostSubmit } from "@/components/globals/utils";
 import { FaTrash } from "react-icons/fa6";
+import { sendOTP } from "@/components/globals/serverUtils";
+import { Destroy } from "@/components/globals/types";
 
 type Props = {
   title: string;
-  action: (values: { id: string }) => Promise<ActionResponse>;
+  action: (values: Destroy) => Promise<ActionResponse>;
   id: string;
 };
 
 const DestroyModal = ({ title, action, id }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [submitting, setSubmitting] = useState(false);
+  const [opening, setOpening] = useState(false);
+
+  const openModal = async () => {
+    setOpening(true);
+    await sendOTP();
+    setOpening(false);
+    onOpen();
+  };
 
   const initialValues = {
     id: id,
+    otp: "",
   };
 
   const onSubmit = async (
-    values: { id: string },
+    values: Destroy,
     actions: { resetForm: () => void }
   ) => {
-    action(values).then((response) =>
-      handlePostSubmit(response, actions, onClose)
-    );
+    setSubmitting(true);
+    action(values).then((response) => {
+      setSubmitting(false);
+      handlePostSubmit(response, actions, onClose);
+    });
   };
 
   return (
@@ -45,7 +60,8 @@ const DestroyModal = ({ title, action, id }: Props) => {
         color="danger"
         isIconOnly={true}
         title="Delete"
-        onPress={onOpen}
+        onPress={openModal}
+        isLoading={opening}
       >
         <FaTrash />
       </Button>
@@ -59,25 +75,38 @@ const DestroyModal = ({ title, action, id }: Props) => {
                 validationSchema={destroySchema}
                 onSubmit={onSubmit}
               >
-                {(props: FormikProps<{ id: string }>) => (
+                {() => (
                   <Form>
                     <ModalHeader>Delete {title}</ModalHeader>
                     <ModalBody>
                       <Field type="hidden" name="id" />
-                      <h6>
-                        Are you sure that you want to delete this {title}?
-                      </h6>
+                      <h6>Enter OTP to Confirm {title} Deletion:</h6>
+
+                      <div className="flex justify-center">
+                        <Field name="otp">
+                          {({ field, meta }: FieldProps) => (
+                            <div>
+                              <InputOtp {...field} length={6} />
+                              {meta.touched && meta.error && (
+                                <small className="text-red-500">
+                                  {meta.error}
+                                </small>
+                              )}
+                            </div>
+                          )}
+                        </Field>
+                      </div>
                     </ModalBody>
                     <ModalFooter>
                       <Button
                         color="primary"
                         type="submit"
-                        isLoading={props.isSubmitting}
+                        isLoading={submitting}
                       >
-                        Yes
+                        Submit
                       </Button>
                       <Button color="danger" onPress={onClose}>
-                        No
+                        Cancel
                       </Button>
                     </ModalFooter>
                   </Form>

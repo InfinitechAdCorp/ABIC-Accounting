@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardBody,
@@ -13,9 +13,9 @@ import {
   useDisclosure,
   Input,
   Checkbox,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { create as createSchema } from "@/components/accounts/schemas";
-import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
+import { Formik, Form, Field, FieldProps } from "formik";
 import { create as createAction } from "@/components/accounts/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
@@ -23,10 +23,12 @@ import { PlusIcon } from "@/components/globals/icons";
 
 const CreateModal = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
     name: "",
     transaction_history_access: false,
+    income_expenses_access: false,
     collection_monitoring_access: false,
   };
 
@@ -34,7 +36,9 @@ const CreateModal = () => {
     values: Prisma.AccountCreateInput,
     actions: { resetForm: () => void }
   ) => {
+    setSubmitting(true)
     createAction(values).then((response) => {
+      setSubmitting(false)
       handlePostSubmit(response, actions, onClose);
     });
   };
@@ -57,7 +61,7 @@ const CreateModal = () => {
                 validationSchema={createSchema}
                 onSubmit={onSubmit}
               >
-                {(props: FormikProps<Prisma.AccountCreateInput>) => (
+                {() => (
                   <Form>
                     <ModalHeader>Add Account</ModalHeader>
                     <ModalBody>
@@ -98,6 +102,20 @@ const CreateModal = () => {
                             </div>
                           )}
                         </Field>
+                        <Field name="income_expenses_access">
+                          {({ field, meta }: FieldProps) => (
+                            <div>
+                              <Checkbox {...field}>
+                                Income & Expenses
+                              </Checkbox>
+                              {meta.touched && meta.error && (
+                                <small className="text-red-500">
+                                  {meta.error}
+                                </small>
+                              )}
+                            </div>
+                          )}
+                        </Field>
                         <Field name="collection_monitoring_access">
                           {({ field, meta }: FieldProps) => (
                             <div>
@@ -118,7 +136,7 @@ const CreateModal = () => {
                       <Button
                         color="primary"
                         type="submit"
-                        isLoading={props.isSubmitting}
+                        isLoading={submitting}
                       >
                         Save
                       </Button>

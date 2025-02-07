@@ -19,6 +19,7 @@ export type FormattedTransaction = {
   type: string;
   amount: number;
   status: string;
+  proof: string;
 };
 
 export type TransactionClientWithTransactions = Prisma.TransactionClientGetPayload<{

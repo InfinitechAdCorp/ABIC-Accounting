@@ -2,7 +2,6 @@
 
 import prisma from "@/lib/db";
 import { Prisma } from "@prisma/client";
-import { revalidatePath } from "next/cache";
 import { ActionResponse } from "@/components/globals/types";
 import {
   create as createSchema,
@@ -11,27 +10,40 @@ import {
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
-
-type CollectionClientCreateInput = Prisma.CollectionClientCreateInput & {
-  account_id?: string;
-};
+import { formatCollectionClients } from "@/components/globals/utils";
+import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
+import { Destroy } from "@/components/globals/types";
 
 export const getAll = async () => {
-  let collectionClients = [];
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value || "";
+
+  let account;
 
   try {
-    collectionClients = await prisma.collectionClient.findMany({
-      include: { collections: true },
+    account = await prisma.account.findUnique({
+      where: { id: accountID },
+      include: {
+        collection_clients: {
+          include: {
+            collections: true,
+          },
+        },
+      },
     });
   } catch {
     const response = {
       code: 500,
       message: "Server Error",
-      clients: [],
+      collectionClients: [],
     };
     return response;
   }
 
+  const collectionClients = formatCollectionClients(
+    account?.collection_clients || []
+  );
   const response = {
     code: 200,
     message: "Fetched Clients",
@@ -40,7 +52,40 @@ export const getAll = async () => {
   return response;
 };
 
-export const create = async (values: CollectionClientCreateInput) => {
+export const get = async (id: string) => {
+  let collectionClient;
+
+  try {
+    collectionClient = await prisma.collectionClient.findUnique({
+      where: { id: id },
+      include: {
+        collections: true,
+      },
+    });
+  } catch {
+    const response = {
+      code: 500,
+      message: "Server Error",
+      collectionClient: null,
+    };
+    return response;
+  }
+
+  const formattedCollectionClient = formatCollectionClients([
+    collectionClient,
+  ])[0];
+  const response = {
+    code: 200,
+    message: "Fetched Client",
+    collectionClient: formattedCollectionClient,
+  };
+  return response;
+};
+
+export const create = async (values: Prisma.CollectionClientCreateInput) => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value || "";
+
   const schema = createSchema;
 
   try {
@@ -59,7 +104,7 @@ export const create = async (values: CollectionClientCreateInput) => {
   try {
     await prisma.collectionClient.create({
       data: {
-        account: { connect: { id: values.account_id } },
+        account: { connect: { id: accountID } },
         name: values.name,
       },
     });
@@ -68,12 +113,15 @@ export const create = async (values: CollectionClientCreateInput) => {
     return response;
   }
 
-  revalidatePath("/collection-clients");
+  revalidatePath("/collection-monitoring/collection-clients");
   const response: ActionResponse = { code: 200, message: "Added Client" };
   return response;
 };
 
-export const update = async (values: CollectionClientCreateInput) => {
+export const update = async (values: Prisma.CollectionClientCreateInput) => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value || "";
+
   const schema = updateSchema;
 
   try {
@@ -95,7 +143,7 @@ export const update = async (values: CollectionClientCreateInput) => {
         id: values.id,
       },
       data: {
-        account: { connect: { id: values.account_id } },
+        account: { connect: { id: accountID } },
         name: values.name,
       },
     });
@@ -104,12 +152,14 @@ export const update = async (values: CollectionClientCreateInput) => {
     return response;
   }
 
-  revalidatePath("/collection-clients");
+  revalidatePath("/collection-monitoring/collection-clients");
   const response: ActionResponse = { code: 200, message: "Updated Client" };
   return response;
 };
 
-export const destroy = async (values: { id: string }) => {
+export const destroy = async (values: Destroy) => {
+  const session = await cookies();
+  const otp = session.get("otp")?.value;
   const schema = destroySchema;
 
   try {
@@ -125,16 +175,26 @@ export const destroy = async (values: { id: string }) => {
     return response;
   }
 
-  try {
-    await prisma.collectionClient.delete({
-      where: { id: values.id },
-    });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  if (otp == values.otp) {
+    try {
+      await prisma.collectionClient.delete({
+        where: { id: values.id },
+      });
+    } catch {
+      const response: ActionResponse = { code: 500, message: "Server Error" };
+      return response;
+    }
+
+    session.delete("otp");
+  } else {
+    const response: ActionResponse = {
+      code: 401,
+      message: "Invalid Token",
+    };
     return response;
   }
 
-  revalidatePath("/collection-clients");
+  revalidatePath("/collection-monitoring/collection-clients");
   const response: ActionResponse = { code: 200, message: "Deleted Client" };
   return response;
 };

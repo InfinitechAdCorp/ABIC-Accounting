@@ -21,6 +21,7 @@ model Account {
   collection_clients           CollectionClient[]
   name                         String              @unique
   transaction_history_access   Boolean
+  income_expenses_access       Boolean
   collection_monitoring_access Boolean
   created_at                   DateTime            @default(now())
   updated_at                   DateTime            @updatedAt
@@ -51,10 +52,30 @@ model Transaction {
   type                  String
   amount                Decimal            @db.Decimal(15, 2)
   status                String
+  proof                 String
   created_at            DateTime           @default(now())
   updated_at            DateTime           @updatedAt
 
   @@map(name: "transactions")
+}
+
+model Detail {
+  id          String    @id @default(cuid())
+  project     String
+  unit        String
+  date_res    DateTime  @db.Date
+  terms       String
+  consultant  String
+  manager     String
+  price       Decimal   @db.Decimal(15, 2)
+  list_price  Decimal   @db.Decimal(15, 2)
+  status      String
+  source      String
+  extension   DateTime? @db.Date
+  closed_date DateTime? @db.Date
+  type        String
+
+  @@map(name: "details")
 }
 
 model CollectionClient {

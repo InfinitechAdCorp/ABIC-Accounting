@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -8,36 +10,37 @@ import {
   Button,
   useDisclosure,
   Input,
-} from "@nextui-org/react";
-import { FormattedClient } from "@/components/collectionMonitoring/types";
+} from "@heroui/react";
+import { FormattedCollectionClient } from "@/components/collectionMonitoring/types";
 import { update as updateSchema } from "@/components/collectionMonitoring/collectionClients/schemas";
-import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
+import { Formik, Form, Field, FieldProps } from "formik";
 import { update as updateAction } from "@/components/collectionMonitoring/collectionClients/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
 import { FaPenToSquare } from "react-icons/fa6";
 
 type Props = {
-  client: FormattedClient;
+  collectionClient: FormattedCollectionClient;
 };
 
-type ClientCreateInput = Prisma.ClientCreateInput & { id: string };
-
-const UpdateModal = ({ client }: Props) => {
+const UpdateModal = ({ collectionClient }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
-    id: client.id,
-    name: client.name,
+    id: collectionClient.id,
+    name: collectionClient.name,
   };
 
   const onSubmit = async (
-    values: Prisma.ClientCreateInput,
+    values: Prisma.CollectionClientCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    updateAction(values).then((response) =>
-      handlePostSubmit(response, actions, onClose)
-    );
+    setSubmitting(true);
+    updateAction(values).then((response) => {
+      setSubmitting(false);
+      handlePostSubmit(response, actions, onClose);
+    });
   };
 
   return (
@@ -61,12 +64,12 @@ const UpdateModal = ({ client }: Props) => {
                 validationSchema={updateSchema}
                 onSubmit={onSubmit}
               >
-                {(props: FormikProps<ClientCreateInput>) => (
+                {() => (
                   <Form>
                     <ModalHeader>Update Client</ModalHeader>
                     <ModalBody>
                       <Field type="hidden" name="id" />
-
+                      
                       <Field name="name">
                         {({ field, meta }: FieldProps) => (
                           <div>
@@ -92,7 +95,7 @@ const UpdateModal = ({ client }: Props) => {
                       <Button
                         color="primary"
                         type="submit"
-                        isLoading={props.isSubmitting}
+                        isLoading={submitting}
                       >
                         Update
                       </Button>

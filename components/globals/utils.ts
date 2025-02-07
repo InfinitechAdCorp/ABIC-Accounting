@@ -11,7 +11,7 @@ import {
   CollectionWithCollectionClient,
 } from "@/components/collectionMonitoring/types";
 import * as Yup from "yup";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 import { ActionResponse } from "@/components/globals/types";
 import { DateValue, parseDate } from "@internationalized/date";
 
@@ -28,6 +28,8 @@ export const handlePostSubmit = (
   } else {
     if (response.code == 429) {
       console.log(response.errors);
+    } else {
+      console.log(response.error);
     }
     toast.error(response.message);
   }
@@ -35,7 +37,9 @@ export const handlePostSubmit = (
 
 // Data Formatters
 
-export const formatTransactionClients = (transactionClients: TransactionClientWithTransactions[]) => {
+export const formatTransactionClients = (
+  transactionClients: TransactionClientWithTransactions[]
+) => {
   const formattedTransactionClients: FormattedTransactionClient[] = [];
 
   if (transactionClients) {
@@ -62,7 +66,52 @@ export const formatTransactionClients = (transactionClients: TransactionClientWi
   return formattedTransactionClients;
 };
 
-export const formatTransactions = (transactions: TransactionWithTransactionClient[]) => {
+export const displayFormatTransactionClients = (
+  columns: { key: string; name: string }[],
+  transactionClients: FormattedTransactionClient[]
+) => {
+  const columnnNames: string[] = [];
+  columns.forEach((column) => {
+    columnnNames.push(column.name);
+  });
+
+  const rows = [];
+  transactionClients.forEach((transactionClient) => {
+    const row = {};
+    columns.forEach((column) => {
+      const key = column.key
+      let value;
+      switch (key) {
+        case "transactions":
+          value = transactionClient.transactions?.length;
+          break;
+        case "starting_fund":
+          value = 0;
+          break;
+        case "running_balance":
+          value = 0;
+          break;
+        default:
+          value =
+            transactionClient[key as keyof FormattedTransactionClient];
+          break;
+      }
+      row[key] = value;
+    });
+    rows.push(row);
+  });
+
+  const data = {
+    columnNames: columnnNames,
+    rows: rows,
+  };
+
+  return data;
+};
+
+export const formatTransactions = (
+  transactions: TransactionWithTransactionClient[]
+) => {
   const formattedTransactions: FormattedTransaction[] = [];
 
   transactions.forEach((transaction) => {
@@ -85,34 +134,40 @@ export const formatTransactions = (transactions: TransactionWithTransactionClien
   return formattedTransactions;
 };
 
-export const formatCollectionClients = (collectionClients: CollectionClientWithCollections[]) => {
+export const formatCollectionClients = (
+  collectionClients: CollectionClientWithCollections[]
+) => {
   const formattedCollectionClients: FormattedCollectionClient[] = [];
 
-  collectionClients.forEach((collectionClient) => {
-    const formattedCollections: FormattedCollection[] = [];
-    collectionClient.collections.forEach((collection) => {
-      const formattedCollection = {
-        ...collection,
-        collection_client_id: collection.collection_client_id as string,
-        tenant_price: collection.tenant_price?.toNumber(),
-        owner_income: collection.owner_income?.toNumber(),
-        abic_income: collection.abic_income?.toNumber(),
-      };
-      formattedCollections.push(formattedCollection);
-    });
+  if (collectionClients) {
+    collectionClients.forEach((collectionClient) => {
+      const formattedCollections: FormattedCollection[] = [];
+      collectionClient.collections.forEach((collection) => {
+        const formattedCollection = {
+          ...collection,
+          collection_client_id: collection.collection_client_id as string,
+          tenant_price: collection.tenant_price?.toNumber(),
+          owner_income: collection.owner_income?.toNumber(),
+          abic_income: collection.abic_income?.toNumber(),
+        };
+        formattedCollections.push(formattedCollection);
+      });
 
-    const formattedCollectionClient = {
-      ...collectionClient,
-      account_id: collectionClient.account_id as string,
-      collections: formattedCollections,
-    };
-    formattedCollectionClients.push(formattedCollectionClient);
-  });
+      const formattedCollectionClient = {
+        ...collectionClient,
+        account_id: collectionClient.account_id as string,
+        collections: formattedCollections,
+      };
+      formattedCollectionClients.push(formattedCollectionClient);
+    });
+  }
 
   return formattedCollectionClients;
 };
 
-export const formatCollections = (collections: CollectionWithCollectionClient[]) => {
+export const formatCollections = (
+  collections: CollectionWithCollectionClient[]
+) => {
   const formattedCollections: FormattedCollection[] = [];
 
   collections.forEach((collection) => {
@@ -193,4 +248,18 @@ export const formatErrors = (errors: Yup.ValidationError) => {
     }
   });
   return formattedErrors;
+};
+
+export const computeBalance = (transactions: FormattedTransaction[]) => {
+  let total = 0;
+  transactions.forEach((transaction) => {
+    if (transaction.status != "Cancelled") {
+      if (transaction.type == "Credit") {
+        total += transaction.amount;
+      } else {
+        total -= transaction.amount;
+      }
+    }
+  });
+  return total;
 };

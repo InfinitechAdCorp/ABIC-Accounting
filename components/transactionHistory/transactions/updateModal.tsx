@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -12,14 +14,14 @@ import {
   Select,
   SelectItem,
   Textarea,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import {
   FormattedTransaction,
-  FormattedAccount,
-} from "@/components/transactionMonitoring/types";
-import { update as updateSchema } from "@/components/transactionMonitoring/transactions/schemas";
+  FormattedTransactionClient,
+} from "@/components/transactionHistory/types";
+import { update as updateSchema } from "@/components/transactionHistory/transactions/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
-import { update as updateAction } from "@/components/transactionMonitoring/transactions/actions";
+import { update as updateAction } from "@/components/transactionHistory/transactions/actions";
 import { Prisma } from "@prisma/client";
 import {
   handlePostSubmit,
@@ -30,30 +32,39 @@ import { FaPenToSquare } from "react-icons/fa6";
 
 type Props = {
   transaction: FormattedTransaction;
-  accounts: FormattedAccount[];
+  transactionClients: FormattedTransactionClient[];
 };
 
-const UpdateModal = ({ transaction, accounts }: Props) => {
+type TransactionCreateInput = Prisma.TransactionCreateInput & {
+  proof: File;
+};
+
+const UpdateModal = ({ transaction, transactionClients }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
     id: transaction.id,
     date: transaction.date,
     voucher: transaction.voucher,
     check: transaction.check,
-    account_id: transaction.account_id,
+    transaction_client_id: transaction.transaction_client_id,
     particulars: transaction.particulars,
     type: transaction.type,
     amount: transaction.amount,
+    status: transaction.status,
+    proof: "",
   };
 
   const onSubmit = async (
-    values: Prisma.TransactionCreateInput,
+    values: TransactionCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    updateAction(values).then((response) =>
-      handlePostSubmit(response, actions, onClose)
-    );
+    setSubmitting(true);
+    updateAction(values).then((response) => {
+      setSubmitting(false);
+      handlePostSubmit(response, actions, onClose);
+    });
   };
 
   return (
@@ -83,6 +94,7 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
                     <ModalHeader>Update Transaction</ModalHeader>
                     <ModalBody>
                       <Field type="hidden" name="id" />
+                      <Field type="hidden" name="status" />
 
                       <Field name="date">
                         {({ field, meta }: FieldProps) => (
@@ -96,7 +108,7 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
                               value={dateToDateValue(field.value)}
                               onChange={(value) => {
                                 const date = dateValueToDate(value);
-                                props.setFieldValue("date", date);
+                                props.setFieldValue(field.name, date);
                               }}
                             />
                             {meta.touched && meta.error && (
@@ -152,22 +164,22 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
                         </Field>
                       </div>
 
-                      <Field name="account_id">
+                      <Field name="transaction_client_id">
                         {({ field, meta }: FieldProps) => (
                           <div>
                             <Select
                               {...field}
                               size="md"
                               variant="bordered"
-                              label="Account"
+                              label="Client"
                               labelPlacement="outside"
-                              placeholder="Select Account"
-                              items={accounts}
+                              placeholder="Select Client"
+                              items={transactionClients}
                               defaultSelectedKeys={[field.value]}
                             >
-                              {(account) => (
-                                <SelectItem key={account.id}>
-                                  {account.name}
+                              {(transactionClient) => (
+                                <SelectItem key={transactionClient.id}>
+                                  {transactionClient.name}
                                 </SelectItem>
                               )}
                             </Select>
@@ -246,12 +258,43 @@ const UpdateModal = ({ transaction, accounts }: Props) => {
                           )}
                         </Field>
                       </div>
+
+                      <div>
+                        <Field name="proof">
+                          {({ field, meta }: FieldProps) => (
+                            <div>
+                              <Input
+                                type="file"
+                                size="md"
+                                variant="bordered"
+                                label="Proof"
+                                labelPlacement="outside"
+                                placeholder="Enter Proof"
+                                onChange={(e) => {
+                                  if (e.target.files) {
+                                    props.setFieldValue(
+                                      field.name,
+                                      e.target.files[0]
+                                    );
+                                  }
+                                }}
+                                onBlur={field.onBlur}
+                              />
+                              {meta.touched && meta.error && (
+                                <small className="text-red-500">
+                                  {meta.error}
+                                </small>
+                              )}
+                            </div>
+                          )}
+                        </Field>
+                      </div>
                     </ModalBody>
                     <ModalFooter>
                       <Button
                         color="primary"
                         type="submit"
-                        isLoading={props.isSubmitting}
+                        isLoading={submitting}
                       >
                         Update
                       </Button>

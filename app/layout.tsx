@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { Providers } from "@/app/providers";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 
 import "@/styles/globals.css";
 
@@ -30,8 +30,8 @@ export default function RootLayout({
     <html lang="en" className={montserrat.className} data-theme="light">
       <body>
         <Providers>
-          {children}
           <Toaster position="top-center" />
+          {children}
         </Providers>
       </body>
     </html>

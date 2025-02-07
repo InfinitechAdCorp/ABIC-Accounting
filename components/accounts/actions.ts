@@ -3,11 +3,11 @@
 import prisma from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { ActionResponse } from "@/components/globals/types";
-import {
-  create as createSchema,
-} from "@/components/accounts/schemas";
+import { create as createSchema } from "@/components/accounts/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
+import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
 export const getAll = async () => {
   let accounts = [];
@@ -31,14 +31,17 @@ export const getAll = async () => {
   return response;
 };
 
-export const get = async (accountID: string) => {
+export const get = async () => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value;
+
   let account;
 
   try {
     account = await prisma.account.findUnique({
       where: {
-        id: accountID
-      }
+        id: accountID,
+      },
     });
   } catch {
     const response = {
@@ -78,6 +81,7 @@ export const create = async (values: Prisma.AccountCreateInput) => {
       data: {
         name: values.name,
         transaction_history_access: values.transaction_history_access,
+        income_expenses_access: values.income_expenses_access,
         collection_monitoring_access: values.collection_monitoring_access,
       },
     });
@@ -86,6 +90,7 @@ export const create = async (values: Prisma.AccountCreateInput) => {
     return response;
   }
 
+  revalidatePath("/accounts");
   const response: ActionResponse = { code: 200, message: "Added Account" };
   return response;
 };

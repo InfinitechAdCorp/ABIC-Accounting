@@ -1,14 +1,11 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
-import { Card, CardBody } from "@nextui-org/react";
+import React from "react";
+import { get as getAccount } from "@/components/accounts/actions";
 import { getCounts } from "@/components/dashboard/actions";
+import Navbar from "@/components/globals/navbar";
+import CountCard from "@/components/dashboard/countCard";
 import { GrTransaction } from "react-icons/gr";
 import { FaUsers, FaFileSignature } from "react-icons/fa6";
-import Navbar from "@/components/globals/navbar";
-import { useRouter } from "next/navigation";
-
-export const dynamic = "force-dynamic";
+import { Account } from "@prisma/client";
 
 export type Counts = {
   transactionClients: number;
@@ -16,99 +13,38 @@ export type Counts = {
   collections: number;
 };
 
-const Dashboard = () => {
-  const router = useRouter();
-  const [accountID, setAccountID] = useState("");
-
-  const [counts, setCounts] = useState<Counts>();
-
-  useEffect(() => {
-    setAccountID(sessionStorage.getItem("accountID") as string);
-  }, []);
-
-  useEffect(() => {
-    const fetchCounts = async () => {
-      const response = await getCounts(accountID);
-      setCounts(response.counts);
-    };
-
-    fetchCounts();
-  }, [accountID]);
+const Dashboard = async () => {
+  const { account } = await getAccount();
+  const { counts } = await getCounts();
 
   return (
     <>
-      <Navbar />
+      <Navbar account={account as Account} />
 
       <div className="m-5 md:mx-7 xl:mx-14 2xl:mx-60">
         <div className="text-center">
-          <h1 className="font-bold text-2xl mb-5">Dashboard</h1>
+          <h1 className="font-bold text-2xl mb-5">DASHBOARD</h1>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 px-5 lg:px-24 xl:px-60 gap-3 mb-3">
-          <Card
-            className="cursor-pointer"
-            title="View Clients"
-            isPressable
-            isHoverable
-            onPress={() => {
-              router.push("/transaction-clients");
-            }}
-          >
-            <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
-              <div className="flex justify-center items-center">
-                <FaUsers size={56} />
-              </div>
-
-              <div className="flex flex-col justify-center items-center">
-                <h1 className="font-extrabold text-3xl">
-                  {counts?.transactionClients}
-                </h1>
-                <h4 className="text-neutral-500">Clients</h4>
-              </div>
-            </CardBody>
-          </Card>
-
-          <Card
-            className="cursor-pointer"
-            title="View Transactions"
-            isPressable
-            isHoverable
-            onPress={() => router.push("/transactions")}
-          >
-            <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
-              <div className="flex justify-center items-center">
-                <GrTransaction size={56} />
-              </div>
-
-              <div className="flex flex-col justify-center items-center">
-                <h1 className="font-extrabold text-3xl">
-                  {counts?.transactions}
-                </h1>
-                <h4 className="text-neutral-500">Transactions</h4>
-              </div>
-            </CardBody>
-          </Card>
-
-          <Card
-            className="cursor-pointer"
-            title="View Collections"
-            isPressable
-            isHoverable
-            onPress={() => router.push("/collections")}
-          >
-            <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
-              <div className="flex justify-center items-center">
-                <FaFileSignature size={56} />
-              </div>
-
-              <div className="flex flex-col justify-center items-center">
-                <h1 className="font-extrabold text-3xl">
-                  {counts?.collections}
-                </h1>
-                <h4 className="text-neutral-500">Collections</h4>
-              </div>
-            </CardBody>
-          </Card>
+          <CountCard
+            Icon={<FaUsers size={56} />}
+            model="Clients"
+            link="/transaction-history/clients"
+            count={counts.transactionClients}
+          ></CountCard>
+          <CountCard
+            Icon={<GrTransaction size={56} />}
+            model="Transactions"
+            link="/transaction-history/transactions"
+            count={counts.transactions}
+          ></CountCard>
+          <CountCard
+            Icon={<FaFileSignature size={56} />}
+            model="Collections"
+            link="/collection-monitoring/collections"
+            count={counts.collections}
+          ></CountCard>
         </div>
       </div>
     </>

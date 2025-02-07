@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -10,28 +10,31 @@ import {
   Button,
   useDisclosure,
   Input,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { create as createSchema } from "@/components/transactionHistory/transactionClients/schemas";
-import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
+import { Formik, Form, Field, FieldProps } from "formik";
 import { create as createAction } from "@/components/transactionHistory/transactionClients/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
 
+
 const CreateModal = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
     name: "",
-    starting_balance: "",
   };
 
   const onSubmit = async (
-    values: Prisma.AccountCreateInput,
+    values: Prisma.TransactionClientCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    createAction(values).then((response) =>
-      handlePostSubmit(response, actions, onClose)
-    );
+    setSubmitting(true);
+    createAction(values).then((response) => {
+      setSubmitting(false);
+      handlePostSubmit(response, actions, onClose);
+    });
   };
 
   return (
@@ -49,7 +52,7 @@ const CreateModal = () => {
                 validationSchema={createSchema}
                 onSubmit={onSubmit}
               >
-                {(props: FormikProps<any>) => (
+                {() => (
                   <Form>
                     <ModalHeader>Add Client</ModalHeader>
                     <ModalBody>
@@ -73,33 +76,12 @@ const CreateModal = () => {
                           </div>
                         )}
                       </Field>
-
-                      <Field name="starting_balance">
-                        {({ field, meta }: FieldProps) => (
-                          <div>
-                            <Input
-                              {...field}
-                              type="text"
-                              size="md"
-                              variant="bordered"
-                              label="Starting Balance"
-                              labelPlacement="outside"
-                              placeholder="Enter Starting Balance"
-                            />
-                            {meta.touched && meta.error && (
-                              <small className="text-red-500">
-                                {meta.error}
-                              </small>
-                            )}
-                          </div>
-                        )}
-                      </Field>
                     </ModalBody>
                     <ModalFooter>
                       <Button
                         color="primary"
                         type="submit"
-                        isLoading={props.isSubmitting}
+                        isLoading={submitting}
                       >
                         Save
                       </Button>

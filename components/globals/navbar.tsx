@@ -1,52 +1,27 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useRouter, usePathname } from "next/navigation";
-import toast from "react-hot-toast";
+import LogoutBtn from "@/components/globals/logoutBtn";
+import AccountsBtn from "@/components/globals/accountsBtn";
 import { Account } from "@prisma/client";
-import { get } from "@/components/accounts/actions";
 
-const Navbar = () => {
+type Props = {
+  account: Account;
+};
+
+const Navbar = ({ account }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [accountID, setAccountID] = useState("");
-  const [account, setAccount] = useState<Account | null>();
 
-  const isActive = (hrefs: string[]) => hrefs.includes(pathname);
-
-  const logout = () => {
-    setIsLoggedIn(false);
-    toast.success("Logged Out");
-  };
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      sessionStorage.clear();
-    }
-  }, [isLoggedIn]);
-
-  useEffect(() => {
-    setAccountID(sessionStorage.getItem("accountID") as string);
-  }, []);
-
-  useEffect(() => {
-    if (accountID) {
-      const fetchAccount = async () => {
-        const response = await get(accountID);
-        setAccount(response.account);
-      };
-
-      fetchAccount();
-    }
-  }, [accountID]);
+  const isActive = (url: string) => pathname.startsWith(url);
 
   return (
     <>
@@ -55,7 +30,7 @@ const Navbar = () => {
           <Link href="/dashboard" className="text-center">
             <h3
               className={`text-sm md:text-base text-white cursor-pointer ${
-                isActive(["/dashboard"]) ? "font-black" : "font-semibold"
+                isActive("/dashboard") ? "font-black" : "font-semibold"
               }`}
             >
               Dashboard
@@ -71,7 +46,7 @@ const Navbar = () => {
               <DropdownTrigger className="text-center">
                 <h3
                   className={`text-sm md:text-base text-white cursor-pointer ${
-                    isActive(["/transaction-clients", "/transactions"])
+                    isActive("/transaction-history")
                       ? "font-black"
                       : "font-semibold"
                   }`}
@@ -83,14 +58,59 @@ const Navbar = () => {
 
               <DropdownMenu className="text-center">
                 <DropdownItem
-                  onPress={() => router.push("/transaction-clients")}
-                  key="Transaction Clients"
+                  onPress={() =>
+                    router.push("/transaction-history/clients")
+                  }
+                  key="Clients"
+                  textValue="Clients"
                 >
                   <h3 className="font-semibold">Clients</h3>
                 </DropdownItem>
                 <DropdownItem
-                  onPress={() => router.push("/transactions")}
+                  onPress={() =>
+                    router.push("/transaction-history/transactions")
+                  }
                   key="Transactions"
+                  textValue="Transactions"
+                >
+                  <h3 className="font-semibold">Transactions</h3>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          )}
+
+          {account?.income_expenses_access && (
+            <Dropdown
+              classNames={{
+                content: "min-w-0",
+              }}
+            >
+              <DropdownTrigger className="text-center">
+                <h3
+                  className={`text-sm md:text-base text-white cursor-pointer ${
+                    isActive("/income-expenses")
+                      ? "font-black"
+                      : "font-semibold"
+                  }`}
+                >
+                  <span className="hidden lg:inline">Income & Expenses</span>
+                  <span className="inline lg:hidden">Income & Expenses</span>
+                </h3>
+              </DropdownTrigger>
+              <DropdownMenu className="text-center">
+                <DropdownItem
+                  onPress={() => {
+                    router.push("/income-expenses/clients");
+                  }}
+                  key="Clients"
+                  textValue="Clients"
+                >
+                  <h3 className="font-semibold">Clients</h3>
+                </DropdownItem>
+                <DropdownItem
+                  onPress={() => router.push("/income-expenses/transactions")}
+                  key="Transactions"
+                  textValue="Transactions"
                 >
                   <h3 className="font-semibold">Transactions</h3>
                 </DropdownItem>
@@ -107,7 +127,7 @@ const Navbar = () => {
               <DropdownTrigger className="text-center">
                 <h3
                   className={`text-sm md:text-base text-white cursor-pointer ${
-                    isActive(["/collection-clients", "/collections"])
+                    isActive("/collection-monitoring")
                       ? "font-black"
                       : "font-semibold"
                   }`}
@@ -120,14 +140,20 @@ const Navbar = () => {
               </DropdownTrigger>
               <DropdownMenu className="text-center">
                 <DropdownItem
-                  onPress={() => router.push("/collection-clients")}
-                  key="Collection Clients"
+                  onPress={() => {
+                    router.push("/collection-monitoring/clients");
+                  }}
+                  key="Clients"
+                  textValue="Clients"
                 >
                   <h3 className="font-semibold">Clients</h3>
                 </DropdownItem>
                 <DropdownItem
-                  onPress={() => router.push("/collections")}
+                  onPress={() =>
+                    router.push("/collection-monitoring/collections")
+                  }
                   key="Collections"
+                  textValue="Collections"
                 >
                   <h3 className="font-semibold">Collections</h3>
                 </DropdownItem>
@@ -136,45 +162,56 @@ const Navbar = () => {
           )}
         </div>
         <div className="flex justify-end gap-4">
-  <Dropdown classNames={{ content: "min-w-0" }}>
-    <DropdownTrigger className="text-center">
-      <h3 className={`text-sm md:text-base text-white cursor-pointer ${isActive(["/tools/loancalculator", "/tools/currencyconverter", "/tools/taxcomputation","/tools/acknowledgementreceipt","/tools/billingstatement"]) ? "font-black" : "font-semibold"}`}>
-        <span className="hidden lg:inline">Tools</span>
-        <span className="inline lg:hidden">More</span>
-      </h3>
-    </DropdownTrigger>
-    <DropdownMenu className="text-center">
-      <DropdownItem onPress={() => router.push("/tools/loancalculator")} key="LoanCalculator">
-        <h3 className="font-semibold">Loan Calculator</h3>
-      </DropdownItem>
-      <DropdownItem onPress={() => router.push("/tools/currencyconverter")} key="CurrencyConverter">
-        <h3 className="font-semibold">Currency Converter</h3>
-      </DropdownItem>
-      <DropdownItem onPress={() => router.push("/tools/taxcomputation")} key="TaxComputation">
-        <h3 className="font-semibold">Tax Computation</h3>
-      </DropdownItem>
-      <DropdownItem onPress={() => router.push("/tools/acknowledgementreceipt")} key="AcknowledgementReceipt">
-        <h3 className="font-semibold">Acknowledgement</h3>
-      </DropdownItem>
-      <DropdownItem onPress={() => router.push("/tools/billingstatement")} key="BillingStatement">
-        <h3 className="font-semibold">Billing Statement</h3>
-      </DropdownItem>
-    </DropdownMenu>
-  </Dropdown>
-  <Link href="/" className="text-end">
-            <h3
-              className={
-                "text-sm md:text-base font-semibold text-white cursor-pointer"
-              }
-              onClick={logout}
-            >
-              Logout
-            </h3>
-          </Link>
-  
-</div>
+          <Dropdown classNames={{ content: "min-w-0" }}>
+            <DropdownTrigger className="text-center">
+              <h3
+                className={`text-sm md:text-base text-white cursor-pointer ${
+                  isActive("/tools")
+                    ? "font-black"
+                    : "font-semibold"
+                }`}
+              >
+                <span className="hidden lg:inline">Tools</span>
+                <span className="inline lg:hidden">More</span>
+              </h3>
+            </DropdownTrigger>
+            <DropdownMenu className="text-center">
+              <DropdownItem
+                onPress={() => router.push("/tools/loan-calculator")}
+                key="Loan Calculator"
+              >
+                <h3 className="font-semibold">Loan Calculator</h3>
+              </DropdownItem>
+              <DropdownItem
+                onPress={() => router.push("/tools/currency-converter")}
+                key="Currency Converter"
+              >
+                <h3 className="font-semibold">Currency Converter</h3>
+              </DropdownItem>
+              <DropdownItem
+                onPress={() => router.push("/tools/tax-computation")}
+                key="Tax Computation"
+              >
+                <h3 className="font-semibold">Tax Computation</h3>
+              </DropdownItem>
+              <DropdownItem
+                onPress={() => router.push("/tools/acknowledgement-receipt")}
+                key="Acknowledgement Receipt"
+              >
+                <h3 className="font-semibold">Acknowledgement</h3>
+              </DropdownItem>
+              <DropdownItem
+                onPress={() => router.push("/tools/billing-statement")}
+                key="Billing Statement"
+              >
+                <h3 className="font-semibold">Billing Statement</h3>
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
 
-        
+          <AccountsBtn />
+          <LogoutBtn />
+        </div>
       </div>
     </>
   );

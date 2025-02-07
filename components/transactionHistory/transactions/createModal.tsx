@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -14,8 +14,8 @@ import {
   Select,
   SelectItem,
   Textarea,
-} from "@nextui-org/react";
-import { FormattedAccount } from "@/components/transactionHistory/types";
+} from "@heroui/react";
+import { FormattedTransactionClient } from "@/components/transactionHistory/types";
 import { create as createSchema } from "@/components/transactionHistory/transactions/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
 import { create as createAction } from "@/components/transactionHistory/transactions/actions";
@@ -27,29 +27,39 @@ import {
 } from "@/components/globals/utils";
 
 type Props = {
-  accounts: FormattedAccount[];
+  voucher: string;
+  transactionClients: FormattedTransactionClient[];
 };
 
-const CreateModal = ({ accounts }: Props) => {
+type TransactionCreateInput = Prisma.TransactionCreateInput & {
+  proof: File;
+};
+
+const CreateModal = ({ voucher, transactionClients }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
     date: "",
-    voucher: "",
+    voucher: voucher,
     check: "",
-    account_id: "",
+    transaction_client_id: "",
     particulars: "",
     type: "",
     amount: "",
+    status: "Active",
+    proof: null,
   };
 
   const onSubmit = async (
-    values: Prisma.TransactionCreateInput,
+    values: TransactionCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    createAction(values).then((response) =>
-      handlePostSubmit(response, actions, onClose)
-    );
+    setSubmitting(true);
+    createAction(values).then((response) => {
+      setSubmitting(false);
+      handlePostSubmit(response, actions, onClose);
+    });
   };
 
   return (
@@ -71,6 +81,8 @@ const CreateModal = ({ accounts }: Props) => {
                   <Form>
                     <ModalHeader>Add Transaction</ModalHeader>
                     <ModalBody>
+                      <Field type="hidden" name="status" />
+
                       <Field name="date">
                         {({ field, meta }: FieldProps) => (
                           <div>
@@ -83,7 +95,7 @@ const CreateModal = ({ accounts }: Props) => {
                               value={dateToDateValue(field.value)}
                               onChange={(value) => {
                                 const date = dateValueToDate(value);
-                                props.setFieldValue("date", date);
+                                props.setFieldValue(field.name, date);
                               }}
                             />
                             {meta.touched && meta.error && (
@@ -139,21 +151,21 @@ const CreateModal = ({ accounts }: Props) => {
                         </Field>
                       </div>
 
-                      <Field name="account_id">
+                      <Field name="transaction_client_id">
                         {({ field, meta }: FieldProps) => (
                           <div>
                             <Select
                               {...field}
                               size="md"
                               variant="bordered"
-                              label="Account"
+                              label="Client"
                               labelPlacement="outside"
-                              placeholder="Select Account"
-                              items={accounts}
+                              placeholder="Select Client"
+                              items={transactionClients}
                             >
-                              {(account) => (
-                                <SelectItem key={account.id}>
-                                  {account.name}
+                              {(transactionClient) => (
+                                <SelectItem key={transactionClient.id}>
+                                  {transactionClient.name}
                                 </SelectItem>
                               )}
                             </Select>
@@ -231,12 +243,43 @@ const CreateModal = ({ accounts }: Props) => {
                           )}
                         </Field>
                       </div>
+
+                      <div>
+                        <Field name="proof">
+                          {({ field, meta }: FieldProps) => (
+                            <div>
+                              <Input
+                                type="file"
+                                size="md"
+                                variant="bordered"
+                                label="Proof"
+                                labelPlacement="outside"
+                                placeholder="Enter Proof"
+                                onChange={(e) => {
+                                  if (e.target.files) {
+                                    props.setFieldValue(
+                                      field.name,
+                                      e.target.files[0]
+                                    );
+                                  }
+                                }}
+                                onBlur={field.onBlur}
+                              />
+                              {meta.touched && meta.error && (
+                                <small className="text-red-500">
+                                  {meta.error}
+                                </small>
+                              )}
+                            </div>
+                          )}
+                        </Field>
+                      </div>
                     </ModalBody>
                     <ModalFooter>
                       <Button
                         color="primary"
                         type="submit"
-                        isLoading={props.isSubmitting}
+                        isLoading={submitting}
                       >
                         Save
                       </Button>

@@ -2,7 +2,6 @@
 
 import prisma from "@/lib/db";
 import { Prisma } from "@prisma/client";
-import { revalidatePath } from "next/cache";
 import { ActionResponse } from "@/components/globals/types";
 import { addMonths, getDate, setDate } from "date-fns";
 import {
@@ -13,24 +12,42 @@ import {
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
+import { formatCollections } from "@/components/globals/utils";
+import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
+import { Destroy } from "@/components/globals/types";
 
-type CollectionCreateInput = Prisma.CollectionCreateInput & { collection_client_id?: string };
+type CollectionCreateInput = Prisma.CollectionCreateInput & {
+  collection_client_id?: string;
+};
 
 export const getAll = async () => {
-  let collections = [];
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value;
+
+  let collections;
+
   try {
     collections = await prisma.collection.findMany({
-      include: { collection_client: true },
+      where: {
+        collection_client: {
+          account_id: accountID,
+        },
+      },
+      include: {
+        collection_client: true,
+      },
     });
   } catch {
     const response = {
       code: 500,
       message: "Server Error",
-      contracts: [],
+      collections: [],
     };
     return response;
   }
 
+  collections = formatCollections(collections || []);
   const response = {
     code: 200,
     message: "Fetched Collections",
@@ -63,8 +80,8 @@ export const create = async (values: CollectionCreateInput) => {
         location: values.location,
         start: new Date(new Date(values.start).setUTCHours(0, 0, 0, 0)),
         end: new Date(new Date(values.end).setUTCHours(0, 0, 0, 0)),
-        advance: values.advance,
-        deposit: values.deposit,
+        advance: Number(values.advance),
+        deposit: Number(values.deposit),
         tenant_price: values.tenant_price,
         owner_income: values.owner_income,
         abic_income: values.abic_income,
@@ -72,11 +89,14 @@ export const create = async (values: CollectionCreateInput) => {
       },
     });
   } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+    const response: ActionResponse = {
+      code: 500,
+      message: "Server Error",
+    };
     return response;
   }
 
-  revalidatePath("/collections");
+  revalidatePath("/collection-monitoring/collections");
   const response: ActionResponse = { code: 200, message: "Added Collection" };
   return response;
 };
@@ -119,12 +139,14 @@ export const update = async (values: CollectionCreateInput) => {
     return response;
   }
 
-  revalidatePath("/collections");
+  revalidatePath("/collection-monitoring/collections");
   const response: ActionResponse = { code: 200, message: "Updated Collection" };
   return response;
 };
 
-export const destroy = async (values: { id: string }) => {
+export const destroy = async (values: Destroy) => {
+  const session = await cookies();
+  const otp = session.get("otp")?.value;
   const schema = destroySchema;
 
   try {
@@ -140,16 +162,27 @@ export const destroy = async (values: { id: string }) => {
     return response;
   }
 
-  try {
-    await prisma.collection.delete({
-      where: { id: values.id },
-    });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  if (otp == values.otp) {
+    try {
+      await prisma.collection.delete({
+        where: { id: values.id },
+      });
+    } catch {
+      const response: ActionResponse = { code: 500, message: "Server Error" };
+      return response;
+    }
+
+    session.delete("otp");
+  } else {
+    const response: ActionResponse = {
+      code: 401,
+      message: "Invalid Token",
+    };
     return response;
   }
 
-  revalidatePath("/collections");
+
+  revalidatePath("/collection-monitoring/collections");
   const response: ActionResponse = { code: 200, message: "Deleted Collection" };
   return response;
 };
@@ -187,7 +220,7 @@ export const markAsPaid = async (values: { id: string }) => {
     return response;
   }
 
-  revalidatePath("/collections");
+  revalidatePath("/collection-monitoring/collections");
   const response: ActionResponse = {
     code: 200,
     message: "Successfully Made Payment",

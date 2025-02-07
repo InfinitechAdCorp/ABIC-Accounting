@@ -6,16 +6,19 @@ const accounts: Prisma.AccountCreateInput[] = [
   {
     name: "SCB 443",
     transaction_history_access: true,
+    income_expenses_access: false,
     collection_monitoring_access: true,
   },
   {
     name: "SCB 483",
-    transaction_history_access: true,
+    transaction_history_access: false,
+    income_expenses_access: true,
     collection_monitoring_access: false,
   },
   {
     name: "SCB 202",
     transaction_history_access: true,
+    income_expenses_access: false,
     collection_monitoring_access: false,
   },
 ];
@@ -61,12 +64,13 @@ const transactions: Prisma.TransactionCreateInput[] = [
       },
     },
     date: "2025-02-25T00:00:00.000Z",
-    voucher: "5245",
+    voucher: "00001",
     check: "24837",
     particulars: "Tivoli",
     type: "Credit",
     amount: 5000.5,
     status: "Active",
+    proof: "no-image.jpg",
   },
   {
     transaction_client: {
@@ -78,12 +82,13 @@ const transactions: Prisma.TransactionCreateInput[] = [
       },
     },
     date: "2025-03-25T00:00:00.000Z",
-    voucher: "4321",
+    voucher: "00002",
     check: "76598",
     particulars: "Alea Residences",
     type: "Debit",
     amount: 3000.75,
     status: "Active",
+    proof: "no-image.jpg",
   },
   {
     transaction_client: {
@@ -95,12 +100,13 @@ const transactions: Prisma.TransactionCreateInput[] = [
       },
     },
     date: "2025-04-20T00:00:00.000Z",
-    voucher: "4256",
+    voucher: "00003",
     check: "42783",
     particulars: "Jazz Residences",
     type: "Credit",
     amount: 4000.5,
     status: "Active",
+    proof: "no-image.jpg",
   },
 ];
 

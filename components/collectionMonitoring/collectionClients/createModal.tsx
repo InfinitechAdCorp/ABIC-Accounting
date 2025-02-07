@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -10,27 +10,30 @@ import {
   Button,
   useDisclosure,
   Input,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { create as createSchema } from "@/components/collectionMonitoring/collectionClients/schemas";
-import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
+import { Formik, Form, Field, FieldProps } from "formik";
 import { create as createAction } from "@/components/collectionMonitoring/collectionClients/actions";
 import { Prisma } from "@prisma/client";
 import { handlePostSubmit } from "@/components/globals/utils";
 
 const CreateModal = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
     name: "",
   };
 
   const onSubmit = async (
-    values: Prisma.ClientCreateInput,
+    values: Prisma.CollectionClientCreateInput,
     actions: { resetForm: () => void }
   ) => {
-    createAction(values).then((response) =>
-      handlePostSubmit(response, actions, onClose)
-    );
+    setSubmitting(true);
+    createAction(values).then((response) => {
+      setSubmitting(false);
+      handlePostSubmit(response, actions, onClose);
+    });
   };
 
   return (
@@ -48,7 +51,7 @@ const CreateModal = () => {
                 validationSchema={createSchema}
                 onSubmit={onSubmit}
               >
-                {(props: FormikProps<Prisma.ClientCreateInput>) => (
+                {() => (
                   <Form>
                     <ModalHeader>Add Client</ModalHeader>
                     <ModalBody>
@@ -77,7 +80,7 @@ const CreateModal = () => {
                       <Button
                         color="primary"
                         type="submit"
-                        isLoading={props.isSubmitting}
+                        isLoading={submitting}
                       >
                         Save
                       </Button>

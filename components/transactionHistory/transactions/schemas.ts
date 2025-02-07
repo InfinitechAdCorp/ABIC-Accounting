@@ -15,6 +15,7 @@ export const create = Yup.object().shape({
     .typeError("Amount must be a number")
     .moreThan(-1, "Amount must be a positive number"),
   status: Yup.string().required("Status is a required field"),
+  proof: Yup.mixed().required("Proof is a required field")
 });
 
 export const update = Yup.object().shape({
@@ -33,8 +34,10 @@ export const update = Yup.object().shape({
     .typeError("Amount must be a number")
     .moreThan(-1, "Amount must be a positive number"),
   status: Yup.string().required("Status is a required field"),
+  proof: Yup.mixed().nullable()
 });
 
-export const cancel = Yup.object().shape({
+export const changeStatus = Yup.object().shape({
   id: Yup.string().required("ID is a required field"),
+  status: Yup.string().required("Status is a required field"),
 });
