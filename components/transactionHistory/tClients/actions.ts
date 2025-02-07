@@ -6,14 +6,17 @@ import { ActionResponse } from "@/components/globals/types";
 import {
   create as createSchema,
   update as updateSchema,
-} from "@/components/transactionHistory/transactionClients/schemas";
+} from "@/components/transactionHistory/tClients/schemas";
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
-import { formatTransactionClients } from "@/components/globals/utils";
+import { formatTClients } from "@/components/globals/utils";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { Destroy } from "@/components/globals/types";
+
+const model = "Client";
+const url = "/transaction-history/clients";
 
 export const getAll = async () => {
   const session = await cookies();
@@ -25,7 +28,7 @@ export const getAll = async () => {
     account = await prisma.account.findUnique({
       where: { id: accountID },
       include: {
-        transaction_clients: {
+        t_clients: {
           include: {
             transactions: {
               orderBy: {
@@ -40,29 +43,29 @@ export const getAll = async () => {
     const response = {
       code: 500,
       message: "Server Error",
-      transactionClients: [],
+      records: [],
       accountID: accountID,
     };
     return response;
   }
 
-  const transactionClients = formatTransactionClients(
-    account?.transaction_clients || []
+  const records = formatTClients(
+    account?.t_clients || []
   );
   const response = {
     code: 200,
-    message: "Fetched Clients",
-    transactionClients: transactionClients,
+    message: `Fetched ${model}s`,
+    records: records,
     accountID: accountID,
   };
   return response;
 };
 
 export const get = async (id: string) => {
-  let transactionClient;
+  let record;
 
   try {
-    transactionClient = await prisma.transactionClient.findUnique({
+    record = await prisma.tClient.findUnique({
       where: { id: id },
       include: {
         transactions: {
@@ -76,23 +79,23 @@ export const get = async (id: string) => {
     const response = {
       code: 500,
       message: "Server Error",
-      transactionClient: null,
+      record: null,
     };
     return response;
   }
 
-  const formattedTransactionClient = formatTransactionClients([
-    transactionClient,
+  record = formatTClients([
+    record,
   ])[0];
   const response = {
     code: 200,
-    message: "Fetched Client",
-    transactionClient: formattedTransactionClient,
+    message: `Fetched ${model}`,
+    record: record,
   };
   return response;
 };
 
-export const create = async (values: Prisma.TransactionClientCreateInput) => {
+export const create = async (values: Prisma.TClientCreateInput) => {
   const session = await cookies();
   const accountID = session.get("accountID")?.value;
 
@@ -100,19 +103,19 @@ export const create = async (values: Prisma.TransactionClientCreateInput) => {
 
   try {
     await schema.validate(values, { abortEarly: false });
-  } catch (errors) {
-    const formattedErrors = formatErrors(errors as Yup.ValidationError);
+  } catch (ufErrors) {
+    const errors = formatErrors(ufErrors as Yup.ValidationError);
 
     const response = {
       code: 429,
       message: "Validation Error",
-      errors: formattedErrors,
+      errors: errors,
     };
     return response;
   }
 
   try {
-    await prisma.transactionClient.create({
+    await prisma.tClient.create({
       data: {
         account: { connect: { id: accountID } },
         name: values.name,
@@ -123,12 +126,12 @@ export const create = async (values: Prisma.TransactionClientCreateInput) => {
     return response;
   }
 
-  revalidatePath("/transaction-history/transaction-clients");
-  const response = { code: 200, message: "Added Client" };
+  revalidatePath(url);
+  const response = { code: 200, message: `Added ${model}` };
   return response;
 };
 
-export const update = async (values: Prisma.TransactionClientCreateInput) => {
+export const update = async (values: Prisma.TClientCreateInput) => {
   const session = await cookies();
   const accountID = session.get("accountID")?.value;
 
@@ -136,19 +139,19 @@ export const update = async (values: Prisma.TransactionClientCreateInput) => {
 
   try {
     await schema.validate(values, { abortEarly: false });
-  } catch (errors) {
-    const formattedErrors = formatErrors(errors as Yup.ValidationError);
+  } catch (ufErrors) {
+    const errors = formatErrors(ufErrors as Yup.ValidationError);
 
     const response: ActionResponse = {
       code: 429,
       message: "Validation Error",
-      errors: formattedErrors,
+      errors: errors,
     };
     return response;
   }
 
   try {
-    await prisma.transactionClient.update({
+    await prisma.tClient.update({
       where: {
         id: values.id,
       },
@@ -162,8 +165,8 @@ export const update = async (values: Prisma.TransactionClientCreateInput) => {
     return response;
   }
 
-  revalidatePath("/transaction-history/transaction-clients");
-  const response: ActionResponse = { code: 200, message: "Updated Client" };
+  revalidatePath(url);
+  const response: ActionResponse = { code: 200, message: `Updated ${model}` };
   return response;
 };
 
@@ -174,20 +177,20 @@ export const destroy = async (values: Destroy) => {
 
   try {
     await schema.validate(values, { abortEarly: false });
-  } catch (errors) {
-    const formattedErrors = formatErrors(errors as Yup.ValidationError);
+  } catch (ufErrors) {
+    const errors = formatErrors(ufErrors as Yup.ValidationError);
 
     const response: ActionResponse = {
       code: 429,
       message: "Validation Error",
-      errors: formattedErrors,
+      errors: errors,
     };
     return response;
   }
 
   if (otp == values.otp) {
     try {
-      await prisma.transactionClient.delete({
+      await prisma.tClient.delete({
         where: { id: values.id },
       });
     } catch {
@@ -204,10 +207,10 @@ export const destroy = async (values: Destroy) => {
     return response;
   }
 
-  revalidatePath("/transaction-history/transaction-clients");
+  revalidatePath(url);
   const response: ActionResponse = {
     code: 200,
-    message: "Deleted Client",
+    message: `Deleted ${model}`,
   };
   return response;
 };

@@ -9,12 +9,12 @@ import {
   Input,
   Button,
 } from "@heroui/react";
-import { login as loginAction } from "@/components/globals/auth";
+import { login as action } from "@/components/globals/auth";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Formik, Form, Field, FieldProps } from "formik";
-import { login as loginSchema } from "@/components/globals/schemas";
+import { login as validationSchema } from "@/components/globals/schemas";
 import { Login } from "@/components/globals/types";
 
 const LoginForm = () => {
@@ -31,14 +31,15 @@ const LoginForm = () => {
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
-    loginAction(values).then((response) => {
+    action(values).then(({ isValid, message }) => {
       setSubmitting(false);
       actions.resetForm();
-      if (response.isValid) {
-        toast.success(response.message);
+
+      if (isValid) {
+        toast.success(message);
         router.push("/accounts");
       } else {
-        toast.error(response.message);
+        toast.error(message);
       }
     });
   };
@@ -48,7 +49,7 @@ const LoginForm = () => {
       <Card className="m-5 md:m-7 p-5 w-[30rem]">
         <Formik
           initialValues={initialValues}
-          validationSchema={loginSchema}
+          validationSchema={validationSchema}
           onSubmit={onSubmit}
         >
           {() => (

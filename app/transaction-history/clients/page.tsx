@@ -1,27 +1,25 @@
 import React from "react";
-import { getAll as getTransactionClients } from "@/components/transactionHistory/transactionClients/actions";
+import { getAll as getTClients } from "@/components/transactionHistory/tClients/actions";
 import { getAll as getTransactions } from "@/components/transactionHistory/transactions/actions";
 import { get as getAccount } from "@/components/accounts/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
-import RenderCell from "@/components/transactionHistory/transactionClients/renderCell";
-import CreateModal from "@/components/transactionHistory/transactionClients/createModal";
-import {
-  computeBalance,
-  displayFormatTransactionClients,
-  formatNumber,
-} from "@/components/globals/utils";
+import RenderCell from "@/components/transactionHistory/tClients/renderCell";
+import CreateModal from "@/components/transactionHistory/tClients/createModal";
+import { computeBalance, formatNumber } from "@/components/globals/utils";
 import { Account } from "@prisma/client";
 import ExportBtn from "@/components/globals/exportBtn";
 
-const TransactionClients = async () => {
-  const { account } = await getAccount();
-  const { transactionClients } = await getTransactionClients();
-  const { transactions } = await getTransactions();
+const TClients = async () => {
+  const { record: account } = await getAccount();
+  const { records } = await getTClients();
+  const { records: transactions } = await getTransactions();
 
   const model = "Clients";
-  const runningBalance = computeBalance([...transactions].reverse());
+  const runningBalance = formatNumber(
+    computeBalance([...transactions].reverse())
+  );
 
   const columns = [
     { key: "name", name: "NAME" },
@@ -31,25 +29,9 @@ const TransactionClients = async () => {
     { key: "actions", name: "ACTIONS" },
   ];
 
-
-
-  const { columnNames, rows } = displayFormatTransactionClients(
-    columns.slice(0, -1),
-    transactionClients
-  );
-
-  const pdfRows = [];
-  rows.forEach((row) => {
-    pdfRows.push(Object.values(row))
-  })
-
-  console.log(transactionClients)
-  console.log(rows)
-  console.log(pdfRows)
-
   return (
     <>
-      <Navbar account={account as Account} />
+      <Navbar record={account as Account} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
@@ -59,20 +41,20 @@ const TransactionClients = async () => {
                 {model.toUpperCase()}
               </h1>
               <h1 className="text-md font-semibold mb-3">
-                RUNNING BALANCE: {formatNumber(runningBalance)}
+                RUNNING BALANCE: {runningBalance}
               </h1>
             </div>
 
             <DataTable
               model={model}
               columns={columns}
-              rows={transactionClients}
+              rows={records}
               searchKey="name"
               RenderCell={RenderCell}
             >
               <>
                 <CreateModal />
-                <ExportBtn columns={columnNames} rows={rows} />
+                <ExportBtn />
               </>
             </DataTable>
           </CardBody>
@@ -82,4 +64,4 @@ const TransactionClients = async () => {
   );
 };
 
-export default TransactionClients;
+export default TClients;

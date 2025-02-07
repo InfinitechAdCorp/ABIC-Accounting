@@ -20,24 +20,27 @@ import { Destroy } from "@/components/globals/types";
 
 type TransactionCreateInput = Prisma.TransactionCreateInput & {
   proof: File;
-  transaction_client_id?: string;
+  t_client_id?: string;
 };
+
+const model = "Transactions";
+const url = "/transaction-history/transactions";
 
 export const getAll = async () => {
   const session = await cookies();
   const accountID = session.get("accountID")?.value;
 
-  let transactions;
+  let records;
 
   try {
-    transactions = await prisma.transaction.findMany({
+    records = await prisma.transaction.findMany({
       where: {
-        transaction_client: {
+        t_client: {
           account_id: accountID,
         },
       },
       include: {
-        transaction_client: true,
+        t_client: true,
       },
       orderBy: [
         {
@@ -45,23 +48,23 @@ export const getAll = async () => {
         },
         {
           created_at: "desc",
-        }
+        },
       ],
     });
   } catch {
     const response = {
       code: 500,
       message: "Server Error",
-      transactions: [],
+      records: [],
     };
     return response;
   }
 
-  transactions = formatTransactions(transactions || []);
+  records = formatTransactions(records || []);
   const response = {
     code: 200,
-    message: "Fetched Transactions",
-    transactions: transactions,
+    message: `Fetched ${model}s`,
+    records: records,
   };
   return response;
 };
@@ -71,28 +74,28 @@ export const create = async (values: TransactionCreateInput) => {
 
   try {
     await schema.validate(values, { abortEarly: false });
-  } catch (errors) {
-    const formattedErrors = formatErrors(errors as Yup.ValidationError);
+  } catch (ufErrors) {
+    const errors = formatErrors(ufErrors as Yup.ValidationError);
 
     const response: ActionResponse = {
       code: 429,
       message: "Validation Error",
-      errors: formattedErrors,
+      errors: errors,
     };
     return response;
   }
 
   try {
-    const proof = values.proof;
-    const extension = proof.name.split(".").at(-1);
-    const proofName = `${ulid()}.${extension}`;
-    await put(proofName, proof, {
+    const file = values.proof;
+    const extension = file.name.split(".").at(-1);
+    const proof = `${ulid()}.${extension}`;
+    await put(proof, file, {
       access: "public",
     });
 
     await prisma.transaction.create({
       data: {
-        transaction_client: { connect: { id: values.transaction_client_id } },
+        t_client: { connect: { id: values.t_client_id } },
         date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
         voucher: values.voucher,
         check: values.check,
@@ -100,7 +103,7 @@ export const create = async (values: TransactionCreateInput) => {
         type: values.type,
         amount: values.amount,
         status: values.status,
-        proof: proofName,
+        proof: proof,
       },
     });
   } catch {
@@ -108,8 +111,8 @@ export const create = async (values: TransactionCreateInput) => {
     return response;
   }
 
-  revalidatePath("/transaction-history/transactions");
-  const response: ActionResponse = { code: 200, message: "Added Transaction" };
+  revalidatePath(url);
+  const response: ActionResponse = { code: 200, message: `Added ${model}` };
   return response;
 };
 
@@ -118,47 +121,47 @@ export const update = async (values: TransactionCreateInput) => {
 
   try {
     await schema.validate(values, { abortEarly: false });
-  } catch (errors) {
-    const formattedErrors = formatErrors(errors as Yup.ValidationError);
+  } catch (ufErrors) {
+    const errors = formatErrors(ufErrors as Yup.ValidationError);
 
     const response: ActionResponse = {
       code: 429,
       message: "Validation Error",
-      errors: formattedErrors,
+      errors: errors,
     };
     return response;
   }
 
   try {
-    const proof = values.proof;
-    let proofName;
+    const file = values.proof;
+    let proof;
 
-    if (proof) {
-      const transaction = await prisma.transaction.findUnique({
+    if (file) {
+      const record = await prisma.transaction.findUnique({
         where: {
           id: values.id,
         },
       });
-      const oldProofName = transaction?.proof;
+      const old = record?.proof;
 
       const { blobs } = await list();
       const blob = blobs.find((blob) => {
-        return oldProofName == blob.pathname;
+        return old == blob.pathname;
       });
 
       if (blob) {
         await del(blob.url || "");
       }
 
-      const extension = proof.name.split(".").at(-1);
-      proofName = `${ulid()}.${extension}`;
-      await put(proofName, proof, {
+      const extension = file.name.split(".").at(-1);
+      proof = `${ulid()}.${extension}`;
+      await put(proof, file, {
         access: "public",
       });
     }
 
     const data = {
-      transaction_client: { connect: { id: values.transaction_client_id } },
+      t_client: { connect: { id: values.t_client_id } },
       date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
       voucher: values.voucher,
       check: values.check,
@@ -166,10 +169,10 @@ export const update = async (values: TransactionCreateInput) => {
       type: values.type,
       amount: values.amount,
       status: values.status,
-      proof: proofName,
+      proof: proof,
     };
 
-    if (proofName) {
+    if (proof) {
       delete data.proof;
     }
 
@@ -182,10 +185,10 @@ export const update = async (values: TransactionCreateInput) => {
     return response;
   }
 
-  revalidatePath("/transaction-history/transactions");
+  revalidatePath(url);
   const response: ActionResponse = {
     code: 200,
-    message: "Updated Transaction",
+    message: `Updated ${model}`,
   };
   return response;
 };
@@ -197,29 +200,29 @@ export const destroy = async (values: Destroy) => {
 
   try {
     await schema.validate(values, { abortEarly: false });
-  } catch (errors) {
-    const formattedErrors = formatErrors(errors as Yup.ValidationError);
+  } catch (ufErrors) {
+    const errors = formatErrors(ufErrors as Yup.ValidationError);
 
     const response: ActionResponse = {
       code: 429,
       message: "Validation Error",
-      errors: formattedErrors,
+      errors: errors,
     };
     return response;
   }
 
   if (otp == values.otp) {
     try {
-      const transaction = await prisma.transaction.findUnique({
+      const record = await prisma.transaction.findUnique({
         where: {
           id: values.id,
         },
       });
-      const proofName = transaction?.proof;
+      const proof = record?.proof;
 
       const { blobs } = await list();
       const blob = blobs.find((blob) => {
-        return proofName == blob.pathname;
+        return proof == blob.pathname;
       });
 
       if (blob) {
@@ -247,10 +250,10 @@ export const destroy = async (values: Destroy) => {
     return response;
   }
 
-  revalidatePath("/transaction-history/transactions");
+  revalidatePath(url);
   const response: ActionResponse = {
     code: 200,
-    message: "Deleted Transaction",
+    message: `Deleted ${model}`,
   };
   return response;
 };
@@ -260,13 +263,13 @@ export const changeStatus = async (values: { id: string; status: string }) => {
 
   try {
     await schema.validate(values, { abortEarly: false });
-  } catch (errors) {
-    const formattedErrors = formatErrors(errors as Yup.ValidationError);
+  } catch (ufErrors) {
+    const errors = formatErrors(ufErrors as Yup.ValidationError);
 
     const response: ActionResponse = {
       code: 429,
       message: "Validation Error",
-      errors: formattedErrors,
+      errors: errors,
     };
     return response;
   }
@@ -283,12 +286,10 @@ export const changeStatus = async (values: { id: string; status: string }) => {
     return response;
   }
 
-  revalidatePath("/transaction-history/transactions");
+  revalidatePath(url);
   const response: ActionResponse = {
     code: 200,
-    message: `${
-      values.status == "Active" ? "Restored" : "Cancelled"
-    } Transaction`,
+    message: `${values.status == "Active" ? "Restored" : "Cancelled"} ${model}`,
   };
   return response;
 };
