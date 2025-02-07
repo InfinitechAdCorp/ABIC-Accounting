@@ -22,7 +22,7 @@ import { Destroy } from "@/components/globals/types";
 const model = "Client";
 const url = "/transaction-history/clients";
 
-export const formatTClients = (ufRecords: TClientWithTransactions[]) => {
+export const format = async (ufRecords: TClientWithTransactions[]) => {
   const records: TClient[] = [];
 
   if (ufRecords) {
@@ -80,7 +80,7 @@ export const getAll = async () => {
     return response;
   }
 
-  const records = formatTClients(account?.t_clients || []);
+  const records = await format(account?.t_clients || []);
   const response = {
     code: 200,
     message: `Fetched ${model}s`,
@@ -113,7 +113,7 @@ export const get = async (id: string) => {
     return response;
   }
 
-  record = formatTClients([record])[0];
+  record = await format([record])[0];
   const response = {
     code: 200,
     message: `Fetched ${model}`,

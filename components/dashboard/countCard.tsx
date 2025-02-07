@@ -27,7 +27,7 @@ const CountCard = ({ icon, model, url, count }: Props) => {
       >
         <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
           <div className="flex justify-center items-center">
-            <icon.type {...icon.props} />
+            {icon}
           </div>
 
           <div className="flex flex-col justify-center items-center">

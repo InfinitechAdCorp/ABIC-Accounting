@@ -14,7 +14,6 @@ import {
   CClient,
   CClientWithCollections,
   Collection,
-  CollectionWithCClient,
 } from "@/components/collectionMonitoring/types";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
@@ -23,7 +22,7 @@ import { Destroy } from "@/components/globals/types";
 const model = "Client";
 const url = "/collection-monitoring/clients";
 
-export const formatCClients = (ufRecords: CClientWithCollections[]) => {
+export const format = async (ufRecords: CClientWithCollections[]) => {
   const records: CClient[] = [];
 
   if (ufRecords) {
@@ -52,21 +51,39 @@ export const formatCClients = (ufRecords: CClientWithCollections[]) => {
   return records;
 };
 
-// export const tFormatCClients = (
-//   columns: { key: string; name: string }[],
-//   ufRecords: CClient
-// ) => {
-//   const records: {
-//     name: string,
-//     collections: string,
-//   }[] = [];
+export const tableFormat = async (
+  columns: { key: string; name: string }[],
+  records: CClient[],
+) => {
+  const rows: {
+    name: string,
+    collections: string,
+  }[] = [];
 
-//   ufRecords.forEach((ufRecord) => {
-//     columns.forEach((column) => {
+  records.forEach((record) => {
+    const row = {};
 
-//     })
-//   })
-// };
+    columns.forEach((column) => {
+      const key = column.key
+      let value;
+
+      switch (key) {
+        case "collections": 
+          value = record.collections?.length
+          break;
+        default: 
+          value = record[key]
+          break;
+      }
+
+      row[key] = value;
+    })
+
+    rows.push(row)
+  })
+
+  return rows;
+};
 
 export const getAll = async () => {
   const session = await cookies();
@@ -94,7 +111,7 @@ export const getAll = async () => {
     return response;
   }
 
-  const records = formatCClients(account?.c_clients || []);
+  const records = await format(account?.c_clients || []);
   const response = {
     code: 200,
     message: `Fetched ${model}s`,
@@ -122,7 +139,7 @@ export const get = async (id: string) => {
     return response;
   }
 
-  record = formatCClients([record])[0];
+  record = await format([record])[0];
   const response = {
     code: 200,
     message: `Fetched ${model}`,

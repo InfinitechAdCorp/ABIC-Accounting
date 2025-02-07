@@ -1,12 +1,6 @@
 import {
   Transaction,
 } from "@/components/transactionHistory/types";
-import {
-  CClient,
-  CClientWithCollections,
-  Collection,
-  CollectionWithCClient,
-} from "@/components/collectionMonitoring/types";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { ActionResponse } from "@/components/globals/types";
@@ -31,37 +25,6 @@ export const onPostSubmit = (
     }
     toast.error(response.message);
   }
-};
-
-
-
-
-
-
-export const formatCollections = (ufRecords: CollectionWithCClient[]) => {
-  const records: Collection[] = [];
-
-  ufRecords.forEach((ufRecord) => {
-    const cClient = ufRecord.c_client;
-
-    const record = {
-      ...ufRecord,
-      c_client: {
-        ...cClient,
-        id: cClient?.id as string,
-        account_id: cClient?.account_id as string,
-        name: cClient?.name as string,
-      },
-      c_client_id: ufRecord.c_client_id as string,
-      tenant_price: ufRecord.tenant_price?.toNumber() as number,
-      owner_income: ufRecord.owner_income?.toNumber() as number,
-      abic_income: ufRecord.abic_income?.toNumber() as number,
-    };
-
-    records.push(record);
-  });
-
-  return records;
 };
 
 // Formatters

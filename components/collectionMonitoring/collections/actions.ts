@@ -12,7 +12,10 @@ import {
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
-import { formatCollections } from "@/components/globals/utils";
+import {
+  Collection,
+  CollectionWithCClient,
+} from "@/components/collectionMonitoring/types";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { Destroy } from "@/components/globals/types";
@@ -23,6 +26,32 @@ type CollectionCreateInput = Prisma.CollectionCreateInput & {
 
 const model = "Collection";
 const url = "/collection-monitoring/collections";
+
+export const format = async (ufRecords: CollectionWithCClient[]) => {
+  const records: Collection[] = [];
+
+  ufRecords.forEach((ufRecord) => {
+    const cClient = ufRecord.c_client;
+
+    const record = {
+      ...ufRecord,
+      c_client: {
+        ...cClient,
+        id: cClient?.id as string,
+        account_id: cClient?.account_id as string,
+        name: cClient?.name as string,
+      },
+      c_client_id: ufRecord.c_client_id as string,
+      tenant_price: ufRecord.tenant_price?.toNumber() as number,
+      owner_income: ufRecord.owner_income?.toNumber() as number,
+      abic_income: ufRecord.abic_income?.toNumber() as number,
+    };
+
+    records.push(record);
+  });
+
+  return records;
+};
 
 export const getAll = async () => {
   const session = await cookies();
@@ -50,7 +79,7 @@ export const getAll = async () => {
     return response;
   }
 
-  records = formatCollections(records || []);
+  records = await format(records || []);
   const response = {
     code: 200,
     message: `Fetched ${model}`,

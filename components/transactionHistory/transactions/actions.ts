@@ -29,7 +29,7 @@ type TransactionCreateInput = Prisma.TransactionCreateInput & {
 const model = "Transaction";
 const url = "/transaction-history/transactions";
 
-export const formatTransactions = (ufRecords: TransactionWithTClient[]) => {
+export const format = async (ufRecords: TransactionWithTClient[]) => {
   const records: Transaction[] = [];
 
   ufRecords.forEach((ufRecord) => {
@@ -86,7 +86,7 @@ export const getAll = async () => {
     return response;
   }
 
-  records = formatTransactions(records || []);
+  records = await format(records || []);
   const response = {
     code: 200,
     message: `Fetched ${model}s`,

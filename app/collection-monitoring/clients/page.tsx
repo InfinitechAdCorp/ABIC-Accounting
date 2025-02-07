@@ -1,5 +1,5 @@
 import React from "react";
-import { getAll } from "@/components/collectionMonitoring/cClients/actions";
+import { getAll, tableFormat } from "@/components/collectionMonitoring/cClients/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
@@ -13,8 +13,6 @@ const CClients = async () => {
   const { record: account } = await getAccount();
   const { records } = await getAll();
 
-  console.log(records)
-
   const model = "Clients";
 
   const columns = [
@@ -22,6 +20,8 @@ const CClients = async () => {
     { key: "collections", name: "COLLECTIONS" },
     { key: "actions", name: "ACTIONS" },
   ];
+
+  const rows = await tableFormat(columns.slice(0, -1), records);
 
   return (
     <>
