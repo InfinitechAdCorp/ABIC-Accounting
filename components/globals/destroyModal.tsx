@@ -86,7 +86,7 @@ const DestroyModal = ({ title, action, id }: Props) => {
                         <Field name="otp">
                           {({ field, meta }: FieldProps) => (
                             <div>
-                              <InputOtp {...field} length={6} />
+                              <InputOtp {...field} length={6} errorMessage="OTP is a required field" />
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">
                                   {meta.error}

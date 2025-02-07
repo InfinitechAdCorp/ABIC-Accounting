@@ -2,26 +2,24 @@
 
 import React from "react";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
-import UpdateModal from "@/components/transactionHistory/transactionClients/updateModal";
+import UpdateModal from "@/components/transactionHistory/tClients/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
 import ViewBtn from "@/components/globals/viewBtn";
-import { destroy } from "@/components/transactionHistory/transactionClients/actions";
-import { FormattedTransactionClient } from "@/components/transactionHistory/types";
+import { destroy as action } from "@/components/transactionHistory/tClients/actions";
+import { TClient as Record } from "@/components/transactionHistory/types";
 
-type Item = FormattedTransactionClient;
-
-const RenderCell = (item: Item, columnKey: string) => {
-  const transactions = item.transactions?.reverse() || [];
+const RenderCell = (record: Record, columnKey: string) => {
+  const transactions = record.transactions?.reverse() || [];
 
   switch (columnKey) {
     case "actions":
       return (
         <div className="relative flex justify-end items-center gap-2">
-          <UpdateModal transactionClient={item} />
-          <DestroyModal title="Client" action={destroy} id={item.id} />
+          <UpdateModal record={record} />
+          <DestroyModal title="Client" action={action} id={record.id} />
           <ViewBtn
             title="View Transactions"
-            link={`/transaction-history/clients/${item.id}`}
+            url={`/transaction-history/clients/${record.id}`}
           />
         </div>
       );
@@ -47,9 +45,9 @@ const RenderCell = (item: Item, columnKey: string) => {
       const runningBalance = computeBalance(transactions);
       return formatNumber(runningBalance);
     case "transactions":
-      return item.transactions?.length;
+      return record.transactions?.length;
     default:
-      return item[columnKey as keyof Item];
+      return record[columnKey as keyof Record];
   }
 };
 

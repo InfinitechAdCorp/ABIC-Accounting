@@ -16,7 +16,6 @@ import {
 type column = {
   name: string;
   key: string;
-  sortable?: boolean;
 };
 
 type Props = {
@@ -99,7 +98,7 @@ const DataTable = ({
               placeholder="Search"
               startContent={<SearchIcon />}
               value={filterValue}
-              onClear={() => onClear()}
+              onClear={onClear}
               onValueChange={onSearchChange}
             />
             <div className="flex gap-3">{children}</div>
@@ -126,8 +125,8 @@ const DataTable = ({
   }, [
     filterValue,
     onSearchChange,
-    onRowsPerPageChange,
     onClear,
+    onRowsPerPageChange,
     rows.length,
     children,
   ]);
@@ -164,9 +163,7 @@ const DataTable = ({
       >
         <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn key={column.key}>
-              {column.name}
-            </TableColumn>
+            <TableColumn key={column.key}>{column.name}</TableColumn>
           )}
         </TableHeader>
         <TableBody emptyContent={`No ${model} Found`} items={items}>

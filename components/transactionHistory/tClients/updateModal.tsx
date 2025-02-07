@@ -11,35 +11,35 @@ import {
   useDisclosure,
   Input,
 } from "@heroui/react";
-import { FormattedTransactionClient } from "@/components/transactionHistory/types";
-import { update as updateSchema } from "@/components/transactionHistory/transactionClients/schemas";
+import { TClient as Record } from "@/components/transactionHistory/types";
+import { update as validationSchema } from "@/components/transactionHistory/tClients/schemas";
 import { Formik, Form, Field, FieldProps } from "formik";
-import { update as updateAction } from "@/components/transactionHistory/transactionClients/actions";
+import { update as action } from "@/components/transactionHistory/tClients/actions";
 import { Prisma } from "@prisma/client";
-import { handlePostSubmit } from "@/components/globals/utils";
+import { onPostSubmit } from "@/components/globals/utils";
 import { FaPenToSquare } from "react-icons/fa6";
 
 type Props = {
-  transactionClient: FormattedTransactionClient;
+  record: Record;
 };
 
-const UpdateModal = ({ transactionClient }: Props) => {
+const UpdateModal = ({ record }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
-    id: transactionClient.id,
-    name: transactionClient.name,
+    id: record.id,
+    name: record.name,
   };
 
   const onSubmit = async (
-    values: Prisma.TransactionClientCreateInput,
+    values: Prisma.TClientCreateInput,
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
-    updateAction(values).then((response) => {
+    action(values).then((response) => {
       setSubmitting(false);
-      handlePostSubmit(response, actions, onClose);
+      onPostSubmit(response, actions, onClose);
     });
   };
 
@@ -61,7 +61,7 @@ const UpdateModal = ({ transactionClient }: Props) => {
             <>
               <Formik
                 initialValues={initialValues}
-                validationSchema={updateSchema}
+                validationSchema={validationSchema}
                 onSubmit={onSubmit}
                 enableReinitialize={true}
               >
