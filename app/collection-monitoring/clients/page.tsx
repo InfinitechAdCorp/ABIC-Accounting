@@ -9,9 +9,9 @@ import CreateModal from "@/components/collectionMonitoring/cClients/createModal"
 import { Account } from "@prisma/client";
 import ExportBtn from "@/components/globals/exportBtn";
 
-const CollectionClients = async () => {
-  const { account } = await getAccount();
-  const { collectionClients } = await getAll();
+const CClients = async () => {
+  const { record: account } = await getAccount();
+  const { records } = await getAll();
 
   const model = "Clients";
 
@@ -23,7 +23,7 @@ const CollectionClients = async () => {
 
   return (
     <>
-      <Navbar account={account as Account} />
+      <Navbar record={account as Account} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
@@ -34,7 +34,7 @@ const CollectionClients = async () => {
             <DataTable
               model={model}
               columns={columns}
-              rows={collectionClients}
+              rows={records}
               searchKey="name"
               RenderCell={RenderCell}
             >
@@ -51,4 +51,4 @@ const CollectionClients = async () => {
   );
 };
 
-export default CollectionClients;
+export default CClients;

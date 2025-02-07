@@ -17,8 +17,8 @@ import {
 import { ListBlobResultBlob } from "@vercel/blob";
 
 const RenderCell = (
-  record: Record,
   columnKey: string,
+  record: Record,
   dependencies: {
     blobs: ListBlobResultBlob[];
     tClients: TClient[];

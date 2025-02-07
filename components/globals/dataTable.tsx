@@ -29,7 +29,7 @@ type Props = {
   columns: column[];
   rows: any[];
   searchKey: string;
-  RenderCell: (row: any, columnKey: string, dependencies?: any) => any;
+  RenderCell: (columnKey: string, item: any, dependencies?: any) => any;
   dependencies?: any;
   children: ReactElement;
 };
@@ -180,7 +180,7 @@ const DataTable = ({
             >
               {(columnKey: any) => (
                 <TableCell>
-                  {RenderCell(item, columnKey, dependencies)}
+                  {RenderCell(columnKey, item, dependencies)}
                 </TableCell>
               )}
             </TableRow>

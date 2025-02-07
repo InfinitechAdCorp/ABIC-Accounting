@@ -173,6 +173,7 @@ export const update = async (values: Prisma.TClientCreateInput) => {
 export const destroy = async (values: Destroy) => {
   const session = await cookies();
   const otp = session.get("otp")?.value;
+  
   const schema = destroySchema;
 
   try {

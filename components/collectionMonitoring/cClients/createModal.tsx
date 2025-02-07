@@ -15,7 +15,7 @@ import { create as createSchema } from "@/components/collectionMonitoring/cClien
 import { Formik, Form, Field, FieldProps } from "formik";
 import { create as createAction } from "@/components/collectionMonitoring/cClients/actions";
 import { Prisma } from "@prisma/client";
-import { handlePostSubmit } from "@/components/globals/utils";
+import { onPostSubmit } from "@/components/globals/utils";
 
 const CreateModal = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();

@@ -1,8 +1,9 @@
 import React from "react";
 import {
-  get as getTransactionClient,
-  getAll as getTransactionClients,
-} from "@/components/transactionHistory/transactionClients/actions";
+  get,
+  getAll as getTClients,
+} from "@/components/transactionHistory/tClients/actions";
+import { getAll as getTransactions } from "@/components/transactionHistory/transactions/actions";
 import { get as getAccount } from "@/components/accounts/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
@@ -13,22 +14,23 @@ import { list } from "@vercel/blob";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
 import { Account } from "@prisma/client";
 import ExportBtn from "@/components/globals/exportBtn";
+import { Transaction } from "@/components/transactionHistory/types";
 
-const TransactionClient = async ({
+const TClient = async ({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) => {
   const id = (await params).id;
-
-  const { account } = await getAccount();
-  const { transactionClient } = await getTransactionClient(id);
-  const { transactionClients } = await getTransactionClients();
+  const { record: account } = await getAccount();
+  const { record } = await get(id);
+  const { records: tClients } = await getTClients();
+  const { records: transactions } = await getTransactions();
   const { blobs } = await list();
 
-  const model = `${transactionClient?.name}'s Transactions`;
-  const runningBalance = computeBalance(
-    [...(transactionClient?.transactions || [])].reverse()
+  const model = `${record?.name}'s Transactions`;
+  const runningBalance = formatNumber(
+    computeBalance([...(record?.transactions || [])].reverse())
   );
 
   const columns = [
@@ -42,9 +44,20 @@ const TransactionClient = async ({
     { key: "actions", name: "ACTIONS" },
   ];
 
+  const setVoucher = (transaction: Transaction) => {
+    let id = 1;
+    if (transaction) {
+      id = Number(transaction.voucher) + 1;
+    }
+    const voucher = `${id}`.padStart(5, "0");
+    return voucher;
+  };
+
+  const voucher = setVoucher(transactions[0]);
+
   return (
     <>
-      <Navbar account={account as Account} />
+      <Navbar record={account as Account} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
@@ -54,24 +67,24 @@ const TransactionClient = async ({
                 {model.toUpperCase()}
               </h1>
               <h1 className="text-md font-semibold mb-3">
-                RUNNING BALANCE: {formatNumber(runningBalance)}
+                RUNNING BALANCE: {runningBalance}
               </h1>
             </div>
 
             <DataTable
               model={model}
               columns={columns}
-              rows={transactionClient?.transactions || []}
+              rows={record?.transactions || []}
               searchKey="name"
               RenderCell={RenderCell}
               dependencies={{
                 blobs: blobs,
-                transactionClients: transactionClients,
+                tClients: tClients,
               }}
             >
               <>
-              <CreateModal transactionClients={transactionClients} />
-              <ExportBtn />
+                <CreateModal voucher={voucher} tClients={tClients} />
+                <ExportBtn />
               </>
             </DataTable>
           </CardBody>
@@ -81,4 +94,4 @@ const TransactionClient = async ({
   );
 };
 
-export default TransactionClient;
+export default TClient;

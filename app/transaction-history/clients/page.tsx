@@ -1,5 +1,5 @@
 import React from "react";
-import { getAll as getTClients } from "@/components/transactionHistory/tClients/actions";
+import { getAll } from "@/components/transactionHistory/tClients/actions";
 import { getAll as getTransactions } from "@/components/transactionHistory/transactions/actions";
 import { get as getAccount } from "@/components/accounts/actions";
 import { Card, CardBody } from "@heroui/react";
@@ -13,7 +13,7 @@ import ExportBtn from "@/components/globals/exportBtn";
 
 const TClients = async () => {
   const { record: account } = await getAccount();
-  const { records } = await getTClients();
+  const { records } = await getAll();
   const { records: transactions } = await getTransactions();
 
   const model = "Clients";

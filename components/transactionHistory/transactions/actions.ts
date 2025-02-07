@@ -23,7 +23,7 @@ type TransactionCreateInput = Prisma.TransactionCreateInput & {
   t_client_id?: string;
 };
 
-const model = "Transactions";
+const model = "Transaction";
 const url = "/transaction-history/transactions";
 
 export const getAll = async () => {
@@ -196,6 +196,7 @@ export const update = async (values: TransactionCreateInput) => {
 export const destroy = async (values: Destroy) => {
   const session = await cookies();
   const otp = session.get("otp")?.value;
+  
   const schema = destroySchema;
 
   try {

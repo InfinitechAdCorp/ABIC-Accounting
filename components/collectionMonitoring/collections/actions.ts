@@ -18,40 +18,43 @@ import { revalidatePath } from "next/cache";
 import { Destroy } from "@/components/globals/types";
 
 type CollectionCreateInput = Prisma.CollectionCreateInput & {
-  collection_client_id?: string;
+  c_client_id?: string;
 };
+
+const model = "Collection";
+const url = "/collection-monitoring/collections";
 
 export const getAll = async () => {
   const session = await cookies();
   const accountID = session.get("accountID")?.value;
 
-  let collections;
+  let records;
 
   try {
-    collections = await prisma.collection.findMany({
+    records = await prisma.collection.findMany({
       where: {
-        collection_client: {
+        c_client: {
           account_id: accountID,
         },
       },
       include: {
-        collection_client: true,
+        c_client: true,
       },
     });
   } catch {
     const response = {
       code: 500,
       message: "Server Error",
-      collections: [],
+      records: [],
     };
     return response;
   }
 
-  collections = formatCollections(collections || []);
+  records = formatCollections(records || []);
   const response = {
     code: 200,
-    message: "Fetched Collections",
-    collections: collections,
+    message: `Fetched ${model}`,
+    records: records,
   };
   return response;
 };
@@ -61,13 +64,13 @@ export const create = async (values: CollectionCreateInput) => {
 
   try {
     await schema.validate(values, { abortEarly: false });
-  } catch (errors) {
-    const formattedErrors = formatErrors(errors as Yup.ValidationError);
+  } catch (ufErrors) {
+    const errors = formatErrors(ufErrors as Yup.ValidationError);
 
     const response: ActionResponse = {
       code: 429,
       message: "Validation Error",
-      errors: formattedErrors,
+      errors: errors,
     };
     return response;
   }
@@ -75,7 +78,7 @@ export const create = async (values: CollectionCreateInput) => {
   try {
     await prisma.collection.create({
       data: {
-        collection_client: { connect: { id: values.collection_client_id } },
+        c_client: { connect: { id: values.c_client_id } },
         property: values.property,
         location: values.location,
         start: new Date(new Date(values.start).setUTCHours(0, 0, 0, 0)),
@@ -96,8 +99,8 @@ export const create = async (values: CollectionCreateInput) => {
     return response;
   }
 
-  revalidatePath("/collection-monitoring/collections");
-  const response: ActionResponse = { code: 200, message: "Added Collection" };
+  revalidatePath(url);
+  const response: ActionResponse = { code: 200, message: `Added ${model}` };
   return response;
 };
 
@@ -106,13 +109,13 @@ export const update = async (values: CollectionCreateInput) => {
 
   try {
     await schema.validate(values, { abortEarly: false });
-  } catch (errors) {
-    const formattedErrors = formatErrors(errors as Yup.ValidationError);
+  } catch (ufErrors) {
+    const errors = formatErrors(ufErrors as Yup.ValidationError);
 
     const response: ActionResponse = {
       code: 429,
       message: "Validation Error",
-      errors: formattedErrors,
+      errors: errors,
     };
     return response;
   }
@@ -121,7 +124,7 @@ export const update = async (values: CollectionCreateInput) => {
     await prisma.collection.update({
       where: { id: values.id },
       data: {
-        collection_client: { connect: { id: values.collection_client_id } },
+        c_client: { connect: { id: values.c_client_id } },
         property: values.property,
         location: values.location,
         start: new Date(new Date(values.start).setUTCHours(0, 0, 0, 0)),
@@ -139,25 +142,26 @@ export const update = async (values: CollectionCreateInput) => {
     return response;
   }
 
-  revalidatePath("/collection-monitoring/collections");
-  const response: ActionResponse = { code: 200, message: "Updated Collection" };
+  revalidatePath(url);
+  const response: ActionResponse = { code: 200, message: `Updated ${model}` };
   return response;
 };
 
 export const destroy = async (values: Destroy) => {
   const session = await cookies();
   const otp = session.get("otp")?.value;
+
   const schema = destroySchema;
 
   try {
     await schema.validate(values, { abortEarly: false });
-  } catch (errors) {
-    const formattedErrors = formatErrors(errors as Yup.ValidationError);
+  } catch (ufErrors) {
+    const errors = formatErrors(ufErrors as Yup.ValidationError);
 
     const response: ActionResponse = {
       code: 429,
       message: "Validation Error",
-      errors: formattedErrors,
+      errors: errors,
     };
     return response;
   }
@@ -181,9 +185,8 @@ export const destroy = async (values: Destroy) => {
     return response;
   }
 
-
-  revalidatePath("/collection-monitoring/collections");
-  const response: ActionResponse = { code: 200, message: "Deleted Collection" };
+  revalidatePath(url);
+  const response: ActionResponse = { code: 200, message: `Deleted ${model}` };
   return response;
 };
 
@@ -192,23 +195,23 @@ export const markAsPaid = async (values: { id: string }) => {
 
   try {
     await schema.validate(values, { abortEarly: false });
-  } catch (errors) {
-    const formattedErrors = formatErrors(errors as Yup.ValidationError);
+  } catch (ufErrors) {
+    const errors = formatErrors(ufErrors as Yup.ValidationError);
 
     const response: ActionResponse = {
       code: 429,
       message: "Validation Error",
-      errors: formattedErrors,
+      errors: errors,
     };
     return response;
   }
 
   const id = values.id;
-  const collection = await prisma.collection.findUnique({ where: { id: id } });
+  const record = await prisma.collection.findUnique({ where: { id: id } });
 
-  const due_day = getDate(collection?.start as Date);
-  let due = addMonths(collection?.due as Date, 1);
-  due = setDate(due, due_day);
+  const day = getDate(record?.start as Date);
+  let due = addMonths(record?.due as Date, 1);
+  due = setDate(due, day);
 
   try {
     await prisma.collection.update({
@@ -220,7 +223,7 @@ export const markAsPaid = async (values: { id: string }) => {
     return response;
   }
 
-  revalidatePath("/collection-monitoring/collections");
+  revalidatePath(url);
   const response: ActionResponse = {
     code: 200,
     message: "Successfully Made Payment",

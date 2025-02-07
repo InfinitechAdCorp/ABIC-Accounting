@@ -48,7 +48,7 @@ const CreateModal = ({ voucher, tClients }: Props) => {
     type: "",
     amount: "",
     status: "Active",
-    proof: null,
+    proof: "",
   };
 
   const onSubmit = async (
@@ -151,7 +151,7 @@ const CreateModal = ({ voucher, tClients }: Props) => {
                         </Field>
                       </div>
 
-                      <Field name="transaction_client_id">
+                      <Field name="t_client_id">
                         {({ field, meta }: FieldProps) => (
                           <div>
                             <Select

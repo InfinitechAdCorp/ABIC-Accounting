@@ -53,7 +53,7 @@ const UpdateModal = ({ record, tClients }: Props) => {
     type: record.type,
     amount: record.amount,
     status: record.status,
-    proof: null,
+    proof: "",
   };
 
   const onSubmit = async (
@@ -164,7 +164,7 @@ const UpdateModal = ({ record, tClients }: Props) => {
                         </Field>
                       </div>
 
-                      <Field name="transaction_client_id">
+                      <Field name="t_client_id">
                         {({ field, meta }: FieldProps) => (
                           <div>
                             <Select

@@ -1,6 +1,6 @@
 import React from "react";
 import { get as getAccount } from "@/components/accounts/actions";
-import { getAll as getTransactions } from "@/components/transactionHistory/transactions/actions";
+import { getAll } from "@/components/transactionHistory/transactions/actions";
 import { getAll as getTClients } from "@/components/transactionHistory/tClients/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
@@ -16,7 +16,7 @@ import { Transaction as Record } from "@/components/transactionHistory/types";
 
 const Transactions = async () => {
   const { record: account } = await getAccount();
-  const { records } = await getTransactions();
+  const { records } = await getAll();
   const { records: tClients } = await getTClients();
   const { blobs } = await list();
 

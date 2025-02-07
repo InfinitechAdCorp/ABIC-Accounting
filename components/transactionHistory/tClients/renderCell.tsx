@@ -8,7 +8,7 @@ import ViewBtn from "@/components/globals/viewBtn";
 import { destroy as action } from "@/components/transactionHistory/tClients/actions";
 import { TClient as Record } from "@/components/transactionHistory/types";
 
-const RenderCell = (record: Record, columnKey: string) => {
+const RenderCell = (columnKey: string, record: Record) => {
   const transactions = record.transactions?.reverse() || [];
 
   switch (columnKey) {
