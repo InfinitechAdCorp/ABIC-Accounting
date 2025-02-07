@@ -11,14 +11,14 @@ export const login = async (values: Login) => {
 
   try {
     await schema.validate(values, { abortEarly: false });
-  } catch (errors) {
-    const formattedErrors = formatErrors(errors as Yup.ValidationError);
+  } catch (ufErrors) {
+    const errors = formatErrors(ufErrors as Yup.ValidationError)
 
     const response = {
       code: 429,
       message: "Validation Error",
       isValid: false,
-      errors: formattedErrors,
+      errors: errors,
     };
     return response;
   }
@@ -39,9 +39,9 @@ export const login = async (values: Login) => {
   return response;
 };
 
-export const set = async (accountID: string) => {
+export const set = async (id: string) => {
   const session = await cookies();
-  session.set("accountID", accountID);
+  session.set("accountID", id);
 
   const response = {
     code: 200,
@@ -53,7 +53,7 @@ export const set = async (accountID: string) => {
 
 export const unset = async () => {
   const session = await cookies();
-  session.delete('accountID');
+  session.delete("accountID");
 
   const response = {
     code: 200,

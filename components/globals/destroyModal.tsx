@@ -12,9 +12,9 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { ActionResponse } from "@/components/globals/types";
-import { destroy as destroySchema } from "@/components/globals/schemas";
+import { destroy as validationSchema } from "@/components/globals/schemas";
 import { Formik, Form, Field, FieldProps } from "formik";
-import { handlePostSubmit } from "@/components/globals/utils";
+import { onPostSubmit } from "@/components/globals/utils";
 import { FaTrash } from "react-icons/fa6";
 import { sendOTP } from "@/components/globals/serverUtils";
 import { Destroy } from "@/components/globals/types";
@@ -30,16 +30,16 @@ const DestroyModal = ({ title, action, id }: Props) => {
   const [submitting, setSubmitting] = useState(false);
   const [opening, setOpening] = useState(false);
 
-  const openModal = async () => {
+  const initialValues = {
+    id: id,
+    otp: "",
+  };
+
+  const onPress = async () => {
     setOpening(true);
     await sendOTP();
     setOpening(false);
     onOpen();
-  };
-
-  const initialValues = {
-    id: id,
-    otp: "",
   };
 
   const onSubmit = async (
@@ -49,7 +49,7 @@ const DestroyModal = ({ title, action, id }: Props) => {
     setSubmitting(true);
     action(values).then((response) => {
       setSubmitting(false);
-      handlePostSubmit(response, actions, onClose);
+      onPostSubmit(response, actions, onClose);
     });
   };
 
@@ -60,7 +60,7 @@ const DestroyModal = ({ title, action, id }: Props) => {
         color="danger"
         isIconOnly={true}
         title="Delete"
-        onPress={openModal}
+        onPress={onPress}
         isLoading={opening}
       >
         <FaTrash />
@@ -72,7 +72,7 @@ const DestroyModal = ({ title, action, id }: Props) => {
             <>
               <Formik
                 initialValues={initialValues}
-                validationSchema={destroySchema}
+                validationSchema={validationSchema}
                 onSubmit={onSubmit}
               >
                 {() => (

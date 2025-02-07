@@ -21,7 +21,8 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendOTP = async () => {
-  const otp = crypto.randomInt(100000, 999999).toString();
+  const otp = `${crypto.randomInt(100000, 999999)}`;
+
   await transporter.sendMail({
     to: SMTP_RECEIVER,
     subject: "ABIC Accounting OTP",

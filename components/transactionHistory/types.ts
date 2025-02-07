@@ -1,17 +1,17 @@
 import { Prisma, Account } from "@prisma/client";
 
-export type FormattedTransactionClient = {
+export type TClient = {
   id: string;
   account?: Account;
   account_id?: string;
-  transactions?: FormattedTransaction[];
+  transactions?: Transaction[];
   name: string;
 };
 
-export type FormattedTransaction = {
+export type Transaction = {
   id: string;
-  transaction_client?: FormattedTransactionClient;
-  transaction_client_id?: string;
+  t_client?: TClient;
+  t_client_id?: string;
   date: Date;
   voucher: string;
   check: string;
@@ -22,14 +22,14 @@ export type FormattedTransaction = {
   proof: string;
 };
 
-export type TransactionClientWithTransactions = Prisma.TransactionClientGetPayload<{
+export type TClientWithTransactions = Prisma.TClientGetPayload<{
   include: {
     transactions: true;
   };
 }>;
 
-export type TransactionWithTransactionClient = Prisma.TransactionGetPayload<{
+export type TransactionWithTClient = Prisma.TransactionGetPayload<{
   include: {
-    transaction_client: true;
+    t_client: true;
   };
 }>;

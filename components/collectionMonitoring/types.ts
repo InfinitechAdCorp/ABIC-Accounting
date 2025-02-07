@@ -1,17 +1,17 @@
 import { Prisma, Account } from "@prisma/client";
 
-export type FormattedCollectionClient = {
+export type CClient = {
   id: string;
   account?: Account;
   account_id?: string;
-  collections?: FormattedCollection[];
+  collections?: Collection[];
   name: string;
 };
 
-export type FormattedCollection = {
+export type Collection = {
   id: string;
-  collection_client?: FormattedCollectionClient;
-  collection_client_id?: string;
+  c_client?: CClient;
+  c_client_id?: string;
   property: string;
   location: string;
   start: Date;
@@ -24,15 +24,15 @@ export type FormattedCollection = {
   due: Date;
 };
 
-export type CollectionClientWithCollections = Prisma.CollectionClientGetPayload<{
+export type CClientWithCollections = Prisma.CClientGetPayload<{
   include: {
     collections: true;
   };
 }>;
 
-export type CollectionWithCollectionClient = Prisma.CollectionGetPayload<{
+export type CollectionWithCClient = Prisma.CollectionGetPayload<{
   include: {
-    collection_client: true;
+    c_client: true;
   };
 }>;
 

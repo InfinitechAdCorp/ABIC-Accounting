@@ -11,7 +11,7 @@ type Props = {
 };
 
 const ExportBtn = ({ columns, rows }: Props) => {
-  const exportPDF = () => {
+  const onPress = () => {
     const doc = new jsPDF();
     autoTable(doc, {
       head: [columns],
@@ -22,7 +22,7 @@ const ExportBtn = ({ columns, rows }: Props) => {
   };
 
   return (
-    <Button color="primary" onPress={exportPDF}>
+    <Button color="primary" onPress={onPress}>
       Export
     </Button>
   );

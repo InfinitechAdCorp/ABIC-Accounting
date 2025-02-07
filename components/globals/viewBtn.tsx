@@ -7,10 +7,10 @@ import { useRouter } from "next/navigation";
 
 type Props = {
   title: string;
-  link: string;
+  url: string;
 };
 
-const ViewBtn = ({ title, link }: Props) => {
+const ViewBtn = ({ title, url }: Props) => {
   const router = useRouter();
 
   return (
@@ -20,7 +20,7 @@ const ViewBtn = ({ title, link }: Props) => {
         color="primary"
         isIconOnly={true}
         title={title}
-        onPress={() => router.push(link)}
+        onPress={() => router.push(url)}
       >
         <FaEye size={14} />
       </Button>

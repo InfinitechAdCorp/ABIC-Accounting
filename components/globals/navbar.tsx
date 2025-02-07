@@ -11,13 +11,13 @@ import {
 import { useRouter, usePathname } from "next/navigation";
 import LogoutBtn from "@/components/globals/logoutBtn";
 import AccountsBtn from "@/components/globals/accountsBtn";
-import { Account } from "@prisma/client";
+import { Account as Record } from "@prisma/client";
 
 type Props = {
-  account: Account;
+  record: Record;
 };
 
-const Navbar = ({ account }: Props) => {
+const Navbar = ({ record }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -37,7 +37,7 @@ const Navbar = ({ account }: Props) => {
             </h3>
           </Link>
 
-          {account?.transaction_history_access && (
+          {record?.th_access && (
             <Dropdown
               classNames={{
                 content: "min-w-0",
@@ -79,7 +79,7 @@ const Navbar = ({ account }: Props) => {
             </Dropdown>
           )}
 
-          {account?.income_expenses_access && (
+          {record?.ie_access && (
             <Dropdown
               classNames={{
                 content: "min-w-0",
@@ -118,7 +118,7 @@ const Navbar = ({ account }: Props) => {
             </Dropdown>
           )}
 
-          {account?.collection_monitoring_access && (
+          {record?.cm_access && (
             <Dropdown
               classNames={{
                 content: "min-w-0",

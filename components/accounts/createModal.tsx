@@ -14,11 +14,11 @@ import {
   Input,
   Checkbox,
 } from "@heroui/react";
-import { create as createSchema } from "@/components/accounts/schemas";
+import { create as validationSchema } from "@/components/accounts/schemas";
 import { Formik, Form, Field, FieldProps } from "formik";
-import { create as createAction } from "@/components/accounts/actions";
+import { create as action } from "@/components/accounts/actions";
 import { Prisma } from "@prisma/client";
-import { handlePostSubmit } from "@/components/globals/utils";
+import { onPostSubmit } from "@/components/globals/utils";
 import { PlusIcon } from "@/components/globals/icons";
 
 const CreateModal = () => {
@@ -37,9 +37,9 @@ const CreateModal = () => {
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
-    createAction(values).then((response) => {
+    action(values).then((response) => {
       setSubmitting(false);
-      handlePostSubmit(response, actions, onClose);
+      onPostSubmit(response, actions, onClose);
     });
   };
 
@@ -58,7 +58,7 @@ const CreateModal = () => {
             <>
               <Formik
                 initialValues={initialValues}
-                validationSchema={createSchema}
+                validationSchema={validationSchema}
                 onSubmit={onSubmit}
               >
                 {() => (

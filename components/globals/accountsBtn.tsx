@@ -1,20 +1,20 @@
 "use client";
 
 import React from "react";
-import { unset as unsetAccount } from "@/components/globals/auth";
+import { unset } from "@/components/globals/auth";
 import { useRouter } from "next/navigation";
 
 const AccountsBtn = () => {
   const router = useRouter();
 
-  const unset = async () => {
-    await unsetAccount();
+  const onClick = async () => {
+    await unset();
     router.push("/accounts");
   };
 
   return (
     <>
-      <div className="text-center" onClick={unset}>
+      <div className="text-center" onClick={onClick}>
         <h3
           className={
             "text-sm md:text-base font-semibold text-white cursor-pointer"
