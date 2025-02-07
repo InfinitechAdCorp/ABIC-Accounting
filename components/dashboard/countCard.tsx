@@ -1,11 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { ReactElement } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardBody } from "@heroui/react";
 
 type Props = {
-  icon: React.ReactElement;
+  icon: ReactElement;
   model: string;
   url: string;
   count: number;

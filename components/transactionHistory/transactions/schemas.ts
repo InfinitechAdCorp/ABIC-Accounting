@@ -1,8 +1,8 @@
 import * as Yup from "yup";
 
 export const create = Yup.object().shape({
-  transaction_client_id: Yup.string().required(
-    "Transaction Client ID is a required field"
+  t_client_id: Yup.string().required(
+    "Client ID is a required field"
   ),
   date: Yup.date()
     .typeError("Date must be a valid date")
@@ -20,8 +20,8 @@ export const create = Yup.object().shape({
 
 export const update = Yup.object().shape({
   id: Yup.string().required("ID is a required field"),
-  transaction_client_id: Yup.string().required(
-    "Transaction Client ID is a required field"
+  t_client_id: Yup.string().required(
+    "Client ID is a required field"
   ),
   date: Yup.date()
     .typeError("Date must be a valid date")
@@ -37,7 +37,7 @@ export const update = Yup.object().shape({
   proof: Yup.mixed().nullable()
 });
 
-export const changeStatus = Yup.object().shape({
+export const setStatus = Yup.object().shape({
   id: Yup.string().required("ID is a required field"),
   status: Yup.string().required("Status is a required field"),
 });

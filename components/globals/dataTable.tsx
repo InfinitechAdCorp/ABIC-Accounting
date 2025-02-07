@@ -1,6 +1,12 @@
 "use client";
 
-import React from "react";
+import React, {
+  ReactElement,
+  useState,
+  useMemo,
+  useCallback,
+  ChangeEvent,
+} from "react";
 import { SearchIcon } from "@/components/globals/icons";
 import {
   Table,
@@ -25,7 +31,7 @@ type Props = {
   searchKey: string;
   RenderCell: (row: any, columnKey: string, dependencies?: any) => any;
   dependencies?: any;
-  children: React.ReactElement;
+  children: ReactElement;
 };
 
 const DataTable = ({
@@ -37,12 +43,12 @@ const DataTable = ({
   dependencies,
   children,
 }: Props) => {
-  const [filterValue, setFilterValue] = React.useState("");
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [page, setPage] = React.useState(1);
+  const [filterValue, setFilterValue] = useState("");
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(1);
   const hasSearchFilter = Boolean(filterValue);
 
-  const filteredItems = React.useMemo(() => {
+  const filteredItems = useMemo(() => {
     let filteredRows = [...rows];
 
     if (hasSearchFilter) {
@@ -58,22 +64,22 @@ const DataTable = ({
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
-  const items = React.useMemo(() => {
+  const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
     return filteredItems.slice(start, end);
   }, [page, filteredItems, rowsPerPage]);
 
-  const onRowsPerPageChange = React.useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const onRowsPerPageChange = useCallback(
+    (e: ChangeEvent<HTMLSelectElement>) => {
       setRowsPerPage(Number(e.target.value));
       setPage(1);
     },
     []
   );
 
-  const onSearchChange = React.useCallback((value?: string) => {
+  const onSearchChange = useCallback((value?: string) => {
     if (value) {
       setFilterValue(value);
       setPage(1);
@@ -82,12 +88,12 @@ const DataTable = ({
     }
   }, []);
 
-  const onClear = React.useCallback(() => {
+  const onClear = useCallback(() => {
     setFilterValue("");
     setPage(1);
   }, []);
 
-  const topContent = React.useMemo(() => {
+  const topContent = useMemo(() => {
     return (
       <>
         <div className="flex flex-col gap-4">
@@ -131,7 +137,7 @@ const DataTable = ({
     children,
   ]);
 
-  const bottomContent = React.useMemo(() => {
+  const bottomContent = useMemo(() => {
     return (
       <div className="p2 flex justify-center items-center">
         <Pagination

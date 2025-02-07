@@ -16,44 +16,44 @@ import {
   Textarea,
 } from "@heroui/react";
 import {
-  FormattedTransaction,
-  FormattedTransactionClient,
+  Transaction as Record,
+  TClient,
 } from "@/components/transactionHistory/types";
-import { update as updateSchema } from "@/components/transactionHistory/transactions/schemas";
+import { update as validationSchema } from "@/components/transactionHistory/transactions/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
-import { update as updateAction } from "@/components/transactionHistory/transactions/actions";
+import { update as action } from "@/components/transactionHistory/transactions/actions";
 import { Prisma } from "@prisma/client";
 import {
-  handlePostSubmit,
+  onPostSubmit,
   dateToDateValue,
   dateValueToDate,
 } from "@/components/globals/utils";
 import { FaPenToSquare } from "react-icons/fa6";
 
 type Props = {
-  transaction: FormattedTransaction;
-  transactionClients: FormattedTransactionClient[];
+  record: Record;
+  tClients: TClient[];
 };
 
 type TransactionCreateInput = Prisma.TransactionCreateInput & {
   proof: File;
 };
 
-const UpdateModal = ({ transaction, transactionClients }: Props) => {
+const UpdateModal = ({ record, tClients }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
-    id: transaction.id,
-    date: transaction.date,
-    voucher: transaction.voucher,
-    check: transaction.check,
-    transaction_client_id: transaction.transaction_client_id,
-    particulars: transaction.particulars,
-    type: transaction.type,
-    amount: transaction.amount,
-    status: transaction.status,
-    proof: "",
+    id: record.id,
+    date: record.date,
+    voucher: record.voucher,
+    check: record.check,
+    t_client_id: record.t_client_id,
+    particulars: record.particulars,
+    type: record.type,
+    amount: record.amount,
+    status: record.status,
+    proof: null,
   };
 
   const onSubmit = async (
@@ -61,9 +61,9 @@ const UpdateModal = ({ transaction, transactionClients }: Props) => {
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
-    updateAction(values).then((response) => {
+    action(values).then((response) => {
       setSubmitting(false);
-      handlePostSubmit(response, actions, onClose);
+      onPostSubmit(response, actions, onClose);
     });
   };
 
@@ -85,7 +85,7 @@ const UpdateModal = ({ transaction, transactionClients }: Props) => {
             <>
               <Formik
                 initialValues={initialValues}
-                validationSchema={updateSchema}
+                validationSchema={validationSchema}
                 onSubmit={onSubmit}
                 enableReinitialize={true}
               >
@@ -174,12 +174,12 @@ const UpdateModal = ({ transaction, transactionClients }: Props) => {
                               label="Client"
                               labelPlacement="outside"
                               placeholder="Select Client"
-                              items={transactionClients}
+                              items={tClients}
                               defaultSelectedKeys={[field.value]}
                             >
-                              {(transactionClient) => (
-                                <SelectItem key={transactionClient.id}>
-                                  {transactionClient.name}
+                              {(tClient) => (
+                                <SelectItem key={tClient.id}>
+                                  {tClient.name}
                                 </SelectItem>
                               )}
                             </Select>
@@ -223,7 +223,7 @@ const UpdateModal = ({ transaction, transactionClients }: Props) => {
                                 label="Type"
                                 labelPlacement="outside"
                                 placeholder="Select Type"
-                                defaultSelectedKeys={[transaction.type]}
+                                defaultSelectedKeys={[record.type]}
                               >
                                 <SelectItem key="Credit">Credit</SelectItem>
                                 <SelectItem key="Debit">Debit</SelectItem>

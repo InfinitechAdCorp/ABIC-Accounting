@@ -6,7 +6,7 @@ import { ActionResponse } from "@/components/globals/types";
 import {
   create as createSchema,
   update as updateSchema,
-  changeStatus as changeStatusSchema,
+  setStatus as setStatusSchema,
 } from "@/components/transactionHistory/transactions/schemas";
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
@@ -258,8 +258,8 @@ export const destroy = async (values: Destroy) => {
   return response;
 };
 
-export const changeStatus = async (values: { id: string; status: string }) => {
-  const schema = changeStatusSchema;
+export const setStatus = async (values: { id: string; status: string }) => {
+  const schema = setStatusSchema;
 
   try {
     await schema.validate(values, { abortEarly: false });

@@ -11,9 +11,9 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { ActionResponse } from "@/components/globals/types";
-import { changeStatus as changeStatusSchema } from "@/components/transactionHistory/transactions/schemas";
+import { setStatus as validationSchema } from "@/components/transactionHistory/transactions/schemas";
 import { Formik, Form, Field } from "formik";
-import { handlePostSubmit } from "@/components/globals/utils";
+import { onPostSubmit } from "@/components/globals/utils";
 import { FaXmark } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa";
 
@@ -23,7 +23,7 @@ type Props = {
   status: string;
 };
 
-const ChangeStatusModal = ({ action, id, status }: Props) => {
+const SetStatusModal = ({ action, id, status }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
 
@@ -39,7 +39,7 @@ const ChangeStatusModal = ({ action, id, status }: Props) => {
     setSubmitting(true);
     action(values).then((response) => {
       setSubmitting(false);
-      handlePostSubmit(response, actions, onClose);
+      onPostSubmit(response, actions, onClose);
     });
   };
 
@@ -48,8 +48,8 @@ const ChangeStatusModal = ({ action, id, status }: Props) => {
       <Button
         className="text-white"
         size="sm"
-        color={status == "Active" ? "danger" : "success"}
         isIconOnly={true}
+        color={status == "Active" ? "danger" : "success"}
         title={status == "Active" ? "Cancel" : "Restore"}
         onPress={onOpen}
       >
@@ -62,7 +62,7 @@ const ChangeStatusModal = ({ action, id, status }: Props) => {
             <>
               <Formik
                 initialValues={initialValues}
-                validationSchema={changeStatusSchema}
+                validationSchema={validationSchema}
                 onSubmit={onSubmit}
               >
                 {() => (
@@ -102,4 +102,4 @@ const ChangeStatusModal = ({ action, id, status }: Props) => {
   );
 };
 
-export default ChangeStatusModal;
+export default SetStatusModal;

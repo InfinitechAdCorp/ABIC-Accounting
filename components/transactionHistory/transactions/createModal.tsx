@@ -15,27 +15,27 @@ import {
   SelectItem,
   Textarea,
 } from "@heroui/react";
-import { FormattedTransactionClient } from "@/components/transactionHistory/types";
-import { create as createSchema } from "@/components/transactionHistory/transactions/schemas";
+import { TClient } from "@/components/transactionHistory/types";
+import { create as validationSchema } from "@/components/transactionHistory/transactions/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
-import { create as createAction } from "@/components/transactionHistory/transactions/actions";
+import { create as action } from "@/components/transactionHistory/transactions/actions";
 import { Prisma } from "@prisma/client";
 import {
-  handlePostSubmit,
+  onPostSubmit,
   dateToDateValue,
   dateValueToDate,
 } from "@/components/globals/utils";
 
 type Props = {
   voucher: string;
-  transactionClients: FormattedTransactionClient[];
+  tClients: TClient[];
 };
 
 type TransactionCreateInput = Prisma.TransactionCreateInput & {
   proof: File;
 };
 
-const CreateModal = ({ voucher, transactionClients }: Props) => {
+const CreateModal = ({ voucher, tClients }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
 
@@ -56,9 +56,9 @@ const CreateModal = ({ voucher, transactionClients }: Props) => {
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
-    createAction(values).then((response) => {
+    action(values).then((response) => {
       setSubmitting(false);
-      handlePostSubmit(response, actions, onClose);
+      onPostSubmit(response, actions, onClose);
     });
   };
 
@@ -74,7 +74,7 @@ const CreateModal = ({ voucher, transactionClients }: Props) => {
             <>
               <Formik
                 initialValues={initialValues}
-                validationSchema={createSchema}
+                validationSchema={validationSchema}
                 onSubmit={onSubmit}
               >
                 {(props: FormikProps<any>) => (
@@ -161,11 +161,11 @@ const CreateModal = ({ voucher, transactionClients }: Props) => {
                               label="Client"
                               labelPlacement="outside"
                               placeholder="Select Client"
-                              items={transactionClients}
+                              items={tClients}
                             >
-                              {(transactionClient) => (
-                                <SelectItem key={transactionClient.id}>
-                                  {transactionClient.name}
+                              {(tClient) => (
+                                <SelectItem key={tClient.id}>
+                                  {tClient.name}
                                 </SelectItem>
                               )}
                             </Select>

@@ -4,67 +4,64 @@ import React from "react";
 import { formatDate, formatNumber } from "@/components/globals/utils";
 import UpdateModal from "@/components/transactionHistory/transactions/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
-import ChangeStatusModal from "@/components/transactionHistory/transactions/changeStatuslModal";
+import SetStatusModal from "@/components/transactionHistory/transactions/setStatusModal";
 import ViewProofModal from "@/components/transactionHistory/transactions/viewProofModal";
 import {
   destroy,
-  changeStatus,
+  setStatus,
 } from "@/components/transactionHistory/transactions/actions";
 import {
-  FormattedTransaction,
-  FormattedTransactionClient,
+  Transaction as Record,
+  TClient,
 } from "@/components/transactionHistory/types";
 import { ListBlobResultBlob } from "@vercel/blob";
 
-type Row = FormattedTransaction;
-
 const RenderCell = (
-  row: Row,
+  record: Record,
   columnKey: string,
   dependencies: {
     blobs: ListBlobResultBlob[];
-    transactionClients: FormattedTransactionClient[];
+    tClients: TClient[];
   }
 ) => {
   switch (columnKey) {
     case "actions":
       return (
         <div className="relative flex justify-end items-center gap-2">
-          <UpdateModal
-            transaction={row}
-            transactionClients={dependencies.transactionClients}
-          />
-          <DestroyModal title="Transaction" action={destroy} id={row.id} />
-          <ChangeStatusModal
-            action={changeStatus}
-            id={row.id}
-            status={row.status}
+          <UpdateModal record={record} tClients={dependencies.tClients} />
+          <DestroyModal title="Transaction" action={destroy} id={record.id} />
+          <SetStatusModal
+            action={setStatus}
+            id={record.id}
+            status={record.status}
           />
         </div>
       );
     case "date":
-      return formatDate(row.date);
+      return formatDate(record.date);
     case "client":
-      return row.transaction_client?.name;
+      return record.t_client?.name;
     case "credit":
-      if (row.type == "Credit") {
-        return formatNumber(row.amount);
+      let credit;
+      if (record.type == "Credit") {
+        credit = formatNumber(record.amount);
       }
-      return "";
+      return credit;
     case "debit":
-      if (row.type == "Debit") {
-        return formatNumber(row.amount);
+      let debit;
+      if (record.type == "Debit") {
+        debit = formatNumber(record.amount);
       }
-      return "";
+      return debit;
     case "proof":
-      const name = row[columnKey as keyof Row];
+      const proof = record[columnKey as keyof Record];
       const blob = dependencies.blobs.find((blob) => {
-        return name == blob.pathname;
+        return proof == blob.pathname;
       });
 
       return <ViewProofModal url={blob?.url || "/no-image.png"} />;
     default:
-      return row[columnKey as keyof Row];
+      return record[columnKey as keyof Record];
   }
 };
 
