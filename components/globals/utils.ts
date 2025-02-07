@@ -1,8 +1,5 @@
 import {
-  TClient,
-  TClientWithTransactions,
   Transaction,
-  TransactionWithTClient,
 } from "@/components/transactionHistory/types";
 import {
   CClient,
@@ -16,6 +13,7 @@ import { ActionResponse } from "@/components/globals/types";
 import { DateValue, parseDate } from "@internationalized/date";
 
 // Event Handlers
+
 export const onPostSubmit = (
   response: ActionResponse,
   actions: { resetForm: () => void },
@@ -35,129 +33,10 @@ export const onPostSubmit = (
   }
 };
 
-// Data Formatters
 
-export const formatTClients = (ufRecords: TClientWithTransactions[]) => {
-  const records: TClient[] = [];
 
-  if (ufRecords) {
-    ufRecords.forEach((ufRecord) => {
-      const transactions: Transaction[] = [];
-      ufRecord.transactions.forEach((ufTransaction) => {
-        const transaction = {
-          ...ufTransaction,
-          t_client_id: ufTransaction.t_client_id as string,
-          amount: ufTransaction.amount.toNumber(),
-        };
-        transactions.push(transaction);
-      });
 
-      const record = {
-        ...ufRecord,
-        account_id: ufRecord.account_id as string,
-        transactions: transactions,
-      };
-      records.push(record);
-    });
-  }
 
-  return records;
-};
-
-// export const displayFormatTransactionClients = (
-//   columns: { key: string; name: string }[],
-//   transactionClients: FormattedTransactionClient[]
-// ) => {
-//   const columnnNames: string[] = [];
-//   columns.forEach((column) => {
-//     columnnNames.push(column.name);
-//   });
-
-//   const rows = [];
-//   transactionClients.forEach((transactionClient) => {
-//     const row = {};
-//     columns.forEach((column) => {
-//       const key = column.key
-//       let value;
-//       switch (key) {
-//         case "transactions":
-//           value = transactionClient.transactions?.length;
-//           break;
-//         case "starting_fund":
-//           value = 0;
-//           break;
-//         case "running_balance":
-//           value = 0;
-//           break;
-//         default:
-//           value =
-//             transactionClient[key as keyof FormattedTransactionClient];
-//           break;
-//       }
-//       row[key] = value;
-//     });
-//     rows.push(row);
-//   });
-
-//   const data = {
-//     columnNames: columnnNames,
-//     rows: rows,
-//   };
-
-//   return data;
-// };
-
-export const formatTransactions = (ufRecords: TransactionWithTClient[]) => {
-  const records: Transaction[] = [];
-
-  ufRecords.forEach((ufRecord) => {
-    const tClient = ufRecord.t_client;
-
-    const record = {
-      ...ufRecord,
-      t_client: {
-        ...tClient,
-        id: tClient?.id as string,
-        account_id: tClient?.account_id as string,
-        name: tClient?.name as string,
-      },
-      t_client_id: ufRecord.t_client_id as string,
-      amount: ufRecord.amount.toNumber(),
-    };
-    records.push(record);
-  });
-
-  return records;
-};
-
-export const formatCClients = (ufRecords: CClientWithCollections[]) => {
-  const records: CClient[] = [];
-
-  if (ufRecords) {
-    ufRecords.forEach((ufRecord) => {
-      const collections: Collection[] = [];
-      ufRecord.collections.forEach((ufCollection) => {
-        const collection = {
-          ...ufCollection,
-          c_client_id: ufCollection.c_client_id as string,
-          tenant_price: ufCollection.tenant_price?.toNumber(),
-          owner_income: ufCollection.owner_income?.toNumber(),
-          abic_income: ufCollection.abic_income?.toNumber(),
-        };
-        collections.push(collection);
-      });
-
-      const record = {
-        ...ufRecord,
-        account_id: ufRecord.account_id as string,
-        collections: collections,
-      };
-      records.push(record);
-    });
-  }
-
-  return records;
-};
 
 export const formatCollections = (ufRecords: CollectionWithCClient[]) => {
   const records: Collection[] = [];

@@ -10,13 +10,44 @@ import {
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
-import { formatTClients } from "@/components/globals/utils";
+import {
+  TClient,
+  TClientWithTransactions,
+  Transaction,
+} from "@/components/transactionHistory/types";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { Destroy } from "@/components/globals/types";
 
 const model = "Client";
 const url = "/transaction-history/clients";
+
+export const formatTClients = (ufRecords: TClientWithTransactions[]) => {
+  const records: TClient[] = [];
+
+  if (ufRecords) {
+    ufRecords.forEach((ufRecord) => {
+      const transactions: Transaction[] = [];
+      ufRecord.transactions.forEach((ufTransaction) => {
+        const transaction = {
+          ...ufTransaction,
+          t_client_id: ufTransaction.t_client_id as string,
+          amount: ufTransaction.amount.toNumber(),
+        };
+        transactions.push(transaction);
+      });
+
+      const record = {
+        ...ufRecord,
+        account_id: ufRecord.account_id as string,
+        transactions: transactions,
+      };
+      records.push(record);
+    });
+  }
+
+  return records;
+};
 
 export const getAll = async () => {
   const session = await cookies();
@@ -49,9 +80,7 @@ export const getAll = async () => {
     return response;
   }
 
-  const records = formatTClients(
-    account?.t_clients || []
-  );
+  const records = formatTClients(account?.t_clients || []);
   const response = {
     code: 200,
     message: `Fetched ${model}s`,
@@ -84,9 +113,7 @@ export const get = async (id: string) => {
     return response;
   }
 
-  record = formatTClients([
-    record,
-  ])[0];
+  record = formatTClients([record])[0];
   const response = {
     code: 200,
     message: `Fetched ${model}`,
@@ -173,7 +200,7 @@ export const update = async (values: Prisma.TClientCreateInput) => {
 export const destroy = async (values: Destroy) => {
   const session = await cookies();
   const otp = session.get("otp")?.value;
-  
+
   const schema = destroySchema;
 
   try {

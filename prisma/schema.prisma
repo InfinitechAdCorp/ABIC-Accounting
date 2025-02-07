@@ -109,3 +109,8 @@ model Collection {
 
   @@map(name: "collections")
 }
+
+model AR {
+  id   String @id @default(cuid())
+  file String
+}

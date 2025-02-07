@@ -11,7 +11,10 @@ import {
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
-import { formatTransactions } from "@/components/globals/utils";
+import {
+  Transaction,
+  TransactionWithTClient,
+} from "@/components/transactionHistory/types";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { list, put, del } from "@vercel/blob";
@@ -25,6 +28,29 @@ type TransactionCreateInput = Prisma.TransactionCreateInput & {
 
 const model = "Transaction";
 const url = "/transaction-history/transactions";
+
+export const formatTransactions = (ufRecords: TransactionWithTClient[]) => {
+  const records: Transaction[] = [];
+
+  ufRecords.forEach((ufRecord) => {
+    const tClient = ufRecord.t_client;
+
+    const record = {
+      ...ufRecord,
+      t_client: {
+        ...tClient,
+        id: tClient?.id as string,
+        account_id: tClient?.account_id as string,
+        name: tClient?.name as string,
+      },
+      t_client_id: ufRecord.t_client_id as string,
+      amount: ufRecord.amount.toNumber(),
+    };
+    records.push(record);
+  });
+
+  return records;
+};
 
 export const getAll = async () => {
   const session = await cookies();

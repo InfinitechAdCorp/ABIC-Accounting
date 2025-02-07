@@ -10,13 +10,63 @@ import {
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
-import { formatCClients } from "@/components/globals/utils";
+import {
+  CClient,
+  CClientWithCollections,
+  Collection,
+  CollectionWithCClient,
+} from "@/components/collectionMonitoring/types";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { Destroy } from "@/components/globals/types";
 
 const model = "Client";
 const url = "/collection-monitoring/clients";
+
+export const formatCClients = (ufRecords: CClientWithCollections[]) => {
+  const records: CClient[] = [];
+
+  if (ufRecords) {
+    ufRecords.forEach((ufRecord) => {
+      const collections: Collection[] = [];
+      ufRecord.collections.forEach((ufCollection) => {
+        const collection = {
+          ...ufCollection,
+          c_client_id: ufCollection.c_client_id as string,
+          tenant_price: ufCollection.tenant_price?.toNumber(),
+          owner_income: ufCollection.owner_income?.toNumber(),
+          abic_income: ufCollection.abic_income?.toNumber(),
+        };
+        collections.push(collection);
+      });
+
+      const record = {
+        ...ufRecord,
+        account_id: ufRecord.account_id as string,
+        collections: collections,
+      };
+      records.push(record);
+    });
+  }
+
+  return records;
+};
+
+// export const tFormatCClients = (
+//   columns: { key: string; name: string }[],
+//   ufRecords: CClient
+// ) => {
+//   const records: {
+//     name: string,
+//     collections: string,
+//   }[] = [];
+
+//   ufRecords.forEach((ufRecord) => {
+//     columns.forEach((column) => {
+
+//     })
+//   })
+// };
 
 export const getAll = async () => {
   const session = await cookies();

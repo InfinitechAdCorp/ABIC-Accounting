@@ -13,6 +13,8 @@ const CClients = async () => {
   const { record: account } = await getAccount();
   const { records } = await getAll();
 
+  console.log(records)
+
   const model = "Clients";
 
   const columns = [

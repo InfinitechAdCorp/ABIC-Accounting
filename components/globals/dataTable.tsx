@@ -19,14 +19,12 @@ import {
   Pagination,
 } from "@heroui/react";
 
-type column = {
-  name: string;
-  key: string;
-};
-
 type Props = {
   model: string;
-  columns: column[];
+  columns: {
+    key: string;
+    name: string;
+  }[];
   rows: any[];
   searchKey: string;
   RenderCell: (columnKey: string, item: any, dependencies?: any) => any;
