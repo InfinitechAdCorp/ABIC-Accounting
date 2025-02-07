@@ -1,20 +1,20 @@
 import React from "react";
 import { get as getAccount } from "@/components/accounts/actions";
-import { getAll as getCollections } from "@/components/collectionMonitoring/collections/actions";
-import { getAll as getCollectionClients } from "@/components/collectionMonitoring/cClients/actions";
+import { getAll } from "@/components/collectionMonitoring/collections/actions";
+import { getAll as getCClients } from "@/components/collectionMonitoring/cClients/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import RenderCell from "@/components/collectionMonitoring/collections/renderCell";
 import CreateCollectionModal from "@/components/collectionMonitoring/collections/createModal";
-import CreateClientModal from "@/components/collectionMonitoring/cClients/createModal";
+import CreateCClientModal from "@/components/collectionMonitoring/cClients/createModal";
 import { Account } from "@prisma/client";
 import ExportBtn from "@/components/globals/exportBtn";
 
 const Collections = async () => {
-  const { account } = await getAccount();
-  const { collections } = await getCollections();
-  const { collectionClients } = await getCollectionClients();
+  const { record: account } = await getAccount();
+  const { records } = await getAll();
+  const { records: cClients } = await getCClients();
 
   const model = "Collections";
 
@@ -49,7 +49,7 @@ const Collections = async () => {
 
   return (
     <>
-      <Navbar account={account as Account} />
+      <Navbar record={account as Account} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
@@ -60,21 +60,21 @@ const Collections = async () => {
             <DataTable
               model={model}
               columns={columns}
-              rows={collections || []}
+              rows={records || []}
               searchKey="property"
               RenderCell={RenderCell}
               dependencies={{
                 locations: locations,
-                collectionClients: collectionClients,
+                cClients: cClients,
               }}
             >
               <>
                 <div className="hidden sm:flex">
-                  <CreateClientModal />
+                  <CreateCClientModal />
                 </div>
                 <CreateCollectionModal
                   locations={locations}
-                  collectionClients={collectionClients}
+                  cClients={cClients}
                 />
 
                 <ExportBtn />

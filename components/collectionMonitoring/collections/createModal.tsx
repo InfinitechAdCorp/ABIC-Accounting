@@ -14,13 +14,13 @@ import {
   Select,
   SelectItem,
 } from "@heroui/react";
-import { FormattedCollectionClient } from "@/components/collectionMonitoring/types";
-import { create as createSchema } from "@/components/collectionMonitoring/collections/schemas";
+import { CClient } from "@/components/collectionMonitoring/types";
+import { create as validationSchema } from "@/components/collectionMonitoring/collections/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
-import { create as createAction } from "@/components/collectionMonitoring/collections/actions";
+import { create as action } from "@/components/collectionMonitoring/collections/actions";
 import { Prisma } from "@prisma/client";
 import {
-  handlePostSubmit,
+  onPostSubmit,
   dateToDateValue,
   dateValueToDate,
 } from "@/components/globals/utils";
@@ -30,15 +30,15 @@ type Props = {
     key: string;
     name: string;
   }[];
-  collectionClients: FormattedCollectionClient[];
+  cClients: CClient[];
 };
 
-const CreateModal = ({ locations, collectionClients }: Props) => {
+const CreateModal = ({ locations, cClients }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
-    collection_client_id: "",
+    c_client_id: "",
     property: "",
     location: "",
     start: "",
@@ -56,9 +56,9 @@ const CreateModal = ({ locations, collectionClients }: Props) => {
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
-    createAction(values).then((response) => {
+    action(values).then((response) => {
       setSubmitting(false);
-      handlePostSubmit(response, actions, onClose);
+      onPostSubmit(response, actions, onClose);
     });
   };
 
@@ -74,7 +74,7 @@ const CreateModal = ({ locations, collectionClients }: Props) => {
             <>
               <Formik
                 initialValues={initialValues}
-                validationSchema={createSchema}
+                validationSchema={validationSchema}
                 onSubmit={onSubmit}
               >
                 {(props: FormikProps<any>) => (
@@ -92,11 +92,11 @@ const CreateModal = ({ locations, collectionClients }: Props) => {
                                 label="Client"
                                 labelPlacement="outside"
                                 placeholder="Select Client"
-                                items={collectionClients}
+                                items={cClients}
                               >
-                                {(collectionClient) => (
-                                  <SelectItem key={collectionClient.id}>
-                                    {collectionClient.name}
+                                {(cClient) => (
+                                  <SelectItem key={cClient.id}>
+                                    {cClient.name}
                                   </SelectItem>
                                 )}
                               </Select>
@@ -119,9 +119,9 @@ const CreateModal = ({ locations, collectionClients }: Props) => {
                                 label="Location"
                                 labelPlacement="outside"
                                 placeholder="Select Location"
-                                items={locations.filter(
-                                  (location) => location.name != "All"
-                                )}
+                                items={locations.filter((location) => {
+                                  return location.name != "All";
+                                })}
                               >
                                 {(location) => (
                                   <SelectItem key={location.key}>

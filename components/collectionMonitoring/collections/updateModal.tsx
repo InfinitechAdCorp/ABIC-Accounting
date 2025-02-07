@@ -15,46 +15,46 @@ import {
   SelectItem,
 } from "@heroui/react";
 import {
-  FormattedCollection,
-  FormattedCollectionClient,
+  Collection as Record,
+  CClient,
 } from "@/components/collectionMonitoring/types";
-import { update as updateSchema } from "@/components/collectionMonitoring/collections/schemas";
+import { update as validationSchema } from "@/components/collectionMonitoring/collections/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
-import { update as updateAction } from "@/components/collectionMonitoring/collections/actions";
+import { update as action } from "@/components/collectionMonitoring/collections/actions";
 import { Prisma } from "@prisma/client";
 import {
-  handlePostSubmit,
+  onPostSubmit,
   dateToDateValue,
   dateValueToDate,
 } from "@/components/globals/utils";
 import { FaPenToSquare } from "react-icons/fa6";
 
 type Props = {
-  collection: FormattedCollection;
+  record: Record;
   locations: {
     key: string;
     name: string;
   }[];
-  collectionClients: FormattedCollectionClient[];
+  cClients: CClient[];
 };
 
-const UpdateModal = ({ collection, locations, collectionClients }: Props) => {
+const UpdateModal = ({ record, locations, cClients }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
-    id: collection.id,
-    collection_client_id: collection.collection_client_id,
-    property: collection.property,
-    location: collection.location,
-    start: collection.start,
-    end: collection.end,
-    advance: collection.advance,
-    deposit: collection.deposit,
-    tenant_price: collection.tenant_price,
-    owner_income: collection.owner_income,
-    abic_income: collection.abic_income,
-    due: collection.due,
+    id: record.id,
+    c_client_id: record.c_client_id,
+    property: record.property,
+    location: record.location,
+    start: record.start,
+    end: record.end,
+    advance: record.advance,
+    deposit: record.deposit,
+    tenant_price: record.tenant_price,
+    owner_income: record.owner_income,
+    abic_income: record.abic_income,
+    due: record.due,
   };
 
   const onSubmit = async (
@@ -62,9 +62,9 @@ const UpdateModal = ({ collection, locations, collectionClients }: Props) => {
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
-    updateAction(values).then((response) => {
-      setSubmitting(false)
-      handlePostSubmit(response, actions, onClose);
+    action(values).then((response) => {
+      setSubmitting(false);
+      onPostSubmit(response, actions, onClose);
     });
   };
 
@@ -86,7 +86,7 @@ const UpdateModal = ({ collection, locations, collectionClients }: Props) => {
             <>
               <Formik
                 initialValues={initialValues}
-                validationSchema={updateSchema}
+                validationSchema={validationSchema}
                 onSubmit={onSubmit}
                 enableReinitialize={true}
               >
@@ -97,7 +97,7 @@ const UpdateModal = ({ collection, locations, collectionClients }: Props) => {
                       <Field type="hidden" name="id" />
 
                       <div className="grid grid-cols-2 gap-3">
-                        <Field name="collection_client_id">
+                        <Field name="c_client_id">
                           {({ field, meta }: FieldProps) => (
                             <div>
                               <Select
@@ -107,12 +107,12 @@ const UpdateModal = ({ collection, locations, collectionClients }: Props) => {
                                 label="Client"
                                 labelPlacement="outside"
                                 placeholder="Select Client"
-                                items={collectionClients}
+                                items={cClients}
                                 defaultSelectedKeys={[field.value]}
                               >
-                                {(collectionClient) => (
-                                  <SelectItem key={collectionClient.id}>
-                                    {collectionClient.name}
+                                {(cClient) => (
+                                  <SelectItem key={cClient.id}>
+                                    {cClient.name}
                                   </SelectItem>
                                 )}
                               </Select>

@@ -11,9 +11,9 @@ import {
   useDisclosure,
   Input,
 } from "@heroui/react";
-import { create as createSchema } from "@/components/collectionMonitoring/cClients/schemas";
+import { create as validationSchema } from "@/components/collectionMonitoring/cClients/schemas";
 import { Formik, Form, Field, FieldProps } from "formik";
-import { create as createAction } from "@/components/collectionMonitoring/cClients/actions";
+import { create as action } from "@/components/collectionMonitoring/cClients/actions";
 import { Prisma } from "@prisma/client";
 import { onPostSubmit } from "@/components/globals/utils";
 
@@ -26,13 +26,13 @@ const CreateModal = () => {
   };
 
   const onSubmit = async (
-    values: Prisma.CollectionClientCreateInput,
+    values: Prisma.CClientCreateInput,
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
-    createAction(values).then((response) => {
+    action(values).then((response) => {
       setSubmitting(false);
-      handlePostSubmit(response, actions, onClose);
+      onPostSubmit(response, actions, onClose);
     });
   };
 
@@ -48,7 +48,7 @@ const CreateModal = () => {
             <>
               <Formik
                 initialValues={initialValues}
-                validationSchema={createSchema}
+                validationSchema={validationSchema}
                 onSubmit={onSubmit}
               >
                 {() => (

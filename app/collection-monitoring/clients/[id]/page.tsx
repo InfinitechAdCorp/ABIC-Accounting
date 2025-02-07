@@ -1,7 +1,7 @@
 import React from "react";
 import {
-  get as getCollectionClient,
-  getAll as getCollectionClients,
+  get,
+  getAll as getCClients,
 } from "@/components/collectionMonitoring/cClients/actions";
 import { get as getAccount } from "@/components/accounts/actions";
 import { Card, CardBody } from "@heroui/react";
@@ -19,11 +19,11 @@ const TransactionClient = async ({
 }) => {
   const id = (await params).id;
 
-  const { account } = await getAccount();
-  const { collectionClient } = await getCollectionClient(id);
-  const { collectionClients } = await getCollectionClients();
+  const { record: account } = await getAccount();
+  const { record } = await get(id);
+  const { records: cClients } = await getCClients();
 
-  const model = `${collectionClient?.name}'s Collections`;
+  const model = `${record?.name}'s Collections`;
 
   const locations = [
     { key: "All", name: "All" },
@@ -55,7 +55,7 @@ const TransactionClient = async ({
 
   return (
     <>
-      <Navbar account={account as Account} />
+      <Navbar record={account as Account} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">
@@ -66,18 +66,18 @@ const TransactionClient = async ({
             <DataTable
               model={model}
               columns={columns}
-              rows={collectionClient?.collections || []}
+              rows={record?.collections || []}
               searchKey="name"
               RenderCell={RenderCell}
               dependencies={{
                 locations: locations,
-                collectionClients: collectionClients,
+                cClients: cClients,
               }}
             >
               <>
                 <CreateModal
                   locations={locations}
-                  collectionClients={collectionClients}
+                  cClients={cClients}
                 />
 
                 <ExportBtn />

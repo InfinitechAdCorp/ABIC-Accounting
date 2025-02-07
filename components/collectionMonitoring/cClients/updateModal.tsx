@@ -11,35 +11,35 @@ import {
   useDisclosure,
   Input,
 } from "@heroui/react";
-import { FormattedCollectionClient } from "@/components/collectionMonitoring/types";
-import { update as updateSchema } from "@/components/collectionMonitoring/cClients/schemas";
+import { CClient as Record } from "@/components/collectionMonitoring/types";
+import { update as validationSchema } from "@/components/collectionMonitoring/cClients/schemas";
 import { Formik, Form, Field, FieldProps } from "formik";
-import { update as updateAction } from "@/components/collectionMonitoring/cClients/actions";
+import { update as action } from "@/components/collectionMonitoring/cClients/actions";
 import { Prisma } from "@prisma/client";
-import { handlePostSubmit } from "@/components/globals/utils";
+import { onPostSubmit } from "@/components/globals/utils";
 import { FaPenToSquare } from "react-icons/fa6";
 
 type Props = {
-  collectionClient: FormattedCollectionClient;
+  record: Record;
 };
 
-const UpdateModal = ({ collectionClient }: Props) => {
+const UpdateModal = ({ record }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
-    id: collectionClient.id,
-    name: collectionClient.name,
+    id: record.id,
+    name: record.name,
   };
 
   const onSubmit = async (
-    values: Prisma.CollectionClientCreateInput,
+    values: Prisma.CClientCreateInput,
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
-    updateAction(values).then((response) => {
+    action(values).then((response) => {
       setSubmitting(false);
-      handlePostSubmit(response, actions, onClose);
+      onPostSubmit(response, actions, onClose);
     });
   };
 
@@ -61,7 +61,7 @@ const UpdateModal = ({ collectionClient }: Props) => {
             <>
               <Formik
                 initialValues={initialValues}
-                validationSchema={updateSchema}
+                validationSchema={validationSchema}
                 onSubmit={onSubmit}
               >
                 {() => (

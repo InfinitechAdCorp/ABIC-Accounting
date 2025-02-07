@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 export const create = Yup.object().shape({
-  collection_client_id: Yup.string().required("Collection Client ID is a required field"),
+  c_client_id: Yup.string().required("Client ID is a required field"),
   property: Yup.string().required("Property is a required field"),
   location: Yup.string().required("Location is a required field"),
   start: Yup.date()
@@ -30,12 +30,12 @@ export const create = Yup.object().shape({
     .typeError("Due Date must be a valid date")
     .required("Due Date is a required field")
     .min(Yup.ref("start"), "Due Date must be after Start Date")
-    .max(Yup.ref("end"), "Due Date must be before Due Date"),
+    .max(Yup.ref("end"), "Due Date must be before End Date"),
 });
 
 export const update = Yup.object().shape({
   id: Yup.string().required("ID is a required field"),
-  collection_client_id: Yup.string().required("Collection Client ID is a required field"),
+  c_client_id: Yup.string().required("Client ID is a required field"),
   property: Yup.string().required("Property is a required field"),
   location: Yup.string().required("Location is a required field"),
   start: Yup.date()
@@ -64,7 +64,7 @@ export const update = Yup.object().shape({
     .typeError("Due Date must be a valid date")
     .required("Due Date is a required field")
     .min(Yup.ref("start"), "Due Date must be after Start Date")
-    .max(Yup.ref("end"), "Due Date must be before Due Date"),
+    .max(Yup.ref("end"), "Due Date must be before End Date"),
 });
 
 export const markAsPaid = Yup.object().shape({

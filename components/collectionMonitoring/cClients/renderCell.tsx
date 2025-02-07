@@ -5,27 +5,25 @@ import UpdateModal from "@/components/collectionMonitoring/cClients/updateModal"
 import DestroyModal from "@/components/globals/destroyModal";
 import ViewBtn from "@/components/globals/viewBtn";
 import { destroy } from "@/components/collectionMonitoring/cClients/actions";
-import { FormattedCollectionClient } from "@/components/collectionMonitoring/types";
+import { CClient as Record } from "@/components/collectionMonitoring/types";
 
-type Row = FormattedCollectionClient;
-
-const RenderCell = (row: Row, columnKey: string) => {
+const RenderCell = (columnKey: string, record: Record) => {
   switch (columnKey) {
     case "actions":
       return (
         <div className="relative flex justify-end items-center gap-2">
-          <UpdateModal collectionClient={row} />
-          <DestroyModal title="Client" action={destroy} id={row.id} />
+          <UpdateModal record={record} />
+          <DestroyModal title="Client" action={destroy} id={record.id} />
           <ViewBtn
             title="View Collections"
-            link={`/collection-monitoring/clients/${row.id}`}
+            url={`/collection-monitoring/clients/${record.id}`}
           />
         </div>
       );
     case "collections":
-      return row.collections?.length;
+      return record.collections?.length;
     default:
-      return row[columnKey as keyof Row];
+      return record[columnKey as keyof Record];
   }
 };
 

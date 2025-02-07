@@ -11,9 +11,9 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { ActionResponse } from "@/components/globals/types";
-import { markAsPaid as markAsPaidSchema } from "@/components/collectionMonitoring/collections/schemas";
+import { markAsPaid as validationSchema } from "@/components/collectionMonitoring/collections/schemas";
 import { Formik, Form, Field } from "formik";
-import { handlePostSubmit } from "@/components/globals/utils";
+import { onPostSubmit } from "@/components/globals/utils";
 import { MdPayments } from "react-icons/md";
 
 type Props = {
@@ -36,7 +36,7 @@ const PaymentModal = ({ action, id }: Props) => {
     setSubmitting(true);
     action(values).then((response) => {
       setSubmitting(false);
-      handlePostSubmit(response, actions, onClose);
+      onPostSubmit(response, actions, onClose);
     });
   };
 
@@ -59,7 +59,7 @@ const PaymentModal = ({ action, id }: Props) => {
             <>
               <Formik
                 initialValues={initialValues}
-                validationSchema={markAsPaidSchema}
+                validationSchema={validationSchema}
                 onSubmit={onSubmit}
               >
                 {() => (

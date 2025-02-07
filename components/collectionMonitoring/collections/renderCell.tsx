@@ -12,21 +12,20 @@ import {
   markAsPaid,
 } from "@/components/collectionMonitoring/collections/actions";
 import {
-  FormattedCollection,
-  FormattedCollectionClient,
+  Collection as Record,
+  CClient,
 } from "@/components/collectionMonitoring/types";
 
-type Row = FormattedCollection;
 
 const RenderCell = (
-  row: Row,
   columnKey: string,
+  record: Record,
   dependencies: {
     locations: {
       key: string;
       name: string;
     }[];
-    collectionClients: FormattedCollectionClient[];
+    cClients: CClient[];
   }
 ) => {
   switch (columnKey) {
@@ -34,40 +33,40 @@ const RenderCell = (
       return (
         <div className="relative flex justify-end items-center gap-2">
           <UpdateModal
-            collection={row}
+            record={record}
             locations={dependencies.locations}
-            collectionClients={dependencies.collectionClients}
+            cClients={dependencies.cClients}
           />
-          <DestroyModal title="Collection" action={destroy} id={row.id} />
-          <PaymentModal action={markAsPaid} id={row.id} />
+          <DestroyModal title="Collection" action={destroy} id={record.id} />
+          <PaymentModal action={markAsPaid} id={record.id} />
         </div>
       );
     case "client":
-      return row.collection_client?.name;
+      return record.c_client?.name;
     case "start":
     case "end":
     case "due":
-      return formatDate(row[columnKey as keyof Row] as Date);
+      return formatDate(record[columnKey as keyof Record] as Date);
     case "tenant_price":
     case "owner_income":
     case "abic_income":
-      return formatNumber(row[columnKey as keyof Row] as number);
+      return formatNumber(record[columnKey as keyof Record] as number);
     case "status":
       const today = new Date(new Date().setHours(0, 0, 0, 0));
-      const difference = differenceInDays(row.due.setHours(0, 0, 0, 0), today);
+      const diff = differenceInDays(record.due.setHours(0, 0, 0, 0), today);
 
       type Color = "success" | "danger" | "primary";
 
       let color;
       let status;
 
-      if (difference > 0) {
+      if (diff > 0) {
         color = "success";
-        status = `${difference} Days Remaining`;
-      } else if (difference < 0) {
+        status = `${diff} Days Remaining`;
+      } else if (diff < 0) {
         color = "danger";
-        status = `${difference} Days Past Due`.replace("-", "");
-      } else if (difference == 0) {
+        status = `${diff} Days Past Due`.replace("-", "");
+      } else if (diff == 0) {
         color = "primary";
         status = "Today";
       }
@@ -78,13 +77,13 @@ const RenderCell = (
         </Chip>
       );
     case "payments":
-      let payments = differenceInMonths(row.due, row.start) - 1;
+      let payments = differenceInMonths(record.due, record.start) - 1;
       if (payments < 0) {
         payments = 0;
       }
       return payments;
     default:
-      return row[columnKey as keyof Row];
+      return record[columnKey as keyof Record];
   }
 };
 
