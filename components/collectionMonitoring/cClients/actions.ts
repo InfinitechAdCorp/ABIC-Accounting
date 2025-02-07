@@ -53,34 +53,39 @@ export const format = async (ufRecords: CClientWithCollections[]) => {
 
 export const tableFormat = async (
   columns: { key: string; name: string }[],
-  records: CClient[],
+  records: CClient[]
 ) => {
-  const rows: {
-    name: string,
-    collections: string,
-  }[] = [];
+  type Row = {
+    name: string;
+    collections: string;
+  };
+
+  const rows: Row[] = [];
 
   records.forEach((record) => {
-    const row = {};
+    const row = {
+      name: "",
+      collections: "",
+    };
 
     columns.forEach((column) => {
-      const key = column.key
+      const key = column.key;
       let value;
 
       switch (key) {
-        case "collections": 
-          value = record.collections?.length
+        case "collections":
+          value = record.collections?.length;
           break;
-        default: 
-          value = record[key]
+        default:
+          value = record[key as keyof CClient];
           break;
       }
 
-      row[key] = value;
-    })
+      row[key as keyof Row] = `${value}`;
+    });
 
-    rows.push(row)
-  })
+    rows.push(row);
+  });
 
   return rows;
 };

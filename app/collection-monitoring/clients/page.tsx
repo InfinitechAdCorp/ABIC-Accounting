@@ -43,7 +43,7 @@ const CClients = async () => {
               <>
                 <CreateModal />
 
-                <ExportBtn />
+                <ExportBtn columns={columns.slice(0, -1)} rows={rows} />
               </>
             </DataTable>
           </CardBody>
