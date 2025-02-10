@@ -9,10 +9,9 @@ export type CClient = {
 };
 
 export type CClientRow = {
-  id: string;
   name: string;
   collections: string;
-}
+};
 
 export type Collection = {
   id: string;
@@ -30,6 +29,22 @@ export type Collection = {
   due: Date;
 };
 
+export type CollectionRow = {
+  client: string;
+  property: string;
+  location: string;
+  start: string;
+  end: string;
+  advance: string;
+  deposit: string;
+  tenant_price: string;
+  owner_income: string;
+  abic_income: string;
+  due: string;
+  status: string;
+  payments: string;
+};
+
 export type CClientWithCollections = Prisma.CClientGetPayload<{
   include: {
     collections: true;
@@ -41,4 +56,3 @@ export type CollectionWithCClient = Prisma.CollectionGetPayload<{
     c_client: true;
   };
 }>;
-

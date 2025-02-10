@@ -1,11 +1,14 @@
 import React from "react";
 import { get as getAccount } from "@/components/accounts/actions";
-import { getAll } from "@/components/collectionMonitoring/collections/actions";
+import {
+  getAll,
+  tableFormat,
+} from "@/components/collectionMonitoring/collections/actions";
 import { getAll as getCClients } from "@/components/collectionMonitoring/cClients/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
-import RenderCell from "@/components/collectionMonitoring/collections/renderCell";
+import RenderBody from "@/components/collectionMonitoring/collections/renderBody";
 import CreateCollectionModal from "@/components/collectionMonitoring/collections/createModal";
 import CreateCClientModal from "@/components/collectionMonitoring/cClients/createModal";
 import { Account } from "@prisma/client";
@@ -47,6 +50,8 @@ const Collections = async () => {
     { key: "actions", name: "ACTIONS" },
   ];
 
+  const rows = await tableFormat(columns.slice(0, -1), records);
+
   return (
     <>
       <Navbar record={account as Account} />
@@ -57,12 +62,14 @@ const Collections = async () => {
             <h1 className="text-lg font-semibold mb-3">
               {model.toUpperCase()}
             </h1>
+
             <DataTable
               model={model}
+              records={records}
               columns={columns}
-              rows={records || []}
+              rows={rows}
               searchKey="property"
-              RenderCell={RenderCell}
+              RenderBody={RenderBody}
               dependencies={{
                 locations: locations,
                 cClients: cClients,
@@ -76,8 +83,7 @@ const Collections = async () => {
                   locations={locations}
                   cClients={cClients}
                 />
-
-                <ExportBtn />
+                <ExportBtn columns={columns.slice(0, -1)} rows={rows} />
               </>
             </DataTable>
           </CardBody>

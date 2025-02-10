@@ -12,6 +12,7 @@ import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 import {
   CClient,
+  CClientRow,
   CClientWithCollections,
   Collection,
 } from "@/components/collectionMonitoring/types";
@@ -55,12 +56,7 @@ export const tableFormat = async (
   columns: { key: string; name: string }[],
   records: CClient[]
 ) => {
-  type Row = {
-    name: string;
-    collections: string;
-  };
-
-  const rows: Row[] = [];
+  const rows: CClientRow[] = [];
 
   records.forEach((record) => {
     const row = {
@@ -81,7 +77,7 @@ export const tableFormat = async (
           break;
       }
 
-      row[key as keyof Row] = `${value}`;
+      row[key as keyof CClientRow] = `${value}`;
     });
 
     rows.push(row);

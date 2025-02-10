@@ -14,11 +14,14 @@ import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 import {
   Collection,
+  CollectionRow,
   CollectionWithCClient,
 } from "@/components/collectionMonitoring/types";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { Destroy } from "@/components/globals/types";
+import { formatDate, formatNumber } from "@/components/globals/utils";
+import { differenceInDays, differenceInMonths } from "date-fns";
 
 type CollectionCreateInput = Prisma.CollectionCreateInput & {
   c_client_id?: string;
@@ -51,6 +54,79 @@ export const format = async (ufRecords: CollectionWithCClient[]) => {
   });
 
   return records;
+};
+
+export const tableFormat = async (
+  columns: { key: string; name: string }[],
+  records: Collection[]
+) => {
+  const rows: CollectionRow[] = [];
+
+  records.forEach((record) => {
+    const row = {
+      client: "",
+      property: "",
+      location: "",
+      start: "",
+      end: "",
+      advance: "",
+      deposit: "",
+      tenant_price: "",
+      owner_income: "",
+      abic_income: "",
+      due: "",
+      status: "",
+      payments: "",
+    };
+
+    columns.forEach((column) => {
+      const key = column.key;
+      let value;
+
+      switch (key) {
+        case "client":
+          value = record.c_client?.name;
+          break;
+        case "start":
+        case "end":
+        case "due":
+          value = formatDate(record[key as keyof Collection] as Date);
+          break;
+        case "tenant_price":
+        case "owner_income":
+        case "abic_income":
+          value = formatNumber(record[key as keyof Collection] as number);
+          break;
+        case "status":
+          const today = new Date(new Date().setHours(0, 0, 0, 0));
+          const diff = differenceInDays(record.due.setHours(0, 0, 0, 0), today);
+
+          if (diff > 0) {
+            value = `${diff} Days Remaining`;
+          } else if (diff < 0) {
+            value = `${diff} Days Past Due`.replace("-", "");
+          } else if (diff == 0) {
+            value = "Today";
+          }
+          break;
+        case "payments":
+          value = differenceInMonths(record.due, record.start) - 1;
+          if (value < 0) {
+            value = 0;
+          }
+          break;
+        default:
+          value = record[key as keyof Collection];
+          break;
+      }
+
+      row[key as keyof CollectionRow] = `${value}`;
+    });
+
+    rows.push(row);
+  });
+
+  return rows;
 };
 
 export const getAll = async () => {
