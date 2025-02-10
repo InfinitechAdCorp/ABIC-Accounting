@@ -57,7 +57,7 @@ export const tableFormat = async (columns: Column[], records: CClient[]) => {
   const rows: CClientRow[] = [];
 
   records.forEach((record) => {
-    const row = {
+    const row: CClientRow = {
       name: "",
       collections: "",
     };
@@ -75,7 +75,9 @@ export const tableFormat = async (columns: Column[], records: CClient[]) => {
           break;
       }
 
-      row[key as keyof CClientRow] = `${value}`;
+      if (value) {
+        row[key as keyof CClientRow] = `${value}`;
+      }
     });
 
     rows.push(row);

@@ -57,10 +57,7 @@ export const format = async (ufRecords: CollectionWithCClient[]) => {
   return records;
 };
 
-export const tableFormat = async (
-  columns: Column[],
-  records: Collection[]
-) => {
+export const tableFormat = async (columns: Column[], records: Collection[]) => {
   const rows: CollectionRow[] = [];
 
   records.forEach((record) => {
@@ -121,7 +118,9 @@ export const tableFormat = async (
           break;
       }
 
-      row[key as keyof CollectionRow] = `${value}`;
+      if (value) {
+        row[key as keyof CollectionRow] = `${value}`;
+      }
     });
 
     rows.push(row);

@@ -111,6 +111,7 @@ model Collection {
 }
 
 model AR {
-  id   String @id @default(cuid())
-  file String
+  id     String @id @default(cuid())
+  number String @unique
+  file   String
 }

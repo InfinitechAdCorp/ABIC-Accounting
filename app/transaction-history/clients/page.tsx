@@ -1,11 +1,14 @@
 import React from "react";
-import { getAll } from "@/components/transactionHistory/tClients/actions";
+import {
+  getAll,
+  tableFormat,
+} from "@/components/transactionHistory/tClients/actions";
 import { getAll as getTransactions } from "@/components/transactionHistory/transactions/actions";
 import { get as getAccount } from "@/components/accounts/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
-import RenderCell from "@/components/transactionHistory/tClients/renderCell";
+import RenderBody from "@/components/transactionHistory/tClients/renderBody";
 import CreateModal from "@/components/transactionHistory/tClients/createModal";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
 import { Account } from "@prisma/client";
@@ -29,6 +32,8 @@ const TClients = async () => {
     { key: "actions", name: "ACTIONS" },
   ];
 
+  const rows = await tableFormat(columns.slice(0, -1), records);
+
   return (
     <>
       <Navbar record={account as Account} />
@@ -47,14 +52,15 @@ const TClients = async () => {
 
             <DataTable
               model={model}
+              records={records}
               columns={columns}
-              rows={records}
+              rows={rows}
               searchKey="name"
-              RenderCell={RenderCell}
+              RenderBody={RenderBody}
             >
               <>
                 <CreateModal />
-                <ExportBtn />
+                <ExportBtn columns={columns.slice(0, -1)} rows={rows} />
               </>
             </DataTable>
           </CardBody>

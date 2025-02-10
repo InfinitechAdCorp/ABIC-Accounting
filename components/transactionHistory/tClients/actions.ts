@@ -10,14 +10,17 @@ import {
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
+import { Column } from "@/components/globals/types";
 import {
   TClient,
+  TClientRow,
   TClientWithTransactions,
   Transaction,
 } from "@/components/transactionHistory/types";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { Destroy } from "@/components/globals/types";
+import { computeBalance, formatNumber } from "@/components/globals/utils";
 
 const model = "Client";
 const url = "/transaction-history/clients";
@@ -47,6 +50,64 @@ export const format = async (ufRecords: TClientWithTransactions[]) => {
   }
 
   return records;
+};
+
+export const tableFormat = async (columns: Column[], records: TClient[]) => {
+  const rows: TClientRow[] = [];
+
+  records.forEach((record) => {
+    const row = {
+      name: "",
+      transactions: "",
+      starting_fund: "",
+      running_balance: "",
+    };
+
+    columns.forEach((column) => {
+      const key = column.key;
+      let value;
+      const transactions = record.transactions;
+
+      switch (key) {
+        case "transactions":
+          value = record.transactions?.length;
+          break;
+        case "starting_fund":
+          value = 0;
+          const transaction = transactions?.find((transaction) => {
+            if (transaction.status != "Cancelled") {
+              return transaction;
+            }
+          });
+
+          if (transaction) {
+            if (transaction.type == "Credit") {
+              value += transaction.amount;
+            } else {
+              value -= transaction.amount;
+            }
+          }
+
+          value = formatNumber(value);
+          break;
+        case "running_balance":
+          value = computeBalance(transactions || []);
+          value = formatNumber(value);
+          break;
+        default:
+          value = record[key as keyof TClient];
+          break;
+      }
+
+      if (value) {
+        row[key as keyof TClientRow] = `${value}`;
+      }
+    });
+
+    rows.push(row);
+  });
+
+  return rows;
 };
 
 export const getAll = async () => {
@@ -113,7 +174,7 @@ export const get = async (id: string) => {
     return response;
   }
 
-  record = await format([record])[0];
+  record = (await format([record]))[0];
   const response = {
     code: 200,
     message: `Fetched ${model}`,

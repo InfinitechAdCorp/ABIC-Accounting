@@ -8,6 +8,13 @@ export type TClient = {
   name: string;
 };
 
+export type TClientRow = {
+  name: string, 
+  transactions: string,
+  starting_fund: string,
+  running_balance: string,
+}
+
 export type Transaction = {
   id: string;
   t_client?: TClient;

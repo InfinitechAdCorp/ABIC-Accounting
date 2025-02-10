@@ -49,8 +49,6 @@ const Transactions = async () => {
 
   const voucher = setVoucher(records[0]);
 
-  console.log(rows)
-
   return (
     <>
       <Navbar record={account as Account} />
