@@ -17,11 +17,11 @@ datasource db {
 
 model Account {
   id         String    @id @default(cuid())
+  listings   Listing[]
   t_clients  TClient[]
   c_clients  CClient[]
   name       String    @unique
   th_access  Boolean
-  ie_access  Boolean
   cm_access  Boolean
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
@@ -59,23 +59,25 @@ model Transaction {
   @@map(name: "transactions")
 }
 
-model Detail {
-  id         String    @id @default(cuid())
-  project    String
-  unit       String
-  res        DateTime  @db.Date
-  terms      String
-  consultant String
-  manager    String
-  price      Decimal   @db.Decimal(15, 2)
-  list_price Decimal   @db.Decimal(15, 2)
-  status     String
-  source     String
-  extension  DateTime? @db.Date
-  closed     DateTime? @db.Date
-  type       String
+model Listing {
+  id          String    @id @default(cuid())
+  account     Account?  @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  account_id  String?
+  project     String
+  unit        String
+  res         DateTime  @db.Date
+  terms       String
+  consultant  String
+  manager     String
+  list_price  Decimal   @db.Decimal(15, 2)
+  total_price Decimal   @db.Decimal(15, 2)
+  status      String
+  source      String
+  extension   DateTime @db.Date
+  closed      DateTime @db.Date
+  type        String
 
-  @@map(name: "details")
+  @@map(name: "listings")
 }
 
 model CClient {

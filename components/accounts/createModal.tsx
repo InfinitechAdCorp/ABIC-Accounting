@@ -28,7 +28,6 @@ const CreateModal = () => {
   const initialValues = {
     name: "",
     th_access: false,
-    ie_access: false,
     cm_access: false,
   };
 
@@ -102,18 +101,7 @@ const CreateModal = () => {
                             </div>
                           )}
                         </Field>
-                        <Field name="ie_access">
-                          {({ field, meta }: FieldProps) => (
-                            <div>
-                              <Checkbox {...field}>Income & Expenses</Checkbox>
-                              {meta.touched && meta.error && (
-                                <small className="text-red-500">
-                                  {meta.error}
-                                </small>
-                              )}
-                            </div>
-                          )}
-                        </Field>
+                       
                         <Field name="cm_access">
                           {({ field, meta }: FieldProps) => (
                             <div>

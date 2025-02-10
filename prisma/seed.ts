@@ -6,19 +6,16 @@ const accounts: Prisma.AccountCreateInput[] = [
   {
     name: "SCB 443",
     th_access: true,
-    ie_access: false,
     cm_access: true,
   },
   {
     name: "SCB 483",
     th_access: false,
-    ie_access: true,
     cm_access: false,
   },
   {
     name: "SCB 202",
     th_access: true,
-    ie_access: false,
     cm_access: false,
   },
 ];

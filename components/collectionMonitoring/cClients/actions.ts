@@ -90,17 +90,13 @@ export const getAll = async () => {
   const session = await cookies();
   const accountID = session.get("accountID")?.value || "";
 
-  let account;
+  let records;
 
   try {
-    account = await prisma.account.findUnique({
-      where: { id: accountID },
+    records = await prisma.cClient.findMany({
+      where: { account_id: accountID },
       include: {
-        c_clients: {
-          include: {
-            collections: true,
-          },
-        },
+        collections: true,
       },
     });
   } catch {
@@ -112,7 +108,7 @@ export const getAll = async () => {
     return response;
   }
 
-  const records = await format(account?.c_clients || []);
+  records = await format(records || []);
   const response = {
     code: 200,
     message: `Fetched ${model}s`,

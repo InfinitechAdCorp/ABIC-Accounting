@@ -83,7 +83,6 @@ export const create = async (values: Prisma.AccountCreateInput) => {
       data: {
         name: values.name,
         th_access: values.th_access,
-        ie_access: values.ie_access,
         cm_access: values.cm_access,
       },
     });

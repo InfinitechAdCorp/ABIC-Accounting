@@ -114,19 +114,15 @@ export const getAll = async () => {
   const session = await cookies();
   const accountID = session.get("accountID")?.value;
 
-  let account;
+  let records;
 
   try {
-    account = await prisma.account.findUnique({
-      where: { id: accountID },
+    records = await prisma.tClient.findMany({
+      where: { account_id: accountID },
       include: {
-        t_clients: {
-          include: {
-            transactions: {
-              orderBy: {
-                date: "desc",
-              },
-            },
+        transactions: {
+          orderBy: {
+            date: "desc",
           },
         },
       },
@@ -141,7 +137,7 @@ export const getAll = async () => {
     return response;
   }
 
-  const records = await format(account?.t_clients || []);
+  records = await format(records || []);
   const response = {
     code: 200,
     message: `Fetched ${model}s`,
