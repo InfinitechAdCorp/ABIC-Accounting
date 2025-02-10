@@ -1,9 +1,9 @@
 import { SVGProps } from "react";
 
 export type Destroy = {
-  id: string,
-  otp: string,
-}
+  id: string;
+  otp: string;
+};
 
 export type Login = {
   username: string;
@@ -21,4 +21,9 @@ export type ActionResponse = {
 
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
+};
+
+export type Column = {
+  key: string;
+  name: string;
 };

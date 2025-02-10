@@ -8,6 +8,11 @@ export type CClient = {
   name: string;
 };
 
+export type CClientRow = {
+  name: string;
+  collections: string;
+}
+
 export type Collection = {
   id: string;
   c_client?: CClient;

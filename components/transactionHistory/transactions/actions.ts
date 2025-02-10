@@ -20,6 +20,7 @@ import { revalidatePath } from "next/cache";
 import { list, put, del } from "@vercel/blob";
 import { ulid } from "ulidx";
 import { Destroy } from "@/components/globals/types";
+import { formatDate, formatNumber } from "@/components/globals/utils";
 
 type TransactionCreateInput = Prisma.TransactionCreateInput & {
   proof: File;
@@ -50,6 +51,76 @@ export const format = async (ufRecords: TransactionWithTClient[]) => {
   });
 
   return records;
+};
+
+export const tableFormat = async (
+  columns: { key: string; name: string }[],
+  records: Transaction[]
+) => {
+  type Row = {
+    date: string;
+    voucher: string;
+    check: string;
+    client: string;
+    particulars: string;
+    credit: string;
+    debit: string;
+    proof: string;
+  };
+
+  const rows: Row[] = [];
+  const { blobs } = await list();
+
+  records.forEach((record) => {
+    const row = {
+      date: "",
+      voucher: "",
+      check: "",
+      client: "",
+      particulars: "",
+      credit: "",
+      debit: "",
+      proof: "",
+    };
+
+    columns.forEach((column) => {
+      const key = column.key;
+      let value;
+
+      switch (key) {
+        case "date":
+          value = formatDate(record[key as keyof Transaction] as Date);
+          break;
+        case "client":
+          value = record.t_client?.name;
+          break;
+        case "credit":
+          if (record.type == "Credit") {
+            value = formatNumber(record.amount);
+          }
+          break;
+        case "debit":
+          if (record.type == "Debit") {
+            value = formatNumber(record.amount);
+          }
+          break;
+        case "proof":
+          const proof = record[key as keyof Transaction];
+          const blob = blobs.find((blob) => proof == blob.pathname);
+          value = blob?.url;
+          break;
+        default:
+          value = record[key as keyof Transaction];
+          break;
+      }
+
+      row[key as keyof Row] = `${value}`;
+    });
+
+    rows.push(row);
+  });
+
+  return rows;
 };
 
 export const getAll = async () => {
@@ -222,7 +293,7 @@ export const update = async (values: TransactionCreateInput) => {
 export const destroy = async (values: Destroy) => {
   const session = await cookies();
   const otp = session.get("otp")?.value;
-  
+
   const schema = destroySchema;
 
   try {

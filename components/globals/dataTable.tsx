@@ -13,22 +13,24 @@ import {
   TableHeader,
   TableColumn,
   TableBody,
-  TableRow,
-  TableCell,
   Input,
   Pagination,
 } from "@heroui/react";
+import { Column } from "@/components/globals/types";
 
 type Props = {
   model: string;
-  columns: {
-    key: string;
-    name: string;
-  }[];
+  records: any[];
+  columns: Column[];
   rows: any[];
-  searchKey: string;
-  RenderCell: (columnKey: string, item: any, dependencies?: any) => any;
   dependencies?: any;
+  searchKey: string;
+  Renderer: (
+    records: any[],
+    columns: Column[],
+    rows: any[],
+    dependencies: any
+  ) => any;
   children: ReactElement;
 };
 
@@ -37,7 +39,7 @@ const DataTable = ({
   columns,
   rows,
   searchKey,
-  RenderCell,
+  Renderer,
   dependencies,
   children,
 }: Props) => {
@@ -169,8 +171,9 @@ const DataTable = ({
             <TableColumn key={column.key}>{column.name}</TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent={`No ${model} Found`} items={items}>
-          {(item) => (
+        <TableBody emptyContent={`No ${model} Found`}>
+          {Renderer(items, columns, rows, dependencies)}
+          {/* {(item) => (
             <TableRow
               key={item.id}
               className={item.status == "Cancelled" ? "text-red-500" : ""}
@@ -181,7 +184,7 @@ const DataTable = ({
                 </TableCell>
               )}
             </TableRow>
-          )}
+          )} */}
         </TableBody>
       </Table>
     </>
