@@ -10,6 +10,7 @@ import {
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
+import { Column } from "@/components/globals/types";
 import {
   CClient,
   CClientRow,
@@ -52,10 +53,7 @@ export const format = async (ufRecords: CClientWithCollections[]) => {
   return records;
 };
 
-export const tableFormat = async (
-  columns: { key: string; name: string }[],
-  records: CClient[]
-) => {
+export const tableFormat = async (columns: Column[], records: CClient[]) => {
   const rows: CClientRow[] = [];
 
   records.forEach((record) => {
@@ -140,7 +138,7 @@ export const get = async (id: string) => {
     return response;
   }
 
-  record = await format([record])[0];
+  record = (await format([record]))[0];
   const response = {
     code: 200,
     message: `Fetched ${model}`,

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { formatDate, formatNumber } from "@/components/globals/utils";
+import { TableRow, TableCell } from "@heroui/react";
 import UpdateModal from "@/components/transactionHistory/transactions/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
 import SetStatusModal from "@/components/transactionHistory/transactions/setStatusModal";
@@ -10,21 +10,22 @@ import {
   destroy,
   setStatus,
 } from "@/components/transactionHistory/transactions/actions";
+import { Column } from "@/components/globals/types";
 import {
   Transaction as Record,
+  TransactionRow as Row,
   TClient,
 } from "@/components/transactionHistory/types";
-import { ListBlobResultBlob } from "@vercel/blob";
 
 const RenderCell = (
-  columnKey: string,
   record: Record,
+  column: string,
+  row: Row,
   dependencies: {
-    blobs: ListBlobResultBlob[];
     tClients: TClient[];
   }
 ) => {
-  switch (columnKey) {
+  switch (column) {
     case "actions":
       return (
         <div className="relative flex justify-end items-center gap-2">
@@ -37,32 +38,35 @@ const RenderCell = (
           />
         </div>
       );
-    case "date":
-      return formatDate(record.date);
-    case "client":
-      return record.t_client?.name;
-    case "credit":
-      let credit;
-      if (record.type == "Credit") {
-        credit = formatNumber(record.amount);
-      }
-      return credit;
-    case "debit":
-      let debit;
-      if (record.type == "Debit") {
-        debit = formatNumber(record.amount);
-      }
-      return debit;
     case "proof":
-      const proof = record[columnKey as keyof Record];
-      const blob = dependencies.blobs.find((blob) => {
-        return proof == blob.pathname;
-      });
-
-      return <ViewProofModal url={blob?.url || "/no-image.png"} />;
+      const value = row[column as keyof Row];
+      return <ViewProofModal url={(value as string) || "/no-image.png"} />;
     default:
-      return record[columnKey as keyof Record];
+      return row[column as keyof Row];
   }
 };
 
-export default RenderCell;
+const RenderBody = (
+  records: Record[],
+  columns: Column[],
+  rows: Row[],
+  dependencies: {
+    tClients: TClient[];
+  }
+) => {
+  return (
+    <>
+      {rows.map((row, index) => (
+        <TableRow key={index}>
+          {columns.map((column) => (
+            <TableCell key={column.key}>
+              {RenderCell(records[index], column.key, row, dependencies)}
+            </TableCell>
+          ))}
+        </TableRow>
+      ))}
+    </>
+  );
+};
+
+export default RenderBody;

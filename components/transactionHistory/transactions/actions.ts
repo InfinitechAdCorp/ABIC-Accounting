@@ -11,8 +11,10 @@ import {
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
+import { Column } from "@/components/globals/types";
 import {
   Transaction,
+  TransactionRow,
   TransactionWithTClient,
 } from "@/components/transactionHistory/types";
 import { cookies } from "next/headers";
@@ -54,21 +56,10 @@ export const format = async (ufRecords: TransactionWithTClient[]) => {
 };
 
 export const tableFormat = async (
-  columns: { key: string; name: string }[],
+  columns: Column[],
   records: Transaction[]
 ) => {
-  type Row = {
-    date: string;
-    voucher: string;
-    check: string;
-    client: string;
-    particulars: string;
-    credit: string;
-    debit: string;
-    proof: string;
-  };
-
-  const rows: Row[] = [];
+  const rows: TransactionRow[] = [];
   const { blobs } = await list();
 
   records.forEach((record) => {
@@ -97,11 +88,15 @@ export const tableFormat = async (
         case "credit":
           if (record.type == "Credit") {
             value = formatNumber(record.amount);
+          } else {
+            value = "";
           }
           break;
         case "debit":
           if (record.type == "Debit") {
             value = formatNumber(record.amount);
+          } else {
+            value = "";
           }
           break;
         case "proof":
@@ -114,7 +109,7 @@ export const tableFormat = async (
           break;
       }
 
-      row[key as keyof Row] = `${value}`;
+      row[key as keyof TransactionRow] = `${value}`;
     });
 
     rows.push(row);

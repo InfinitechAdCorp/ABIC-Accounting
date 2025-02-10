@@ -44,7 +44,7 @@ const ExportBtn = ({ columns: ufColumns, rows: ufRows }: Props) => {
   const rows = formatRows(ufRows);
 
   const onPress = () => {
-    const doc = new jsPDF();
+    const doc = new jsPDF("l");
     autoTable(doc, {
       head: [columns],
       body: rows,

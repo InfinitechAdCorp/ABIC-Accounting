@@ -22,6 +22,17 @@ export type Transaction = {
   proof: string;
 };
 
+export type TransactionRow = {
+  date: string;
+  voucher: string;
+  check: string;
+  client: string;
+  particulars: string;
+  credit: string;
+  debit: string;
+  proof: string;
+};
+
 export type TClientWithTransactions = Prisma.TClientGetPayload<{
   include: {
     transactions: true;

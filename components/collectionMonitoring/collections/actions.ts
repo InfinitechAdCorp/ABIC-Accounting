@@ -12,6 +12,7 @@ import {
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
+import { Column } from "@/components/globals/types";
 import {
   Collection,
   CollectionRow,
@@ -57,7 +58,7 @@ export const format = async (ufRecords: CollectionWithCClient[]) => {
 };
 
 export const tableFormat = async (
-  columns: { key: string; name: string }[],
+  columns: Column[],
   records: Collection[]
 ) => {
   const rows: CollectionRow[] = [];

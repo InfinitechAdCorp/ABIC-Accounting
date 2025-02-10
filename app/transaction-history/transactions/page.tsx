@@ -1,14 +1,16 @@
 import React from "react";
 import { get as getAccount } from "@/components/accounts/actions";
-import { getAll } from "@/components/transactionHistory/transactions/actions";
+import {
+  getAll,
+  tableFormat,
+} from "@/components/transactionHistory/transactions/actions";
 import { getAll as getTClients } from "@/components/transactionHistory/tClients/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
-import RenderCell from "@/components/transactionHistory/transactions/renderCell";
+import RenderBody from "@/components/transactionHistory/transactions/renderBody";
 import CreateTransactionModal from "@/components/transactionHistory/transactions/createModal";
 import CreateTClientModal from "@/components/transactionHistory/tClients/createModal";
-import { list } from "@vercel/blob";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
 import { Account } from "@prisma/client";
 import ExportBtn from "@/components/globals/exportBtn";
@@ -18,7 +20,6 @@ const Transactions = async () => {
   const { record: account } = await getAccount();
   const { records } = await getAll();
   const { records: tClients } = await getTClients();
-  const { blobs } = await list();
 
   const model = "Transactions";
   const runningBalance = formatNumber(computeBalance([...records].reverse()));
@@ -35,6 +36,8 @@ const Transactions = async () => {
     { key: "actions", name: "ACTIONS" },
   ];
 
+  const rows = await tableFormat(columns.slice(0, -1), records);
+
   const setVoucher = (record: Record) => {
     let id = 1;
     if (record) {
@@ -45,6 +48,8 @@ const Transactions = async () => {
   };
 
   const voucher = setVoucher(records[0]);
+
+  console.log(rows)
 
   return (
     <>
@@ -64,12 +69,12 @@ const Transactions = async () => {
 
             <DataTable
               model={model}
+              records={records}
               columns={columns}
-              rows={records || []}
+              rows={rows}
               searchKey="particulars"
-              RenderCell={RenderCell}
+              RenderBody={RenderBody}
               dependencies={{
-                blobs: blobs,
                 tClients: tClients,
               }}
             >
@@ -78,12 +83,9 @@ const Transactions = async () => {
                   <CreateTClientModal />
                 </div>
 
-                <CreateTransactionModal
-                  voucher={voucher}
-                  tClients={tClients}
-                />
+                <CreateTransactionModal voucher={voucher} tClients={tClients} />
 
-                <ExportBtn />
+                <ExportBtn columns={columns.slice(0, -1)} rows={rows} />
               </>
             </DataTable>
           </CardBody>
