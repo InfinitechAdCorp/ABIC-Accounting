@@ -1,13 +1,16 @@
 import React from "react";
-import { getAll, tableFormat } from "@/components/collectionMonitoring/cClients/actions";
+import {
+  getAll,
+  tableFormat,
+} from "@/components/collectionMonitoring/cClients/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";
-import RenderCell from "@/components/collectionMonitoring/cClients/renderCell";
 import CreateModal from "@/components/collectionMonitoring/cClients/createModal";
 import { Account } from "@prisma/client";
 import ExportBtn from "@/components/globals/exportBtn";
+import RenderBody from "@/components/collectionMonitoring/cClients/renderBody";
 
 const CClients = async () => {
   const { record: account } = await getAccount();
@@ -35,14 +38,14 @@ const CClients = async () => {
             </h1>
             <DataTable
               model={model}
+              records={records}
               columns={columns}
-              rows={records}
+              rows={rows}
               searchKey="name"
-              RenderCell={RenderCell}
+              RenderBody={RenderBody}
             >
               <>
                 <CreateModal />
-
                 <ExportBtn columns={columns.slice(0, -1)} rows={rows} />
               </>
             </DataTable>

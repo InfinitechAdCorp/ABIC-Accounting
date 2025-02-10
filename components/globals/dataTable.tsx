@@ -25,7 +25,7 @@ type Props = {
   rows: any[];
   dependencies?: any;
   searchKey: string;
-  Renderer: (
+  RenderBody: (
     records: any[],
     columns: Column[],
     rows: any[],
@@ -36,10 +36,11 @@ type Props = {
 
 const DataTable = ({
   model,
+  records,
   columns,
   rows,
   searchKey,
-  Renderer,
+  RenderBody,
   dependencies,
   children,
 }: Props) => {
@@ -172,19 +173,7 @@ const DataTable = ({
           )}
         </TableHeader>
         <TableBody emptyContent={`No ${model} Found`}>
-          {Renderer(items, columns, rows, dependencies)}
-          {/* {(item) => (
-            <TableRow
-              key={item.id}
-              className={item.status == "Cancelled" ? "text-red-500" : ""}
-            >
-              {(columnKey: any) => (
-                <TableCell>
-                  {RenderCell(columnKey, item, dependencies)}
-                </TableCell>
-              )}
-            </TableRow>
-          )} */}
+          {RenderBody(records, columns, items, dependencies)}
         </TableBody>
       </Table>
     </>
