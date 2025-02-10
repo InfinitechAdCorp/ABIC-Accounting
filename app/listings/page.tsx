@@ -6,7 +6,7 @@ import {
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
-// import DataTable from "@/components/globals/dataTable";
+import DataTable from "@/components/globals/dataTable";
 import CreateModal from "@/components/listings/createModal";
 import { Account } from "@prisma/client";
 // import ExportBtn from "@/components/globals/exportBtn";
@@ -20,11 +20,22 @@ const Listings = async () => {
 
   const model = "Listings";
 
-//   const columns = [
-//     { key: "name", name: "NAME" },
-//     { key: "collections", name: "COLLECTIONS" },
-//     { key: "actions", name: "ACTIONS" },
-//   ];
+  const columns = [
+    { key: "client", name: "CLIENT" },
+    { key: "project", name: "PROJECT" },
+    { key: "unit", name: "UNIT" },
+    { key: "res", name: "DATE RES" },
+    { key: "terms", name: "TERMS" },
+    { key: "consultant", name: "CONSULTANT" },
+    { key: "manager", name: "MANAGER" },
+    { key: "list_price", name: "LIST PRICE" },
+    { key: "total_price", name: "TOTAL PRICE" },
+    { key: "status", name: "STATUS" },
+    { key: "source", name: "SOURCE" },
+    { key: "extension", name: "EXTENSION" },
+    { key: "closed", name: "CLOSED DATE" },
+    { key: "actions", name: "ACTIONS" },
+  ];
 
 //   const rows = await tableFormat(columns.slice(0, -1), records);
 
@@ -38,20 +49,19 @@ const Listings = async () => {
             <h1 className="text-lg font-semibold mb-3">
               {model.toUpperCase()}
             </h1>
-            <CreateModal />
-            {/* <DataTable
+            <DataTable
               model={model}
               records={records}
               columns={columns}
-              rows={rows}
+              rows={records}
               searchKey="name"
               RenderBody={RenderBody}
             >
               <>
                 <CreateModal />
-                <ExportBtn columns={columns.slice(0, -1)} rows={rows} />
+                {/* <ExportBtn columns={columns.slice(0, -1)} rows={rows} /> */}
               </>
-            </DataTable> */}
+            </DataTable>
           </CardBody>
         </Card>
       </div>
