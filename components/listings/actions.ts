@@ -88,6 +88,8 @@ export const create = async (values: Prisma.ListingCreateInput) => {
     await prisma.listing.create({
       data: {
         account: { connect: { id: accountID } },
+        client: values.client,
+        type: values.type,
         project: values.project,
         unit: values.unit,
         res: new Date(new Date(values.res).setUTCHours(0, 0, 0, 0)),
@@ -100,7 +102,6 @@ export const create = async (values: Prisma.ListingCreateInput) => {
         source: values.source,
         extension: new Date(new Date(values.extension).setUTCHours(0, 0, 0, 0)),
         closed: new Date(new Date(values.closed).setUTCHours(0, 0, 0, 0)),
-        type: values.type,
       },
     });
   } catch {

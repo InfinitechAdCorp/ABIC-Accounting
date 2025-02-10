@@ -7,7 +7,7 @@ import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
 // import DataTable from "@/components/globals/dataTable";
-// import CreateModal from "@/components/listings/createModal";
+import CreateModal from "@/components/listings/createModal";
 import { Account } from "@prisma/client";
 // import ExportBtn from "@/components/globals/exportBtn";
 // import RenderBody from "@/components/listings/renderBody";
@@ -38,7 +38,7 @@ const Listings = async () => {
             <h1 className="text-lg font-semibold mb-3">
               {model.toUpperCase()}
             </h1>
-            {/* <CreateModal /> */}
+            <CreateModal />
             {/* <DataTable
               model={model}
               records={records}

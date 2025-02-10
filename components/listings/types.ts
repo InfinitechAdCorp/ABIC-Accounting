@@ -4,6 +4,8 @@ export type Listing = {
   id: string,
   account?: Account,
   account_id?: string,
+  client: string,
+  type: string,
   project: string,
   unit: string,
   res: Date,
@@ -16,5 +18,4 @@ export type Listing = {
   source: string,
   extension: Date,
   closed: Date,
-  type: string,
 };

@@ -1,6 +1,8 @@
 import * as Yup from "yup";
 
 export const create = Yup.object().shape({
+  client: Yup.string().required("Client is a required field"),
+  type: Yup.string().required("Type is a required field"),
   project: Yup.string().required("Project is a required field"),
   unit: Yup.string().required("Unit is a required field"),
   res: Yup.date()
@@ -23,11 +25,12 @@ export const create = Yup.object().shape({
   closed: Yup.date()
     .typeError("Closed Date must be a valid date")
     .required("Closed Date is a required field"),
-  type: Yup.string().required("Type is a required field"),
 });
 
 export const update = Yup.object().shape({
   id: Yup.string().required("ID is a required field"),
+  client: Yup.string().required("Client is a required field"),
+  type: Yup.string().required("Type is a required field"),
   project: Yup.string().required("Project is a required field"),
   unit: Yup.string().required("Unit is a required field"),
   res: Yup.date()
@@ -50,5 +53,4 @@ export const update = Yup.object().shape({
   closed: Yup.date()
     .typeError("Closed Date must be a valid date")
     .required("Closed Date is a required field"),
-  type: Yup.string().required("Type is a required field"),
 });
