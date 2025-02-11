@@ -99,7 +99,7 @@ export const tableFormat = async (columns: Column[], records: TClient[]) => {
           break;
       }
 
-      if (value) {
+      if (value || value == 0) {
         row[key as keyof TClientRow] = `${value}`;
       }
     });

@@ -118,7 +118,7 @@ export const tableFormat = async (columns: Column[], records: Collection[]) => {
           break;
       }
 
-      if (value) {
+      if (value || value == 0) {
         row[key as keyof CollectionRow] = `${value}`;
       }
     });

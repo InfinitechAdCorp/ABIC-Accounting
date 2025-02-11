@@ -3,30 +3,26 @@ import {
   get,
   getAll as getTClients,
 } from "@/components/transactionHistory/tClients/actions";
-import { getAll as getTransactions } from "@/components/transactionHistory/transactions/actions";
+import {
+  getAll as getTransactions,
+  tableFormat,
+} from "@/components/transactionHistory/transactions/actions";
 import { get as getAccount } from "@/components/accounts/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
-import RenderCell from "@/components/transactionHistory/transactions/renderCell";
+import RenderBody from "@/components/transactionHistory/transactions/renderBody";
 import CreateModal from "@/components/transactionHistory/transactions/createModal";
-import { list } from "@vercel/blob";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
 import { Account } from "@prisma/client";
 import ExportBtn from "@/components/globals/exportBtn";
 import { Transaction } from "@/components/transactionHistory/types";
 
-const TClient = async ({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) => {
-  const id = (await params).id;
+const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { record: account } = await getAccount();
-  const { record } = await get(id);
+  const { record } = await get((await params).id);
   const { records: tClients } = await getTClients();
   const { records: transactions } = await getTransactions();
-  const { blobs } = await list();
 
   const model = `${record?.name}'s Transactions`;
   const runningBalance = formatNumber(
@@ -43,6 +39,11 @@ const TClient = async ({
     { key: "proof", name: "PROOF" },
     { key: "actions", name: "ACTIONS" },
   ];
+
+  const rows = await tableFormat(
+    columns.slice(0, -1),
+    record?.transactions || []
+  );
 
   const setVoucher = (transaction: Transaction) => {
     let id = 1;
@@ -73,18 +74,18 @@ const TClient = async ({
 
             <DataTable
               model={model}
+              records={record?.transactions || []}
               columns={columns}
-              rows={record?.transactions || []}
+              rows={rows}
               searchKey="name"
-              RenderCell={RenderCell}
+              RenderBody={RenderBody}
               dependencies={{
-                blobs: blobs,
                 tClients: tClients,
               }}
             >
               <>
                 <CreateModal voucher={voucher} tClients={tClients} />
-                <ExportBtn />
+                <ExportBtn columns={columns.slice(0, -1)} rows={rows} />
               </>
             </DataTable>
           </CardBody>

@@ -3,11 +3,12 @@ import {
   get,
   getAll as getCClients,
 } from "@/components/collectionMonitoring/cClients/actions";
+import { tableFormat } from "@/components/collectionMonitoring/collections/actions";
 import { get as getAccount } from "@/components/accounts/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
-import RenderCell from "@/components/collectionMonitoring/collections/renderCell";
+import RenderBody from "@/components/collectionMonitoring/collections/renderBody";
 import CreateModal from "@/components/collectionMonitoring/collections/createModal";
 import { Account } from "@prisma/client";
 import ExportBtn from "@/components/globals/exportBtn";
@@ -17,10 +18,8 @@ const TransactionClient = async ({
 }: {
   params: Promise<{ id: string }>;
 }) => {
-  const id = (await params).id;
-
   const { record: account } = await getAccount();
-  const { record } = await get(id);
+  const { record } = await get((await params).id);
   const { records: cClients } = await getCClients();
 
   const model = `${record?.name}'s Collections`;
@@ -53,6 +52,12 @@ const TransactionClient = async ({
     { key: "actions", name: "ACTIONS" },
   ];
 
+  const rows = await tableFormat(
+    columns.slice(0, -1),
+    record?.collections || []
+  );
+  console.log("🚀 ~ rows:", rows)
+
   return (
     <>
       <Navbar record={account as Account} />
@@ -65,22 +70,19 @@ const TransactionClient = async ({
             </h1>
             <DataTable
               model={model}
+              records={record?.collections || []}
               columns={columns}
-              rows={record?.collections || []}
+              rows={rows}
               searchKey="name"
-              RenderCell={RenderCell}
+              RenderBody={RenderBody}
               dependencies={{
                 locations: locations,
                 cClients: cClients,
               }}
             >
               <>
-                <CreateModal
-                  locations={locations}
-                  cClients={cClients}
-                />
-
-                <ExportBtn />
+                <CreateModal locations={locations} cClients={cClients} />
+                <ExportBtn columns={columns.slice(0, -1)} rows={rows} />
               </>
             </DataTable>
           </CardBody>

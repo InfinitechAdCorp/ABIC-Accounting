@@ -75,7 +75,7 @@ export const tableFormat = async (columns: Column[], records: CClient[]) => {
           break;
       }
 
-      if (value) {
+      if (value || value == 0) {
         row[key as keyof CClientRow] = `${value}`;
       }
     });

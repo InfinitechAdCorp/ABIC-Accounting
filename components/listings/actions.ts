@@ -80,7 +80,7 @@ export const tableFormat = async (columns: Column[], records: Listing[]) => {
           break;
       }
 
-      if (value) {
+      if (value || value == 0) {
         row[key as keyof ListingRow] = `${value}`;
       }
     });

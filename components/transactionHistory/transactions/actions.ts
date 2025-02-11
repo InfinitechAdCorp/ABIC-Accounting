@@ -109,7 +109,7 @@ export const tableFormat = async (
           break;
       }
 
-      if (value) {
+      if (value || value == 0) {
         row[key as keyof TransactionRow] = `${value}`;
       }
     });
