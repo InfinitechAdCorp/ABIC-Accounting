@@ -57,7 +57,12 @@ const RenderBody = (
   return (
     <>
       {rows.map((row, index) => (
-        <TableRow key={index}>
+        <TableRow
+          key={index}
+          className={
+            records[index].status == "Cancelled" ? "text-[#F31260]" : ""
+          }
+        >
           {columns.map((column) => (
             <TableCell key={column.key}>
               {RenderCell(records[index], column.key, row, dependencies)}

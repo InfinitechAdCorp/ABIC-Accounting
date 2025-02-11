@@ -29,6 +29,7 @@ const Listings = async () => {
     { key: "status", name: "STATUS" },
     { key: "source", name: "SOURCE" },
     { key: "extension", name: "EXTENSION" },
+    { key: "aging", name: "AGING" },
     { key: "closed", name: "CLOSED DATE" },
     { key: "actions", name: "ACTIONS" },
   ];
@@ -55,7 +56,6 @@ const Listings = async () => {
             >
               <>
                 <CreateModal />
-              
                 <ExportBtn columns={columns.slice(0, -1)} rows={rows} />
               </>
             </DataTable>

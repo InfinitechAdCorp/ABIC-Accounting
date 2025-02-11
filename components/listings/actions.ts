@@ -16,6 +16,7 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { Destroy } from "@/components/globals/types";
 import { formatDate, formatNumber } from "@/components/globals/utils";
+import { differenceInDays } from "date-fns";
 
 const model = "Listing";
 const url = "/listings";
@@ -58,6 +59,7 @@ export const tableFormat = async (columns: Column[], records: Listing[]) => {
       status: "",
       source: "",
       extension: "",
+      aging: "",
       closed: "",
     };
 
@@ -70,6 +72,10 @@ export const tableFormat = async (columns: Column[], records: Listing[]) => {
         case "extension":
         case "closed":
           value = formatDate(record[key as keyof Listing] as Date);
+          break;
+        case "aging":
+          const today = new Date(new Date().setHours(0, 0, 0, 0));
+          value = differenceInDays(today, record.res.setHours(0, 0, 0, 0));
           break;
         case "list_price":
         case "total_price":

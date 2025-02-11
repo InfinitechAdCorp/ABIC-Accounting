@@ -8,8 +8,8 @@ import {
   ListingRow as Row,
 } from "@/components/listings/types";
 import UpdateModal from "@/components/listings/updateModal";
-// import DestroyModal from "@/components/globals/destroyModal";
-// import { destroy } from "@/components/collectionMonitoring/cClients/actions";
+import DestroyModal from "@/components/globals/destroyModal";
+import { destroy } from "@/components/listings/actions";
 
 const RenderCell = (record: Record, column: string, row: Row) => {
   switch (column) {
@@ -17,7 +17,7 @@ const RenderCell = (record: Record, column: string, row: Row) => {
       return (
         <div className="relative flex justify-end items-center gap-2">
           <UpdateModal record={record} />
-          {/* <DestroyModal title="Client" action={destroy} id={record.id} /> */}
+          <DestroyModal title="Listing" action={destroy} id={record.id} />
         </div>
       );
     default:
@@ -29,7 +29,7 @@ const RenderBody = (records: Record[], columns: Column[], rows: Row[]) => {
   return (
     <>
       {rows.map((row, index) => (
-        <TableRow key={index}>
+        <TableRow key={index} className={records[index].status == "Closed" ? "text-[#006FEE]" : "text-[#F31260]"}>
           {columns.map((column) => (
             <TableCell key={column.key}>
               {RenderCell(records[index], column.key, row)}

@@ -34,5 +34,6 @@ export type ListingRow = {
     status: string,
     source: string,
     extension?: string,
+    aging: string,
     closed?: string,
   };
