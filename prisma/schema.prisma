@@ -60,23 +60,23 @@ model Transaction {
 }
 
 model Listing {
-  id          String   @id @default(cuid())
-  account     Account? @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  id          String    @id @default(cuid())
+  account     Account?  @relation(fields: [account_id], references: [id], onDelete: Cascade)
   account_id  String?
   client      String
   type        String
   project     String
   unit        String
-  res         DateTime @db.Date
+  res         DateTime  @db.Date
   terms       String
   consultant  String
   manager     String
-  list_price  Decimal  @db.Decimal(15, 2)
-  total_price Decimal  @db.Decimal(15, 2)
+  list_price  Decimal   @db.Decimal(15, 2)
+  total_price Decimal   @db.Decimal(15, 2)
   status      String
   source      String
-  extension   DateTime @db.Date
-  closed      DateTime @db.Date
+  extension   DateTime? @db.Date
+  closed      DateTime? @db.Date
 
   @@map(name: "listings")
 }

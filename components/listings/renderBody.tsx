@@ -7,11 +7,19 @@ import {
   Listing as Record,
   ListingRow as Row,
 } from "@/components/listings/types";
+import UpdateModal from "@/components/listings/updateModal";
+// import DestroyModal from "@/components/globals/destroyModal";
+// import { destroy } from "@/components/collectionMonitoring/cClients/actions";
 
 const RenderCell = (record: Record, column: string, row: Row) => {
   switch (column) {
     case "actions":
-      return "5";
+      return (
+        <div className="relative flex justify-end items-center gap-2">
+          <UpdateModal record={record} />
+          {/* <DestroyModal title="Client" action={destroy} id={record.id} /> */}
+        </div>
+      );
     default:
       return row[column as keyof Row];
   }

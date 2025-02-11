@@ -5,7 +5,7 @@ import { Listing as PrismaListing, Prisma } from "@prisma/client";
 import { ActionResponse } from "@/components/globals/types";
 import {
   create as createSchema,
-  //   update as updateSchema,
+  update as updateSchema,
 } from "@/components/listings/schemas";
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
@@ -30,6 +30,8 @@ export const format = async (ufRecords: PrismaListing[]) => {
         account_id: ufRecord.account_id as string,
         list_price: ufRecord.list_price?.toNumber() as number,
         total_price: ufRecord.total_price?.toNumber() as number,
+        extension: ufRecord.extension || undefined,
+        closed: ufRecord.closed || undefined,
       };
       records.push(record);
     });
@@ -91,7 +93,7 @@ export const tableFormat = async (columns: Column[], records: Listing[]) => {
 
 export const getAll = async () => {
   const session = await cookies();
-  const accountID = session.get("accountID")?.value || "";
+  const accountID = session.get("accountID")?.value;
 
   let records;
 
@@ -119,7 +121,7 @@ export const getAll = async () => {
 
 export const create = async (values: Prisma.ListingCreateInput) => {
   const session = await cookies();
-  const accountID = session.get("accountID")?.value || "";
+  const accountID = session.get("accountID")?.value;
 
   const schema = createSchema;
 
@@ -134,6 +136,16 @@ export const create = async (values: Prisma.ListingCreateInput) => {
       errors: errors,
     };
     return response;
+  }
+
+  let extension;
+  if (values.extension) {
+    extension = new Date(new Date(values.extension).setUTCHours(0, 0, 0, 0));
+  }
+
+  let closed;
+  if (values.closed) {
+    closed = new Date(new Date(values.closed).setUTCHours(0, 0, 0, 0));
   }
 
   try {
@@ -152,8 +164,8 @@ export const create = async (values: Prisma.ListingCreateInput) => {
         total_price: Number(values.total_price),
         status: values.status,
         source: values.source,
-        extension: new Date(new Date(values.extension).setUTCHours(0, 0, 0, 0)),
-        closed: new Date(new Date(values.closed).setUTCHours(0, 0, 0, 0)),
+        extension: extension,
+        closed: closed,
       },
     });
   } catch {
@@ -163,6 +175,68 @@ export const create = async (values: Prisma.ListingCreateInput) => {
 
   revalidatePath(url);
   const response: ActionResponse = { code: 200, message: `Added ${model}` };
+  return response;
+};
+
+export const update = async (values: Prisma.ListingCreateInput) => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value;
+
+  const schema = updateSchema;
+
+  try {
+    await schema.validate(values, { abortEarly: false });
+  } catch (ufErrors) {
+    const errors = formatErrors(ufErrors as Yup.ValidationError);
+
+    const response: ActionResponse = {
+      code: 429,
+      message: "Validation Error",
+      errors: errors,
+    };
+    return response;
+  }
+
+  let extension;
+  if (values.extension) {
+    extension = new Date(new Date(values.extension).setUTCHours(0, 0, 0, 0));
+  }
+
+  let closed;
+  if (values.closed) {
+    closed = new Date(new Date(values.closed).setUTCHours(0, 0, 0, 0));
+  }
+
+  try {
+    await prisma.listing.update({
+      where: {
+        id: values.id,
+      },
+      data: {
+        account: { connect: { id: accountID } },
+        client: values.client,
+        type: values.type,
+        project: values.project,
+        unit: values.unit,
+        res: new Date(new Date(values.res).setUTCHours(0, 0, 0, 0)),
+        terms: values.terms,
+        consultant: values.consultant,
+        manager: values.manager,
+        list_price: Number(values.list_price),
+        total_price: Number(values.total_price),
+        status: values.status,
+        source: values.source,
+        extension: extension,
+        closed: closed,
+      },
+    });
+  } catch {
+    const response: ActionResponse = { code: 500, message: "Server Error" };
+    return response;
+  }
+
+  revalidatePath(url);
+  const response: ActionResponse = { code: 200, message: `Updated ${model}` };
   return response;
 };
 

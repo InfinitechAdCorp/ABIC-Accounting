@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  getAll,
-  tableFormat,
-} from "@/components/listings/actions";
+import { getAll, tableFormat } from "@/components/listings/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
@@ -16,12 +13,11 @@ const Listings = async () => {
   const { record: account } = await getAccount();
   const { records } = await getAll();
 
-    console.log(records)
-
   const model = "Listings";
 
   const columns = [
     { key: "client", name: "CLIENT" },
+    { key: "type", name: "TYPE" },
     { key: "project", name: "PROJECT" },
     { key: "unit", name: "UNIT" },
     { key: "res", name: "DATE RES" },

@@ -16,8 +16,8 @@ export type Listing = {
   total_price: number,
   status: string,
   source: string,
-  extension: Date,
-  closed: Date,
+  extension?: Date,
+  closed?: Date,
 };
 
 export type ListingRow = {
@@ -33,6 +33,6 @@ export type ListingRow = {
     total_price: string,
     status: string,
     source: string,
-    extension: string,
-    closed: string,
+    extension?: string,
+    closed?: string,
   };
