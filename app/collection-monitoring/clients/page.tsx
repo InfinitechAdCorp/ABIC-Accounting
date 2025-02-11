@@ -24,7 +24,7 @@ const CClients = async () => {
     { key: "actions", name: "ACTIONS" },
   ];
 
-  const rows = await tableFormat(columns.slice(0, -1), records);
+  const rows = await tableFormat(columns, records);
 
   return (
     <>

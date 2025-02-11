@@ -35,7 +35,11 @@ const ExportBtn = ({ columns: ufColumns, rows: ufRows }: Props) => {
     const rows: string[][] = [];
 
     ufRows.forEach((ufRow) => {
-      rows.push(Object.values(ufRow));
+      const row: string[] = [];
+      ufColumns.forEach((ufColumn) => {
+        row.push(ufRow[ufColumn.key]);
+      });
+      rows.push(row);
     });
 
     return rows;

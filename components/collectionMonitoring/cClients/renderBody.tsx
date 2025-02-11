@@ -12,6 +12,13 @@ import {
   CClientRow as Row,
 } from "@/components/collectionMonitoring/types";
 
+const getRecord = (records: Record[], id: string) => {
+  const record = records.find((record) => {
+    return record.id == id;
+  }) as Record;
+  return record;
+};
+
 const RenderCell = (record: Record, column: string, row: Row) => {
   switch (column) {
     case "actions":
@@ -33,11 +40,11 @@ const RenderCell = (record: Record, column: string, row: Row) => {
 const RenderBody = (records: Record[], columns: Column[], rows: Row[]) => {
   return (
     <>
-      {rows.map((row, index) => (
-        <TableRow key={index}>
+      {rows.map((row) => (
+        <TableRow key={row.id}>
           {columns.map((column) => (
             <TableCell key={column.key}>
-              {RenderCell(records[index], column.key, row)}
+              {RenderCell(getRecord(records, row.id), column.key, row)}
             </TableCell>
           ))}
         </TableRow>

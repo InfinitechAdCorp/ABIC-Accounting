@@ -76,7 +76,14 @@ const UpdateModal = ({ record }: Props) => {
         <FaPenToSquare size={14} />
       </Button>
 
-      <Modal size="xl" isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal
+        size="xl"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        onClose={() => {
+          setStatus(record.status);
+        }}
+      >
         <ModalContent>
           {(onClose) => (
             <>

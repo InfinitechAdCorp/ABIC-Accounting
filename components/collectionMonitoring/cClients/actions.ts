@@ -58,12 +58,14 @@ export const tableFormat = async (columns: Column[], records: CClient[]) => {
 
   records.forEach((record) => {
     const row: CClientRow = {
+      id: "",
       name: "",
       collections: "",
+      actions: "",
     };
 
-    columns.forEach((column) => {
-      const key = column.key;
+    Object.keys(row).forEach((column) => {
+      const key = column;
       let value;
 
       switch (key) {

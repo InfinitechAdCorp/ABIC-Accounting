@@ -9,8 +9,10 @@ export type CClient = {
 };
 
 export type CClientRow = {
+  id: string;
   name: string;
   collections: string;
+  actions: string;
 };
 
 export type Collection = {
