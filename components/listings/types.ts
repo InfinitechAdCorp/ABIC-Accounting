@@ -19,3 +19,20 @@ export type Listing = {
   extension: Date,
   closed: Date,
 };
+
+export type ListingRow = {
+    client: string,
+    type: string,
+    project: string,
+    unit: string,
+    res: string,
+    terms: string,
+    consultant: string,
+    manager: string,
+    list_price: string,
+    total_price: string,
+    status: string,
+    source: string,
+    extension: string,
+    closed: string,
+  };

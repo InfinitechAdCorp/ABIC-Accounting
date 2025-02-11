@@ -5,16 +5,17 @@ import { Listing as PrismaListing, Prisma } from "@prisma/client";
 import { ActionResponse } from "@/components/globals/types";
 import {
   create as createSchema,
-//   update as updateSchema,
+  //   update as updateSchema,
 } from "@/components/listings/schemas";
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
-// import { Column } from "@/components/globals/types";
-import { Listing } from "@/components/listings/types";
+import { Column } from "@/components/globals/types";
+import { Listing, ListingRow } from "@/components/listings/types";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { Destroy } from "@/components/globals/types";
+import { formatDate, formatNumber } from "@/components/globals/utils";
 
 const model = "Listing";
 const url = "/listings";
@@ -35,6 +36,57 @@ export const format = async (ufRecords: PrismaListing[]) => {
   }
 
   return records;
+};
+
+export const tableFormat = async (columns: Column[], records: Listing[]) => {
+  const rows: ListingRow[] = [];
+
+  records.forEach((record) => {
+    const row = {
+      client: "",
+      type: "",
+      project: "",
+      unit: "",
+      res: "",
+      terms: "",
+      consultant: "",
+      manager: "",
+      list_price: "",
+      total_price: "",
+      status: "",
+      source: "",
+      extension: "",
+      closed: "",
+    };
+
+    columns.forEach((column) => {
+      const key = column.key;
+      let value;
+
+      switch (key) {
+        case "res":
+        case "extension":
+        case "closed":
+          value = formatDate(record[key as keyof Listing] as Date);
+          break;
+        case "list_price":
+        case "total_price":
+          value = formatNumber(record[key as keyof Listing] as number);
+          break;
+        default:
+          value = record[key as keyof Listing];
+          break;
+      }
+
+      if (value) {
+        row[key as keyof ListingRow] = `${value}`;
+      }
+    });
+
+    rows.push(row);
+  });
+
+  return rows;
 };
 
 export const getAll = async () => {

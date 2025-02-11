@@ -1,7 +1,7 @@
 import React from "react";
 import {
   getAll,
-//   tableFormat,
+  tableFormat,
 } from "@/components/listings/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
@@ -9,8 +9,8 @@ import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";
 import CreateModal from "@/components/listings/createModal";
 import { Account } from "@prisma/client";
-// import ExportBtn from "@/components/globals/exportBtn";
-// import RenderBody from "@/components/listings/renderBody";
+import ExportBtn from "@/components/globals/exportBtn";
+import RenderBody from "@/components/listings/renderBody";
 
 const Listings = async () => {
   const { record: account } = await getAccount();
@@ -37,7 +37,7 @@ const Listings = async () => {
     { key: "actions", name: "ACTIONS" },
   ];
 
-//   const rows = await tableFormat(columns.slice(0, -1), records);
+  const rows = await tableFormat(columns.slice(0, -1), records);
 
   return (
     <>
@@ -53,13 +53,13 @@ const Listings = async () => {
               model={model}
               records={records}
               columns={columns}
-              rows={records}
+              rows={rows}
               searchKey="name"
               RenderBody={RenderBody}
             >
               <>
                 <CreateModal />
-                {/* <ExportBtn columns={columns.slice(0, -1)} rows={rows} /> */}
+                <ExportBtn columns={columns.slice(0, -1)} rows={rows} />
               </>
             </DataTable>
           </CardBody>
