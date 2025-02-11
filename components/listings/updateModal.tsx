@@ -33,6 +33,7 @@ type Props = {
 const UpdateModal = ({ record }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
+  const [status, setStatus] = useState(record.status);
 
   const initialValues = {
     id: record.id,
@@ -331,6 +332,13 @@ const UpdateModal = ({ record }: Props) => {
                                 labelPlacement="outside"
                                 placeholder="Select Status"
                                 defaultSelectedKeys={[field.value]}
+                                onChange={(
+                                  e: React.ChangeEvent<HTMLSelectElement>
+                                ) => {
+                                  const value = e.target.value;
+                                  props.setFieldValue(field.name, value);
+                                  setStatus(value);
+                                }}
                               >
                                 <SelectItem key="Closed">Closed</SelectItem>
                                 <SelectItem key="Back Out">Back Out</SelectItem>
@@ -366,55 +374,57 @@ const UpdateModal = ({ record }: Props) => {
                         </Field>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-3">
-                        <Field name="extension">
-                          {({ field, meta }: FieldProps) => (
-                            <div>
-                              <DatePicker
-                                {...field}
-                                size="md"
-                                variant="bordered"
-                                label="Extension"
-                                labelPlacement="outside"
-                                value={dateToDateValue(field.value)}
-                                onChange={(value) => {
-                                  const date = dateValueToDate(value);
-                                  props.setFieldValue(field.name, date);
-                                }}
-                              />
-                              {meta.touched && meta.error && (
-                                <small className="text-red-500">
-                                  {meta.error}
-                                </small>
-                              )}
-                            </div>
-                          )}
-                        </Field>
+                      {status == "Closed" && (
+                        <div className="grid grid-cols-2 gap-3">
+                          <Field name="extension">
+                            {({ field, meta }: FieldProps) => (
+                              <div>
+                                <DatePicker
+                                  {...field}
+                                  size="md"
+                                  variant="bordered"
+                                  label="Extension"
+                                  labelPlacement="outside"
+                                  value={dateToDateValue(field.value)}
+                                  onChange={(value) => {
+                                    const date = dateValueToDate(value);
+                                    props.setFieldValue(field.name, date);
+                                  }}
+                                />
+                                {meta.touched && meta.error && (
+                                  <small className="text-red-500">
+                                    {meta.error}
+                                  </small>
+                                )}
+                              </div>
+                            )}
+                          </Field>
 
-                        <Field name="closed">
-                          {({ field, meta }: FieldProps) => (
-                            <div>
-                              <DatePicker
-                                {...field}
-                                size="md"
-                                variant="bordered"
-                                label="Closed Date"
-                                labelPlacement="outside"
-                                value={dateToDateValue(field.value)}
-                                onChange={(value) => {
-                                  const date = dateValueToDate(value);
-                                  props.setFieldValue(field.name, date);
-                                }}
-                              />
-                              {meta.touched && meta.error && (
-                                <small className="text-red-500">
-                                  {meta.error}
-                                </small>
-                              )}
-                            </div>
-                          )}
-                        </Field>
-                      </div>
+                          <Field name="closed">
+                            {({ field, meta }: FieldProps) => (
+                              <div>
+                                <DatePicker
+                                  {...field}
+                                  size="md"
+                                  variant="bordered"
+                                  label="Closed Date"
+                                  labelPlacement="outside"
+                                  value={dateToDateValue(field.value)}
+                                  onChange={(value) => {
+                                    const date = dateValueToDate(value);
+                                    props.setFieldValue(field.name, date);
+                                  }}
+                                />
+                                {meta.touched && meta.error && (
+                                  <small className="text-red-500">
+                                    {meta.error}
+                                  </small>
+                                )}
+                              </div>
+                            )}
+                          </Field>
+                        </div>
+                      )}
                     </ModalBody>
                     <ModalFooter>
                       <Button

@@ -238,7 +238,7 @@ const listings: Prisma.ListingCreateInput[] = [
     total_price: "2979900",
     status: "Closed",
     source: "Personal ADs",
-    extension: "",
+    extension: undefined,
     closed: "2025-01-19T00:00:00.000Z",
   },
   {
@@ -260,8 +260,8 @@ const listings: Prisma.ListingCreateInput[] = [
     total_price: "3060000",
     status: "Back Out",
     source: "Personal ADs",
-    extension: "",
-    closed: "2025-01-19T00:00:00.000Z",
+    extension: undefined,
+    closed: undefined,
   },
 ];
 
