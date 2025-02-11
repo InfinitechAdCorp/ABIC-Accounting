@@ -1,6 +1,4 @@
-import {
-  Transaction,
-} from "@/components/transactionHistory/types";
+import { Transaction } from "@/components/transactionHistory/types";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { ActionResponse } from "@/components/globals/types";
@@ -42,11 +40,16 @@ export const formatNumber = (ufNumber: number) => {
 };
 
 export const formatDate = (ufDate: Date) => {
-  const date = ufDate.toLocaleDateString("default", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  let date;
+
+  if (ufDate) {
+    date = ufDate.toLocaleDateString("default", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  }
+
   return date;
 };
 
@@ -74,24 +77,32 @@ export const dateValueToDate = (dateValue: DateValue | null) => {
 
 export const formatErrors = (ufErrors: Yup.ValidationError) => {
   const errors: { [key: string]: string } = {};
-  ufErrors.inner.forEach((ufError) => {
-    if (ufError.path) {
-      errors[ufError.path] = ufError.message;
-    }
-  });
+
+  if (ufErrors) {
+    ufErrors.inner.forEach((ufError) => {
+      if (ufError.path) {
+        errors[ufError.path] = ufError.message;
+      }
+    });
+  }
+
   return errors;
 };
 
 export const computeBalance = (records: Transaction[]) => {
   let total = 0;
-  records.forEach((record) => {
-    if (record.status != "Cancelled") {
-      if (record.type == "Credit") {
-        total += record.amount;
-      } else {
-        total -= record.amount;
+
+  if (records) {
+    records.forEach((record) => {
+      if (record.status != "Cancelled") {
+        if (record.type == "Credit") {
+          total += record.amount;
+        } else {
+          total -= record.amount;
+        }
       }
-    }
-  });
+    });
+  }
+
   return total;
 };

@@ -40,8 +40,8 @@ const CreateModal = () => {
     total_price: "",
     status: "",
     source: "",
-    extension: "",
-    closed: "",
+    extension: undefined,
+    closed: undefined,
     type: "",
   };
 

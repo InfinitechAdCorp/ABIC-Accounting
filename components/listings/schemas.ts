@@ -19,8 +19,14 @@ export const create = Yup.object().shape({
     .moreThan(-1, "Total Price must be a positive number"),
   status: Yup.string().required("Status is a required field"),
   source: Yup.string().required("Source is a required field"),
-  extension: Yup.date().nullable(),
-  closed: Yup.date().nullable(),
+  extension: Yup.date()
+    .typeError("Extension must be a valid date")
+    .min(Yup.ref("closed"), "Extension must be after Closed Date")
+    .nullable(),
+  closed: Yup.date()
+    .typeError("Closed Date must be a valid date")
+    .min(Yup.ref("res"), "Closed Date must be after Date Res")
+    .nullable(),
 });
 
 export const update = Yup.object().shape({
@@ -43,6 +49,12 @@ export const update = Yup.object().shape({
     .moreThan(-1, "Total Price must be a positive number"),
   status: Yup.string().required("Status is a required field"),
   source: Yup.string().required("Source is a required field"),
-  extension: Yup.date().nullable(),
-  closed: Yup.date().nullable(),
+  extension: Yup.date()
+    .typeError("Extension must be a valid date")
+    .min(Yup.ref("closed"), "Extension must be after Closed Date")
+    .nullable(),
+  closed: Yup.date()
+    .typeError("Closed Date must be a valid date")
+    .min(Yup.ref("res"), "Closed Date must be after Date Res")
+    .nullable(),
 });
