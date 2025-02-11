@@ -11,10 +11,9 @@ import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/transactionHistory/transactions/renderBody";
 import CreateTransactionModal from "@/components/transactionHistory/transactions/createModal";
 import CreateTClientModal from "@/components/transactionHistory/tClients/createModal";
-import { computeBalance, formatNumber } from "@/components/globals/utils";
+import { computeBalance, formatNumber, setVoucher } from "@/components/globals/utils";
 import { Account } from "@prisma/client";
 import ExportBtn from "@/components/globals/exportBtn";
-import { Transaction as Record } from "@/components/transactionHistory/types";
 
 const Transactions = async () => {
   const { record: account } = await getAccount();
@@ -37,15 +36,6 @@ const Transactions = async () => {
   ];
 
   const rows = await tableFormat(columns.slice(0, -1), records);
-
-  const setVoucher = (record: Record) => {
-    let id = 1;
-    if (record) {
-      id = Number(record.voucher) + 1;
-    }
-    const voucher = `${id}`.padStart(5, "0");
-    return voucher;
-  };
 
   const voucher = setVoucher(records[0]);
 

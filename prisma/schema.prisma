@@ -118,3 +118,9 @@ model AR {
   number String @unique
   file   String
 }
+
+model BS {
+  id     String @id @default(cuid())
+  number String @unique
+  file   String
+}

@@ -13,10 +13,13 @@ import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/transactionHistory/transactions/renderBody";
 import CreateModal from "@/components/transactionHistory/transactions/createModal";
-import { computeBalance, formatNumber } from "@/components/globals/utils";
+import {
+  computeBalance,
+  formatNumber,
+  setVoucher,
+} from "@/components/globals/utils";
 import { Account } from "@prisma/client";
 import ExportBtn from "@/components/globals/exportBtn";
-import { Transaction } from "@/components/transactionHistory/types";
 
 const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { record: account } = await getAccount();
@@ -44,15 +47,6 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
     columns.slice(0, -1),
     record?.transactions || []
   );
-
-  const setVoucher = (transaction: Transaction) => {
-    let id = 1;
-    if (transaction) {
-      id = Number(transaction.voucher) + 1;
-    }
-    const voucher = `${id}`.padStart(5, "0");
-    return voucher;
-  };
 
   const voucher = setVoucher(transactions[0]);
 

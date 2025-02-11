@@ -1,13 +1,17 @@
 "use client";
-import React, { useState } from "react";
-import Navbar from "@/components/globals/navbar"; // Import Navbar
+import React, { useState, useEffect } from "react";
+import { getAll as getAllBSs } from "@/components/tools/BS/actions";
+import { BS } from "@prisma/client";
 
 const Invoice = () => {
   const [date, setDate] = useState("January-25-2025");
   const [companyName, setCompanyName] = useState("Example Company Name");
-  const [companyAddress, setCompanyAddress] = useState("Example Company Address");
+  const [companyAddress, setCompanyAddress] = useState(
+    "Example Company Address"
+  );
   const [companyContact, setCompanyContact] = useState("09456754591");
-  const [billingCompanyName, setBillingCompanyName] = useState("Click to add text");
+  const [billingCompanyName, setBillingCompanyName] =
+    useState("Click to add text");
   const [billingAmount, setBillingAmount] = useState("Click to add amount");
 
   const [items, setItems] = useState([
@@ -15,26 +19,28 @@ const Invoice = () => {
   ]);
 
   const hasEdited = (initialValue: any, currentValue: any): boolean => {
-    if (initialValue === null || initialValue === undefined || currentValue === null || currentValue === undefined) {
+    if (
+      initialValue === null ||
+      initialValue === undefined ||
+      currentValue === null ||
+      currentValue === undefined
+    ) {
       return false;
     }
     return initialValue !== currentValue;
   };
-  
 
   const addItemRow = () => {
     setItems([
       ...items,
-      { qty: 0, price: 0, name: "", purpose: "" },  // Set qty and price as numbers
+      { qty: 0, price: 0, name: "", purpose: "" }, // Set qty and price as numbers
     ]);
   };
-  
 
   // Function to compute total for each row
   const computeRowTotal = (price: any): number => {
     return parseFloat(String(price)) || 0;
   };
-  
 
   // Function to compute grand total
   const computeGrandTotal = () => {
@@ -56,10 +62,31 @@ const Invoice = () => {
     }
   };
 
+  const [records, setRecords] = useState<BS[]>([]);
+
+  useEffect(() => {
+    const getAll = async () => {
+      const response = await getAllBSs();
+      setRecords(response.records);
+    };
+
+    getAll();
+  }, []);
+
+  const setNumber = (ar: any) => {
+    let id = 500;
+    if (ar) {
+      id = Number(ar.number.split("-").at(-1)) + 1;
+    }
+    const year = new Date().getFullYear();
+    const voucher = `${year}-AR-${id.toString().padStart(5, "0")}`;
+    return voucher;
+  };
+
+  const number = setNumber(records[0]);
+
   return (
     <div className="min-h-screen">
-      <Navbar />
-
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
         <div className="w-full max-w-4xl mt-20 bg-white shadow-lg rounded-2xl p-6">
           <div className="flex justify-between items-start">
@@ -68,7 +95,7 @@ const Invoice = () => {
               <p className="font-semibold text-gray-700">Date Issued:</p>
               <input
                 type="text"
-                value={date}
+                value={number}
                 onChange={(e) => setDate(e.target.value)}
                 className={`focus:outline-none ml-2 ${
                   hasEdited("001234", date) ? "" : "border-b border-gray-400"
@@ -84,7 +111,9 @@ const Invoice = () => {
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 className={`w-full overflow-x-auto text-center focus:outline-none ${
-                  hasEdited("Company Name", companyName) ? "" : "border-b border-gray-400"
+                  hasEdited("Company Name", companyName)
+                    ? ""
+                    : "border-b border-gray-400"
                 }`}
               />
             </h1>
@@ -93,7 +122,9 @@ const Invoice = () => {
               value={companyAddress}
               onChange={(e) => setCompanyAddress(e.target.value)}
               className={`text-gray-600 focus:outline-none w-full overflow-x-auto text-center ${
-                hasEdited("123 Main St, City, Country", companyAddress) ? "" : "border-b border-gray-400"
+                hasEdited("123 Main St, City, Country", companyAddress)
+                  ? ""
+                  : "border-b border-gray-400"
               }`}
             />
             <input
@@ -101,7 +132,9 @@ const Invoice = () => {
               value={companyContact}
               onChange={(e) => setCompanyContact(e.target.value)}
               className={`text-gray-600 focus:outline-none ${
-                hasEdited("(123) 456-7890", companyContact) ? "" : "border-b border-gray-400"
+                hasEdited("(123) 456-7890", companyContact)
+                  ? ""
+                  : "border-b border-gray-400"
               }`}
             />
           </div>
@@ -123,7 +156,9 @@ const Invoice = () => {
                 onChange={(e) => setBillingAmount(e.target.value)}
                 className="focus:outline-none w-full max-w-xs mx-auto text-center"
               />
-              {" for the payment of website development, hosting, and related services. This billing statement serves as a formal request for payment and outlines the details of the charges incurred."}
+              {
+                " for the payment of website development, hosting, and related services. This billing statement serves as a formal request for payment and outlines the details of the charges incurred."
+              }
             </p>
           </div>
 
@@ -131,9 +166,15 @@ const Invoice = () => {
             <table className="w-full border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-gray-200">
-                  <th className="border border-gray-300 px-4 py-2 text-left">DESCRIPTION</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">UNIT PRICE</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">TOTAL</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">
+                    DESCRIPTION
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">
+                    UNIT PRICE
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">
+                    TOTAL
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -146,7 +187,9 @@ const Invoice = () => {
                         onChange={(e) =>
                           setItems(
                             items.map((itm, idx) =>
-                              idx === index ? { ...itm, name: e.target.value } : itm
+                              idx === index
+                                ? { ...itm, name: e.target.value }
+                                : itm
                             )
                           )
                         }
@@ -154,19 +197,24 @@ const Invoice = () => {
                       />
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
-  <input
-    type="text"
-    value={item.price}
-    onChange={(e) =>
-      setItems(
-        items.map((itm, idx) =>
-          idx === index ? { ...itm, price: parseFloat(e.target.value) || 0 } : itm
-        )
-      )
-    }
-    className="w-full focus:outline-none"
-  />
-</td>
+                      <input
+                        type="text"
+                        value={item.price}
+                        onChange={(e) =>
+                          setItems(
+                            items.map((itm, idx) =>
+                              idx === index
+                                ? {
+                                    ...itm,
+                                    price: parseFloat(e.target.value) || 0,
+                                  }
+                                : itm
+                            )
+                          )
+                        }
+                        className="w-full focus:outline-none"
+                      />
+                    </td>
 
                     <td className="border border-gray-300 px-4 py-2">
                       <input

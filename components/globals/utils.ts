@@ -118,3 +118,12 @@ export const isPending = (date: Date) => {
 
   return isPending;
 };
+
+export const setVoucher = (transaction: Transaction) => {
+  let id = 1;
+  if (transaction) {
+    id = Number(transaction.voucher) + 1;
+  }
+  const voucher = `${id}`.padStart(5, "0");
+  return voucher;
+};
