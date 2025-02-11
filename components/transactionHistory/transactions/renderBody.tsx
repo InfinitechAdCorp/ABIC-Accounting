@@ -16,12 +16,11 @@ import {
   TransactionRow as Row,
   TClient,
 } from "@/components/transactionHistory/types";
-import { isAfter } from "date-fns";
+import { isPending } from "@/components/globals/utils";
 
 const setColor = (record: Record) => {
   let color;
-  const today = new Date(new Date().setHours(0, 0, 0, 0));
-  if (isAfter(record.date.setHours(0, 0, 0, 0), today)) {
+  if (isPending(record.date)) {
     color = "text-[#F5A524]";
   }
   if (record.status == "Cancelled") {

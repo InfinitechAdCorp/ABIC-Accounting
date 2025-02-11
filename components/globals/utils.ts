@@ -3,6 +3,7 @@ import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { ActionResponse } from "@/components/globals/types";
 import { DateValue, parseDate } from "@internationalized/date";
+import { isAfter } from "date-fns";
 
 // Event Handlers
 
@@ -94,7 +95,7 @@ export const computeBalance = (records: Transaction[]) => {
 
   if (records) {
     records.forEach((record) => {
-      if (record.status != "Cancelled") {
+      if (record.status != "Cancelled" && !isPending(record.date)) {
         if (record.type == "Credit") {
           total += record.amount;
         } else {
@@ -105,4 +106,15 @@ export const computeBalance = (records: Transaction[]) => {
   }
 
   return total;
+};
+
+export const isPending = (date: Date) => {
+  let isPending = false;
+  const today = new Date(new Date().setHours(0, 0, 0, 0));
+
+  if (date) {
+    isPending = isAfter(date.setHours(0, 0, 0, 0), today);
+  }
+
+  return isPending;
 };

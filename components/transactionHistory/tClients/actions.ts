@@ -20,7 +20,11 @@ import {
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { Destroy } from "@/components/globals/types";
-import { computeBalance, formatNumber } from "@/components/globals/utils";
+import {
+  formatNumber,
+  computeBalance,
+  isPending,
+} from "@/components/globals/utils";
 
 const model = "Client";
 const url = "/transaction-history/clients";
@@ -75,7 +79,10 @@ export const tableFormat = async (columns: Column[], records: TClient[]) => {
         case "starting_fund":
           value = 0;
           const transaction = transactions?.find((transaction) => {
-            if (transaction.status != "Cancelled") {
+            if (
+              transaction.status != "Cancelled" &&
+              !isPending(transaction.date)
+            ) {
               return transaction;
             }
           });
