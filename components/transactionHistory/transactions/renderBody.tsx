@@ -16,6 +16,19 @@ import {
   TransactionRow as Row,
   TClient,
 } from "@/components/transactionHistory/types";
+import { isAfter } from "date-fns";
+
+const setColor = (record: Record) => {
+  let color;
+  const today = new Date(new Date().setHours(0, 0, 0, 0));
+  if (isAfter(record.date.setHours(0, 0, 0, 0), today)) {
+    color = "text-[#F5A524]";
+  }
+  if (record.status == "Cancelled") {
+    color = "text-[#F31260]";
+  }
+  return color;
+};
 
 const RenderCell = (
   record: Record,
@@ -57,12 +70,7 @@ const RenderBody = (
   return (
     <>
       {rows.map((row, index) => (
-        <TableRow
-          key={index}
-          className={
-            records[index].status == "Cancelled" ? "text-[#F31260]" : ""
-          }
-        >
+        <TableRow key={index} className={setColor(records[index])}>
           {columns.map((column) => (
             <TableCell key={column.key}>
               {RenderCell(records[index], column.key, row, dependencies)}
