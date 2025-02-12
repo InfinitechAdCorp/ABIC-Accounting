@@ -40,6 +40,7 @@ export type TransactionRow = {
   particulars: string;
   credit: string;
   debit: string;
+  status: string;
   proof: string;
   actions: string;
 };

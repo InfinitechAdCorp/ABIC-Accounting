@@ -23,6 +23,7 @@ import { list, put, del } from "@vercel/blob";
 import { ulid } from "ulidx";
 import { Destroy } from "@/components/globals/types";
 import { formatDate, formatNumber } from "@/components/globals/utils";
+import { isPending } from "@/components/globals/utils";
 
 type TransactionCreateInput = Prisma.TransactionCreateInput & {
   proof: File;
@@ -73,6 +74,7 @@ export const tableFormat = async (
       credit: "",
       debit: "",
       proof: "",
+      status: "",
       actions: "",
     };
 
@@ -99,6 +101,14 @@ export const tableFormat = async (
             value = formatNumber(record.amount);
           } else {
             value = "";
+          }
+          break;
+        case "status":
+          if (isPending(record.date)) {
+            value = "Pending";
+          } else {
+            value = record[key as keyof Transaction];
+            if (value == "Active") value = "";
           }
           break;
         case "proof":

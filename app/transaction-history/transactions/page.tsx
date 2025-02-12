@@ -36,6 +36,7 @@ const Transactions = async () => {
     { key: "particulars", name: "PARTICULARS" },
     { key: "credit", name: "CREDIT" },
     { key: "debit", name: "DEBIT" },
+    { key: "status", name: "STATUS" },
     { key: "proof", name: "PROOF" },
     { key: "actions", name: "ACTIONS" },
   ];
