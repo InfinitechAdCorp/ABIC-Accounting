@@ -17,7 +17,11 @@ import {
 import { Formik, Form, Field, FieldProps } from "formik";
 import { exportAsPDF as validationSchema } from "@/components/globals/schemas";
 import { ExportAsPDF } from "@/components/globals/types";
-import { dateToDateValue, dateValueToDate, stringToDate } from "@/components/globals/utils";
+import {
+  dateToDateValue,
+  dateValueToDate,
+  stringToDate,
+} from "@/components/globals/utils";
 
 type Props = {
   model: string;
@@ -52,7 +56,7 @@ const ExportModal = ({ model, columns: ufColumns, rows: ufRows }: Props) => {
     const columns: string[] = [];
 
     ufColumns.forEach((ufColumn) => {
-      if (excluded.includes(ufColumn.key)) {
+      if (!excluded.includes(ufColumn.key)) {
         columns.push(ufColumn.name);
       }
     });
@@ -62,41 +66,44 @@ const ExportModal = ({ model, columns: ufColumns, rows: ufRows }: Props) => {
 
   const columns = formatColumns(ufColumns);
 
-  // const formatRows = (ufRows: any[]) => {
-  //   const rows: string[][] = [];
+  const formatRows = (ufRows: any[]) => {
+    const rows: string[][] = [];
 
-  //   ufRows.forEach((ufRow) => {
-  //     const row: string[] = [];
-  //     ufColumns.forEach((ufColumn) => {
-  //       row.push(ufRow[ufColumn.key]);
-  //     });
-  //     rows.push(row);
-  //   });
+    ufRows.forEach((ufRow) => {
+      const row: string[] = [];
+      ufColumns.forEach((ufColumn) => {
+        row.push(ufRow[ufColumn.key]);
+      });
+      rows.push(row);
+    });
 
-  //   return rows;
-  // };
-
-  // const rows = formatRows(ufRows);
+    return rows;
+  };
 
   const onSubmit = async (
     values: ExportAsPDF,
     actions: { resetForm: () => void }
   ) => {
-    const start = dateValueToDate(values.range.start)?.toLocaleDateString("en-CA")
-    const end = dateValueToDate(values.range.end)?.toLocaleDateString("en-CA")
+    const start = dateValueToDate(values.range.start)?.toLocaleDateString(
+      "en-CA"
+    ) as string;
+    const end = dateValueToDate(values.range.end)?.toLocaleDateString(
+      "en-CA"
+    ) as string;
 
-    ufRows.forEach((ufRow) => {
-      console.log(stringToDate(ufRow.date))
-    })
-    
-    // setSubmitting(true);
-    // action(values).then((response) => {
-    //   setSubmitting(false);
-    //   onPostSubmit(response, actions, onClose);
-    // });
+    const fRows = ufRows.filter((ufRow) => {
+      const date = stringToDate(ufRow.date);
+      return date >= start && date <= end;
+    });
+
+    const rows = formatRows(fRows);
+    exportAsPDF(rows);
+
+    actions.resetForm();
+    onClose();
   };
 
-  const exportAsPDF = () => {
+  const exportAsPDF = (rows: string[][]) => {
     const doc = new jsPDF("l");
     autoTable(doc, {
       head: [columns],
@@ -121,7 +128,7 @@ const ExportModal = ({ model, columns: ufColumns, rows: ufRows }: Props) => {
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}
               >
-                {() => (
+                {(props) => (
                   <Form>
                     <ModalHeader>Export {model}</ModalHeader>
                     <ModalBody>
@@ -129,10 +136,17 @@ const ExportModal = ({ model, columns: ufColumns, rows: ufRows }: Props) => {
                         {({ field, meta }: FieldProps) => (
                           <div>
                             <DateRangePicker
+                              {...field}
                               label="Select Date Range to Export From"
                               labelPlacement="outside"
                               defaultValue={field.value}
-                              onChange={(value) => console.log(value)}
+                              onChange={(value) => {
+                                const range = {
+                                  start: value?.start,
+                                  end: value?.end,
+                                };
+                                props.setFieldValue(field.name, range);
+                              }}
                             />
                             {meta.touched && meta.error && (
                               <small className="text-red-500">
