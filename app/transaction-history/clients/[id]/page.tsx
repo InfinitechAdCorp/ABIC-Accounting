@@ -27,7 +27,7 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { records: tClients } = await getTClients();
   const { records: transactions } = await getTransactions();
 
-  const model = `${record?.name}'s Transactions`;
+  const model = `Transactions`;
   const runningBalance = formatNumber(
     computeBalance([...(record?.transactions || [])].reverse())
   );
@@ -44,10 +44,7 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
     { key: "actions", name: "ACTIONS" },
   ];
 
-  const rows = await tableFormat(
-    columns,
-    record?.transactions || []
-  );
+  const rows = await tableFormat(columns, record?.transactions || []);
 
   const voucher = setVoucher(transactions[0]);
 
@@ -60,7 +57,7 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
           <CardBody>
             <div className="flex justify-between">
               <h1 className="text-lg font-semibold mb-3">
-                {model.toUpperCase()}
+                {`${record?.name}'s ${model}`.toUpperCase()}
               </h1>
               <h1 className="text-md font-semibold mb-3">
                 RUNNING BALANCE: {runningBalance}

@@ -11,7 +11,7 @@ import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/collectionMonitoring/collections/renderBody";
 import CreateModal from "@/components/collectionMonitoring/collections/createModal";
 import { Account } from "@prisma/client";
-import ExportBtn from "@/components/globals/exportRangeModal";
+import ExportRangeModal from "@/components/globals/exportRangeModal";
 
 const TransactionClient = async ({
   params,
@@ -22,7 +22,7 @@ const TransactionClient = async ({
   const { record } = await get((await params).id);
   const { records: cClients } = await getCClients();
 
-  const model = `${record?.name}'s Collections`;
+  const model = `Collections`;
 
   const locations = [
     { key: "All", name: "All" },
@@ -38,7 +38,6 @@ const TransactionClient = async ({
 
   const columns = [
     { key: "id", name: "ID" },
-    { key: "client", name: "CLIENT" },
     { key: "property", name: "PROPERTY" },
     { key: "location", name: "LOCATION" },
     { key: "start", name: "CONTRACT START" },
@@ -54,10 +53,7 @@ const TransactionClient = async ({
     { key: "actions", name: "ACTIONS" },
   ];
 
-  const rows = await tableFormat(
-    columns,
-    record?.collections || []
-  );
+  const rows = await tableFormat(columns, record?.collections || []);
 
   return (
     <>
@@ -67,7 +63,7 @@ const TransactionClient = async ({
         <Card className="m-5 md:m-7 p-3">
           <CardBody>
             <h1 className="text-lg font-semibold mb-3">
-              {model.toUpperCase()}
+              {`${record?.name}'s ${model}`.toUpperCase()}
             </h1>
             <DataTable
               model={model}
@@ -83,7 +79,7 @@ const TransactionClient = async ({
             >
               <>
                 <CreateModal locations={locations} cClients={cClients} />
-                <ExportBtn columns={columns} rows={rows} />
+                <ExportRangeModal model={model} columns={columns} rows={rows} filterKey="start" />
               </>
             </DataTable>
           </CardBody>

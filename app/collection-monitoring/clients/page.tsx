@@ -9,7 +9,7 @@ import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";
 import CreateModal from "@/components/collectionMonitoring/cClients/createModal";
 import { Account } from "@prisma/client";
-import ExportBtn from "@/components/globals/exportRangeModal";
+import ExportBtn from "@/components/globals/exportBtn";
 import RenderBody from "@/components/collectionMonitoring/cClients/renderBody";
 
 const CClients = async () => {
@@ -47,7 +47,7 @@ const CClients = async () => {
             >
               <>
                 <CreateModal />
-                <ExportBtn columns={columns} rows={rows} />
+                <ExportBtn model={model} columns={columns} rows={rows} />
               </>
             </DataTable>
           </CardBody>

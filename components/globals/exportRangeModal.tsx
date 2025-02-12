@@ -74,8 +74,6 @@ const ExportRangeModal = ({
 
   const columns = formatColumns(ufColumns);
 
-  console.log(columns);
-
   const formatRows = (fRows: any[]) => {
     const rows: string[][] = [];
 
@@ -124,7 +122,7 @@ const ExportRangeModal = ({
       actions.resetForm();
       onClose();
     } else {
-      toast.error("No Records were Found");
+      toast.error(`No ${model} were Found`);
     }
   };
 
