@@ -34,6 +34,7 @@ const Collections = async () => {
   ];
 
   const columns = [
+    { key: "id", name: "ID" },
     { key: "client", name: "CLIENT" },
     { key: "property", name: "PROPERTY" },
     { key: "location", name: "LOCATION" },
@@ -50,7 +51,7 @@ const Collections = async () => {
     { key: "actions", name: "ACTIONS" },
   ];
 
-  const rows = await tableFormat(columns.slice(0, -1), records);
+  const rows = await tableFormat(columns, records);
 
   return (
     <>
@@ -85,7 +86,7 @@ const Collections = async () => {
                 />
                 <ExportRangeModal
                   model={model}
-                  columns={columns.slice(0, -1)}
+                  columns={columns}
                   rows={rows}
                   filterKey="start"
                 />

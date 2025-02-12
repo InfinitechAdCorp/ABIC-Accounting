@@ -62,6 +62,7 @@ export const tableFormat = async (columns: Column[], records: Collection[]) => {
 
   records.forEach((record) => {
     const row = {
+      id: "",
       client: "",
       property: "",
       location: "",
@@ -75,6 +76,7 @@ export const tableFormat = async (columns: Column[], records: Collection[]) => {
       due: "",
       status: "",
       payments: "",
+      actions: "",
     };
 
     columns.forEach((column) => {

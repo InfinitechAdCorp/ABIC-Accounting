@@ -28,6 +28,7 @@ const Transactions = async () => {
   const runningBalance = formatNumber(computeBalance([...records].reverse()));
 
   const columns = [
+    { key: "id", name: "ID" },
     { key: "date", name: "DATE" },
     { key: "voucher", name: "VOUCHER" },
     { key: "check", name: "CHECK" },
@@ -39,7 +40,7 @@ const Transactions = async () => {
     { key: "actions", name: "ACTIONS" },
   ];
 
-  const rows = await tableFormat(columns.slice(0, -1), records);
+  const rows = await tableFormat(columns, records);
 
   const voucher = setVoucher(records[0]);
 
@@ -79,7 +80,7 @@ const Transactions = async () => {
 
                 <ExportRangeModal
                   model={model}
-                  columns={columns.slice(0, -1)}
+                  columns={columns}
                   rows={rows}
                   filterKey="date"
                 />

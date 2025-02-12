@@ -61,10 +61,12 @@ export const tableFormat = async (columns: Column[], records: TClient[]) => {
 
   records.forEach((record) => {
     const row = {
+      id: "",
       name: "",
       transactions: "",
       starting_fund: "",
       running_balance: "",
+      actions: "",
     };
 
     columns.forEach((column) => {

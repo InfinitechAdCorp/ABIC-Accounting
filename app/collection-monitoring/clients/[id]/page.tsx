@@ -37,6 +37,8 @@ const TransactionClient = async ({
   ];
 
   const columns = [
+    { key: "id", name: "ID" },
+    { key: "client", name: "CLIENT" },
     { key: "property", name: "PROPERTY" },
     { key: "location", name: "LOCATION" },
     { key: "start", name: "CONTRACT START" },
@@ -53,10 +55,9 @@ const TransactionClient = async ({
   ];
 
   const rows = await tableFormat(
-    columns.slice(0, -1),
+    columns,
     record?.collections || []
   );
-  console.log("🚀 ~ rows:", rows);
 
   return (
     <>
@@ -82,7 +83,7 @@ const TransactionClient = async ({
             >
               <>
                 <CreateModal locations={locations} cClients={cClients} />
-                <ExportBtn columns={columns.slice(0, -1)} rows={rows} />
+                <ExportBtn columns={columns} rows={rows} />
               </>
             </DataTable>
           </CardBody>

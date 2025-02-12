@@ -11,6 +11,13 @@ import UpdateModal from "@/components/listings/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
 import { destroy } from "@/components/listings/actions";
 
+const getRecord = (records: Record[], id: string) => {
+  const record = records.find((record) => {
+    return record.id == id;
+  }) as Record;
+  return record;
+};
+
 const RenderCell = (record: Record, column: string, row: Row) => {
   switch (column) {
     case "actions":
@@ -28,11 +35,18 @@ const RenderCell = (record: Record, column: string, row: Row) => {
 const RenderBody = (records: Record[], columns: Column[], rows: Row[]) => {
   return (
     <>
-      {rows.map((row, index) => (
-        <TableRow key={index} className={records[index].status == "Closed" ? "text-[#006FEE]" : "text-[#F31260]"}>
+      {rows.map((row) => (
+        <TableRow
+          key={row.id}
+          className={
+            getRecord(records, row.id).status == "Closed"
+              ? "text-[#006FEE]"
+              : "text-[#F31260]"
+          }
+        >
           {columns.map((column) => (
             <TableCell key={column.key}>
-              {RenderCell(records[index], column.key, row)}
+              {RenderCell(getRecord(records, row.id), column.key, row)}
             </TableCell>
           ))}
         </TableRow>

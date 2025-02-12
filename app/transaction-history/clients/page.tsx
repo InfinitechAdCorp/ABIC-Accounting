@@ -25,6 +25,7 @@ const TClients = async () => {
   );
 
   const columns = [
+    { key: "id", name: "ID" },
     { key: "name", name: "NAME" },
     { key: "transactions", name: "TRANSACTIONS" },
     { key: "starting_fund", name: "STARTING FUND" },
@@ -32,7 +33,7 @@ const TClients = async () => {
     { key: "actions", name: "ACTIONS" },
   ];
 
-  const rows = await tableFormat(columns.slice(0, -1), records);
+  const rows = await tableFormat(columns, records);
 
   return (
     <>
@@ -60,7 +61,7 @@ const TClients = async () => {
             >
               <>
                 <CreateModal />
-                <ExportBtn columns={columns.slice(0, -1)} rows={rows} />
+                <ExportBtn columns={columns} rows={rows} />
               </>
             </DataTable>
           </CardBody>

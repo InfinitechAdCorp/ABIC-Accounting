@@ -16,6 +16,7 @@ const Listings = async () => {
   const model = "Listings";
 
   const columns = [
+    { key: "id", name: "ID" },
     { key: "client", name: "CLIENT" },
     { key: "type", name: "TYPE" },
     { key: "project", name: "PROJECT" },
@@ -34,7 +35,7 @@ const Listings = async () => {
     { key: "actions", name: "ACTIONS" },
   ];
 
-  const rows = await tableFormat(columns.slice(0, -1), records);
+  const rows = await tableFormat(columns, records);
 
   return (
     <>
@@ -56,7 +57,12 @@ const Listings = async () => {
             >
               <>
                 <CreateModal />
-                <ExportRangeModal model={model} columns={columns.slice(0, -1)} rows={rows} filterKey="res" />
+                <ExportRangeModal
+                  model={model}
+                  columns={columns}
+                  rows={rows}
+                  filterKey="res"
+                />
               </>
             </DataTable>
           </CardBody>

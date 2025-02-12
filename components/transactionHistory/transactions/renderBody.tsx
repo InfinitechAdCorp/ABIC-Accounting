@@ -18,6 +18,13 @@ import {
 } from "@/components/transactionHistory/types";
 import { isPending } from "@/components/globals/utils";
 
+const getRecord = (records: Record[], id: string) => {
+  const record = records.find((record) => {
+    return record.id == id;
+  }) as Record;
+  return record;
+};
+
 const setColor = (record: Record) => {
   let color;
   if (isPending(record.date)) {
@@ -68,11 +75,16 @@ const RenderBody = (
 ) => {
   return (
     <>
-      {rows.map((row, index) => (
-        <TableRow key={index} className={setColor(records[index])}>
+      {rows.map((row) => (
+        <TableRow key={row.id} className={setColor(getRecord(records, row.id))}>
           {columns.map((column) => (
             <TableCell key={column.key}>
-              {RenderCell(records[index], column.key, row, dependencies)}
+              {RenderCell(
+                getRecord(records, row.id),
+                column.key,
+                row,
+                dependencies
+              )}
             </TableCell>
           ))}
         </TableRow>

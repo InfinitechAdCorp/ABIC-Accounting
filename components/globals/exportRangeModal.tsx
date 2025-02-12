@@ -42,6 +42,8 @@ const ExportRangeModal = ({
 }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
+  const excluded = ["id", "actions"];
+
   const today = dateToDateValue(
     new Date(new Date().setHours(0, 0, 0, 0))
   ) as CalendarDate;
@@ -59,7 +61,6 @@ const ExportRangeModal = ({
       name: string;
     }[]
   ) => {
-    const excluded = ["id", "actions"];
     const columns: string[] = [];
 
     ufColumns.forEach((ufColumn) => {
@@ -73,13 +74,17 @@ const ExportRangeModal = ({
 
   const columns = formatColumns(ufColumns);
 
+  console.log(columns);
+
   const formatRows = (fRows: any[]) => {
     const rows: string[][] = [];
 
     fRows.forEach((fRow) => {
       const row: string[] = [];
       ufColumns.forEach((ufColumn) => {
-        row.push(fRow[ufColumn.key]);
+        if (!excluded.includes(ufColumn.key)) {
+          row.push(fRow[ufColumn.key]);
+        }
       });
       rows.push(row);
     });

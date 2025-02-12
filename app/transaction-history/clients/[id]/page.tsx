@@ -19,7 +19,7 @@ import {
   setVoucher,
 } from "@/components/globals/utils";
 import { Account } from "@prisma/client";
-import ExportBtn from "@/components/globals/exportRangeModal";
+import ExportRangeModal from "@/components/globals/exportRangeModal";
 
 const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { record: account } = await getAccount();
@@ -33,6 +33,7 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
   );
 
   const columns = [
+    { key: "id", name: "ID" },
     { key: "date", name: "DATE" },
     { key: "voucher", name: "VOUCHER" },
     { key: "check", name: "CHECK" },
@@ -44,7 +45,7 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
   ];
 
   const rows = await tableFormat(
-    columns.slice(0, -1),
+    columns,
     record?.transactions || []
   );
 
@@ -79,7 +80,12 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
             >
               <>
                 <CreateModal voucher={voucher} tClients={tClients} />
-                <ExportBtn columns={columns.slice(0, -1)} rows={rows} />
+                <ExportRangeModal
+                  model={model}
+                  columns={columns}
+                  rows={rows}
+                  filterKey="date"
+                />
               </>
             </DataTable>
           </CardBody>

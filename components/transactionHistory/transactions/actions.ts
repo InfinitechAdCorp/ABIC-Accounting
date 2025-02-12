@@ -64,6 +64,7 @@ export const tableFormat = async (
 
   records.forEach((record) => {
     const row = {
+      id: "",
       date: "",
       voucher: "",
       check: "",
@@ -72,6 +73,7 @@ export const tableFormat = async (
       credit: "",
       debit: "",
       proof: "",
+      actions: "",
     };
 
     columns.forEach((column) => {

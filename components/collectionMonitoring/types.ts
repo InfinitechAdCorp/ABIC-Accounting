@@ -32,6 +32,7 @@ export type Collection = {
 };
 
 export type CollectionRow = {
+  id: string,
   client: string;
   property: string;
   location: string;
@@ -45,6 +46,7 @@ export type CollectionRow = {
   due: string;
   status: string;
   payments: string;
+  actions: string;
 };
 
 export type CClientWithCollections = Prisma.CClientGetPayload<{

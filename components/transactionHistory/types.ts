@@ -9,11 +9,13 @@ export type TClient = {
 };
 
 export type TClientRow = {
-  name: string, 
-  transactions: string,
-  starting_fund: string,
-  running_balance: string,
-}
+  id: string;
+  name: string;
+  transactions: string;
+  starting_fund: string;
+  running_balance: string;
+  actions: string;
+};
 
 export type Transaction = {
   id: string;
@@ -30,6 +32,7 @@ export type Transaction = {
 };
 
 export type TransactionRow = {
+  id: string;
   date: string;
   voucher: string;
   check: string;
@@ -38,6 +41,7 @@ export type TransactionRow = {
   credit: string;
   debit: string;
   proof: string;
+  actions: string;
 };
 
 export type TClientWithTransactions = Prisma.TClientGetPayload<{
