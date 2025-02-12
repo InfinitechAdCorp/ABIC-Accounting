@@ -17,6 +17,8 @@ import { LoanCalculator } from "@/components/tools/loanCalculator/types";
 
 const LoanCalculatorForm = () => {
   const [submitting, setSubmitting] = useState(false);
+  const [monthlyPayment, setMonthlyPayment] = useState(0);
+  const [totalPayment, setTotalPayment] = useState(0);
 
   const initialValues = {
     amount: "",
@@ -25,23 +27,32 @@ const LoanCalculatorForm = () => {
     rate: "",
   };
 
+  const calculate = (values: LoanCalculator) => {
+    const amount = Number(values.amount);
+    const years = Number(values.years);
+    const months = Number(values.months);
+    const rate = Number(values.rate);
+
+    const totalMonths = years * 12 + months;
+    const monthlyRate = rate / 100 / 12;
+
+    const monthlyPayment =
+      (amount * (monthlyRate * Math.pow(1 + monthlyRate, totalMonths))) /
+      (Math.pow(1 + monthlyRate, totalMonths) - 1);
+    const totalPayment = monthlyPayment * totalMonths;
+
+    setMonthlyPayment(monthlyPayment);
+    setTotalPayment(totalPayment);
+  };
+
   const onSubmit = async (
     values: LoanCalculator,
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
-    console.log(values);
-    // action(values).then(({ isValid, message }) => {
-    //   setSubmitting(false);
-    //   actions.resetForm();
-
-    //   if (isValid) {
-    //     toast.success(message);
-    //     router.push("/accounts");
-    //   } else {
-    //     toast.error(message);
-    //   }
-    // });
+    calculate(values);
+    setSubmitting(false);
+    actions.resetForm();
   };
 
   return (
@@ -54,7 +65,11 @@ const LoanCalculatorForm = () => {
         >
           {() => (
             <Form>
-              <CardHeader>Loan Calculator</CardHeader>
+              <CardHeader>
+                <div className="flex items-center justify-center w-full">
+                  <h3 className="text-base font-semibold">Loan Calculator</h3>
+                </div>
+              </CardHeader>
               <CardBody>
                 <Field name="amount">
                   {({ field, meta }: FieldProps) => (
@@ -147,6 +162,28 @@ const LoanCalculatorForm = () => {
             </Form>
           )}
         </Formik>
+      </Card>
+
+      <Card className="m-5 md:m-7 p-5 w-[30rem]">
+        <CardHeader>
+          <div className="flex items-center justify-center w-full">
+            <h3 className="text-base font-semibold">Result</h3>
+          </div>
+        </CardHeader>
+        <CardBody>
+          <h3 className="text-base">
+            Monthly Payment:{" "}
+            <span className="text-base font-semibold">
+              {monthlyPayment.toFixed(2)}
+            </span>
+          </h3>
+          <h3 className="text-base">
+            Total Payment:{" "}
+            <span className="text-base font-semibold">
+              {totalPayment.toFixed(2)}
+            </span>
+          </h3>
+        </CardBody>
       </Card>
     </>
   );

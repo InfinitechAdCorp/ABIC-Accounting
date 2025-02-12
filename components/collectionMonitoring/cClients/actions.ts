@@ -34,9 +34,9 @@ export const format = async (ufRecords: CClientWithCollections[]) => {
         const collection = {
           ...ufCollection,
           c_client_id: ufCollection.c_client_id as string,
-          tenant_price: ufCollection.tenant_price?.toNumber(),
-          owner_income: ufCollection.owner_income?.toNumber(),
-          abic_income: ufCollection.abic_income?.toNumber(),
+          tenant_price: Number(ufCollection.tenant_price),
+          owner_income: Number(ufCollection.owner_income),
+          abic_income: Number(ufCollection.abic_income),
         };
         collections.push(collection);
       });

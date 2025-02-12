@@ -48,7 +48,7 @@ export const format = async (ufRecords: TransactionWithTClient[]) => {
         name: tClient?.name as string,
       },
       t_client_id: ufRecord.t_client_id as string,
-      amount: ufRecord.amount.toNumber(),
+      amount: Number(ufRecord.amount),
     };
     records.push(record);
   });

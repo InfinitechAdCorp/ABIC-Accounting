@@ -39,7 +39,7 @@ export const format = async (ufRecords: TClientWithTransactions[]) => {
         const transaction = {
           ...ufTransaction,
           t_client_id: ufTransaction.t_client_id as string,
-          amount: ufTransaction.amount.toNumber(),
+          amount: Number(ufTransaction.amount),
         };
         transactions.push(transaction);
       });

@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 
-export const calculate = {
+export const calculate = Yup.object().shape({
   amount: Yup.number()
     .typeError("Amount must be a number")
     .moreThan(-1, "Amount must be a positive number"),
@@ -13,4 +13,4 @@ export const calculate = {
   rate: Yup.number()
     .typeError("Rate must be a number")
     .moreThan(-1, "Rate must be a positive number"),
-};
+});
