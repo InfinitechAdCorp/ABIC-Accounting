@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/globals/navbar";
-import { getAll as getAllARs } from "@/components/tools/AR/actions";
+import { getAllARs } from "@/components/tools/actions";
 import { AR } from "@prisma/client";
 
 const Invoice = () => {

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { getAll as getAllBSs } from "@/components/tools/BS/actions";
+import { getAllBSs } from "@/components/tools/actions";
 import { BS } from "@prisma/client";
 
 const Invoice = () => {
