@@ -37,13 +37,17 @@ type Props = {
 const DataTable = ({
   model,
   records,
-  columns,
+  columns: ufColumns,
   rows,
   searchKey,
   RenderBody,
   dependencies,
   children,
 }: Props) => {
+  const columns = ufColumns.filter((ufColumn) => {
+    return ufColumn.key != "id";
+  });
+
   const [filterValue, setFilterValue] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);

@@ -11,7 +11,7 @@ import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/collectionMonitoring/collections/renderBody";
 import CreateModal from "@/components/collectionMonitoring/collections/createModal";
 import { Account } from "@prisma/client";
-import ExportBtn from "@/components/globals/exportBtn";
+import ExportBtn from "@/components/globals/exportModal";
 
 const TransactionClient = async ({
   params,
@@ -56,7 +56,7 @@ const TransactionClient = async ({
     columns.slice(0, -1),
     record?.collections || []
   );
-  console.log("🚀 ~ rows:", rows)
+  console.log("🚀 ~ rows:", rows);
 
   return (
     <>

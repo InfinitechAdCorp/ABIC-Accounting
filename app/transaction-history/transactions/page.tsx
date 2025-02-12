@@ -11,9 +11,13 @@ import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/transactionHistory/transactions/renderBody";
 import CreateTransactionModal from "@/components/transactionHistory/transactions/createModal";
 import CreateTClientModal from "@/components/transactionHistory/tClients/createModal";
-import { computeBalance, formatNumber, setVoucher } from "@/components/globals/utils";
+import {
+  computeBalance,
+  formatNumber,
+  setVoucher,
+} from "@/components/globals/utils";
 import { Account } from "@prisma/client";
-import ExportBtn from "@/components/globals/exportBtn";
+import ExportBtn from "@/components/globals/exportModal";
 
 const Transactions = async () => {
   const { record: account } = await getAccount();
@@ -73,7 +77,7 @@ const Transactions = async () => {
 
                 <CreateTransactionModal voucher={voucher} tClients={tClients} />
 
-                <ExportBtn columns={columns.slice(0, -1)} rows={rows} />
+                <ExportBtn model={model} columns={columns.slice(0, -1)} rows={rows} />
               </>
             </DataTable>
           </CardBody>

@@ -6,7 +6,7 @@ import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";
 import CreateModal from "@/components/listings/createModal";
 import { Account } from "@prisma/client";
-import ExportBtn from "@/components/globals/exportBtn";
+import ExportBtn from "@/components/globals/exportModal";
 import RenderBody from "@/components/listings/renderBody";
 
 const Listings = async () => {

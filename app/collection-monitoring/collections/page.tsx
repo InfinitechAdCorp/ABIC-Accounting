@@ -12,7 +12,7 @@ import RenderBody from "@/components/collectionMonitoring/collections/renderBody
 import CreateCollectionModal from "@/components/collectionMonitoring/collections/createModal";
 import CreateCClientModal from "@/components/collectionMonitoring/cClients/createModal";
 import { Account } from "@prisma/client";
-import ExportBtn from "@/components/globals/exportBtn";
+import ExportBtn from "@/components/globals/exportModal";
 
 const Collections = async () => {
   const { record: account } = await getAccount();
