@@ -12,7 +12,12 @@ import {
   Button,
   DateRangePicker,
   useDisclosure,
+  CalendarDate,
 } from "@heroui/react";
+import { Formik, Form, Field, FieldProps } from "formik";
+import { exportAsPDF as validationSchema } from "@/components/globals/schemas";
+import { ExportAsPDF } from "@/components/globals/types";
+import { dateToDateValue, dateValueToDate, stringToDate } from "@/components/globals/utils";
 
 type Props = {
   model: string;
@@ -25,6 +30,17 @@ type Props = {
 
 const ExportModal = ({ model, columns: ufColumns, rows: ufRows }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
+  const today = dateToDateValue(
+    new Date(new Date().setHours(0, 0, 0, 0))
+  ) as CalendarDate;
+
+  const initialValues = {
+    range: {
+      start: today,
+      end: today,
+    },
+  };
 
   const formatColumns = (
     ufColumns: {
@@ -46,31 +62,49 @@ const ExportModal = ({ model, columns: ufColumns, rows: ufRows }: Props) => {
 
   const columns = formatColumns(ufColumns);
 
-  const formatRows = (ufRows: any[]) => {
-    const rows: string[][] = [];
+  // const formatRows = (ufRows: any[]) => {
+  //   const rows: string[][] = [];
+
+  //   ufRows.forEach((ufRow) => {
+  //     const row: string[] = [];
+  //     ufColumns.forEach((ufColumn) => {
+  //       row.push(ufRow[ufColumn.key]);
+  //     });
+  //     rows.push(row);
+  //   });
+
+  //   return rows;
+  // };
+
+  // const rows = formatRows(ufRows);
+
+  const onSubmit = async (
+    values: ExportAsPDF,
+    actions: { resetForm: () => void }
+  ) => {
+    const start = dateValueToDate(values.range.start)?.toLocaleDateString("en-CA")
+    const end = dateValueToDate(values.range.end)?.toLocaleDateString("en-CA")
 
     ufRows.forEach((ufRow) => {
-      const row: string[] = [];
-      ufColumns.forEach((ufColumn) => {
-        row.push(ufRow[ufColumn.key]);
-      });
-      rows.push(row);
-    });
-
-    return rows;
+      console.log(stringToDate(ufRow.date))
+    })
+    
+    // setSubmitting(true);
+    // action(values).then((response) => {
+    //   setSubmitting(false);
+    //   onPostSubmit(response, actions, onClose);
+    // });
   };
 
-  const rows = formatRows(ufRows);
-
-  // const onPress = () => {
-  //   const doc = new jsPDF("l");
-  //   autoTable(doc, {
-  //     head: [columns],
-  //     body: rows,
-  //     theme: "grid",
-  //   });
-  //   doc.save("table.pdf");
-  // };
+  const exportAsPDF = () => {
+    const doc = new jsPDF("l");
+    autoTable(doc, {
+      head: [columns],
+      body: rows,
+      theme: "grid",
+    });
+    doc.save("table.pdf");
+  };
 
   return (
     <>
@@ -82,18 +116,44 @@ const ExportModal = ({ model, columns: ufColumns, rows: ufRows }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader>Export {model}</ModalHeader>
-              <ModalBody>
-                <DateRangePicker className="max-w-xs" label="Date Range" />
-              </ModalBody>
-              <ModalFooter>
-                <Button color="primary" type="submit">
-                  Export
-                </Button>
-                <Button color="danger" onPress={onClose}>
-                  Cancel
-                </Button>
-              </ModalFooter>
+              <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={onSubmit}
+              >
+                {() => (
+                  <Form>
+                    <ModalHeader>Export {model}</ModalHeader>
+                    <ModalBody>
+                      <Field name="range">
+                        {({ field, meta }: FieldProps) => (
+                          <div>
+                            <DateRangePicker
+                              label="Select Date Range to Export From"
+                              labelPlacement="outside"
+                              defaultValue={field.value}
+                              onChange={(value) => console.log(value)}
+                            />
+                            {meta.touched && meta.error && (
+                              <small className="text-red-500">
+                                {meta.error}
+                              </small>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button color="primary" type="submit">
+                        Export
+                      </Button>
+                      <Button color="danger" onPress={onClose}>
+                        Cancel
+                      </Button>
+                    </ModalFooter>
+                  </Form>
+                )}
+              </Formik>
             </>
           )}
         </ModalContent>

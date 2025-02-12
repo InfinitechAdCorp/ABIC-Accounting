@@ -80,7 +80,7 @@ const DestroyModal = ({ title, action, id }: Props) => {
                     <ModalHeader>Delete {title}</ModalHeader>
                     <ModalBody>
                       <Field type="hidden" name="id" />
-                      <h6>Enter OTP to Confirm {title} Deletion:</h6>
+                      <h6>Enter OTP to Confirm {title} Deletion</h6>
 
                       <div className="flex justify-center">
                         <Field name="otp">

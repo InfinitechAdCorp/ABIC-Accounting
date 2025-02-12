@@ -1,4 +1,14 @@
 import { SVGProps } from "react";
+import {
+  CalendarDate,
+} from "@heroui/react";
+
+export type ExportAsPDF = {
+  range: {
+    start: CalendarDate;
+    end: CalendarDate;
+  };
+};
 
 export type Destroy = {
   id: string;
