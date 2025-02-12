@@ -6,7 +6,7 @@ import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";
 import CreateModal from "@/components/listings/createModal";
 import { Account } from "@prisma/client";
-import ExportBtn from "@/components/globals/exportRangeModal";
+import ExportRangeModal from "@/components/globals/exportRangeModal";
 import RenderBody from "@/components/listings/renderBody";
 
 const Listings = async () => {
@@ -56,7 +56,7 @@ const Listings = async () => {
             >
               <>
                 <CreateModal />
-                <ExportBtn columns={columns.slice(0, -1)} rows={rows} />
+                <ExportRangeModal model={model} columns={columns.slice(0, -1)} rows={rows} filterKey="res" />
               </>
             </DataTable>
           </CardBody>

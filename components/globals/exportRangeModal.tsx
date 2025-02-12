@@ -22,6 +22,7 @@ import {
   dateValueToDate,
   stringToDate,
 } from "@/components/globals/utils";
+import toast from "react-hot-toast";
 
 type Props = {
   model: string;
@@ -112,10 +113,14 @@ const ExportRangeModal = ({
 
     const fRows = filterRows(ufRows, filterKey, start, end);
     const rows = formatRows(fRows);
-    exportAsPDF(rows);
 
-    actions.resetForm();
-    onClose();
+    if (rows.length > 0) {
+      exportAsPDF(rows);
+      actions.resetForm();
+      onClose();
+    } else {
+      toast.error("No Records were Found");
+    }
   };
 
   const exportAsPDF = (rows: string[][]) => {
@@ -124,8 +129,9 @@ const ExportRangeModal = ({
       head: [columns],
       body: rows,
       theme: "grid",
+      headStyles: { fillColor: [0, 111, 238] },
     });
-    doc.save("table.pdf");
+    doc.save(`${model}.pdf`);
   };
 
   return (
