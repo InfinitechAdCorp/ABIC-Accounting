@@ -12,7 +12,7 @@ import RenderBody from "@/components/collectionMonitoring/collections/renderBody
 import CreateCollectionModal from "@/components/collectionMonitoring/collections/createModal";
 import CreateCClientModal from "@/components/collectionMonitoring/cClients/createModal";
 import { Account } from "@prisma/client";
-import ExportBtn from "@/components/globals/exportModal";
+import ExportRangeModal from "@/components/globals/exportRangeModal";
 
 const Collections = async () => {
   const { record: account } = await getAccount();
@@ -83,7 +83,12 @@ const Collections = async () => {
                   locations={locations}
                   cClients={cClients}
                 />
-                <ExportBtn columns={columns.slice(0, -1)} rows={rows} />
+                <ExportRangeModal
+                  model={model}
+                  columns={columns.slice(0, -1)}
+                  rows={rows}
+                  filterKey="start"
+                />
               </>
             </DataTable>
           </CardBody>

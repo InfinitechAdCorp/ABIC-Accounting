@@ -17,7 +17,7 @@ import {
   setVoucher,
 } from "@/components/globals/utils";
 import { Account } from "@prisma/client";
-import ExportBtn from "@/components/globals/exportModal";
+import ExportRangeModal from "@/components/globals/exportRangeModal";
 
 const Transactions = async () => {
   const { record: account } = await getAccount();
@@ -77,7 +77,12 @@ const Transactions = async () => {
 
                 <CreateTransactionModal voucher={voucher} tClients={tClients} />
 
-                <ExportBtn model={model} columns={columns.slice(0, -1)} rows={rows} />
+                <ExportRangeModal
+                  model={model}
+                  columns={columns.slice(0, -1)}
+                  rows={rows}
+                  filterKey="date"
+                />
               </>
             </DataTable>
           </CardBody>

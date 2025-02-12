@@ -11,7 +11,7 @@ import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/collectionMonitoring/collections/renderBody";
 import CreateModal from "@/components/collectionMonitoring/collections/createModal";
 import { Account } from "@prisma/client";
-import ExportBtn from "@/components/globals/exportModal";
+import ExportBtn from "@/components/globals/exportRangeModal";
 
 const TransactionClient = async ({
   params,

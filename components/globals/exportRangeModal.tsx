@@ -30,9 +30,15 @@ type Props = {
     name: string;
   }[];
   rows: any[];
+  filterKey: string;
 };
 
-const ExportModal = ({ model, columns: ufColumns, rows: ufRows }: Props) => {
+const ExportRangeModal = ({
+  model,
+  columns: ufColumns,
+  rows: ufRows,
+  filterKey,
+}: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const today = dateToDateValue(
@@ -66,18 +72,31 @@ const ExportModal = ({ model, columns: ufColumns, rows: ufRows }: Props) => {
 
   const columns = formatColumns(ufColumns);
 
-  const formatRows = (ufRows: any[]) => {
+  const formatRows = (fRows: any[]) => {
     const rows: string[][] = [];
 
-    ufRows.forEach((ufRow) => {
+    fRows.forEach((fRow) => {
       const row: string[] = [];
       ufColumns.forEach((ufColumn) => {
-        row.push(ufRow[ufColumn.key]);
+        row.push(fRow[ufColumn.key]);
       });
       rows.push(row);
     });
 
     return rows;
+  };
+
+  const filterRows = (
+    ufRows: any[],
+    key: string,
+    start: string,
+    end: string
+  ) => {
+    const fRows = ufRows.filter((ufRow) => {
+      const date = stringToDate(ufRow[key]);
+      return date >= start && date <= end;
+    });
+    return fRows;
   };
 
   const onSubmit = async (
@@ -91,11 +110,7 @@ const ExportModal = ({ model, columns: ufColumns, rows: ufRows }: Props) => {
       "en-CA"
     ) as string;
 
-    const fRows = ufRows.filter((ufRow) => {
-      const date = stringToDate(ufRow.date);
-      return date >= start && date <= end;
-    });
-
+    const fRows = filterRows(ufRows, filterKey, start, end);
     const rows = formatRows(fRows);
     exportAsPDF(rows);
 
@@ -137,7 +152,7 @@ const ExportModal = ({ model, columns: ufColumns, rows: ufRows }: Props) => {
                           <div>
                             <DateRangePicker
                               {...field}
-                              label="Select Date Range to Export From"
+                              label="Select Date Range"
                               labelPlacement="outside"
                               defaultValue={field.value}
                               onChange={(value) => {
@@ -176,4 +191,4 @@ const ExportModal = ({ model, columns: ufColumns, rows: ufRows }: Props) => {
   );
 };
 
-export default ExportModal;
+export default ExportRangeModal;

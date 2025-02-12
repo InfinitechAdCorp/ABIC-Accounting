@@ -12,7 +12,7 @@ import RenderBody from "@/components/transactionHistory/tClients/renderBody";
 import CreateModal from "@/components/transactionHistory/tClients/createModal";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
 import { Account } from "@prisma/client";
-import ExportBtn from "@/components/globals/exportModal";
+import ExportBtn from "@/components/globals/exportRangeModal";
 
 const TClients = async () => {
   const { record: account } = await getAccount();

@@ -9,7 +9,7 @@ import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";
 import CreateModal from "@/components/collectionMonitoring/cClients/createModal";
 import { Account } from "@prisma/client";
-import ExportBtn from "@/components/globals/exportModal";
+import ExportBtn from "@/components/globals/exportRangeModal";
 import RenderBody from "@/components/collectionMonitoring/cClients/renderBody";
 
 const CClients = async () => {

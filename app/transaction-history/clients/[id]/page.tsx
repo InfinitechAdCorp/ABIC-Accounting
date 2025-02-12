@@ -19,7 +19,7 @@ import {
   setVoucher,
 } from "@/components/globals/utils";
 import { Account } from "@prisma/client";
-import ExportBtn from "@/components/globals/exportModal";
+import ExportBtn from "@/components/globals/exportRangeModal";
 
 const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { record: account } = await getAccount();
