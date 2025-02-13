@@ -55,6 +55,18 @@ const TransactionClient = async ({
 
   const rows = await tableFormat(columns, record?.collections || []);
 
+  const Buttons = (
+    <>
+      <CreateModal locations={locations} cClients={cClients} />
+      <ExportRangeModal
+        model={model}
+        columns={columns}
+        rows={rows}
+        filterKey="start"
+      />
+    </>
+  );
+
   return (
     <>
       <Navbar record={account!} />
@@ -76,17 +88,8 @@ const TransactionClient = async ({
                 locations: locations,
                 cClients: cClients,
               }}
-            >
-              <>
-                <CreateModal locations={locations} cClients={cClients} />
-                <ExportRangeModal
-                  model={model}
-                  columns={columns}
-                  rows={rows}
-                  filterKey="start"
-                />
-              </>
-            </DataTable>
+              Buttons={Buttons}
+            />
           </CardBody>
         </Card>
       </div>

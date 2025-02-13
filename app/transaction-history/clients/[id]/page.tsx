@@ -49,6 +49,18 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   const voucher = setVoucher(transactions[0]);
 
+  const Buttons = (
+    <>
+      <CreateModal voucher={voucher} tClients={tClients} />
+      <ExportRangeModal
+        model={model}
+        columns={columns}
+        rows={rows}
+        filterKey="date"
+      />
+    </>
+  );
+
   return (
     <>
       <Navbar record={account!} />
@@ -71,21 +83,12 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
               columns={columns}
               rows={rows}
               searchKey="name"
-              RenderBody={RenderBody}
               dependencies={{
                 tClients: tClients,
               }}
-            >
-              <>
-                <CreateModal voucher={voucher} tClients={tClients} />
-                <ExportRangeModal
-                  model={model}
-                  columns={columns}
-                  rows={rows}
-                  filterKey="date"
-                />
-              </>
-            </DataTable>
+              RenderBody={RenderBody}
+              Buttons={Buttons}
+            />
           </CardBody>
         </Card>
       </div>

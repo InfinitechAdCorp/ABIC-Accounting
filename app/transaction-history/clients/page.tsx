@@ -35,6 +35,13 @@ const TClients = async () => {
 
   const rows = await tableFormat(columns, records);
 
+  const Buttons = (
+    <>
+      <CreateModal />
+      <ExportBtn model={model} columns={columns} rows={rows} />
+    </>
+  );
+
   return (
     <>
       <Navbar record={account!} />
@@ -58,12 +65,8 @@ const TClients = async () => {
               rows={rows}
               searchKey="name"
               RenderBody={RenderBody}
-            >
-              <>
-                <CreateModal />
-                <ExportBtn model={model} columns={columns} rows={rows} />
-              </>
-            </DataTable>
+              Buttons={Buttons}
+            />
           </CardBody>
         </Card>
       </div>

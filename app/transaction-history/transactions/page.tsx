@@ -45,6 +45,23 @@ const Transactions = async () => {
 
   const voucher = setVoucher(records[0]);
 
+  const Buttons = (
+    <>
+      <div className="hidden sm:flex">
+        <CreateTClientModal />
+      </div>
+
+      <CreateTransactionModal voucher={voucher} tClients={tClients} />
+
+      <ExportRangeModal
+        model={model}
+        columns={columns}
+        rows={rows}
+        filterKey="date"
+      />
+    </>
+  );
+
   return (
     <>
       <Navbar record={account!} />
@@ -67,26 +84,12 @@ const Transactions = async () => {
               columns={columns}
               rows={rows}
               searchKey="particulars"
-              RenderBody={RenderBody}
               dependencies={{
                 tClients: tClients,
               }}
-            >
-              <>
-                <div className="hidden sm:flex">
-                  <CreateTClientModal />
-                </div>
-
-                <CreateTransactionModal voucher={voucher} tClients={tClients} />
-
-                <ExportRangeModal
-                  model={model}
-                  columns={columns}
-                  rows={rows}
-                  filterKey="date"
-                />
-              </>
-            </DataTable>
+              RenderBody={RenderBody}
+              Buttons={Buttons}
+            />
           </CardBody>
         </Card>
       </div>

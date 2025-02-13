@@ -37,6 +37,18 @@ const Listings = async () => {
 
   const rows = await tableFormat(columns, records);
 
+  const Buttons = (
+    <>
+      <CreateModal />
+      <ExportRangeModal
+        model={model}
+        columns={columns}
+        rows={rows}
+        filterKey="res"
+      />
+    </>
+  );
+
   return (
     <>
       <Navbar record={account!} />
@@ -54,17 +66,8 @@ const Listings = async () => {
               rows={rows}
               searchKey="client"
               RenderBody={RenderBody}
-            >
-              <>
-                <CreateModal />
-                <ExportRangeModal
-                  model={model}
-                  columns={columns}
-                  rows={rows}
-                  filterKey="res"
-                />
-              </>
-            </DataTable>
+              Buttons={Buttons}
+            />
           </CardBody>
         </Card>
       </div>

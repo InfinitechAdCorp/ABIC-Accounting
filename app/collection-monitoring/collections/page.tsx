@@ -53,6 +53,21 @@ const Collections = async () => {
 
   const rows = await tableFormat(columns, records);
 
+  const Buttons = (
+    <>
+      <div className="hidden sm:flex">
+        <CreateCClientModal />
+      </div>
+      <CreateCollectionModal locations={locations} cClients={cClients} />
+      <ExportRangeModal
+        model={model}
+        columns={columns}
+        rows={rows}
+        filterKey="start"
+      />
+    </>
+  );
+
   return (
     <>
       <Navbar record={account!} />
@@ -70,28 +85,13 @@ const Collections = async () => {
               columns={columns}
               rows={rows}
               searchKey="property"
-              RenderBody={RenderBody}
               dependencies={{
                 locations: locations,
                 cClients: cClients,
               }}
-            >
-              <>
-                <div className="hidden sm:flex">
-                  <CreateCClientModal />
-                </div>
-                <CreateCollectionModal
-                  locations={locations}
-                  cClients={cClients}
-                />
-                <ExportRangeModal
-                  model={model}
-                  columns={columns}
-                  rows={rows}
-                  filterKey="start"
-                />
-              </>
-            </DataTable>
+              RenderBody={RenderBody}
+              Buttons={Buttons}
+            />
           </CardBody>
         </Card>
       </div>

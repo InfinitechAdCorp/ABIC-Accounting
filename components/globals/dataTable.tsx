@@ -24,15 +24,15 @@ type Props = {
   records: any[];
   columns: Column[];
   rows: any[];
-  dependencies?: any;
   searchKey: string;
+  dependencies?: any;
   RenderBody: (
     records: any[],
     columns: Column[],
     rows: any[],
     dependencies: any
   ) => any;
-  children: ReactElement;
+  Buttons: ReactElement;
 };
 
 const DataTable = ({
@@ -41,9 +41,9 @@ const DataTable = ({
   columns: ufColumns,
   rows,
   searchKey,
-  RenderBody,
   dependencies,
-  children,
+  RenderBody,
+  Buttons,
 }: Props) => {
   const columns = ufColumns.filter((ufColumn) => {
     return ufColumn.key != "id";
@@ -111,7 +111,7 @@ const DataTable = ({
               onClear={onClear}
               onValueChange={onSearchChange}
             />
-            <div className="flex gap-3">{children}</div>
+            <div className="flex gap-3">{Buttons}</div>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-default-400 text-small">
@@ -139,7 +139,7 @@ const DataTable = ({
     onRowsPerPageChange,
     rows.length,
     searchKey,
-    children,
+    Buttons,
   ]);
 
   const bottomContent = useMemo(() => {
