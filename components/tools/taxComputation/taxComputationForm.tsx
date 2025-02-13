@@ -287,7 +287,7 @@ const TaxComputationForm = () => {
                 : (fields[field as keyof Fields] as number)
             }
             onChange={(e) => handleChange(field, Number(e.target.value))}
-            className="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-[#9E3361] focus:border-[#9E3361]"
+            className="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-[#006FEE] focus:border-[#006FEE]"
           />
         </div>
       );
@@ -313,7 +313,7 @@ const TaxComputationForm = () => {
               id="payrollPeriod"
               value={payrollPeriod}
               onChange={(e) => setPayrollPeriod(e.target.value)}
-              className="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-[#9E3361] focus:border-[#9E3361]"
+              className="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-[#006FEE] focus:border-[#006FEE]"
             >
               <option value="Daily">Daily</option>
               <option value="Weekly">Weekly</option>
@@ -345,15 +345,15 @@ const TaxComputationForm = () => {
           </div>
 
           <div className="flex flex-col items-center mt-6">
-            <h2 className="text-xl font-bold text-white">Results</h2>
+            <h2 className="text-xl font-bold ">Results</h2>
             <div className="mt-4">
-              <p className="text-white">
+              <p>
                 Gross Compensation Income: {results.grossCompensationIncome}
               </p>
-              <p className="text-white">
+              <p>
                 Total Non-Taxable Income: {results.totalNonTaxableIncome}
               </p>
-              <p className="text-white">
+              <p>
                 Net Taxable Income: {results.netTaxableIncome}
               </p>
             </div>
@@ -362,13 +362,13 @@ const TaxComputationForm = () => {
           <div className="mt-6 flex justify-center space-x-4">
             <button
               onClick={printPage}
-              className="text-white px-4 py-2 rounded-lg"
+              className="px-4 py-2 rounded-lg"
             >
               Print Page
             </button>
             <button
               onClick={exportToPDF}
-              className="text-white px-4 py-2 rounded-lg"
+              className="px-4 py-2 rounded-lg"
             >
               Export to PDF
             </button>
