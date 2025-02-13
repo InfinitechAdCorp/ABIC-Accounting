@@ -203,8 +203,12 @@ export const create = async (values: TransactionCreateInput) => {
         proof: proof,
       },
     });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  } catch (error) {
+    const response: ActionResponse = {
+      code: 500,
+      message: "Server Error",
+      error: error,
+    };
     return response;
   }
 
@@ -277,8 +281,12 @@ export const update = async (values: TransactionCreateInput) => {
       where: { id: values.id },
       data: data,
     });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  } catch (error) {
+    const response: ActionResponse = {
+      code: 500,
+      message: "Server Error",
+      error: error,
+    };
     return response;
   }
 
@@ -379,8 +387,12 @@ export const setStatus = async (values: { id: string; status: string }) => {
         status: values.status,
       },
     });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  } catch (error) {
+    const response: ActionResponse = {
+      code: 500,
+      message: "Server Error",
+      error: error,
+    };
     return response;
   }
 

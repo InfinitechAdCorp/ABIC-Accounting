@@ -221,8 +221,8 @@ export const create = async (values: Prisma.TClientCreateInput) => {
         name: values.name,
       },
     });
-  } catch {
-    const response = { code: 500, message: "Server Error" };
+  } catch (error) {
+    const response = { code: 500, message: "Server Error", error: error };
     return response;
   }
 
@@ -260,8 +260,12 @@ export const update = async (values: Prisma.TClientCreateInput) => {
         name: values.name,
       },
     });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  } catch (error) {
+    const response: ActionResponse = {
+      code: 500,
+      message: "Server Error",
+      error: error,
+    };
     return response;
   }
 
@@ -294,8 +298,12 @@ export const destroy = async (values: Destroy) => {
       await prisma.tClient.delete({
         where: { id: values.id },
       });
-    } catch {
-      const response: ActionResponse = { code: 500, message: "Server Error" };
+    } catch (error) {
+      const response: ActionResponse = {
+        code: 500,
+        message: "Server Error",
+        error: error,
+      };
       return response;
     }
 

@@ -86,8 +86,12 @@ export const create = async (values: Prisma.AccountCreateInput) => {
         cm_access: values.cm_access,
       },
     });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  } catch (error) {
+    const response: ActionResponse = {
+      code: 500,
+      message: "Server Error",
+      error: error,
+    };
     return response;
   }
 

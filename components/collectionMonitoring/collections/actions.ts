@@ -189,10 +189,11 @@ export const create = async (values: CollectionCreateInput) => {
         due: new Date(new Date(values.due).setUTCHours(0, 0, 0, 0)),
       },
     });
-  } catch {
+  } catch (error) {
     const response: ActionResponse = {
       code: 500,
       message: "Server Error",
+      error: error,
     };
     return response;
   }
@@ -235,8 +236,12 @@ export const update = async (values: CollectionCreateInput) => {
         due: new Date(new Date(values.due).setUTCHours(0, 0, 0, 0)),
       },
     });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  } catch (error) {
+    const response: ActionResponse = {
+      code: 500,
+      message: "Server Error",
+      error: error,
+    };
     return response;
   }
 
@@ -269,8 +274,12 @@ export const destroy = async (values: Destroy) => {
       await prisma.collection.delete({
         where: { id: values.id },
       });
-    } catch {
-      const response: ActionResponse = { code: 500, message: "Server Error" };
+    } catch (error) {
+      const response: ActionResponse = {
+        code: 500,
+        message: "Server Error",
+        error: error,
+      };
       return response;
     }
 
@@ -316,8 +325,12 @@ export const markAsPaid = async (values: { id: string }) => {
       where: { id: id },
       data: { due: due },
     });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  } catch (error) {
+    const response: ActionResponse = {
+      code: 500,
+      message: "Server Error",
+      error: error,
+    };
     return response;
   }
 

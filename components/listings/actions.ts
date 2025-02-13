@@ -173,8 +173,12 @@ export const create = async (values: Prisma.ListingCreateInput) => {
         closed: closed,
       },
     });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  } catch (error) {
+    const response: ActionResponse = {
+      code: 500,
+      message: "Server Error",
+      error: error,
+    };
     return response;
   }
 
@@ -235,8 +239,12 @@ export const update = async (values: Prisma.ListingCreateInput) => {
         closed: closed,
       },
     });
-  } catch {
-    const response: ActionResponse = { code: 500, message: "Server Error" };
+  } catch (error) {
+    const response: ActionResponse = {
+      code: 500,
+      message: "Server Error",
+      error: error,
+    };
     return response;
   }
 
@@ -269,8 +277,12 @@ export const destroy = async (values: Destroy) => {
       await prisma.listing.delete({
         where: { id: values.id },
       });
-    } catch {
-      const response: ActionResponse = { code: 500, message: "Server Error" };
+    } catch (error) {
+      const response: ActionResponse = {
+        code: 500,
+        message: "Server Error",
+        error: error,
+      };
       return response;
     }
 
