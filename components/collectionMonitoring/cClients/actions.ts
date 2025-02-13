@@ -136,13 +136,22 @@ export const get = async (id: string) => {
     return response;
   }
 
-  record = (await format([record]))[0];
-  const response = {
-    code: 200,
-    message: `Fetched ${model}`,
-    record: record,
-  };
-  return response;
+  if (record) {
+    record = (await format([record]))[0];
+    const response = {
+      code: 200,
+      message: `Fetched ${model}`,
+      record: record,
+    };
+    return response;
+  } else {
+    const response = {
+      code: 404,
+      message: `${model} Not Found`,
+      record: null,
+    };
+    return response;
+  }
 };
 
 export const create = async (values: Prisma.CClientCreateInput) => {
