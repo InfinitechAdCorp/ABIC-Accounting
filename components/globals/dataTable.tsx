@@ -17,6 +17,7 @@ import {
   Pagination,
 } from "@heroui/react";
 import { Column } from "@/components/globals/types";
+import { capitalize } from "@/components/globals/utils";
 
 type Props = {
   model: string;
@@ -58,9 +59,7 @@ const DataTable = ({
 
     if (hasSearchFilter) {
       filteredRows = filteredRows.filter((row) => {
-        return (row[searchKey])
-          .toLowerCase()
-          .includes(filterValue.toLowerCase());
+        return row[searchKey].toLowerCase().includes(filterValue.toLowerCase());
       });
     }
 
@@ -106,7 +105,7 @@ const DataTable = ({
             <Input
               isClearable
               className="w-full sm:max-w-[44%]"
-              placeholder="Search"
+              placeholder={`Search ${capitalize(searchKey)}`}
               startContent={<SearchIcon />}
               value={filterValue}
               onClear={onClear}
@@ -139,6 +138,7 @@ const DataTable = ({
     onClear,
     onRowsPerPageChange,
     rows.length,
+    searchKey,
     children,
   ]);
 
