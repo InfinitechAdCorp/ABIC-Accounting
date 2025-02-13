@@ -176,8 +176,8 @@ export const create = async (values: Prisma.CClientCreateInput) => {
   try {
     await prisma.cClient.create({
       data: {
-        ...values,
         account: { connect: { id: accountID } },
+        name: values.name,
       },
     });
   } catch {
@@ -215,8 +215,8 @@ export const update = async (values: Prisma.CClientCreateInput) => {
         id: values.id,
       },
       data: {
-        ...values,
         account: { connect: { id: accountID } },
+        name: values.name,
       },
     });
   } catch {

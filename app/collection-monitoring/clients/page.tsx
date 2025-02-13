@@ -10,9 +10,10 @@ import DataTable from "@/components/globals/dataTable";
 import CreateModal from "@/components/collectionMonitoring/cClients/createModal";
 import ExportBtn from "@/components/globals/exportBtn";
 import RenderBody from "@/components/collectionMonitoring/cClients/renderBody";
+import { retry } from "@/components/globals/serverUtils";
 
 const CClients = async () => {
-  const { record: account } = await getAccount();
+  const { record: account } = await retry(getAccount);
   const { records } = await getAll();
 
   const model = "Clients";
