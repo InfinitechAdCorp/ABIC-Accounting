@@ -37,17 +37,8 @@ export const format = async (ufRecords: TransactionWithTClient[]) => {
   const records: Transaction[] = [];
 
   ufRecords.forEach((ufRecord) => {
-    const tClient = ufRecord.t_client;
-
     const record = {
       ...ufRecord,
-      t_client: {
-        ...tClient,
-        id: tClient?.id as string,
-        account_id: tClient?.account_id as string,
-        name: tClient?.name as string,
-      },
-      t_client_id: ufRecord.t_client_id as string,
       amount: Number(ufRecord.amount),
     };
     records.push(record);

@@ -59,7 +59,7 @@ const RenderCell = (
       );
     case "proof":
       const value = row[column as keyof Row];
-      return <ViewProofModal url={(value as string) || "/no-image.png"} />;
+      return <ViewProofModal url={value || "/no-image.png"} />;
     default:
       return row[column as keyof Row];
   }

@@ -1,11 +1,13 @@
-import { Prisma, Account } from "@prisma/client";
+import {
+  Prisma,
+  Account,
+  TClient as PrismaTClient,
+  Transaction as PrismaTransaction,
+} from "@prisma/client";
 
-export type TClient = {
-  id: string;
+export type TClient = PrismaTClient & {
   account?: Account;
-  account_id?: string;
   transactions?: Transaction[];
-  name: string;
 };
 
 export type TClientRow = {
@@ -17,18 +19,9 @@ export type TClientRow = {
   actions: string;
 };
 
-export type Transaction = {
-  id: string;
-  t_client?: TClient;
-  t_client_id?: string;
-  date: Date;
-  voucher: string;
-  check: string;
-  particulars: string;
-  type: string;
+export type Transaction = Omit<PrismaTransaction, "amount"> & {
+  t_client?: TClient | null;
   amount: number;
-  status: string;
-  proof: string;
 };
 
 export type TransactionRow = {

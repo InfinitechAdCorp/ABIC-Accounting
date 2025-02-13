@@ -1,23 +1,9 @@
-import { Account } from "@prisma/client";
+import { Account, Listing as PrismaListing } from "@prisma/client";
 
-export type Listing = {
-  id: string;
+export type Listing = Omit<PrismaListing, "list_price" | "total_price"> & {
   account?: Account;
-  account_id: string | null;
-  client: string;
-  type: string;
-  project: string;
-  unit: string;
-  res: Date;
-  terms: string;
-  consultant: string;
-  manager: string;
   list_price: number;
   total_price: number;
-  status: string;
-  source: string;
-  extension: Date | null;
-  closed: Date | null;
 };
 
 export type ListingRow = {
@@ -34,8 +20,8 @@ export type ListingRow = {
   total_price: string;
   status: string;
   source: string;
-  extension?: string;
+  extension: string;
   aging: string;
-  closed?: string;
+  closed: string;
   actions: string;
 };

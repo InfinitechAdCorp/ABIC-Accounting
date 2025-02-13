@@ -1,11 +1,13 @@
-import { Prisma, Account } from "@prisma/client";
+import {
+  Prisma,
+  Account,
+  CClient as PrismaCClient,
+  Collection as PrismaCollection,
+} from "@prisma/client";
 
-export type CClient = {
-  id: string;
+export type CClient = PrismaCClient & {
   account?: Account;
-  account_id: string | null;
   collections?: Collection[];
-  name: string;
 };
 
 export type CClientRow = {
@@ -15,24 +17,18 @@ export type CClientRow = {
   actions: string;
 };
 
-export type Collection = {
-  id: string;
-  c_client?: CClient;
-  c_client_id: string | null;
-  property: string;
-  location: string;
-  start: Date;
-  end: Date;
-  advance: number;
-  deposit: number;
-  tenant_price?: number;
-  owner_income?: number;
-  abic_income?: number;
-  due: Date;
+export type Collection = Omit<
+  PrismaCollection,
+  "tenant_price" | "owner_income" | "abic_income"
+> & {
+  c_client?: CClient | null;
+  tenant_price: number;
+  owner_income: number;
+  abic_income: number;
 };
 
 export type CollectionRow = {
-  id: string,
+  id: string;
   client: string;
   property: string;
   location: string;
