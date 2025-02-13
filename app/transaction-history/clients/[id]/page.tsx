@@ -19,9 +19,10 @@ import {
   setVoucher,
 } from "@/components/globals/utils";
 import ExportRangeModal from "@/components/globals/exportRangeModal";
+import { retry } from "@/components/globals/serverUtils";
 
 const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const { record: account } = await getAccount();
+  const { record: account } = await retry(getAccount);
   const { record } = await get((await params).id);
   const { records: tClients } = await getTClients();
   const { records: transactions } = await getTransactions();

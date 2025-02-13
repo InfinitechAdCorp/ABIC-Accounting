@@ -12,9 +12,10 @@ import RenderBody from "@/components/transactionHistory/tClients/renderBody";
 import CreateModal from "@/components/transactionHistory/tClients/createModal";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
 import ExportBtn from "@/components/globals/exportBtn";
+import { retry } from "@/components/globals/serverUtils";
 
 const TClients = async () => {
-  const { record: account } = await getAccount();
+  const { record: account } = await retry(getAccount);
   const { records } = await getAll();
   const { records: transactions } = await getTransactions();
 

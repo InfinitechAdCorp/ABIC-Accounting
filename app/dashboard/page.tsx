@@ -5,6 +5,7 @@ import Navbar from "@/components/globals/navbar";
 import CountCard from "@/components/dashboard/countCard";
 import { GrTransaction } from "react-icons/gr";
 import { FaUsers, FaFileSignature } from "react-icons/fa6";
+import { retry } from "@/components/globals/serverUtils";
 
 export type Counts = {
   tClients: number;
@@ -13,7 +14,7 @@ export type Counts = {
 };
 
 const Dashboard = async () => {
-  const { record: account } = await getAccount();
+  const { record: account } = await retry(getAccount);
   const { counts } = await getCounts();
 
   return (

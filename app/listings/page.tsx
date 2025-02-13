@@ -7,9 +7,10 @@ import DataTable from "@/components/globals/dataTable";
 import CreateModal from "@/components/listings/createModal";
 import ExportRangeModal from "@/components/globals/exportRangeModal";
 import RenderBody from "@/components/listings/renderBody";
+import { retry } from "@/components/globals/serverUtils";
 
 const Listings = async () => {
-  const { record: account } = await getAccount();
+  const { record: account } = await retry(getAccount);
   const { records } = await getAll();
 
   const model = "Listings";

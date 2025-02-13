@@ -3,9 +3,10 @@ import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
 import AcknowldegmentReceiptForm from "@/components/tools/acknowledgmentReceipt/acknowledgmentReceiptForm";
 import { getAllARs } from "@/components/tools/actions";
+import { retry } from "@/components/globals/serverUtils";
 
 const AcknowledgmentReceipt = async () => {
-  const { record: account } = await getAccount();
+  const { record: account } = await retry(getAccount);
   const { records } = await getAllARs();
 
   const setNumber = (ar: any) => {

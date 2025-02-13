@@ -29,6 +29,13 @@ export type ActionResponse = {
   error?: any;
 };
 
+export type GetResponse = {
+  code: number;
+  message: string;
+  record?: any;
+  records?: any;
+};
+
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };

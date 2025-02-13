@@ -12,9 +12,10 @@ import RenderBody from "@/components/collectionMonitoring/collections/renderBody
 import CreateCollectionModal from "@/components/collectionMonitoring/collections/createModal";
 import CreateCClientModal from "@/components/collectionMonitoring/cClients/createModal";
 import ExportRangeModal from "@/components/globals/exportRangeModal";
+import { retry } from "@/components/globals/serverUtils";
 
 const Collections = async () => {
-  const { record: account } = await getAccount();
+  const { record: account } = await retry(getAccount);
   const { records } = await getAll();
   const { records: cClients } = await getCClients();
 

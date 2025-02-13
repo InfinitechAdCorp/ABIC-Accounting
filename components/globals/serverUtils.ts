@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
-import { Account } from "@prisma/client";
+import { GetResponse } from "@/components/globals/types";
 
 const SMTP_HOST = process.env.SMTP_HOST;
 const SMTP_USERNAME = process.env.SMTP_USERNAME;
@@ -34,13 +34,6 @@ export const sendOTP = async () => {
   session.set("otp", otp);
 };
 
-type GetResponse = {
-  code: number;
-  message: string;
-  record?: any;
-  records?: any;
-};
-
 export const retry = async (action: () => Promise<GetResponse>, max = 3) => {
   let response;
   let count = 1;
@@ -48,7 +41,11 @@ export const retry = async (action: () => Promise<GetResponse>, max = 3) => {
   do {
     response = await action();
     ++count;
-  } while ((!response.record || !response.records) || count <= max);
+
+    if (response.record || response.records) {
+      break;
+    }
+  } while (count <= max);
 
   return response;
 };

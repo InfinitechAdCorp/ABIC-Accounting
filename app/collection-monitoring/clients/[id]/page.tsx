@@ -11,13 +11,14 @@ import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/collectionMonitoring/collections/renderBody";
 import CreateModal from "@/components/collectionMonitoring/collections/createModal";
 import ExportRangeModal from "@/components/globals/exportRangeModal";
+import { retry } from "@/components/globals/serverUtils";
 
 const TransactionClient = async ({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) => {
-  const { record: account } = await getAccount();
+  const { record: account } = await retry(getAccount);
   const { record } = await get((await params).id);
   const { records: cClients } = await getCClients();
 
@@ -78,7 +79,12 @@ const TransactionClient = async ({
             >
               <>
                 <CreateModal locations={locations} cClients={cClients} />
-                <ExportRangeModal model={model} columns={columns} rows={rows} filterKey="start" />
+                <ExportRangeModal
+                  model={model}
+                  columns={columns}
+                  rows={rows}
+                  filterKey="start"
+                />
               </>
             </DataTable>
           </CardBody>
