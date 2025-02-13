@@ -3,7 +3,7 @@ import { Account } from "@prisma/client";
 export type Listing = {
   id: string;
   account?: Account;
-  account_id?: string;
+  account_id: string | null;
   client: string;
   type: string;
   project: string;
@@ -16,8 +16,8 @@ export type Listing = {
   total_price: number;
   status: string;
   source: string;
-  extension?: Date;
-  closed?: Date;
+  extension: Date | null;
+  closed: Date | null;
 };
 
 export type ListingRow = {

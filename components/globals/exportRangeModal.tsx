@@ -12,7 +12,6 @@ import {
   Button,
   DateRangePicker,
   useDisclosure,
-  CalendarDate,
 } from "@heroui/react";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { exportAsPDF as validationSchema } from "@/components/globals/schemas";
@@ -46,7 +45,7 @@ const ExportRangeModal = ({
 
   const today = dateToDateValue(
     new Date(new Date().setHours(0, 0, 0, 0))
-  ) as CalendarDate;
+  )!;
 
   const initialValues = {
     range: {
@@ -107,10 +106,10 @@ const ExportRangeModal = ({
     values: ExportAsPDF,
     actions: { resetForm: () => void }
   ) => {
-    const start = dateValueToDate(values.range.start)?.toLocaleDateString(
+    const start = dateValueToDate(values.range.start)!.toLocaleDateString(
       "en-CA"
-    ) as string;
-    const end = dateValueToDate(values.range.end)?.toLocaleDateString(
+    );
+    const end = dateValueToDate(values.range.end)!.toLocaleDateString(
       "en-CA"
     ) as string;
 

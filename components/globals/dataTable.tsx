@@ -58,7 +58,7 @@ const DataTable = ({
 
     if (hasSearchFilter) {
       filteredRows = filteredRows.filter((row) => {
-        return (row[searchKey] as string)
+        return (row[searchKey])
           .toLowerCase()
           .includes(filterValue.toLowerCase());
       });

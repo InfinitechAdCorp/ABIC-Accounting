@@ -33,7 +33,6 @@ export const format = async (ufRecords: CClientWithCollections[]) => {
       ufRecord.collections.forEach((ufCollection) => {
         const collection = {
           ...ufCollection,
-          c_client_id: ufCollection.c_client_id as string,
           tenant_price: Number(ufCollection.tenant_price),
           owner_income: Number(ufCollection.owner_income),
           abic_income: Number(ufCollection.abic_income),
@@ -43,7 +42,6 @@ export const format = async (ufRecords: CClientWithCollections[]) => {
 
       const record = {
         ...ufRecord,
-        account_id: ufRecord.account_id as string,
         collections: collections,
       };
       records.push(record);

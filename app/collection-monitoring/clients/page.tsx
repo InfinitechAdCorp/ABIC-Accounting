@@ -8,7 +8,6 @@ import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";
 import CreateModal from "@/components/collectionMonitoring/cClients/createModal";
-import { Account } from "@prisma/client";
 import ExportBtn from "@/components/globals/exportBtn";
 import RenderBody from "@/components/collectionMonitoring/cClients/renderBody";
 
@@ -29,7 +28,7 @@ const CClients = async () => {
 
   return (
     <>
-      <Navbar record={account as Account} />
+      <Navbar record={account!} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">

@@ -18,7 +18,6 @@ import {
   formatNumber,
   setVoucher,
 } from "@/components/globals/utils";
-import { Account } from "@prisma/client";
 import ExportRangeModal from "@/components/globals/exportRangeModal";
 
 const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
@@ -51,7 +50,7 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <>
-      <Navbar record={account as Account} />
+      <Navbar record={account!} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">

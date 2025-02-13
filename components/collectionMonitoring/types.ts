@@ -3,7 +3,7 @@ import { Prisma, Account } from "@prisma/client";
 export type CClient = {
   id: string;
   account?: Account;
-  account_id?: string;
+  account_id: string | null;
   collections?: Collection[];
   name: string;
 };
@@ -18,7 +18,7 @@ export type CClientRow = {
 export type Collection = {
   id: string;
   c_client?: CClient;
-  c_client_id?: string;
+  c_client_id: string | null;
   property: string;
   location: string;
   start: Date;

@@ -5,7 +5,6 @@ import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";
 import CreateModal from "@/components/listings/createModal";
-import { Account } from "@prisma/client";
 import ExportRangeModal from "@/components/globals/exportRangeModal";
 import RenderBody from "@/components/listings/renderBody";
 
@@ -39,7 +38,7 @@ const Listings = async () => {
 
   return (
     <>
-      <Navbar record={account as Account} />
+      <Navbar record={account!} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">

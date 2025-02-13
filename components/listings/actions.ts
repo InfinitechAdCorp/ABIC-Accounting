@@ -28,11 +28,8 @@ export const format = async (ufRecords: PrismaListing[]) => {
     ufRecords.forEach((ufRecord) => {
       const record = {
         ...ufRecord,
-        account_id: ufRecord.account_id as string,
         list_price: Number(ufRecord.list_price),
         total_price: Number(ufRecord.total_price),
-        extension: ufRecord.extension || undefined,
-        closed: ufRecord.closed || undefined,
       };
       records.push(record);
     });

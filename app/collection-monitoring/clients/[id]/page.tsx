@@ -10,7 +10,6 @@ import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/collectionMonitoring/collections/renderBody";
 import CreateModal from "@/components/collectionMonitoring/collections/createModal";
-import { Account } from "@prisma/client";
 import ExportRangeModal from "@/components/globals/exportRangeModal";
 
 const TransactionClient = async ({
@@ -57,7 +56,7 @@ const TransactionClient = async ({
 
   return (
     <>
-      <Navbar record={account as Account} />
+      <Navbar record={account!} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">

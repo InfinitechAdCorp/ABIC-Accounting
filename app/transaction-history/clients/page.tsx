@@ -11,7 +11,6 @@ import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/transactionHistory/tClients/renderBody";
 import CreateModal from "@/components/transactionHistory/tClients/createModal";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
-import { Account } from "@prisma/client";
 import ExportBtn from "@/components/globals/exportBtn";
 
 const TClients = async () => {
@@ -37,7 +36,7 @@ const TClients = async () => {
 
   return (
     <>
-      <Navbar record={account as Account} />
+      <Navbar record={account!} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">

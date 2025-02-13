@@ -1,7 +1,6 @@
 import React from "react";
 import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
-import { Account } from "@prisma/client";
 import CurrencyConverterForm from "@/components/tools/currencyConverter/currencyConverterForm";
 
 const CurrencyConverter = async () => {
@@ -9,7 +8,7 @@ const CurrencyConverter = async () => {
 
   return (
     <>
-      <Navbar record={account as Account} />
+      <Navbar record={account!} />
 
       <div className="flex justify-center items-center">
         <CurrencyConverterForm />

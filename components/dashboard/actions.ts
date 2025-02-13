@@ -37,7 +37,7 @@ export const getCounts = async () => {
       },
     });
 
-    counts.tClients = account?.t_clients.length as number;
+    counts.tClients = account?.t_clients.length || 0;
     counts.transactions = transactions.length;
     counts.collections = collections.length;
   } catch {

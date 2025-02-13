@@ -11,7 +11,6 @@ import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/collectionMonitoring/collections/renderBody";
 import CreateCollectionModal from "@/components/collectionMonitoring/collections/createModal";
 import CreateCClientModal from "@/components/collectionMonitoring/cClients/createModal";
-import { Account } from "@prisma/client";
 import ExportRangeModal from "@/components/globals/exportRangeModal";
 
 const Collections = async () => {
@@ -55,7 +54,7 @@ const Collections = async () => {
 
   return (
     <>
-      <Navbar record={account as Account} />
+      <Navbar record={account!} />
 
       <div className="flex justify-center max-h-[93vh]">
         <Card className="m-5 md:m-7 p-3">

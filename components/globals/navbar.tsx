@@ -168,7 +168,7 @@ const Navbar = ({ record }: Props) => {
                 onPress={() => router.push("/tools/acknowledgement-receipt")}
                 key="Acknowledgement Receipt"
               >
-                <h3 className="font-semibold">Acknowledgement</h3>
+                <h3 className="font-semibold">Acknowledgement Receipt</h3>
               </DropdownItem>
               <DropdownItem
                 onPress={() => router.push("/tools/billing-statement")}
