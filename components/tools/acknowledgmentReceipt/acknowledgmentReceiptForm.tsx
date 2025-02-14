@@ -9,12 +9,12 @@ type Props = {
 const AcknowledgmentReceiptForm = ({ number }: Props) => {
   const [arNumber, setArNumber] = useState(number);
   const [companyName, setCompanyName] = useState(
-    "INFINITECH Advertising Corporation"
+    "Company Name"
   );
   const [companyAddress, setCompanyAddress] = useState(
-    "Unit 311, Campos Rueda Building, Urban Avenue, Makati City"
+    "Company Address"
   );
-  const [companyContact, setCompanyContact] = useState("09456754591");
+  const [companyContact, setCompanyContact] = useState("Contact Details");
   const [receivedBy, setReceivedBy] = useState("");
   const [issuedBy, setIssuedBy] = useState("");
   const [items, setItems] = useState([{ name: "Item A", purpose: "1000" }]);
@@ -71,7 +71,7 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
             type="text"
             value={companyContact}
             onChange={(e) => setCompanyContact(e.target.value)}
-            className="text-gray-600 focus:outline-none"
+            className="text-gray-600 focus:outline-none text-center"
           />
         </div>
 

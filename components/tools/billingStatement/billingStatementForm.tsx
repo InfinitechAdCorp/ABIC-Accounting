@@ -8,11 +8,11 @@ type Props = {
 
 const Invoice = ({ number }: Props) => {
   const [bSNumber, setbSNumber] = useState(number);
-  const [companyName, setCompanyName] = useState("Example Company Name");
+  const [companyName, setCompanyName] = useState("Company Name");
   const [companyAddress, setCompanyAddress] = useState(
-    "Example Company Address"
+    "Company Address"
   );
-  const [companyContact, setCompanyContact] = useState("09456754591");
+  const [companyContact, setCompanyContact] = useState("Contact Details");
   const [billingCompanyName, setBillingCompanyName] =
     useState("Click to add text");
   const [billingAmount, setBillingAmount] = useState("Click to add amount");
@@ -92,7 +92,7 @@ const Invoice = ({ number }: Props) => {
               className={`w-full overflow-x-auto text-center focus:outline-none ${
                 hasEdited("Company Name", companyName)
                   ? ""
-                  : "border-b border-gray-400"
+                  : "border-gray-400"
               }`}
             />
           </h1>
@@ -110,7 +110,7 @@ const Invoice = ({ number }: Props) => {
             type="text"
             value={companyContact}
             onChange={(e) => setCompanyContact(e.target.value)}
-            className={`text-gray-600 focus:outline-none ${
+            className={`text-gray-600 text-center focus:outline-none ${
               hasEdited("(123) 456-7890", companyContact)
                 ? ""
                 : "border-b border-gray-400"

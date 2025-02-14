@@ -21,8 +21,6 @@ const AcknowledgmentReceipt = async () => {
 
   const number = setNumber(records[0])
 
-  console.log(number)
-
   return (
     <>
       <Navbar record={account!} />
