@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { createAR as action } from "@/components/tools/actions";
+import toast from "react-hot-toast";
+import { ActionResponse } from "@/components/globals/types";
 
 type Props = {
   number: string;
@@ -8,12 +11,8 @@ type Props = {
 
 const AcknowledgmentReceiptForm = ({ number }: Props) => {
   const [arNumber, setArNumber] = useState(number);
-  const [companyName, setCompanyName] = useState(
-    "Company Name"
-  );
-  const [companyAddress, setCompanyAddress] = useState(
-    "Company Address"
-  );
+  const [companyName, setCompanyName] = useState("Company Name");
+  const [companyAddress, setCompanyAddress] = useState("Company Address");
   const [companyContact, setCompanyContact] = useState("Contact Details");
   const [receivedBy, setReceivedBy] = useState("");
   const [issuedBy, setIssuedBy] = useState("");
@@ -29,6 +28,20 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
   );
 
   const handlePrint = () => {
+    const values = { number: arNumber };
+    action(values).then((response: ActionResponse) => {
+      if (response.code == 200) {
+        toast.success(response.message);
+      } else {
+        if (response.code == 429) {
+          console.log(response.errors);
+        } else {
+          console.log(response.error);
+        }
+        toast.error(response.message);
+      }
+    });
+
     document.getElementById("addRowButton")!.style.display = "none";
     document.getElementById("printButton")!.style.display = "none";
     window.print();
@@ -142,7 +155,7 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
         <div className="mt-6 text-sm text-gray-700">
           <p>
             <strong>For check payment,</strong> please make check payable to{" "}
-            <strong>ABIC REALTY CORPORATION</strong>. <br />
+            <strong>{companyName}</strong>. <br />
             <strong>For bank deposit,</strong> kindly see below bank account
             details for reference. Once deposited, send us the deposit slip for
             payment reference.

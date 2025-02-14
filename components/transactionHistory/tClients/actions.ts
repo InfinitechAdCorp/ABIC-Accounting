@@ -8,7 +8,6 @@ import {
   update as updateSchema,
 } from "@/components/transactionHistory/tClients/schemas";
 import { destroy as destroySchema } from "@/components/globals/schemas";
-import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { Column } from "@/components/globals/types";
 import {
@@ -21,6 +20,7 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { Destroy } from "@/components/globals/types";
 import {
+  formatErrors,
   formatNumber,
   computeBalance,
   isPending,

@@ -19,7 +19,7 @@ const BillingStatement = async () => {
     return voucher;
   };
 
-  const number = setNumber(records[0]);
+  const number = setNumber(records.at(-1));
 
   return (
     <>
