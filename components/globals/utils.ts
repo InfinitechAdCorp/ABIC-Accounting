@@ -36,6 +36,7 @@ export const capitalize = (ufString: string) => {
 export const formatNumber = (ufNumber: number) => {
   const number = new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 2,
+    maximumSignificantDigits: 2,
   }).format(ufNumber);
   return number;
 };
