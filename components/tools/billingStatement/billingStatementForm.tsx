@@ -1,6 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { createBS as action } from "@/components/tools/actions";
+import toast from "react-hot-toast";
+import { ActionResponse } from "@/components/globals/types";
 
 type Props = {
   number: string;
@@ -53,6 +56,20 @@ const Invoice = ({ number }: Props) => {
   };
 
   const handlePrint = () => {
+    const values = { number: bSNumber };
+    action(values).then((response: ActionResponse) => {
+      if (response.code == 200) {
+        toast.success(response.message);
+      } else {
+        if (response.code == 429) {
+          console.log(response.errors);
+        } else {
+          console.log(response.error);
+        }
+        toast.error(response.message);
+      }
+    });
+
     const addRowButton = document.getElementById("addRowButton");
     const printButton = document.getElementById("printButton");
 

@@ -3,7 +3,10 @@
 import prisma from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { createAR as createARSchema } from "@/components/tools/schemas";
+import {
+  createAR as createARSchema,
+  createBS as createBSSchema,
+} from "@/components/tools/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 
@@ -80,5 +83,37 @@ export const createAR = async (values: Prisma.ARCreateInput) => {
 
   revalidatePath("/tools/acknowledgment-receipt");
   const response = { code: 200, message: `Added Acknowledgment Receipt` };
+  return response;
+};
+
+export const createBS = async (values: Prisma.BSCreateInput) => {
+  const schema = createBSSchema;
+
+  try {
+    await schema.validate(values, { abortEarly: false });
+  } catch (ufErrors) {
+    const errors = formatErrors(ufErrors as Yup.ValidationError);
+
+    const response = {
+      code: 429,
+      message: "Validation Error",
+      errors: errors,
+    };
+    return response;
+  }
+
+  try {
+    await prisma.bS.create({
+      data: {
+        number: values.number,
+      },
+    });
+  } catch (error) {
+    const response = { code: 500, message: "Server Error", error: error };
+    return response;
+  }
+
+  revalidatePath("/tools/billing-statement");
+  const response = { code: 200, message: `Added Billing Statement` };
   return response;
 };
