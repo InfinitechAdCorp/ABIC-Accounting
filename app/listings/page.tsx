@@ -38,12 +38,9 @@ const Listings = async () => {
 
   const rows = await tableFormat(columns, records);
 
-  const uniqueNames = getUniques(records, 'client');
-
-
   const Buttons = (
     <>
-      <CreateModal />
+      <CreateModal records={records} />
       <ExportRangeModal
         model={model}
         columns={columns}
