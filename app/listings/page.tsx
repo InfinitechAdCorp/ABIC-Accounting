@@ -8,6 +8,7 @@ import CreateModal from "@/components/listings/createModal";
 import ExportRangeModal from "@/components/globals/exportRangeModal";
 import RenderBody from "@/components/listings/renderBody";
 import { retry } from "@/components/globals/serverUtils";
+import { getUniques } from "@/components/globals/utils";
 
 const Listings = async () => {
   const { record: account } = await retry(getAccount);
@@ -36,6 +37,9 @@ const Listings = async () => {
   ];
 
   const rows = await tableFormat(columns, records);
+
+  const uniqueNames = getUniques(records, 'client');
+
 
   const Buttons = (
     <>
