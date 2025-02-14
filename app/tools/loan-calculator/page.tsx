@@ -2,7 +2,6 @@ import React from "react";
 import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
 import LoanCalculatorForm from "@/components/tools/loanCalculator/loanCalculatorForm";
-import HeroForm from "@/components/tools/loanCalculator/heroForm";
 import { retry } from "@/components/globals/serverUtils";
 
 const LoanCalculator = async () => {
@@ -14,7 +13,6 @@ const LoanCalculator = async () => {
 
       <div className="flex justify-center items-center">
         <LoanCalculatorForm />
-        <HeroForm />
       </div>
     </>
   );

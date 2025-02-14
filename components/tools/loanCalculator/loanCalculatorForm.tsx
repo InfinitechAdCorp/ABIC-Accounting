@@ -1,140 +1,155 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Input,
+  Select,
+  SelectItem,
+  CardFooter,
+} from "@heroui/react";
+import { formatNumber } from "@/components/globals/utils";
 
 const LoanCalculatorForm = () => {
-  const [loanAmount, setLoanAmount] = useState<number>(0);
-  const [years, setYears] = useState<number>(0);
-  const [months, setMonths] = useState<number>(0);
-  const [interestRate, setInterestRate] = useState<number | null>(null);
-  const [monthlyPayment, setMonthlyPayment] = useState<number | null>(null);
-  const [totalLoanAmount, setTotalLoanAmount] = useState<number | null>(null);
+  const [amount, setAmount] = useState(0);
+  const [years, setYears] = useState(0);
+  const [months, setMonths] = useState(0);
+  const [rate, setRate] = useState(0);
+
+  const [monthly, setMonthly] = useState(0);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    if (interestRate === null || interestRate <= 0) {
-      return;
-    }
-
     const totalMonths = years * 12 + months;
-    const monthlyInterestRate = interestRate / 100 / 12;
+    const monthlyRate = rate / 100 / 12;
 
-    const monthly =
-      (loanAmount *
-        (monthlyInterestRate *
-          Math.pow(1 + monthlyInterestRate, totalMonths))) /
-      (Math.pow(1 + monthlyInterestRate, totalMonths) - 1);
-    const totalLoanAmountWithInterest = monthly * totalMonths;
+    const monthlyPayment =
+      (amount * (monthlyRate * (1 + monthlyRate) ** totalMonths)) /
+      ((1 + monthlyRate) ** totalMonths - 1);
+    const totalPayment = monthlyPayment * totalMonths;
 
-    setMonthlyPayment(monthly);
-    setTotalLoanAmount(totalLoanAmountWithInterest);
-  }, [loanAmount, years, months, interestRate]);
+    setMonthly(monthlyPayment);
+    setTotal(totalPayment);
+  }, [amount, years, months, rate]);
 
-  const formatCurrency = (amount: number | null) => {
-    if (amount === null) return "₱0.00";
-    return `₱${amount.toFixed(2)}`;
-  };
+  const isValid = amount != 0 && years != 0 && months != 0 && rate != 0;
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-lg w-full sm:w-96 p-6 m-7">
-        <h1 className="text-3xl font-bold text-center mb-6">Loan Calculator</h1>
-        <p className="mb-5 text-sm text-gray-600">
-          Enter your desired loan amount, term, and interest rate to calculate
-          the monthly payment.
-        </p>
+      <Card className="m-5 md:m-7 p-5 w-[25rem]">
+        <CardHeader>
+          <div className="w-full">
+            <div className="text-center">
+              <h3 className="text-sm md:text-3xl font-semibold mb-3">
+                Loan Calculator
+              </h3>
+            </div>
 
-        <div className="mb-4">
-          <label
-            htmlFor="loanAmount"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Amount (₱)
-          </label>
-          <input
+            <div>
+              <small className="text-gray-600">
+                Enter your desired loan amount, term, and interest rate to
+                calculate the monthly payment.
+              </small>
+            </div>
+          </div>
+        </CardHeader>
+
+        <CardBody>
+          <Input
+            className="mb-3"
             type="number"
-            id="loanAmount"
-            value={loanAmount}
-            onChange={(e) => setLoanAmount(Number(e.target.value))}
-            className="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-[#006FEE] focus:border-[#006FEE]"
+            size="md"
+            variant="bordered"
+            label="Amount"
+            labelPlacement="outside"
+            placeholder="Enter Amount"
+            onChange={(e) => {
+              const value = Number(e.target.value);
+              setAmount(value);
+            }}
           />
-        </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <div className="mb-4">
-            <label
-              htmlFor="years"
-              className="block text-sm font-medium text-gray-700"
+          <div className="grid grid-cols-2 gap-3 mb-3">
+            <Select
+              size="md"
+              variant="bordered"
+              label="Years"
+              labelPlacement="outside"
+              placeholder="Select Years"
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                setYears(value);
+              }}
             >
-              Years
-            </label>
-            <select
-              id="years"
-              value={years}
-              onChange={(e) => setYears(Number(e.target.value))}
-              className="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-[#006FEE] focus:border-[#006FEE]"
-            >
-              {Array.from({ length: 25 }, (_, i) => i + 1).map((year) => (
-                <option key={year} value={year}>
-                  {year} {year === 1 ? "Year" : "Years"}
-                </option>
+              {Array.from({ length: 26 }).map((_, index) => (
+                <SelectItem
+                  key={index}
+                  textValue={`${index} ${index == 1 ? "Year" : "Years"}`}
+                >
+                  {index} {index == 1 ? "Year" : "Years"}
+                </SelectItem>
               ))}
-            </select>
+            </Select>
+
+            <Select
+              size="md"
+              variant="bordered"
+              label="Months"
+              labelPlacement="outside"
+              placeholder="Select Months"
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                setMonths(value);
+              }}
+            >
+              {Array.from({ length: 12 }).map((_, index) => (
+                <SelectItem
+                  key={index}
+                  textValue={`${index} ${index == 1 ? "Month" : "Months"}`}
+                >
+                  {index} {index == 1 ? "Month" : "Months"}
+                </SelectItem>
+              ))}
+            </Select>
           </div>
 
-          <div className="mb-4">
-            <label
-              htmlFor="months"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Months
-            </label>
-            <select
-              id="months"
-              value={months}
-              onChange={(e) => setMonths(Number(e.target.value))}
-              className="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-[#006FEE] focus:border-[#006FEE]"
-            >
-              {Array.from({ length: 12 }, (_, i) => i).map((month) => (
-                <option key={month} value={month}>
-                  {month} {month === 1 ? "Month" : "Months"}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <label
-            htmlFor="interestRate"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Interest Rate
-          </label>
-          <input
+          <Input
+            className="mb-3"
             type="number"
-            id="interestRate"
-            value={interestRate || ""}
-            onChange={(e) => setInterestRate(Number(e.target.value))}
-            className="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-[#006FEE] focus:border-[#006FEE]"
+            size="md"
+            variant="bordered"
+            label="Interest Rate"
+            labelPlacement="outside"
+            placeholder="Enter Interest Rate"
+            onChange={(e) => {
+              const value = Number(e.target.value);
+              setRate(value);
+            }}
           />
-        </div>
+        </CardBody>
 
-        {monthlyPayment !== null && (
-          <div
-            id="loan-results"
-            className="mt-5 p-4 bg-[#006FEE] text-white rounded-lg"
-          >
-            <h2 className="text-lg font-semibold">Calculation Result</h2>
-            <p className="mt-2">
-              Monthly Payment: <strong>{formatCurrency(monthlyPayment)}</strong>
-            </p>
-            <p>
-              Total Loan Amount:{" "}
-              <strong>{formatCurrency(totalLoanAmount)}</strong>
-            </p>
-          </div>
+        {isValid && (
+          <CardFooter>
+            <div className="w-full bg-[#006FEE] rounded-lg">
+              <div className="text-center my-5">
+                <h3 className="text-sm text-white md:text-lg font-semibold mb-2">
+                  Calculation Results
+                </h3>
+                <div>
+                  <h3 className="text-white">
+                    Monthly Payment: <strong>{formatNumber(monthly)}</strong>
+                  </h3>
+                  <h3 className="text-white">
+                    Total Loan Amount: <strong>{formatNumber(total)}</strong>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </CardFooter>
         )}
-      </div>
+      </Card>
     </>
   );
 };
