@@ -34,7 +34,7 @@ const LoanCalculatorForm = () => {
     setTotal(totalPayment);
   }, [amount, years, months, rate]);
 
-  const isValid = amount != 0 && years != 0 && months != 0 && rate != 0;
+  const isValid = amount != 0 && months != 0 && rate != 0;
 
   return (
     <>

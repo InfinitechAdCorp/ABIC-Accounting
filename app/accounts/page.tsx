@@ -4,9 +4,11 @@ import Image from "next/image";
 import LogoutBtn from "@/components/globals/logoutBtn";
 import CreateModal from "@/components/accounts/createModal";
 import AccountCard from "@/components/accounts/accountCard";
+import { retry } from "@/components/globals/serverUtils";
+import { Account } from "@prisma/client";
 
 const Accounts = async () => {
-  const { records } = await getAll();
+  const { records }: { records?: Account[] } = await retry(getAll);
 
   return (
     <>
@@ -29,7 +31,7 @@ const Accounts = async () => {
 
           <div className="grid grid-cols-4 gap-5">
             <CreateModal />
-            {records.map((record) => (
+            {records!.map((record) => (
               <AccountCard key={record.id} record={record} />
             ))}
           </div>

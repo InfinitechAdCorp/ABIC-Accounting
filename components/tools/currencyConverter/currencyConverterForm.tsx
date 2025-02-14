@@ -1,116 +1,143 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Input,
+  Select,
+  SelectItem,
+  CardFooter,
+} from "@heroui/react";
+import { formatNumber } from "@/components/globals/utils";
+
+type Rates = {
+  [key: string]: number;
+};
 
 const CurrencyConverterForm = () => {
-  const [amount, setAmount] = useState<number>(0);
-  const [fromCurrency, setFromCurrency] = useState<string>("PHP");
-  const [toCurrency, setToCurrency] = useState<string>("USD");
-  const [convertedAmount, setConvertedAmount] = useState<number | null>(null);
-  const [currencies, setCurrencies] = useState<any>({});
-  const [allCurrencies, setAllCurrencies] = useState<string[]>([]);
+  const [currencies, setCurrencies] = useState<Rates>({});
+  const [amount, setAmount] = useState(0);
+  const [from, setFrom] = useState("PHP");
+  const [to, setTo] = useState("USD");
+  const [convertedAmount, setConvertedAmount] = useState(0);
 
   useEffect(() => {
     const fetchCurrencies = async () => {
       const response = await fetch(
-        `https://api.exchangerate-api.com/v4/latest/${fromCurrency}`
+        `https://api.exchangerate-api.com/v4/latest/${from}`
       );
       const data = await response.json();
       setCurrencies(data.rates);
-      setAllCurrencies(Object.keys(data.rates));
     };
 
     fetchCurrencies();
-  }, [fromCurrency]);
+  }, [from]);
 
   useEffect(() => {
-    if (!currencies[toCurrency]) return;
+    if (currencies) {
+      const converted = amount * currencies[to];
+      setConvertedAmount(converted);
+    }
+  }, [amount, currencies, to]);
 
-    const converted = amount * currencies[toCurrency];
-    setConvertedAmount(converted);
-  }, [amount, currencies, toCurrency]);
+  const isValid = amount != 0 && from != "" && to != "";
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-lg w-full sm:w-96 p-6 m-7">
-        <h1 className="text-3xl font-bold text-center mb-6">
-          Currency Converter
-        </h1>
-        <p className="mb-5 text-sm text-gray-600">
-          Enter an amount and select currencies to convert.
-        </p>
+      <Card className="m-5 md:m-7 p-5 w-[25rem]">
+        <CardHeader>
+          <div className="w-full">
+            <div className="text-center">
+              <h3 className="text-sm md:text-3xl font-semibold mb-3">
+                Currency Converter
+              </h3>
+            </div>
 
-        <div className="mb-4">
-          <label
-            htmlFor="amount"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Amount (₱)
-          </label>
-          <input
-            type="number"
-            id="amount"
-            value={amount}
-            onChange={(e) => setAmount(Number(e.target.value))}
-            className="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-[#006FEE] focus:border-[#006FEE]"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label
-            htmlFor="fromCurrency"
-            className="block text-sm font-medium text-gray-700"
-          >
-            From Currency
-          </label>
-          <select
-            id="fromCurrency"
-            value={fromCurrency}
-            onChange={(e) => setFromCurrency(e.target.value)}
-            className="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-[#006FEE] focus:border-[#006FEE]"
-          >
-            {allCurrencies.map((currency) => (
-              <option key={currency} value={currency}>
-                {currency}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="mb-4">
-          <label
-            htmlFor="toCurrency"
-            className="block text-sm font-medium text-gray-700"
-          >
-            To Currency
-          </label>
-          <select
-            id="toCurrency"
-            value={toCurrency}
-            onChange={(e) => setToCurrency(e.target.value)}
-            className="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-[#006FEE] focus:border-[#006FEE]"
-          >
-            {allCurrencies.map((currency) => (
-              <option key={currency} value={currency}>
-                {currency}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {convertedAmount !== null && (
-          <div
-            id="currency-converter-result"
-            className="mt-5 p-4 bg-[#006FEE] text-white rounded-lg"
-          >
-            <h2 className="text-lg font-semibold">Converted Amount</h2>
-            <p className="mt-2">
-              Converted Amount:{" "}
-              <strong>{convertedAmount.toFixed(2) || 0}</strong> {toCurrency}
-            </p>
+            <div>
+              <small className="text-gray-600">
+                Enter an amount and select currencies to convert.
+              </small>
+            </div>
           </div>
+        </CardHeader>
+
+        <CardBody>
+          <Input
+            className="mb-3"
+            type="number"
+            size="md"
+            variant="bordered"
+            label="Amount"
+            labelPlacement="outside"
+            placeholder="Enter Amount"
+            onChange={(e) => {
+              const value = Number(e.target.value);
+              setAmount(value);
+            }}
+          />
+
+          <Select
+            className="mb-3"
+            size="md"
+            variant="bordered"
+            label="From"
+            labelPlacement="outside"
+            placeholder="Select Currency to Convert From"
+            defaultSelectedKeys={[from]}
+            onChange={(e) => {
+              const value = e.target.value;
+              setFrom(value);
+            }}
+          >
+            {Object.keys(currencies).map((currency) => (
+              <SelectItem key={currency}>{currency}</SelectItem>
+            ))}
+          </Select>
+
+          <Select
+            size="md"
+            variant="bordered"
+            label="To"
+            labelPlacement="outside"
+            placeholder="Select Currency to Convert To"
+            defaultSelectedKeys={[to]}
+            onChange={(e) => {
+              const value = e.target.value;
+              setTo(value);
+            }}
+          >
+            {Object.keys(currencies).map((currency) => (
+              <SelectItem key={currency}>{currency}</SelectItem>
+            ))}
+          </Select>
+        </CardBody>
+
+        {isValid && (
+          <CardFooter>
+            <div className="w-full bg-[#006FEE] rounded-lg">
+              <div className="text-center my-5">
+                <h3 className="text-sm text-white md:text-lg font-semibold mb-1">
+                  Conversion Results
+                </h3>
+                <div>
+                  <h3 className="text-white">
+                    Converted Amount:{" "}
+                    <strong>{formatNumber(convertedAmount)}</strong>
+                  </h3>
+                  <h3 className="text-white">
+                    Rate:{" "}
+                    <strong>
+                      1 {from} = {currencies[to]} {to}
+                    </strong>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </CardFooter>
         )}
-      </div>
+      </Card>
     </>
   );
 };
