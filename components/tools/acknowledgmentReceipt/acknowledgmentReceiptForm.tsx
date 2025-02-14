@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { createAR as action } from "@/components/tools/actions";
 import toast from "react-hot-toast";
 import { ActionResponse } from "@/components/globals/types";
@@ -17,6 +17,9 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
   const [receivedBy, setReceivedBy] = useState("");
   const [issuedBy, setIssuedBy] = useState("");
   const [items, setItems] = useState([{ name: "Item A", purpose: "1000" }]);
+
+  const addRowBtnRef = useRef<HTMLButtonElement>(null);
+  const printBtnRef = useRef<HTMLButtonElement>(null);
 
   const addItemRow = () => {
     setItems([...items, { name: "", purpose: "" }]);
@@ -42,11 +45,13 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
       }
     });
 
-    document.getElementById("addRowButton")!.style.display = "none";
-    document.getElementById("printButton")!.style.display = "none";
+    addRowBtnRef.current!.style.display = "none";
+    printBtnRef.current!.style.display = "none";
+    document.getElementById("navbar")!.style.display = "none";
     window.print();
-    document.getElementById("addRowButton")!.style.display = "block";
-    document.getElementById("printButton")!.style.display = "block";
+    addRowBtnRef.current!.style.display = "block";
+    printBtnRef.current!.style.display = "block";
+    document.getElementById("navbar")!.style.display = "grid";
   };
 
   return (
@@ -143,7 +148,7 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
           </table>
 
           <button
-            id="addRowButton"
+            ref={addRowBtnRef}
             onClick={addItemRow}
             className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition text-sm"
           >
@@ -217,7 +222,7 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
             </div>
           </div>
           <button
-            id="printButton"
+            ref={printBtnRef}
             onClick={handlePrint}
             className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition text-sm"
           >

@@ -12,9 +12,7 @@ type Props = {
 const Invoice = ({ number }: Props) => {
   const [bSNumber, setbSNumber] = useState(number);
   const [companyName, setCompanyName] = useState("Company Name");
-  const [companyAddress, setCompanyAddress] = useState(
-    "Company Address"
-  );
+  const [companyAddress, setCompanyAddress] = useState("Company Address");
   const [companyContact, setCompanyContact] = useState("Contact Details");
   const [billingCompanyName, setBillingCompanyName] =
     useState("Click to add text");
@@ -72,13 +70,16 @@ const Invoice = ({ number }: Props) => {
 
     const addRowButton = document.getElementById("addRowButton");
     const printButton = document.getElementById("printButton");
+    const navbar = document.getElementById("navbar");
 
     if (addRowButton && printButton) {
       addRowButton.style.display = "none";
       printButton.style.display = "none";
+      navbar!.style.display = "none";
       window.print();
       addRowButton.style.display = "block";
       printButton.style.display = "block";
+      navbar!.style.display = "grid";
     }
   };
 
@@ -107,9 +108,7 @@ const Invoice = ({ number }: Props) => {
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
               className={`w-full overflow-x-auto text-center focus:outline-none ${
-                hasEdited("Company Name", companyName)
-                  ? ""
-                  : "border-gray-400"
+                hasEdited("Company Name", companyName) ? "" : "border-gray-400"
               }`}
             />
           </h1>
