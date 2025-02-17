@@ -13,9 +13,9 @@ const TaxComputation = async () => {
       <Navbar record={account!} />
 
       <div>
-        <div className="flex justify-center">
+        {/* <div className="flex justify-center">
           <TaxComputationForm />
-        </div>
+        </div> */}
 
         <div className="flex justify-center">
           <HeroForm />
