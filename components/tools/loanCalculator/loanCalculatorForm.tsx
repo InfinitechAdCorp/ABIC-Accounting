@@ -137,11 +137,11 @@ const LoanCalculatorForm = () => {
                 <h3 className="text-sm text-white md:text-lg font-semibold mb-2">
                   Calculation Results
                 </h3>
-                <div>
-                  <h3 className="text-white">
+                <div className="text-white">
+                  <h3>
                     Monthly Payment: <strong>{formatNumber(monthly)}</strong>
                   </h3>
-                  <h3 className="text-white">
+                  <h3>
                     Total Loan Amount: <strong>{formatNumber(total)}</strong>
                   </h3>
                 </div>

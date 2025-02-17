@@ -121,12 +121,12 @@ const CurrencyConverterForm = () => {
                 <h3 className="text-sm text-white md:text-lg font-semibold mb-1">
                   Conversion Results
                 </h3>
-                <div>
-                  <h3 className="text-white">
+                <div className="text-white">
+                  <h3>
                     Converted Amount:{" "}
                     <strong>{formatNumber(convertedAmount)}</strong>
                   </h3>
-                  <h3 className="text-white">
+                  <h3>
                     Rate:{" "}
                     <strong>
                       1 {from} = {currencies[to]} {to}

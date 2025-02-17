@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -12,7 +12,178 @@ import {
   Button,
 } from "@heroui/react";
 
+interface NonTaxableIncomeMWE {
+  holidayPay: number;
+  overtimePay: number;
+  nightShiftDifferential: number;
+  hazardPay: number;
+  nonTaxable13thMonthPay: number;
+  deMinimisBenefits: number;
+  contributions: number;
+  otherNonTaxableIncome: number;
+}
+
+interface Fields {
+  basicSalary: number;
+  representationAllowance: number;
+  transportationAllowance: number;
+  costOfLivingAllowance: number;
+  fixedHousingAllowance: number;
+  otherTaxableRegularCompensation: number;
+  commission: number;
+  profitSharing: number;
+  directorsFee: number;
+  taxable13thMonthPay: number;
+  hazardPay: number;
+  overtimePay: number;
+  otherTaxableSupplementaryCompensation: number;
+  statutoryMinimumWage: number;
+  nonTaxableIncomeMWE: NonTaxableIncomeMWE;
+}
+
+interface Results {
+  grossCompensationIncome: number;
+  totalNonTaxableIncome: number;
+  netTaxableIncome: number;
+}
+
 const HeroForm = () => {
+  const [payrollPeriod, setPayrollPeriod] = useState(2);
+  const [fields, setFields] = useState<Fields>({
+    basicSalary: 0,
+    representationAllowance: 0,
+    transportationAllowance: 0,
+    costOfLivingAllowance: 0,
+    fixedHousingAllowance: 0,
+    otherTaxableRegularCompensation: 0,
+    commission: 0,
+    profitSharing: 0,
+    directorsFee: 0,
+    taxable13thMonthPay: 0,
+    hazardPay: 0,
+    overtimePay: 0,
+    otherTaxableSupplementaryCompensation: 0,
+    statutoryMinimumWage: 0,
+    nonTaxableIncomeMWE: {
+      holidayPay: 0,
+      overtimePay: 0,
+      nightShiftDifferential: 0,
+      hazardPay: 0,
+      nonTaxable13thMonthPay: 0,
+      deMinimisBenefits: 0,
+      contributions: 0,
+      otherNonTaxableIncome: 0,
+    },
+  });
+
+  const taxableCompensationFields = [
+    "basicSalary",
+    "representationAllowance",
+    "transportationAllowance",
+    "costOfLivingAllowance",
+    "fixedHousingAllowance",
+    "otherTaxableRegularCompensation",
+  ];
+
+  const supplementaryCompensationFields = [
+    "commission",
+    "profitSharing",
+    "directorsFee",
+    "taxable13thMonthPay",
+    "hazardPay",
+    "overtimePay",
+    "otherTaxableSupplementaryCompensation",
+  ];
+
+  const nonTaxableCompensationFields = [
+    "statutoryMinimumWage",
+    "holidayPay",
+    "overtimePay",
+    "nightShiftDifferential",
+    "hazardPay",
+    "nonTaxable13thMonthPay",
+    "deMinimisBenefits",
+    "contributions",
+    "otherNonTaxableIncome",
+  ];
+
+  const [results, setResults] = useState<Results>({
+    grossCompensationIncome: 0,
+    totalNonTaxableIncome: 0,
+    netTaxableIncome: 0,
+  });
+
+  useEffect(() => {
+    const computeResults = () => {
+      const {
+        basicSalary,
+        representationAllowance,
+        transportationAllowance,
+        costOfLivingAllowance,
+        fixedHousingAllowance,
+        otherTaxableRegularCompensation,
+        commission,
+        profitSharing,
+        directorsFee,
+        taxable13thMonthPay,
+        hazardPay,
+        overtimePay,
+        otherTaxableSupplementaryCompensation,
+        statutoryMinimumWage,
+        nonTaxableIncomeMWE,
+      } = fields;
+
+      let grossCompensationIncome =
+        basicSalary +
+        representationAllowance +
+        transportationAllowance +
+        costOfLivingAllowance +
+        fixedHousingAllowance +
+        otherTaxableRegularCompensation +
+        commission +
+        profitSharing +
+        directorsFee +
+        taxable13thMonthPay +
+        hazardPay +
+        overtimePay +
+        otherTaxableSupplementaryCompensation;
+
+      const totalNonTaxableIncome =
+        statutoryMinimumWage +
+        Object.values(nonTaxableIncomeMWE).reduce(
+          (acc, value) => acc + value,
+          0
+        );
+
+      const netTaxableIncome = grossCompensationIncome - totalNonTaxableIncome;
+
+      setResults({
+        grossCompensationIncome,
+        totalNonTaxableIncome,
+        netTaxableIncome,
+      });
+    };
+
+    computeResults();
+  }, [fields, payrollPeriod]);
+
+  const handleChange = (field: string, value: number) => {
+    if (field in fields.nonTaxableIncomeMWE) {
+      setFields((prevFields) => ({
+        ...prevFields,
+        nonTaxableIncomeMWE: {
+          ...prevFields.nonTaxableIncomeMWE,
+          [field]: value,
+        },
+      }));
+    } else {
+      setFields((prevFields) => ({
+        ...prevFields,
+        [field]: value,
+      }));
+    }
+  };
+
   return (
     <>
       <>
@@ -35,12 +206,17 @@ const HeroForm = () => {
               label="Payroll Period"
               labelPlacement="outside"
               placeholder="Select Payroll Period"
+              defaultSelectedKeys={[payrollPeriod]}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                setPayrollPeriod(value);
+              }}
             >
-              <SelectItem key="Daily">Daily</SelectItem>
-              <SelectItem key="Weekly">Weekly</SelectItem>
-              <SelectItem key="Semi-Monthly">Semi-Monthly</SelectItem>
-              <SelectItem key="Monthly">Monthly</SelectItem>
-              <SelectItem key="Annually">Annually</SelectItem>
+              <SelectItem key="22">Daily</SelectItem>
+              <SelectItem key="4">Weekly</SelectItem>
+              <SelectItem key="2">Semi-Monthly</SelectItem>
+              <SelectItem key="1">Monthly</SelectItem>
+              <SelectItem key="12">Annually</SelectItem>
             </Select>
 
             <div>
@@ -57,6 +233,9 @@ const HeroForm = () => {
                   label="Basic Salary"
                   labelPlacement="outside"
                   placeholder="Enter Basic Salary"
+                  onChange={(e) =>
+                    handleChange("basicSalary", Number(e.target.value))
+                  }
                 />
 
                 <Input
@@ -67,6 +246,9 @@ const HeroForm = () => {
                   label="Representation Allowance"
                   labelPlacement="outside"
                   placeholder="Enter Representation Allowance"
+                  onChange={(e) =>
+                    handleChange("representationAllowance", Number(e.target.value))
+                  }
                 />
 
                 <Input
@@ -77,6 +259,9 @@ const HeroForm = () => {
                   label="Transportation Allowance"
                   labelPlacement="outside"
                   placeholder="Enter Transportation Allowance"
+                  onChange={(e) =>
+                    handleChange("transportationAllowance", Number(e.target.value))
+                  }
                 />
               </div>
 
@@ -89,6 +274,9 @@ const HeroForm = () => {
                   label="Cost of Living Allowance"
                   labelPlacement="outside"
                   placeholder="Enter Cost of Living Allowance"
+                  onChange={(e) =>
+                    handleChange("costOfLivingAllowance", Number(e.target.value))
+                  }
                 />
 
                 <Input
@@ -99,6 +287,9 @@ const HeroForm = () => {
                   label="Fixed Housing Allowance"
                   labelPlacement="outside"
                   placeholder="Enter Fixed Housing Allowance"
+                  onChange={(e) =>
+                    handleChange("fixedHousingAllowance", Number(e.target.value))
+                  }
                 />
 
                 <Input
@@ -109,6 +300,9 @@ const HeroForm = () => {
                   label="Other Compensation"
                   labelPlacement="outside"
                   placeholder="Enter Other Compensation"
+                  onChange={(e) =>
+                    handleChange("otherTaxableRegularCompensation", Number(e.target.value))
+                  }
                 />
               </div>
             </div>
@@ -127,6 +321,9 @@ const HeroForm = () => {
                   label="Commission"
                   labelPlacement="outside"
                   placeholder="Enter Commission"
+                  onChange={(e) =>
+                    handleChange("commission", Number(e.target.value))
+                  }
                 />
 
                 <Input
@@ -137,6 +334,9 @@ const HeroForm = () => {
                   label="Profit Sharing"
                   labelPlacement="outside"
                   placeholder="Enter Profit Sharing"
+                  onChange={(e) =>
+                    handleChange("profitSharing", Number(e.target.value))
+                  }
                 />
 
                 <Input
@@ -147,6 +347,9 @@ const HeroForm = () => {
                   label="Directors Fee"
                   labelPlacement="outside"
                   placeholder="Enter Directors Fee"
+                  onChange={(e) =>
+                    handleChange("directorsFee", Number(e.target.value))
+                  }
                 />
               </div>
 
@@ -159,6 +362,9 @@ const HeroForm = () => {
                   label="Taxable 13th Month Pay"
                   labelPlacement="outside"
                   placeholder="Enter Taxable 13th Month Pay"
+                  onChange={(e) =>
+                    handleChange("taxable13thMonthPay", Number(e.target.value))
+                  }
                 />
 
                 <Input
@@ -169,6 +375,9 @@ const HeroForm = () => {
                   label="Hazarad Pay"
                   labelPlacement="outside"
                   placeholder="Enter Hazarad Pay"
+                  onChange={(e) =>
+                    handleChange("hazardPay", Number(e.target.value))
+                  }
                 />
 
                 <Input
@@ -179,6 +388,9 @@ const HeroForm = () => {
                   label="Overtime Pay"
                   labelPlacement="outside"
                   placeholder="Enter Overtime Pay"
+                  onChange={(e) =>
+                    handleChange("overtimePay", Number(e.target.value))
+                  }
                 />
               </div>
 
@@ -191,6 +403,12 @@ const HeroForm = () => {
                   label="Other Compensation"
                   labelPlacement="outside"
                   placeholder="Enter Other Compensation"
+                  onChange={(e) =>
+                    handleChange(
+                      "otherTaxableSupplementaryCompensation",
+                      Number(e.target.value)
+                    )
+                  }
                 />
               </div>
             </div>
@@ -206,9 +424,15 @@ const HeroForm = () => {
                   type="number"
                   size="md"
                   variant="bordered"
-                  label="Other Compensation"
+                  label="Statutory Minimum Wage"
                   labelPlacement="outside"
-                  placeholder="Enter Other Compensation"
+                  placeholder="Enter Statutory Minimum Wage"
+                  onChange={(e) =>
+                    handleChange(
+                      "statutoryMinimumWage",
+                      Number(e.target.value)
+                    )
+                  }
                 />
 
                 <Input
@@ -219,6 +443,12 @@ const HeroForm = () => {
                   label="Holiday Pay"
                   labelPlacement="outside"
                   placeholder="Enter Holiday Pay"
+                  onChange={(e) =>
+                    handleChange(
+                      "holidayPay",
+                      Number(e.target.value)
+                    )
+                  }
                 />
 
                 <Input
@@ -229,6 +459,12 @@ const HeroForm = () => {
                   label="Overtime Pay"
                   labelPlacement="outside"
                   placeholder="Enter Overtime Pay"
+                  onChange={(e) =>
+                    handleChange(
+                      "overtimePay",
+                      Number(e.target.value)
+                    )
+                  }
                 />
               </div>
 
@@ -241,6 +477,12 @@ const HeroForm = () => {
                   label="Night Shift Differential"
                   labelPlacement="outside"
                   placeholder="Enter Night Shift Differential"
+                  onChange={(e) =>
+                    handleChange(
+                      "nightShiftDifferential",
+                      Number(e.target.value)
+                    )
+                  }
                 />
 
                 <Input
@@ -251,6 +493,12 @@ const HeroForm = () => {
                   label="Hazard Pay"
                   labelPlacement="outside"
                   placeholder="Enter Hazard Pay"
+                  onChange={(e) =>
+                    handleChange(
+                      "hazardPay",
+                      Number(e.target.value)
+                    )
+                  }
                 />
 
                 <Input
@@ -261,6 +509,12 @@ const HeroForm = () => {
                   label="Non Taxable 13th Month Pay"
                   labelPlacement="outside"
                   placeholder="Enter Non Taxable 13th Month Pay"
+                  onChange={(e) =>
+                    handleChange(
+                      "nonTaxable13thMonthPay",
+                      Number(e.target.value)
+                    )
+                  }
                 />
               </div>
 
@@ -273,6 +527,12 @@ const HeroForm = () => {
                   label="De Minimis Benefits"
                   labelPlacement="outside"
                   placeholder="Enter De Minimis Benefits"
+                  onChange={(e) =>
+                    handleChange(
+                      "deMinimisBenefits",
+                      Number(e.target.value)
+                    )
+                  }
                 />
 
                 <Input
@@ -283,6 +543,12 @@ const HeroForm = () => {
                   label="Contributions"
                   labelPlacement="outside"
                   placeholder="Enter Contributions"
+                  onChange={(e) =>
+                    handleChange(
+                      "contributions",
+                      Number(e.target.value)
+                    )
+                  }
                 />
 
                 <Input
@@ -293,31 +559,35 @@ const HeroForm = () => {
                   label="Other Non Taxable Income"
                   labelPlacement="outside"
                   placeholder="Enter Other Non Taxable Income"
+                  onChange={(e) =>
+                    handleChange(
+                      "otherNonTaxableIncome",
+                      Number(e.target.value)
+                    )
+                  }
                 />
               </div>
             </div>
           </CardBody>
 
           <CardFooter>
-            <div className="w-full rounded-lg">
-              <div className="text-center my-5">
-                <h3 className="text-sm md:text-lg font-semibold mb-2">
-                  Calculation Results
-                </h3>
-                <div className="mb-3">
-                  <h3>
-                    Gross Compensation Income: <strong>0.00</strong>
+            <div className="w-full flex justify-center">
+              <div className="w-2/5 bg-[#006FEE] rounded-lg">
+                <div className="text-center my-5">
+                  <h3 className="text-sm md:text-lg font-semibold mb-2 text-white">
+                    Calculation Results
                   </h3>
-                  <h3>
-                    Total Non-Taxable Income: <strong>0.00</strong>
-                  </h3>
-                  <h3>
-                    Net Taxable Income: <strong>0.00</strong>
-                  </h3>
-                </div>
-                <div className="flex justify-center gap-3">
-                  <Button color="primary">Print</Button>
-                  <Button color="primary">Export</Button>
+                  <div className="mb-3 text-white">
+                    <h3>
+                      Gross Compensation Income: <strong>0.00</strong>
+                    </h3>
+                    <h3>
+                      Total Non-Taxable Income: <strong>0.00</strong>
+                    </h3>
+                    <h3>
+                      Net Taxable Income: <strong>0.00</strong>
+                    </h3>
+                  </div>
                 </div>
               </div>
             </div>
