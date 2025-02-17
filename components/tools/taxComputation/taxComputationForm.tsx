@@ -1,73 +1,47 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { jsPDF } from "jspdf";
-
-interface NonTaxableIncomeMWE {
-  holidayPay: number;
-  overtimePay: number;
-  nightShiftDifferential: number;
-  hazardPay: number;
-  nonTaxable13thMonthPay: number;
-  deMinimisBenefits: number;
-  contributions: number;
-  otherNonTaxableIncome: number;
-}
-
-interface Fields {
-  basicSalary: number;
-  representationAllowance: number;
-  transportationAllowance: number;
-  costOfLivingAllowance: number;
-  fixedHousingAllowance: number;
-  otherTaxableRegularCompensation: number;
-  commission: number;
-  profitSharing: number;
-  directorsFee: number;
-  taxable13thMonthPay: number;
-  hazardPay: number;
-  overtimePay: number;
-  otherTaxableSupplementaryCompensation: number;
-  statutoryMinimumWage: number;
-  nonTaxableIncomeMWE: NonTaxableIncomeMWE;
-}
-
-interface Results {
-  grossCompensationIncome: number;
-  totalNonTaxableIncome: number;
-  netTaxableIncome: number;
-}
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Input,
+  Select,
+  SelectItem,
+  CardFooter,
+} from "@heroui/react";
+import { formatNumber } from "@/components/globals/utils";
 
 const TaxComputationForm = () => {
-  const [payrollPeriod, setPayrollPeriod] = useState<string>("Semi-Monthly");
-  const [fields, setFields] = useState<Fields>({
-    basicSalary: 0,
-    representationAllowance: 0,
-    transportationAllowance: 0,
-    costOfLivingAllowance: 0,
-    fixedHousingAllowance: 0,
-    otherTaxableRegularCompensation: 0,
+  const [period, setPeriod] = useState(2);
+  const [fields, setFields] = useState({
+    basic: 0,
+    representation: 0,
+    transportation: 0,
+    living: 0,
+    housing: 0,
+    otherTaxable: 0,
     commission: 0,
-    profitSharing: 0,
-    directorsFee: 0,
-    taxable13thMonthPay: 0,
-    hazardPay: 0,
-    overtimePay: 0,
-    otherTaxableSupplementaryCompensation: 0,
-    statutoryMinimumWage: 0,
-    nonTaxableIncomeMWE: {
-      holidayPay: 0,
-      overtimePay: 0,
-      nightShiftDifferential: 0,
-      hazardPay: 0,
-      nonTaxable13thMonthPay: 0,
-      deMinimisBenefits: 0,
+    sharing: 0,
+    directors: 0,
+    taxable13th: 0,
+    hazard: 0,
+    oT: 0,
+    otherSupplementary: 0,
+    statutory: 0,
+    nonTaxable: {
+      nonTaxableHoliday: 0,
+      nonTaxableOT: 0,
+      differential: 0,
+      nonTaxableHazard: 0,
+      nonTaxable13th: 0,
+      deMinimis: 0,
       contributions: 0,
-      otherNonTaxableIncome: 0,
+      otherNonTaxable: 0,
     },
   });
 
-  const [results, setResults] = useState<Results>({
+  const [results, setResults] = useState({
     grossCompensationIncome: 0,
     totalNonTaxableIncome: 0,
     netTaxableIncome: 0,
@@ -76,64 +50,43 @@ const TaxComputationForm = () => {
   useEffect(() => {
     const computeResults = () => {
       const {
-        basicSalary,
-        representationAllowance,
-        transportationAllowance,
-        costOfLivingAllowance,
-        fixedHousingAllowance,
-        otherTaxableRegularCompensation,
+        basic,
+        representation,
+        transportation,
+        living,
+        housing,
+        otherTaxable,
         commission,
-        profitSharing,
-        directorsFee,
-        taxable13thMonthPay,
-        hazardPay,
-        overtimePay,
-        otherTaxableSupplementaryCompensation,
-        statutoryMinimumWage,
-        nonTaxableIncomeMWE,
+        sharing,
+        directors,
+        taxable13th,
+        hazard,
+        oT,
+        otherSupplementary,
+        statutory,
+        nonTaxable,
       } = fields;
 
       let grossCompensationIncome =
-        basicSalary +
-        representationAllowance +
-        transportationAllowance +
-        costOfLivingAllowance +
-        fixedHousingAllowance +
-        otherTaxableRegularCompensation +
+        basic +
+        representation +
+        transportation +
+        living +
+        housing +
+        otherTaxable +
         commission +
-        profitSharing +
-        directorsFee +
-        taxable13thMonthPay +
-        hazardPay +
-        overtimePay +
-        otherTaxableSupplementaryCompensation;
+        sharing +
+        directors +
+        taxable13th +
+        hazard +
+        oT +
+        otherSupplementary;
 
-      switch (payrollPeriod) {
-        case "Semi-Monthly":
-          grossCompensationIncome *= 2;
-          break;
-        case "Monthly":
-          grossCompensationIncome *= 1;
-          break;
-        case "Weekly":
-          grossCompensationIncome *= 4;
-          break;
-        case "Daily":
-          grossCompensationIncome *= 22;
-          break;
-        case "Annually":
-          grossCompensationIncome *= 12;
-          break;
-        default:
-          break;
-      }
+      grossCompensationIncome *= period;
 
       const totalNonTaxableIncome =
-        statutoryMinimumWage +
-        Object.values(nonTaxableIncomeMWE).reduce(
-          (acc, value) => acc + value,
-          0
-        );
+        statutory +
+        Object.values(nonTaxable).reduce((acc, value) => acc + value, 0);
 
       const netTaxableIncome = grossCompensationIncome - totalNonTaxableIncome;
 
@@ -145,14 +98,14 @@ const TaxComputationForm = () => {
     };
 
     computeResults();
-  }, [fields, payrollPeriod]);
+  }, [fields, period]);
 
   const handleChange = (field: string, value: number) => {
-    if (field in fields.nonTaxableIncomeMWE) {
+    if (field in fields.nonTaxable) {
       setFields((prevFields) => ({
         ...prevFields,
-        nonTaxableIncomeMWE: {
-          ...prevFields.nonTaxableIncomeMWE,
+        nonTaxable: {
+          ...prevFields.nonTaxable,
           [field]: value,
         },
       }));
@@ -164,217 +117,390 @@ const TaxComputationForm = () => {
     }
   };
 
-  const printPage = () => {
-    window.print();
-  };
-
-  const exportToPDF = () => {
-    const doc = new jsPDF();
-    const logoWidth = 50;
-    const logoHeight = 50;
-    const x = (doc.internal.pageSize.width - logoWidth) / 2; // Center horizontally
-    const y = 20; // Position it at the top
-
-    // Load the logo image from the public folder
-    const logoUrl = "/logo.jpg"; //  the logo is placed in the public folder
-
-    const img = new Image();
-    img.src = logoUrl;
-    img.onload = () => {
-      doc.addImage(img, "JPEG", x, y, logoWidth, logoHeight);
-
-      // Set title for the document
-      doc.setFont("times", "normal");
-      doc.setFontSize(18);
-      const title = "Tax Computation Summary";
-      const titleWidth = doc.getTextWidth(title);
-      const titleX = (doc.internal.pageSize.width - titleWidth) / 2;
-      const titleY = 80;
-
-      doc.text(title, titleX, titleY);
-
-      // Set tax computation details
-      doc.setFontSize(14);
-      const contentY = titleY + 20;
-
-      doc.text(`Payroll Period: ${payrollPeriod}`, 20, contentY);
-      doc.text(
-        `Gross Compensation Income: PHP ${results.grossCompensationIncome.toFixed(
-          2
-        )}`,
-        20,
-        contentY + 10
-      );
-      doc.text(
-        `Total Non-Taxable/Exempt Income: PHP ${results.totalNonTaxableIncome.toFixed(
-          2
-        )}`,
-        20,
-        contentY + 20
-      );
-      doc.text(
-        `Net Taxable Compensation Income: PHP ${results.netTaxableIncome.toFixed(
-          2
-        )}`,
-        20,
-        contentY + 30
-      );
-
-      // Footer
-      const footerText =
-        "This is system-generated. This document was automatically generated.";
-      const footerY = doc.internal.pageSize.height / 2 + 40; // Position footer in the lower half of the page
-      doc.setFontSize(10);
-      doc.setTextColor(0, 0, 0);
-      doc.text(footerText, 20, footerY);
-
-      doc.save("tax_computation_summary.pdf");
-    };
-  };
-
-  const taxableCompensationFields = [
-    "basicSalary",
-    "representationAllowance",
-    "transportationAllowance",
-    "costOfLivingAllowance",
-    "fixedHousingAllowance",
-    "otherTaxableRegularCompensation",
-  ];
-
-  const supplementaryCompensationFields = [
-    "commission",
-    "profitSharing",
-    "directorsFee",
-    "taxable13thMonthPay",
-    "hazardPay",
-    "overtimePay",
-    "otherTaxableSupplementaryCompensation",
-  ];
-
-  const nonTaxableCompensationFields = [
-    "statutoryMinimumWage",
-    "holidayPay",
-    "overtimePay",
-    "nightShiftDifferential",
-    "hazardPay",
-    "nonTaxable13thMonthPay",
-    "deMinimisBenefits",
-    "contributions",
-    "otherNonTaxableIncome",
-  ];
-
-  const renderFields = (fieldsList: string[]) => {
-    return fieldsList.map((field) => {
-      // Check if field is part of nonTaxableIncomeMWE
-      const isNonTaxableField = field in fields.nonTaxableIncomeMWE;
-
-      return (
-        <div className="w-full sm:w-1/3 px-2 mb-4 sm:mb-0" key={field}>
-          <label
-            htmlFor={field}
-            className="block text-sm font-medium text-gray-700 capitalize"
-          >
-            {field.replace(/([A-Z])/g, " $1").trim()}
-          </label>
-          <input
-            type="number"
-            id={field}
-            value={
-              isNonTaxableField
-                ? (fields.nonTaxableIncomeMWE[
-                    field as keyof NonTaxableIncomeMWE
-                  ] as number)
-                : (fields[field as keyof Fields] as number)
-            }
-            onChange={(e) => handleChange(field, Number(e.target.value))}
-            className="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-[#006FEE] focus:border-[#006FEE]"
-          />
-        </div>
-      );
-    });
-  };
-
   return (
     <>
-      <div className="bg-white flex items-center justify-center py-12">
-        <div className="bg-white rounded-lg shadow-lg w-full sm:w-[90%] lg:w-[70%] p-6">
-          <h1 className="text-3xl font-bold text-center mb-6">
-            Tax Calculator
-          </h1>
-
-          <div className="mb-4">
-            <label
-              htmlFor="payrollPeriod"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Payroll Period
-            </label>
-            <select
-              id="payrollPeriod"
-              value={payrollPeriod}
-              onChange={(e) => setPayrollPeriod(e.target.value)}
-              className="w-full border rounded-lg px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-[#006FEE] focus:border-[#006FEE]"
-            >
-              <option value="Daily">Daily</option>
-              <option value="Weekly">Weekly</option>
-              <option value="Semi-Monthly">Semi-Monthly</option>
-              <option value="Monthly">Monthly</option>
-              <option value="Annually">Annually</option>
-            </select>
-          </div>
-
-          <h3 className="text-xl font-semibold mt-4 mb-2">
-            Taxable Compensation Income
-          </h3>
-          <div className="flex flex-wrap -mx-2 mb-4">
-            {renderFields(taxableCompensationFields)}
-          </div>
-
-          <h3 className="text-xl font-semibold mt-4 mb-2">
-            Supplementary Compensation Income
-          </h3>
-          <div className="flex flex-wrap -mx-2 mb-4">
-            {renderFields(supplementaryCompensationFields)}
-          </div>
-
-          <h3 className="text-xl font-semibold mt-4 mb-2">
-            Non-Taxable/Exempt Compensation Income
-          </h3>
-          <div className="flex flex-wrap -mx-2 mb-6">
-            {renderFields(nonTaxableCompensationFields)}
-          </div>
-
-          <div className="flex flex-col items-center mt-6">
-            <h2 className="text-xl font-bold ">Results</h2>
-            <div className="mt-4">
-              <p>
-                Gross Compensation Income: {results.grossCompensationIncome}
-              </p>
-              <p>
-                Total Non-Taxable Income: {results.totalNonTaxableIncome}
-              </p>
-              <p>
-                Net Taxable Income: {results.netTaxableIncome}
-              </p>
+      <>
+        <Card className="m-5 md:m-7 p-5 w-[83rem]">
+          <CardHeader>
+            <div className="w-full">
+              <div className="text-center">
+                <h3 className="text-sm md:text-3xl font-semibold mb-3">
+                  Tax Calculator
+                </h3>
+              </div>
             </div>
-          </div>
+          </CardHeader>
 
-          <div className="mt-6 flex justify-center space-x-4">
-            <button
-              onClick={printPage}
-              className="px-4 py-2 rounded-lg"
+          <CardBody>
+            <Select
+              className="mb-5"
+              size="md"
+              variant="bordered"
+              label="Payroll Period"
+              labelPlacement="outside"
+              placeholder="Select Payroll Period"
+              defaultSelectedKeys={[`${period}`]}
+              onChange={(e) => {
+                const value = Number(e.target.value);
+                setPeriod(value);
+              }}
             >
-              Print Page
-            </button>
-            <button
-              onClick={exportToPDF}
-              className="px-4 py-2 rounded-lg"
-            >
-              Export to PDF
-            </button>
-          </div>
-        </div>
-      </div>
+              <SelectItem key="22">Daily</SelectItem>
+              <SelectItem key="4">Weekly</SelectItem>
+              <SelectItem key="2">Semi-Monthly</SelectItem>
+              <SelectItem key="1">Monthly</SelectItem>
+              <SelectItem key="12">Annually</SelectItem>
+            </Select>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-3">
+                Taxable Compensation Income
+              </h3>
+
+              <div className="grid grid-cols-3 gap-3 mb-1">
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Basic Salary"
+                  labelPlacement="outside"
+                  placeholder="Enter Basic Salary"
+                  onChange={(e) =>
+                    handleChange("basic", Number(e.target.value))
+                  }
+                />
+
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Representation Allowance"
+                  labelPlacement="outside"
+                  placeholder="Enter Representation Allowance"
+                  onChange={(e) =>
+                    handleChange("representation", Number(e.target.value))
+                  }
+                />
+
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Transportation Allowance"
+                  labelPlacement="outside"
+                  placeholder="Enter Transportation Allowance"
+                  onChange={(e) =>
+                    handleChange("transportation", Number(e.target.value))
+                  }
+                />
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 mb-1">
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Cost of Living Allowance"
+                  labelPlacement="outside"
+                  placeholder="Enter Cost of Living Allowance"
+                  onChange={(e) =>
+                    handleChange("living", Number(e.target.value))
+                  }
+                />
+
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Fixed Housing Allowance"
+                  labelPlacement="outside"
+                  placeholder="Enter Fixed Housing Allowance"
+                  onChange={(e) =>
+                    handleChange("housing", Number(e.target.value))
+                  }
+                />
+
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Other Compensation"
+                  labelPlacement="outside"
+                  placeholder="Enter Other Compensation"
+                  onChange={(e) =>
+                    handleChange("otherTaxable", Number(e.target.value))
+                  }
+                />
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-3">
+                Supplementary Compensation Income
+              </h3>
+
+              <div className="grid grid-cols-3 gap-3 mb-1">
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Commission"
+                  labelPlacement="outside"
+                  placeholder="Enter Commission"
+                  onChange={(e) =>
+                    handleChange("commission", Number(e.target.value))
+                  }
+                />
+
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Profit Sharing"
+                  labelPlacement="outside"
+                  placeholder="Enter Profit Sharing"
+                  onChange={(e) =>
+                    handleChange("sharing", Number(e.target.value))
+                  }
+                />
+
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Directors Fee"
+                  labelPlacement="outside"
+                  placeholder="Enter Directors Fee"
+                  onChange={(e) =>
+                    handleChange("directors", Number(e.target.value))
+                  }
+                />
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 mb-1">
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Taxable 13th Month Pay"
+                  labelPlacement="outside"
+                  placeholder="Enter Taxable 13th Month Pay"
+                  onChange={(e) =>
+                    handleChange("taxable13th", Number(e.target.value))
+                  }
+                />
+
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Hazard Pay"
+                  labelPlacement="outside"
+                  placeholder="Enter Hazard Pay"
+                  onChange={(e) =>
+                    handleChange("hazard", Number(e.target.value))
+                  }
+                />
+
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Overtime Pay"
+                  labelPlacement="outside"
+                  placeholder="Enter Overtime Pay"
+                  onChange={(e) => handleChange("oT", Number(e.target.value))}
+                />
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Other Compensation"
+                  labelPlacement="outside"
+                  placeholder="Enter Other Compensation"
+                  onChange={(e) =>
+                    handleChange("otherSupplementary", Number(e.target.value))
+                  }
+                />
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold mb-3">
+                Non-Taxable / Exempt Compensation Income
+              </h3>
+
+              <div className="grid grid-cols-3 gap-3 mb-1">
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Statutory Minimum Wage"
+                  labelPlacement="outside"
+                  placeholder="Enter Statutory Minimum Wage"
+                  onChange={(e) =>
+                    handleChange("statutory", Number(e.target.value))
+                  }
+                />
+
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Holiday Pay"
+                  labelPlacement="outside"
+                  placeholder="Enter Holiday Pay"
+                  onChange={(e) =>
+                    handleChange("nonTaxableHoliday", Number(e.target.value))
+                  }
+                />
+
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Overtime Pay"
+                  labelPlacement="outside"
+                  placeholder="Enter Overtime Pay"
+                  onChange={(e) =>
+                    handleChange("nonTaxableOT", Number(e.target.value))
+                  }
+                />
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 mb-1">
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Night Shift Differential"
+                  labelPlacement="outside"
+                  placeholder="Enter Night Shift Differential"
+                  onChange={(e) =>
+                    handleChange("differential", Number(e.target.value))
+                  }
+                />
+
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Hazard Pay"
+                  labelPlacement="outside"
+                  placeholder="Enter Hazard Pay"
+                  onChange={(e) =>
+                    handleChange("nonTaxableHazard", Number(e.target.value))
+                  }
+                />
+
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Non Taxable 13th Month Pay"
+                  labelPlacement="outside"
+                  placeholder="Enter Non Taxable 13th Month Pay"
+                  onChange={(e) =>
+                    handleChange("nonTaxable13th", Number(e.target.value))
+                  }
+                />
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 mb-1">
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="De Minimis Benefits"
+                  labelPlacement="outside"
+                  placeholder="Enter De Minimis Benefits"
+                  onChange={(e) =>
+                    handleChange("deMinimis", Number(e.target.value))
+                  }
+                />
+
+                <Input
+                  className="mb-3"
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Contributions"
+                  labelPlacement="outside"
+                  placeholder="Enter Contributions"
+                  onChange={(e) =>
+                    handleChange("contributions", Number(e.target.value))
+                  }
+                />
+
+                <Input
+                  type="number"
+                  size="md"
+                  variant="bordered"
+                  label="Other Non Taxable Income"
+                  labelPlacement="outside"
+                  placeholder="Enter Other Non Taxable Income"
+                  onChange={(e) =>
+                    handleChange("otherNonTaxable", Number(e.target.value))
+                  }
+                />
+              </div>
+            </div>
+          </CardBody>
+
+          <CardFooter>
+            <div className="w-full flex justify-center">
+              <div className="bg-[#006FEE] rounded-lg px-16">
+                <div className="text-center my-5">
+                  <h3 className="text-sm md:text-lg font-semibold mb-2 text-white">
+                    Calculation Results
+                  </h3>
+                  <div className="mb-3 text-white">
+                    <h3>
+                      Gross Compensation Income:{" "}
+                      <strong>
+                        {formatNumber(results.grossCompensationIncome)}
+                      </strong>
+                    </h3>
+                    <h3>
+                      Total Non-Taxable Income:{" "}
+                      <strong>
+                        {formatNumber(results.totalNonTaxableIncome)}
+                      </strong>
+                    </h3>
+                    <h3>
+                      Net Taxable Income:{" "}
+                      <strong>{formatNumber(results.netTaxableIncome)}</strong>
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardFooter>
+        </Card>
+      </>
     </>
   );
 };

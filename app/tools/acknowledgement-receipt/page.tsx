@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
 import AcknowldegmentReceiptForm from "@/components/tools/acknowledgmentReceipt/acknowledgmentReceiptForm";
+import Test from "@/components/tools/acknowledgmentReceipt/test";
 import { getAllARs } from "@/components/tools/actions";
 import { retry } from "@/components/globals/serverUtils";
 
@@ -27,6 +28,10 @@ const AcknowledgmentReceipt = async () => {
 
       <div className="flex justify-center items-center">
         <AcknowldegmentReceiptForm number={number} />
+      </div>
+
+      <div className="flex justify-center items-center">
+        <Test number={number} />
       </div>
     </>
   );
