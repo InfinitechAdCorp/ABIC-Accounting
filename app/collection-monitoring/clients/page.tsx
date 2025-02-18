@@ -8,7 +8,6 @@ import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";
 import CreateModal from "@/components/collectionMonitoring/cClients/createModal";
-import ExportBtn from "@/components/globals/exportBtn";
 import RenderBody from "@/components/collectionMonitoring/cClients/renderBody";
 import { retry } from "@/components/globals/serverUtils";
 
@@ -30,7 +29,6 @@ const CClients = async () => {
   const Buttons = (
     <>
       <CreateModal />
-      <ExportBtn model={model} columns={columns} rows={rows} />
     </>
   );
 

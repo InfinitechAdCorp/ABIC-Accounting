@@ -16,7 +16,6 @@ import {
   formatNumber,
   setVoucher,
 } from "@/components/globals/utils";
-import ExportRangeModal from "@/components/globals/exportRangeModal";
 import { retry } from "@/components/globals/serverUtils";
 
 const Transactions = async () => {
@@ -52,13 +51,6 @@ const Transactions = async () => {
       </div>
 
       <CreateTransactionModal voucher={voucher} tClients={tClients} />
-
-      <ExportRangeModal
-        model={model}
-        columns={columns}
-        rows={rows}
-        filterKey="date"
-      />
     </>
   );
 
@@ -84,6 +76,7 @@ const Transactions = async () => {
               columns={columns}
               rows={rows}
               searchKey="particulars"
+              filterKey="date"
               dependencies={{
                 tClients: tClients,
               }}

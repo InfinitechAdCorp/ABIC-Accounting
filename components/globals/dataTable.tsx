@@ -18,6 +18,8 @@ import {
 } from "@heroui/react";
 import { Column } from "@/components/globals/types";
 import { capitalize } from "@/components/globals/utils";
+import ExportRangeModal from "@/components/globals/exportRangeModal";
+import ExportBtn from "@/components/globals/exportBtn";
 
 type Props = {
   model: string;
@@ -25,6 +27,7 @@ type Props = {
   columns: Column[];
   rows: any[];
   searchKey: string;
+  filterKey?: string;
   dependencies?: any;
   RenderBody: (
     records: any[],
@@ -41,6 +44,7 @@ const DataTable = ({
   columns: ufColumns,
   rows,
   searchKey,
+  filterKey,
   dependencies,
   RenderBody,
   Buttons,
@@ -97,6 +101,21 @@ const DataTable = ({
     setPage(1);
   }, []);
 
+  const ExportComponent = useMemo(() => {
+    if (filterKey) {
+      return (
+        <ExportRangeModal
+          model={model}
+          columns={columns}
+          rows={items}
+          filterKey={filterKey}
+        />
+      );
+    } else {
+      return <ExportBtn model={model} columns={columns} rows={items} />;
+    }
+  }, [columns, filterKey, items, model]);
+
   const topContent = useMemo(() => {
     return (
       <>
@@ -111,7 +130,10 @@ const DataTable = ({
               onClear={onClear}
               onValueChange={onSearchChange}
             />
-            <div className="flex gap-3">{Buttons}</div>
+            <div className="flex gap-3">
+              {Buttons}
+              {ExportComponent}
+            </div>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-default-400 text-small">
@@ -140,6 +162,7 @@ const DataTable = ({
     rows.length,
     searchKey,
     Buttons,
+    ExportComponent,
   ]);
 
   const bottomContent = useMemo(() => {

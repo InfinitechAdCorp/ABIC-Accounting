@@ -11,7 +11,6 @@ import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/collectionMonitoring/collections/renderBody";
 import CreateCollectionModal from "@/components/collectionMonitoring/collections/createModal";
 import CreateCClientModal from "@/components/collectionMonitoring/cClients/createModal";
-import ExportRangeModal from "@/components/globals/exportRangeModal";
 import { retry } from "@/components/globals/serverUtils";
 
 const Collections = async () => {
@@ -59,12 +58,6 @@ const Collections = async () => {
         <CreateCClientModal />
       </div>
       <CreateCollectionModal locations={locations} cClients={cClients} />
-      <ExportRangeModal
-        model={model}
-        columns={columns}
-        rows={rows}
-        filterKey="start"
-      />
     </>
   );
 
@@ -85,6 +78,7 @@ const Collections = async () => {
               columns={columns}
               rows={rows}
               searchKey="property"
+              filterKey="start"
               dependencies={{
                 locations: locations,
                 cClients: cClients,

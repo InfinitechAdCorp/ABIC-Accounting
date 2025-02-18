@@ -10,7 +10,6 @@ import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/collectionMonitoring/collections/renderBody";
 import CreateModal from "@/components/collectionMonitoring/collections/createModal";
-import ExportRangeModal from "@/components/globals/exportRangeModal";
 import { retry } from "@/components/globals/serverUtils";
 
 const TransactionClient = async ({
@@ -58,12 +57,6 @@ const TransactionClient = async ({
   const Buttons = (
     <>
       <CreateModal locations={locations} cClients={cClients} />
-      <ExportRangeModal
-        model={model}
-        columns={columns}
-        rows={rows}
-        filterKey="start"
-      />
     </>
   );
 
@@ -83,6 +76,7 @@ const TransactionClient = async ({
               columns={columns}
               rows={rows}
               searchKey="name"
+              filterKey="start"
               RenderBody={RenderBody}
               dependencies={{
                 locations: locations,

@@ -11,7 +11,6 @@ import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/transactionHistory/tClients/renderBody";
 import CreateModal from "@/components/transactionHistory/tClients/createModal";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
-import ExportBtn from "@/components/globals/exportBtn";
 import { retry } from "@/components/globals/serverUtils";
 
 const TClients = async () => {
@@ -38,7 +37,6 @@ const TClients = async () => {
   const Buttons = (
     <>
       <CreateModal />
-      <ExportBtn model={model} columns={columns} rows={rows} />
     </>
   );
 

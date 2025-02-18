@@ -5,7 +5,6 @@ import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";
 import CreateModal from "@/components/listings/createModal";
-import ExportRangeModal from "@/components/globals/exportRangeModal";
 import RenderBody from "@/components/listings/renderBody";
 import { retry } from "@/components/globals/serverUtils";
 
@@ -40,12 +39,6 @@ const Listings = async () => {
   const Buttons = (
     <>
       <CreateModal />
-      <ExportRangeModal
-        model={model}
-        columns={columns}
-        rows={rows}
-        filterKey="res"
-      />
     </>
   );
 
@@ -65,6 +58,7 @@ const Listings = async () => {
               columns={columns}
               rows={rows}
               searchKey="client"
+              filterKey="res"
               RenderBody={RenderBody}
               Buttons={Buttons}
             />

@@ -18,7 +18,6 @@ import {
   formatNumber,
   setVoucher,
 } from "@/components/globals/utils";
-import ExportRangeModal from "@/components/globals/exportRangeModal";
 import { retry } from "@/components/globals/serverUtils";
 
 const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
@@ -52,12 +51,6 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
   const Buttons = (
     <>
       <CreateModal voucher={voucher} tClients={tClients} />
-      <ExportRangeModal
-        model={model}
-        columns={columns}
-        rows={rows}
-        filterKey="date"
-      />
     </>
   );
 
@@ -83,6 +76,7 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
               columns={columns}
               rows={rows}
               searchKey="name"
+              filterKey="date"
               dependencies={{
                 tClients: tClients,
               }}
