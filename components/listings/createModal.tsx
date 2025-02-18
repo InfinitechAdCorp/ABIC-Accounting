@@ -13,8 +13,6 @@ import {
   DatePicker,
   Select,
   SelectItem,
-  Autocomplete,
-  AutocompleteItem,
 } from "@heroui/react";
 import { create as validationSchema } from "@/components/listings/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
@@ -24,15 +22,9 @@ import {
   onPostSubmit,
   dateToDateValue,
   dateValueToDate,
-  getUniques,
 } from "@/components/globals/utils";
-import { Listing } from "@/components/listings/types";
 
-type Props = {
-  records: Listing[];
-};
-
-const CreateModal = ({ records }: Props) => {
+const CreateModal = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState("");
@@ -65,10 +57,6 @@ const CreateModal = ({ records }: Props) => {
     });
   };
 
-  const clients = getUniques(records, "client");
-
-  console.log(clients);
-
   return (
     <>
       <Button color="primary" onPress={onOpen}>
@@ -89,7 +77,7 @@ const CreateModal = ({ records }: Props) => {
                     <ModalHeader>Add Listing</ModalHeader>
                     <ModalBody>
                       <div className="grid grid-cols-2 gap-3">
-                        {/* <Field name="client">
+                        <Field name="client">
                           {({ field, meta }: FieldProps) => (
                             <div>
                               <Input
@@ -101,32 +89,6 @@ const CreateModal = ({ records }: Props) => {
                                 labelPlacement="outside"
                                 placeholder="Enter Client Name"
                               />
-                              {meta.touched && meta.error && (
-                                <small className="text-red-500">
-                                  {meta.error}
-                                </small>
-                              )}
-                            </div>
-                          )}
-                        </Field> */}
-                        <Field name="client">
-                          {({ field, meta }: FieldProps) => (
-                            <div>
-                              <Autocomplete
-                                {...field}
-                                type="text"
-                                size="md"
-                                variant="bordered"
-                                label="Client Name"
-                                labelPlacement="outside"
-                                placeholder="Enter Client Name"
-                              >
-                                {clients.map((client) => (
-                                  <AutocompleteItem key={client}>
-                                    {client}
-                                  </AutocompleteItem>
-                                ))}
-                              </Autocomplete>
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">
                                   {meta.error}
