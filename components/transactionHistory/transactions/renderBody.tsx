@@ -5,7 +5,6 @@ import { TableRow, TableCell } from "@heroui/react";
 import UpdateModal from "@/components/transactionHistory/transactions/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
 import SetStatusModal from "@/components/transactionHistory/transactions/setStatusModal";
-import ViewProofModal from "@/components/transactionHistory/transactions/viewProofModal";
 import {
   destroy,
   setStatus,
@@ -17,6 +16,7 @@ import {
   TClient,
 } from "@/components/transactionHistory/types";
 import { isPending } from "@/components/globals/utils";
+import ViewProofBtn from "@/components/transactionHistory/transactions/viewProofBtn";
 
 const getRecord = (records: Record[], id: string) => {
   const record = records.find((record) => {
@@ -59,7 +59,7 @@ const RenderCell = (
       );
     case "proof":
       const value = row[column as keyof Row];
-      return <ViewProofModal url={value || "/no-image.png"} />;
+      return <ViewProofBtn url={value || "/no-image.png"} />;
     default:
       return row[column as keyof Row];
   }
