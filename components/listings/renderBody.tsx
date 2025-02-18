@@ -45,7 +45,7 @@ const RenderBody = (records: Record[], columns: Column[], rows: Row[]) => {
           }
         >
           {columns.map((column) => (
-            <TableCell key={column.key}>
+            <TableCell key={column.key} className="text-center">
               {RenderCell(getRecord(records, row.id), column.key, row)}
             </TableCell>
           ))}

@@ -15,6 +15,9 @@ import {
   TableBody,
   Input,
   Pagination,
+  Button,
+  Autocomplete,
+  AutocompleteItem,
 } from "@heroui/react";
 import { Column } from "@/components/globals/types";
 import { capitalize } from "@/components/globals/utils";
@@ -101,21 +104,6 @@ const DataTable = ({
     setPage(1);
   }, []);
 
-  const ExportComponent = useMemo(() => {
-    if (filterKey) {
-      return (
-        <ExportRangeModal
-          model={model}
-          columns={columns}
-          rows={items}
-          filterKey={filterKey}
-        />
-      );
-    } else {
-      return <ExportBtn model={model} columns={columns} rows={items} />;
-    }
-  }, [columns, filterKey, items, model]);
-
   const topContent = useMemo(() => {
     return (
       <>
@@ -132,7 +120,16 @@ const DataTable = ({
             />
             <div className="flex gap-3">
               {Buttons}
-              {ExportComponent}
+              {filterKey ? (
+                <ExportRangeModal
+                  model={model}
+                  columns={columns}
+                  rows={items}
+                  filterKey={filterKey}
+                />
+              ) : (
+                <ExportBtn model={model} columns={columns} rows={items} />
+              )}
             </div>
           </div>
           <div className="flex justify-between items-center">
@@ -160,9 +157,12 @@ const DataTable = ({
     onClear,
     onRowsPerPageChange,
     rows.length,
+    model,
+    columns,
+    items,
     searchKey,
+    filterKey,
     Buttons,
-    ExportComponent,
   ]);
 
   const bottomContent = useMemo(() => {
@@ -196,7 +196,23 @@ const DataTable = ({
       >
         <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn key={column.key}>{column.name}</TableColumn>
+            <TableColumn key={column.key}>
+              <div className="w-[10rem] p-3">
+                <div className="text-center mb-2">{column.name}</div>
+                {column.name != "ACTIONS" && (
+                  <Autocomplete
+                    className="max-w-xs"
+                    placeholder="Search"
+                    size="sm"
+                    variant="underlined"
+                  >
+                    <AutocompleteItem key="1">1</AutocompleteItem>
+                    <AutocompleteItem key="2">2</AutocompleteItem>
+                    <AutocompleteItem key="3">3</AutocompleteItem>
+                  </Autocomplete>
+                )}
+              </div>
+            </TableColumn>
           )}
         </TableHeader>
         <TableBody emptyContent={`No ${model} Found`}>
