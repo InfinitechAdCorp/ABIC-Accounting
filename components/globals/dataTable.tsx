@@ -20,6 +20,7 @@ import {
 import { Column } from "@/components/globals/types";
 import ExportRangeModal from "@/components/globals/exportRangeModal";
 import ExportBtn from "@/components/globals/exportBtn";
+import DateRangeModal from "@/components/globals/dateRangeModal";
 
 type Props = {
   model: string;
@@ -150,6 +151,7 @@ const DataTable = ({
             />
             <div className="flex gap-3">
               {Buttons}
+              <DateRangeModal model={model} />
               {ExportComponent}
             </div>
           </div>
