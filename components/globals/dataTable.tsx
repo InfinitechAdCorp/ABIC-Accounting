@@ -18,7 +18,6 @@ import {
   SortDescriptor,
 } from "@heroui/react";
 import { Column } from "@/components/globals/types";
-import { capitalize } from "@/components/globals/utils";
 import ExportRangeModal from "@/components/globals/exportRangeModal";
 import ExportBtn from "@/components/globals/exportBtn";
 
@@ -27,7 +26,6 @@ type Props = {
   records: any[];
   columns: Column[];
   rows: any[];
-  searchKey: string;
   filterKey?: string;
   dependencies?: any;
   RenderBody: (
@@ -44,7 +42,6 @@ const DataTable = ({
   records,
   columns: ufColumns,
   rows,
-  searchKey,
   filterKey,
   dependencies,
   RenderBody,
@@ -68,12 +65,22 @@ const DataTable = ({
 
     if (hasSearchFilter) {
       filteredRows = filteredRows.filter((row) => {
-        return row[searchKey].toLowerCase().includes(filterValue.toLowerCase());
+        let isValid = false;
+        const values: string[] = Object.values(row);
+
+        values.some((value) => {
+          if (value.toLowerCase().includes(filterValue.toLowerCase())) {
+            isValid = true;
+            return true;
+          }
+        });
+
+        if (isValid) return row;
       });
     }
 
     return filteredRows;
-  }, [rows, filterValue, hasSearchFilter, searchKey]);
+  }, [rows, filterValue, hasSearchFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -139,7 +146,7 @@ const DataTable = ({
             <Input
               isClearable
               className="w-full sm:max-w-[44%]"
-              placeholder={`Search ${capitalize(searchKey)}`}
+              placeholder={`Search`}
               startContent={<SearchIcon />}
               value={filterValue}
               onClear={onClear}
@@ -175,7 +182,6 @@ const DataTable = ({
     onClear,
     onRowsPerPageChange,
     rows.length,
-    searchKey,
     Buttons,
     ExportComponent,
   ]);
