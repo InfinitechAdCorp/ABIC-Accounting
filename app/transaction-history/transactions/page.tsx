@@ -17,6 +17,7 @@ import {
   setVoucher,
 } from "@/components/globals/utils";
 import { retry } from "@/components/globals/serverUtils";
+import { Tooltip } from "@heroui/react";
 
 const Transactions = async () => {
   const { record: account } = await retry(getAccount);
@@ -24,7 +25,8 @@ const Transactions = async () => {
   const { records: tClients } = await getTClients();
 
   const model = "Transactions";
-  const runningBalance = formatNumber(computeBalance([...records].reverse()));
+
+  const result = computeBalance([...records].reverse());
 
   const columns = [
     { key: "id", name: "ID", sortable: false },
@@ -65,9 +67,20 @@ const Transactions = async () => {
               <h1 className="text-lg font-semibold mb-3">
                 {model.toUpperCase()}
               </h1>
-              <h1 className="text-md font-semibold mb-3">
-                RUNNING BALANCE: {runningBalance}
-              </h1>
+              <div>
+                <Tooltip
+                  content={
+                    <>
+                      <h3>Credit: {formatNumber(result.credit)}</h3>
+                      <h3>Debit: {formatNumber(result.debit)}</h3>
+                    </>
+                  }
+                >
+                  <h1 className="text-md font-semibold mb-3">
+                    RUNNING BALANCE: {formatNumber(result.balance)}
+                  </h1>
+                </Tooltip>
+              </div>
             </div>
 
             <DataTable
@@ -75,7 +88,6 @@ const Transactions = async () => {
               records={records}
               columns={columns}
               rows={rows}
-              searchKey="particulars"
               filterKey="date"
               dependencies={{
                 tClients: tClients,

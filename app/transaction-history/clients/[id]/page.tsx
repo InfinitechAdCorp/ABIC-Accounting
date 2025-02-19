@@ -19,6 +19,7 @@ import {
   setVoucher,
 } from "@/components/globals/utils";
 import { retry } from "@/components/globals/serverUtils";
+import { Tooltip } from "@heroui/react";
 
 const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { record: account } = await retry(getAccount);
@@ -27,9 +28,8 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { records: transactions } = await getTransactions();
 
   const model = `Transactions`;
-  const runningBalance = formatNumber(
-    computeBalance([...(record?.transactions || [])].reverse())
-  );
+
+  const result = computeBalance([...(record?.transactions || [])].reverse());
 
   const columns = [
     { key: "id", name: "ID", sortable: false },
@@ -65,9 +65,20 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
               <h1 className="text-lg font-semibold mb-3">
                 {`${record?.name}'s ${model}`.toUpperCase()}
               </h1>
-              <h1 className="text-md font-semibold mb-3">
-                RUNNING BALANCE: {runningBalance}
-              </h1>
+              <div>
+                <Tooltip
+                  content={
+                    <>
+                      <h3>Credit: {formatNumber(result.credit)}</h3>
+                      <h3>Debit: {formatNumber(result.debit)}</h3>
+                    </>
+                  }
+                >
+                  <h1 className="text-md font-semibold mb-3">
+                    RUNNING BALANCE: {formatNumber(result.balance)}
+                  </h1>
+                </Tooltip>
+              </div>
             </div>
 
             <DataTable
@@ -75,7 +86,6 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
               records={record?.transactions || []}
               columns={columns}
               rows={rows}
-              searchKey="name"
               filterKey="date"
               dependencies={{
                 tClients: tClients,

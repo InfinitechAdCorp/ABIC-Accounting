@@ -75,7 +75,6 @@ const TransactionClient = async ({
               records={record?.collections || []}
               columns={columns}
               rows={rows}
-              searchKey="name"
               filterKey="start"
               RenderBody={RenderBody}
               dependencies={{

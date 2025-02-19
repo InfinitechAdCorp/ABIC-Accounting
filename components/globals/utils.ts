@@ -121,21 +121,26 @@ export const formatErrors = (ufErrors: Yup.ValidationError) => {
 };
 
 export const computeBalance = (records: Transaction[]) => {
-  let total = 0;
+  const result = {
+    credit: 0,
+    debit: 0,
+    balance: 0,
+  };
 
   if (records) {
     records.forEach((record) => {
       if (record.status != "Cancelled" && !isPending(record.date)) {
         if (record.type == "Credit") {
-          total += record.amount;
+          result.credit += record.amount;
         } else {
-          total -= record.amount;
+          result.debit += record.amount;
         }
       }
     });
+    result.balance = result.credit - result.debit;
   }
 
-  return total;
+  return result;
 };
 
 export const isPending = (date: Date) => {

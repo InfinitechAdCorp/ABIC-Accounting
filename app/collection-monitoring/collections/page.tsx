@@ -77,7 +77,6 @@ const Collections = async () => {
               records={records}
               columns={columns}
               rows={rows}
-              searchKey="property"
               filterKey="start"
               dependencies={{
                 locations: locations,

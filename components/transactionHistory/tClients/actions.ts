@@ -98,8 +98,8 @@ export const tableFormat = async (columns: Column[], records: TClient[]) => {
           value = formatNumber(value);
           break;
         case "running_balance":
-          value = computeBalance(transactions || []);
-          value = formatNumber(value);
+          const result = computeBalance(transactions || []);
+          value = formatNumber(result.balance);
           break;
         default:
           value = record[key as keyof TClient];

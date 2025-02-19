@@ -47,7 +47,6 @@ const CClients = async () => {
               records={records}
               columns={columns}
               rows={rows}
-              searchKey="name"
               RenderBody={RenderBody}
               Buttons={Buttons}
             />

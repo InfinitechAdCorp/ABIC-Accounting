@@ -57,7 +57,6 @@ const Listings = async () => {
               records={records}
               columns={columns}
               rows={rows}
-              searchKey="client"
               filterKey="res"
               RenderBody={RenderBody}
               Buttons={Buttons}

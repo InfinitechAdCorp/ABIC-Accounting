@@ -12,6 +12,7 @@ import RenderBody from "@/components/transactionHistory/tClients/renderBody";
 import CreateModal from "@/components/transactionHistory/tClients/createModal";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
 import { retry } from "@/components/globals/serverUtils";
+import { Tooltip } from "@heroui/react";
 
 const TClients = async () => {
   const { record: account } = await retry(getAccount);
@@ -19,9 +20,8 @@ const TClients = async () => {
   const { records: transactions } = await getTransactions();
 
   const model = "Clients";
-  const runningBalance = formatNumber(
-    computeBalance([...transactions].reverse())
-  );
+
+  const result = computeBalance([...transactions].reverse());
 
   const columns = [
     { key: "id", name: "ID", sortable: false },
@@ -51,9 +51,20 @@ const TClients = async () => {
               <h1 className="text-lg font-semibold mb-3">
                 {model.toUpperCase()}
               </h1>
-              <h1 className="text-md font-semibold mb-3">
-                RUNNING BALANCE: {runningBalance}
-              </h1>
+              <div>
+                <Tooltip
+                  content={
+                    <>
+                      <h3>Credit: {formatNumber(result.credit)}</h3>
+                      <h3>Debit: {formatNumber(result.debit)}</h3>
+                    </>
+                  }
+                >
+                  <h1 className="text-md font-semibold mb-3">
+                    RUNNING BALANCE: {formatNumber(result.balance)}
+                  </h1>
+                </Tooltip>
+              </div>
             </div>
 
             <DataTable

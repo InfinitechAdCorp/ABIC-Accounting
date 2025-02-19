@@ -65,14 +65,10 @@ const DataTable = ({
 
     if (hasSearchFilter) {
       filteredRows = filteredRows.filter((row) => {
-        let isValid = false;
         const values: string[] = Object.values(row);
 
-        values.some((value) => {
-          if (value.toLowerCase().includes(filterValue.toLowerCase())) {
-            isValid = true;
-            return true;
-          }
+        const isValid = values.some((value) => {
+          return value.toLowerCase().includes(filterValue.toLowerCase());
         });
 
         if (isValid) return row;
