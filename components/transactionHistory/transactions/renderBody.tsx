@@ -47,7 +47,7 @@ const RenderCell = (
   switch (column) {
     case "actions":
       return (
-        <div className="relative flex justify-end items-center gap-2">
+        <div className="relative flex justify-center items-center gap-2">
           <UpdateModal record={record} tClients={dependencies.tClients} />
           <DestroyModal title="Transaction" action={destroy} id={record.id} />
           <SetStatusModal
@@ -78,7 +78,7 @@ const RenderBody = (
       {rows.map((row) => (
         <TableRow key={row.id} className={setColor(getRecord(records, row.id))}>
           {columns.map((column) => (
-            <TableCell key={column.key}>
+            <TableCell key={column.key} className="text-center">
               {RenderCell(
                 getRecord(records, row.id),
                 column.key,

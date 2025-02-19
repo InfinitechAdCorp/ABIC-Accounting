@@ -1,9 +1,9 @@
 import * as Yup from "yup";
 
 const rules = {
-  c_client_id: Yup.string().required("Client ID is a required field"),
-  property: Yup.string().required("Property is a required field"),
-  location: Yup.string().required("Location is a required field"),
+  c_client_id: Yup.string().trim().required("Client ID is a required field"),
+  property: Yup.string().trim().required("Property is a required field"),
+  location: Yup.string().trim().required("Location is a required field"),
   start: Yup.date()
     .typeError("Start Date must be a valid date")
     .required("Start Date is a required field"),
@@ -39,9 +39,9 @@ export const create = Yup.object().shape({
 
 export const update = Yup.object().shape({
   ...rules,
-  id: Yup.string().required("ID is a required field"),
+  id: Yup.string().trim().required("ID is a required field"),
 });
 
 export const markAsPaid = Yup.object().shape({
-  id: Yup.string().required("ID is a required field"),
+  id: Yup.string().trim().required("ID is a required field"),
 });

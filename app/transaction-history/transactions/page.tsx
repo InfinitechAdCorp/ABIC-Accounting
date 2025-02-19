@@ -27,17 +27,17 @@ const Transactions = async () => {
   const runningBalance = formatNumber(computeBalance([...records].reverse()));
 
   const columns = [
-    { key: "id", name: "ID" },
-    { key: "date", name: "DATE" },
-    { key: "voucher", name: "VOUCHER" },
-    { key: "check", name: "CHECK" },
-    { key: "client", name: "CLIENT" },
-    { key: "particulars", name: "PARTICULARS" },
-    { key: "credit", name: "CREDIT" },
-    { key: "debit", name: "DEBIT" },
-    { key: "status", name: "STATUS" },
-    { key: "proof", name: "PROOF" },
-    { key: "actions", name: "ACTIONS" },
+    { key: "id", name: "ID", searchable: false, },
+    { key: "date", name: "DATE", searchable: true, },
+    { key: "voucher", name: "VOUCHER", searchable: true, },
+    { key: "check", name: "CHECK", searchable: true, },
+    { key: "client", name: "CLIENT", searchable: true, },
+    { key: "particulars", name: "PARTICULARS", searchable: true, },
+    { key: "credit", name: "CREDIT", searchable: true, },
+    { key: "debit", name: "DEBIT", searchable: true, },
+    { key: "status", name: "STATUS", searchable: true, },
+    { key: "proof", name: "PROOF", searchable: false, },
+    { key: "actions", name: "ACTIONS", searchable: false, },
   ];
 
   const rows = await tableFormat(columns, records);

@@ -161,9 +161,13 @@ export const setVoucher = (transaction: Transaction) => {
 export const getUniques = (records: any[], key: string) => {
   const values: string[] = [];
   records.forEach((record) => {
-    values.push(record[key]);
+    if (!record[key]) {
+      values.push("(Blanks)");
+    } else {
+      values.push(record[key]);
+    }
   });
 
   const uniques: string[] = [...new Set(values)].sort();
   return uniques;
-}
+};

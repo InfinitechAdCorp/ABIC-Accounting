@@ -15,12 +15,11 @@ import {
   TableBody,
   Input,
   Pagination,
-  Button,
   Autocomplete,
   AutocompleteItem,
 } from "@heroui/react";
 import { Column } from "@/components/globals/types";
-import { capitalize } from "@/components/globals/utils";
+import { capitalize, getUniques } from "@/components/globals/utils";
 import ExportRangeModal from "@/components/globals/exportRangeModal";
 import ExportBtn from "@/components/globals/exportBtn";
 
@@ -199,16 +198,22 @@ const DataTable = ({
             <TableColumn key={column.key}>
               <div className="w-[10rem] p-3">
                 <div className="text-center mb-2">{column.name}</div>
-                {column.name != "ACTIONS" && (
+                {column.searchable && (
                   <Autocomplete
+                    key={column.key}
+                    aria-label={column.name}
                     className="max-w-xs"
                     placeholder="Search"
                     size="sm"
                     variant="underlined"
                   >
-                    <AutocompleteItem key="1">1</AutocompleteItem>
-                    <AutocompleteItem key="2">2</AutocompleteItem>
-                    <AutocompleteItem key="3">3</AutocompleteItem>
+                    {getUniques(items, column.key).map(
+                      (value) => (
+                        <AutocompleteItem key={value} textValue={value}>
+                          {value}
+                        </AutocompleteItem>
+                      )
+                    )}
                   </Autocomplete>
                 )}
               </div>

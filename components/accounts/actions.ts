@@ -16,11 +16,12 @@ export const getAll = async () => {
 
   try {
     records = await prisma.account.findMany();
-  } catch {
+  } catch (error) {
     const response = {
       code: 500,
       message: "Server Error",
       records: [],
+      error: error,
     };
     return response;
   }
