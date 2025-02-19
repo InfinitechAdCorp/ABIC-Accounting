@@ -32,16 +32,16 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
   );
 
   const columns = [
-    { key: "id", name: "ID" },
-    { key: "date", name: "DATE" },
-    { key: "voucher", name: "VOUCHER" },
-    { key: "check", name: "CHECK" },
-    { key: "particulars", name: "PARTICULARS" },
-    { key: "credit", name: "CREDIT" },
-    { key: "debit", name: "DEBIT" },
-    { key: "status", name: "STATUS" },
-    { key: "proof", name: "PROOF" },
-    { key: "actions", name: "ACTIONS" },
+    { key: "id", name: "ID", sortable: false },
+    { key: "date", name: "DATE", sortable: true },
+    { key: "voucher", name: "VOUCHER", sortable: true },
+    { key: "check", name: "CHECK", sortable: true },
+    { key: "particulars", name: "PARTICULARS", sortable: true },
+    { key: "credit", name: "CREDIT", sortable: true },
+    { key: "debit", name: "DEBIT", sortable: true },
+    { key: "status", name: "STATUS", sortable: true },
+    { key: "proof", name: "PROOF", sortable: true },
+    { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
   const rows = await tableFormat(columns, record?.transactions || []);

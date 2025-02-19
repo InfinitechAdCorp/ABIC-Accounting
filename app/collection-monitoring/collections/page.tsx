@@ -33,21 +33,21 @@ const Collections = async () => {
   ];
 
   const columns = [
-    { key: "id", name: "ID" },
-    { key: "client", name: "CLIENT" },
-    { key: "property", name: "PROPERTY" },
-    { key: "location", name: "LOCATION" },
-    { key: "start", name: "CONTRACT START" },
-    { key: "end", name: "CONTRACT END" },
-    { key: "advance", name: "ADVANCE" },
-    { key: "deposit", name: "DEPOSIT" },
-    { key: "tenant_price", name: "TENANT PRICE" },
-    { key: "owner_income", name: "OWNER INCOME" },
-    { key: "abic_income", name: "ABIC INCOME" },
-    { key: "due", name: "DUE DATE" },
-    { key: "status", name: "STATUS" },
-    { key: "payments", name: "PAYMENTS" },
-    { key: "actions", name: "ACTIONS" },
+    { key: "id", name: "ID", sortable: false },
+    { key: "client", name: "CLIENT", sortable: true },
+    { key: "property", name: "PROPERTY", sortable: true },
+    { key: "location", name: "LOCATION", sortable: true },
+    { key: "start", name: "CONTRACT START", sortable: true },
+    { key: "end", name: "CONTRACT END", sortable: true },
+    { key: "advance", name: "ADVANCE", sortable: true },
+    { key: "deposit", name: "DEPOSIT", sortable: true },
+    { key: "tenant_price", name: "TENANT PRICE", sortable: true },
+    { key: "owner_income", name: "OWNER INCOME", sortable: true },
+    { key: "abic_income", name: "ABIC INCOME", sortable: true },
+    { key: "due", name: "DUE DATE", sortable: true },
+    { key: "status", name: "STATUS", sortable: true },
+    { key: "payments", name: "PAYMENTS", sortable: true },
+    { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
   const rows = await tableFormat(columns, records);

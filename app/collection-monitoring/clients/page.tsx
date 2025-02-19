@@ -18,10 +18,10 @@ const CClients = async () => {
   const model = "Clients";
 
   const columns = [
-    { key: "id", name: "ID" },
-    { key: "name", name: "NAME" },
-    { key: "collections", name: "COLLECTIONS" },
-    { key: "actions", name: "ACTIONS" },
+    { key: "id", name: "ID", sortable: false },
+    { key: "name", name: "NAME", sortable: true },
+    { key: "collections", name: "COLLECTIONS", sortable: true },
+    { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
   const rows = await tableFormat(columns, records);

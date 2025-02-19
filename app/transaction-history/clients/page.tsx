@@ -24,12 +24,12 @@ const TClients = async () => {
   );
 
   const columns = [
-    { key: "id", name: "ID" },
-    { key: "name", name: "NAME" },
-    { key: "transactions", name: "TRANSACTIONS" },
-    { key: "starting_fund", name: "STARTING FUND" },
-    { key: "running_balance", name: "RUNNING BALANCE" },
-    { key: "actions", name: "ACTIONS" },
+    { key: "id", name: "ID", sortable: false },
+    { key: "name", name: "NAME", sortable: true },
+    { key: "transactions", name: "TRANSACTIONS", sortable: true },
+    { key: "starting_fund", name: "STARTING FUND", sortable: true },
+    { key: "running_balance", name: "RUNNING BALANCE", sortable: true },
+    { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
   const rows = await tableFormat(columns, records);

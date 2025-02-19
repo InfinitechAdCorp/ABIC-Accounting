@@ -15,6 +15,7 @@ import {
   TableBody,
   Input,
   Pagination,
+  SortDescriptor,
 } from "@heroui/react";
 import { Column } from "@/components/globals/types";
 import { capitalize } from "@/components/globals/utils";
@@ -57,6 +58,10 @@ const DataTable = ({
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const hasSearchFilter = Boolean(filterValue);
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+    column: "",
+    direction: "ascending",
+  });
 
   const filteredItems = useMemo(() => {
     let filteredRows = [...rows];
@@ -78,6 +83,16 @@ const DataTable = ({
 
     return filteredItems.slice(start, end);
   }, [page, filteredItems, rowsPerPage]);
+
+  const sortedItems = useMemo(() => {
+    return [...items].sort((a, b) => {
+      const first = a[sortDescriptor.column];
+      const second = b[sortDescriptor.column];
+      const cmp = first < second ? -1 : first > second ? 1 : 0;
+
+      return sortDescriptor.direction === "descending" ? -cmp : cmp;
+    });
+  }, [sortDescriptor, items]);
 
   const onRowsPerPageChange = useCallback(
     (e: ChangeEvent<HTMLSelectElement>) => {
@@ -193,14 +208,18 @@ const DataTable = ({
         }}
         topContent={topContent}
         topContentPlacement="outside"
+        sortDescriptor={sortDescriptor}
+        onSortChange={setSortDescriptor}
       >
         <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn key={column.key}>{column.name}</TableColumn>
+            <TableColumn key={column.key} allowsSorting={column.sortable}>
+              {column.name}
+            </TableColumn>
           )}
         </TableHeader>
         <TableBody emptyContent={`No ${model} Found`}>
-          {RenderBody(records, columns, items, dependencies)}
+          {RenderBody(records, columns, sortedItems, dependencies)}
         </TableBody>
       </Table>
     </>
