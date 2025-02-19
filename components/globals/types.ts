@@ -43,5 +43,4 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 export type Column = {
   key: string;
   name: string;
-  searchable: boolean;
 };

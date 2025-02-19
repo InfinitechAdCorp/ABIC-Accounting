@@ -15,11 +15,9 @@ import {
   TableBody,
   Input,
   Pagination,
-  Select,
-  SelectItem,
 } from "@heroui/react";
 import { Column } from "@/components/globals/types";
-import { capitalize, getUniques } from "@/components/globals/utils";
+import { capitalize } from "@/components/globals/utils";
 import ExportRangeModal from "@/components/globals/exportRangeModal";
 import ExportBtn from "@/components/globals/exportBtn";
 
@@ -59,7 +57,6 @@ const DataTable = ({
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const hasSearchFilter = Boolean(filterValue);
-  const [columnFilters, setColumnFilters] = useState({});
 
   const filteredItems = useMemo(() => {
     let filteredRows = [...rows];
@@ -104,28 +101,20 @@ const DataTable = ({
     setPage(1);
   }, []);
 
-  const test = useMemo(() => {
-    console.log(columnFilters);
-    const filteredItems: any[] = [];
-
-    items.forEach((item) => {
-      let valid = true;
-
-      for (const [key, value] of Object.entries(columnFilters)) {
-        if (value && item[key] != value) {
-          valid = false;
-          break;
-        }
-      }
-
-      if (valid) {
-        filteredItems.push(item);
-      }
-    });
-
-    console.log(filteredItems);
-    return filteredItems;
-  }, [columnFilters, items]);
+  const ExportComponent = useMemo(() => {
+    if (filterKey) {
+      return (
+        <ExportRangeModal
+          model={model}
+          columns={columns}
+          rows={items}
+          filterKey={filterKey}
+        />
+      );
+    } else {
+      return <ExportBtn model={model} columns={columns} rows={items} />;
+    }
+  }, [columns, filterKey, items, model]);
 
   const topContent = useMemo(() => {
     return (
@@ -143,16 +132,7 @@ const DataTable = ({
             />
             <div className="flex gap-3">
               {Buttons}
-              {filterKey ? (
-                <ExportRangeModal
-                  model={model}
-                  columns={columns}
-                  rows={items}
-                  filterKey={filterKey}
-                />
-              ) : (
-                <ExportBtn model={model} columns={columns} rows={items} />
-              )}
+              {ExportComponent}
             </div>
           </div>
           <div className="flex justify-between items-center">
@@ -180,12 +160,9 @@ const DataTable = ({
     onClear,
     onRowsPerPageChange,
     rows.length,
-    model,
-    columns,
-    items,
     searchKey,
-    filterKey,
     Buttons,
+    ExportComponent,
   ]);
 
   const bottomContent = useMemo(() => {
@@ -219,38 +196,7 @@ const DataTable = ({
       >
         <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn key={column.key}>
-              <div className="w-[10rem] p-3">
-                <div className="text-center mb-2">{column.name}</div>
-                {column.searchable && (
-                  <Select
-                    key={column.key}
-                    aria-label={column.name}
-                    className="max-w-xs"
-                    placeholder="Search"
-                    size="sm"
-                    variant="underlined"
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                      const value = e.target.value;
-                      if (value) {
-                        setColumnFilters({
-                          ...columnFilters,
-                          [column.key]: value,
-                        });
-                      } else {
-                        delete columnFilters[column.key];
-                      }
-                    }}
-                  >
-                    {getUniques(items, column.key).map((value) => (
-                      <SelectItem key={value} textValue={value}>
-                        {value}
-                      </SelectItem>
-                    ))}
-                  </Select>
-                )}
-              </div>
-            </TableColumn>
+            <TableColumn key={column.key}>{column.name}</TableColumn>
           )}
         </TableHeader>
         <TableBody emptyContent={`No ${model} Found`}>
