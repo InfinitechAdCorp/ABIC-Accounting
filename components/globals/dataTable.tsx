@@ -15,8 +15,8 @@ import {
   TableBody,
   Input,
   Pagination,
-  Autocomplete,
-  AutocompleteItem,
+  Select,
+  SelectItem,
 } from "@heroui/react";
 import { Column } from "@/components/globals/types";
 import { capitalize, getUniques } from "@/components/globals/utils";
@@ -59,6 +59,7 @@ const DataTable = ({
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const hasSearchFilter = Boolean(filterValue);
+  const [columnFilters, setColumnFilters] = useState({});
 
   const filteredItems = useMemo(() => {
     let filteredRows = [...rows];
@@ -103,7 +104,28 @@ const DataTable = ({
     setPage(1);
   }, []);
 
-  
+  const filters = {
+    client: "Hu Yanchong",
+    particulars: "Tivoli",
+  };
+
+  // const filterByColumns = () => {
+
+  // }
+  // items.forEach((item) => {
+  //   let valid = true;
+
+  //   for (const [key, value] of Object.entries(filters)) {
+  //     if (item[key] != value) {
+  //       valid = false;
+  //       break;
+  //     }
+  //   }
+
+  //   if (valid) {
+  //     test.push(item);
+  //   }
+  // });
 
   const topContent = useMemo(() => {
     return (
@@ -201,22 +223,25 @@ const DataTable = ({
               <div className="w-[10rem] p-3">
                 <div className="text-center mb-2">{column.name}</div>
                 {column.searchable && (
-                  <Autocomplete
+                  <Select
                     key={column.key}
                     aria-label={column.name}
                     className="max-w-xs"
                     placeholder="Search"
                     size="sm"
                     variant="underlined"
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                      const value = e.target.value;
+                      setColumnFilters((columnFilters[column.key] = value));
+                      console.log(columnFilters);
+                    }}
                   >
-                    {getUniques(items, column.key).map(
-                      (value) => (
-                        <AutocompleteItem key={value} textValue={value}>
-                          {value}
-                        </AutocompleteItem>
-                      )
-                    )}
-                  </Autocomplete>
+                    {getUniques(items, column.key).map((value) => (
+                      <SelectItem key={value} textValue={value}>
+                        {value}
+                      </SelectItem>
+                    ))}
+                  </Select>
                 )}
               </div>
             </TableColumn>
