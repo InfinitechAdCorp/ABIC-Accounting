@@ -104,28 +104,28 @@ const DataTable = ({
     setPage(1);
   }, []);
 
-  const filters = {
-    client: "Hu Yanchong",
-    particulars: "Tivoli",
-  };
+  const test = useMemo(() => {
+    console.log(columnFilters);
+    const filteredItems: any[] = [];
 
-  // const filterByColumns = () => {
+    items.forEach((item) => {
+      let valid = true;
 
-  // }
-  // items.forEach((item) => {
-  //   let valid = true;
+      for (const [key, value] of Object.entries(columnFilters)) {
+        if (value && item[key] != value) {
+          valid = false;
+          break;
+        }
+      }
 
-  //   for (const [key, value] of Object.entries(filters)) {
-  //     if (item[key] != value) {
-  //       valid = false;
-  //       break;
-  //     }
-  //   }
+      if (valid) {
+        filteredItems.push(item);
+      }
+    });
 
-  //   if (valid) {
-  //     test.push(item);
-  //   }
-  // });
+    console.log(filteredItems);
+    return filteredItems;
+  }, [columnFilters, items]);
 
   const topContent = useMemo(() => {
     return (
@@ -232,8 +232,14 @@ const DataTable = ({
                     variant="underlined"
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                       const value = e.target.value;
-                      setColumnFilters((columnFilters[column.key] = value));
-                      console.log(columnFilters);
+                      if (value) {
+                        setColumnFilters({
+                          ...columnFilters,
+                          [column.key]: value,
+                        });
+                      } else {
+                        delete columnFilters[column.key];
+                      }
                     }}
                   >
                     {getUniques(items, column.key).map((value) => (
