@@ -10,6 +10,13 @@ export type ExportAsPDF = {
   };
 };
 
+export type Filter = {
+  range: {
+    start: CalendarDate;
+    end: CalendarDate;
+  };
+};
+
 export type Destroy = {
   id: string;
   otp: string;

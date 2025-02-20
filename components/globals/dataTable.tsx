@@ -20,7 +20,24 @@ import {
 import { Column } from "@/components/globals/types";
 import ExportRangeModal from "@/components/globals/exportRangeModal";
 import ExportBtn from "@/components/globals/exportBtn";
-import DateRangeModal from "@/components/globals/dateRangeModal";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  DateRangePicker,
+  useDisclosure,
+} from "@heroui/react";
+import {
+  dateToDateValue,
+  dateValueToDate,
+  stringToDate,
+} from "@/components/globals/utils";
+import { Formik, Form, Field, FieldProps } from "formik";
+import { filter as validationSchema } from "@/components/globals/schemas";
+import { Filter } from "@/components/globals/types";
 
 type Props = {
   model: string;
@@ -135,6 +152,105 @@ const DataTable = ({
     }
   }, [columns, filterKey, items, model]);
 
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const filterByDate = (
+    rows: any[],
+    key: string,
+    start: string,
+    end: string
+  ) => {
+    const fRows = rows.filter((row) => {
+      const date = stringToDate(row[key]);
+      return date >= start && date <= end;
+    });
+    return fRows;
+  };
+
+  const Filter = useMemo(() => {
+    const start = dateToDateValue(new Date(new Date().getFullYear(), 0, 1))!;
+    const end = dateToDateValue(new Date(new Date().getFullYear(), 12, 0))!;
+
+    const initialValues = {
+      range: {
+        start: start,
+        end: end,
+      },
+    };
+
+    const onSubmit = async (values: Filter) => {
+      const start = dateValueToDate(values.range.start)!.toLocaleDateString(
+        "en-CA"
+      );
+      const end = dateValueToDate(values.range.end)!.toLocaleDateString(
+        "en-CA"
+      ) as string;
+
+      console.log(filterByDate(rows, "date", start, end));
+    };
+
+    return (
+      <>
+        <Button size="md" color="primary" title="Filter" onPress={onOpen}>
+          Filter
+        </Button>
+
+        <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <Formik
+                  initialValues={initialValues}
+                  validationSchema={validationSchema}
+                  onSubmit={onSubmit}
+                >
+                  {(props) => (
+                    <Form>
+                      <ModalHeader>Export {model}</ModalHeader>
+                      <ModalBody>
+                        <Field name="range">
+                          {({ field, meta }: FieldProps) => (
+                            <div>
+                              <DateRangePicker
+                                {...field}
+                                label="Select Date Range"
+                                labelPlacement="outside"
+                                onChange={(value) => {
+                                  const range = {
+                                    start: value?.start,
+                                    end: value?.end,
+                                  };
+                                  props.setFieldValue(field.name, range);
+                                }}
+                              />
+                              {meta.touched && meta.error && (
+                                <small className="text-red-500">
+                                  {meta.error}
+                                </small>
+                              )}
+                            </div>
+                          )}
+                        </Field>
+                      </ModalBody>
+                      <ModalFooter>
+                        <Button color="primary" type="submit">
+                          Filter
+                        </Button>
+                        <Button color="danger" onPress={onClose}>
+                          Cancel
+                        </Button>
+                      </ModalFooter>
+                    </Form>
+                  )}
+                </Formik>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      </>
+    );
+  }, [isOpen, model, onOpen, onOpenChange, rows]);
+
   const topContent = useMemo(() => {
     return (
       <>
@@ -151,7 +267,7 @@ const DataTable = ({
             />
             <div className="flex gap-3">
               {Buttons}
-              <DateRangeModal model={model} />
+              {Filter}
               {ExportComponent}
             </div>
           </div>
@@ -182,6 +298,7 @@ const DataTable = ({
     rows.length,
     Buttons,
     ExportComponent,
+    Filter,
   ]);
 
   const bottomContent = useMemo(() => {
