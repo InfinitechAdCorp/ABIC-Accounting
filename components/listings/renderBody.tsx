@@ -5,7 +5,7 @@ import { TableRow, TableCell } from "@heroui/react";
 import { Column } from "@/components/globals/types";
 import {
   Listing as Record,
-  DisplayFormat,
+  ListingDisplayFormat,
 } from "@/components/listings/types";
 import UpdateModal from "@/components/listings/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
@@ -21,7 +21,7 @@ const RenderCell = (column: string, record: Record) => {
         </div>
       );
     default:
-      return record.display_format![column as keyof DisplayFormat];
+      return record.display_format![column as keyof ListingDisplayFormat];
   }
 };
 
@@ -32,9 +32,7 @@ const RenderBody = (columns: Column[], records: Record[]) => {
         <TableRow
           key={record.id}
           className={
-            record.status == "Closed"
-              ? "text-[#006FEE]"
-              : "text-[#F31260]"
+            record.status == "Closed" ? "text-[#006FEE]" : "text-[#F31260]"
           }
         >
           {columns.map((column) => (

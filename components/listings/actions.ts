@@ -11,7 +11,7 @@ import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { Column } from "@/components/globals/types";
-import { Listing, DisplayFormat } from "@/components/listings/types";
+import { Listing, ListingDisplayFormat } from "@/components/listings/types";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { Destroy } from "@/components/globals/types";
@@ -82,7 +82,7 @@ export const displayFormat = async (columns: Column[], records: Listing[]) => {
       }
 
       if (value || value == 0) {
-        display_format[key as keyof DisplayFormat] = `${value}`;
+        display_format[key as keyof ListingDisplayFormat] = `${value}`;
       }
     });
 

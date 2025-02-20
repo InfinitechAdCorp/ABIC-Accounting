@@ -2,7 +2,7 @@ import React from "react";
 import { get as getAccount } from "@/components/accounts/actions";
 import {
   getAll,
-  tableFormat,
+  displayFormat,
 } from "@/components/collectionMonitoring/collections/actions";
 import { getAll as getCClients } from "@/components/collectionMonitoring/cClients/actions";
 import { Card, CardBody } from "@heroui/react";
@@ -15,7 +15,7 @@ import { retry } from "@/components/globals/serverUtils";
 
 const Collections = async () => {
   const { record: account } = await retry(getAccount);
-  const { records } = await getAll();
+  const { records: ufRecords } = await getAll();
   const { records: cClients } = await getCClients();
 
   const model = "Collections";
@@ -33,7 +33,6 @@ const Collections = async () => {
   ];
 
   const columns = [
-    { key: "id", name: "ID", sortable: false },
     { key: "client", name: "CLIENT", sortable: true },
     { key: "property", name: "PROPERTY", sortable: true },
     { key: "location", name: "LOCATION", sortable: true },
@@ -47,10 +46,9 @@ const Collections = async () => {
     { key: "due", name: "DUE DATE", sortable: true },
     { key: "status", name: "STATUS", sortable: true },
     { key: "payments", name: "PAYMENTS", sortable: true },
-    { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
-  const rows = await tableFormat(columns, records);
+  const records = await displayFormat(columns, ufRecords);
 
   const Buttons = (
     <>
@@ -74,9 +72,11 @@ const Collections = async () => {
 
             <DataTable
               model={model}
+              columns={[
+                ...columns,
+                { key: "actions", name: "ACTIONS", sortable: false },
+              ]}
               records={records}
-              columns={columns}
-              rows={rows}
               filterKey="start"
               dependencies={{
                 locations: locations,

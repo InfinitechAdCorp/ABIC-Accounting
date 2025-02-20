@@ -3,7 +3,7 @@ import {
   get,
   getAll as getCClients,
 } from "@/components/collectionMonitoring/cClients/actions";
-import { tableFormat } from "@/components/collectionMonitoring/collections/actions";
+import { displayFormat } from "@/components/collectionMonitoring/collections/actions";
 import { get as getAccount } from "@/components/accounts/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
@@ -52,7 +52,7 @@ const TransactionClient = async ({
     { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
-  const rows = await tableFormat(columns, record?.collections || []);
+  const records = await displayFormat(columns, record?.collections || []);
 
   const Buttons = (
     <>
@@ -72,9 +72,8 @@ const TransactionClient = async ({
             </h1>
             <DataTable
               model={model}
-              records={record?.collections || []}
               columns={columns}
-              rows={rows}
+              records={records}
               filterKey="start"
               RenderBody={RenderBody}
               dependencies={{

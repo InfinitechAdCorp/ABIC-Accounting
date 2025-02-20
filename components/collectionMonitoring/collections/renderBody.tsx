@@ -13,21 +13,13 @@ import {
 import { Column } from "@/components/globals/types";
 import {
   Collection as Record,
-  CollectionRow as Row,
+  CollectionDisplayFormat,
   CClient,
 } from "@/components/collectionMonitoring/types";
 
-const getRecord = (records: Record[], id: string) => {
-  const record = records.find((record) => {
-    return record.id == id;
-  }) as Record;
-  return record;
-};
-
 const RenderCell = (
-  record: Record,
   column: string,
-  row: Row,
+  record: Record,
   dependencies: {
     locations: {
       key: string;
@@ -52,7 +44,8 @@ const RenderCell = (
     case "status":
       type Color = "success" | "danger" | "primary";
 
-      const value = row[column as keyof Row];
+      const value =
+        record.display_format![column as keyof CollectionDisplayFormat];
       let color = "primary";
 
       if (value.includes("Remaining")) {
@@ -67,14 +60,13 @@ const RenderCell = (
         </Chip>
       );
     default:
-      return row[column as keyof Row];
+      return record.display_format![column as keyof CollectionDisplayFormat];
   }
 };
 
 const RenderBody = (
-  records: Record[],
   columns: Column[],
-  rows: Row[],
+  records: Record[],
   dependencies: {
     locations: {
       key: string;
@@ -85,16 +77,11 @@ const RenderBody = (
 ) => {
   return (
     <>
-      {rows.map((row) => (
-        <TableRow key={row.id}>
+      {records.map((record) => (
+        <TableRow key={record.id}>
           {columns.map((column) => (
             <TableCell key={column.key}>
-              {RenderCell(
-                getRecord(records, row.id),
-                column.key,
-                row,
-                dependencies
-              )}
+              {RenderCell(column.key, record, dependencies)}
             </TableCell>
           ))}
         </TableRow>

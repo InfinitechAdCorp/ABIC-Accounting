@@ -8,13 +8,12 @@ import {
 export type CClient = PrismaCClient & {
   account?: Account;
   collections?: Collection[];
+  display_format?: CClientDisplayFormat;
 };
 
-export type CClientRow = {
-  id: string;
+export type CClientDisplayFormat = {
   name: string;
   collections: string;
-  actions: string;
 };
 
 export type Collection = Omit<
@@ -25,10 +24,10 @@ export type Collection = Omit<
   tenant_price: number;
   owner_income: number;
   abic_income: number;
+  display_format?: CollectionDisplayFormat;
 };
 
-export type CollectionRow = {
-  id: string;
+export type CollectionDisplayFormat = {
   client: string;
   property: string;
   location: string;
@@ -42,7 +41,6 @@ export type CollectionRow = {
   due: string;
   status: string;
   payments: string;
-  actions: string;
 };
 
 export type CClientWithCollections = Prisma.CClientGetPayload<{

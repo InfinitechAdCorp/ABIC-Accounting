@@ -158,7 +158,7 @@ const DataTable = ({
 
     return (
       <>
-        <Button size="md" color="primary" title="Filter" onPress={onOpen}>
+        <Button size="md" color="primary" onPress={onOpen}>
           Filter
         </Button>
 

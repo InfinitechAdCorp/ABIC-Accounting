@@ -15,7 +15,7 @@ import * as Yup from "yup";
 import { Column } from "@/components/globals/types";
 import {
   Collection,
-  CollectionRow,
+  CollectionDisplayFormat,
   CollectionWithCClient,
 } from "@/components/collectionMonitoring/types";
 import { cookies } from "next/headers";
@@ -48,12 +48,9 @@ export const format = async (ufRecords: CollectionWithCClient[]) => {
   return records;
 };
 
-export const tableFormat = async (columns: Column[], records: Collection[]) => {
-  const rows: CollectionRow[] = [];
-
+export const displayFormat = async (columns: Column[], records: Collection[]) => {
   records.forEach((record) => {
-    const row = {
-      id: "",
+    const display_format = {
       client: "",
       property: "",
       location: "",
@@ -67,7 +64,6 @@ export const tableFormat = async (columns: Column[], records: Collection[]) => {
       due: "",
       status: "",
       payments: "",
-      actions: "",
     };
 
     columns.forEach((column) => {
@@ -112,14 +108,14 @@ export const tableFormat = async (columns: Column[], records: Collection[]) => {
       }
 
       if (value || value == 0) {
-        row[key as keyof CollectionRow] = `${value}`;
+        display_format[key as keyof CollectionDisplayFormat] = `${value}`;
       }
     });
 
-    rows.push(row);
+    record.display_format = display_format;
   });
 
-  return rows;
+  return records;
 };
 
 export const getAll = async () => {
