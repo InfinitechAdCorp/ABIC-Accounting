@@ -5,7 +5,7 @@ import {
 } from "@/components/transactionHistory/tClients/actions";
 import {
   getAll as getTransactions,
-  tableFormat,
+  displayFormat,
 } from "@/components/transactionHistory/transactions/actions";
 import { get as getAccount } from "@/components/accounts/actions";
 import { Card, CardBody } from "@heroui/react";
@@ -32,7 +32,6 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
   const result = computeBalance([...(record?.transactions || [])].reverse());
 
   const columns = [
-    { key: "id", name: "ID", sortable: false },
     { key: "date", name: "DATE", sortable: true },
     { key: "voucher", name: "VOUCHER", sortable: true },
     { key: "check", name: "CHECK", sortable: true },
@@ -41,12 +40,11 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
     { key: "debit", name: "DEBIT", sortable: true },
     { key: "status", name: "STATUS", sortable: true },
     { key: "proof", name: "PROOF", sortable: true },
-    { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
-  const rows = await tableFormat(columns, record?.transactions || []);
-
   const voucher = setVoucher(transactions[0]);
+
+  const records = await displayFormat(columns, record?.transactions || []);
 
   const Buttons = (
     <>
@@ -83,9 +81,11 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
 
             <DataTable
               model={model}
-              records={record?.transactions || []}
-              columns={columns}
-              rows={rows}
+              columns={[
+                ...columns,
+                { key: "actions", name: "ACTIONS", sortable: false },
+              ]}
+              records={records}
               filterKey="date"
               dependencies={{
                 tClients: tClients,

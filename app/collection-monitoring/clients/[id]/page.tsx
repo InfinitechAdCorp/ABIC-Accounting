@@ -36,7 +36,6 @@ const TransactionClient = async ({
   ];
 
   const columns = [
-    { key: "id", name: "ID", sortable: false },
     { key: "property", name: "PROPERTY", sortable: true },
     { key: "location", name: "LOCATION", sortable: true },
     { key: "start", name: "CONTRACT START", sortable: true },
@@ -49,7 +48,6 @@ const TransactionClient = async ({
     { key: "due", name: "DUE DATE", sortable: true },
     { key: "status", name: "STATUS", sortable: true },
     { key: "payments", name: "PAYMENTS", sortable: true },
-    { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
   const records = await displayFormat(columns, record?.collections || []);
@@ -72,14 +70,17 @@ const TransactionClient = async ({
             </h1>
             <DataTable
               model={model}
-              columns={columns}
+              columns={[
+                ...columns,
+                { key: "actions", name: "ACTIONS", sortable: false },
+              ]}
               records={records}
               filterKey="start"
-              RenderBody={RenderBody}
               dependencies={{
                 locations: locations,
                 cClients: cClients,
               }}
+              RenderBody={RenderBody}
               Buttons={Buttons}
             />
           </CardBody>

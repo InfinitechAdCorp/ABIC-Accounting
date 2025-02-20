@@ -2,7 +2,7 @@ import React from "react";
 import { get as getAccount } from "@/components/accounts/actions";
 import {
   getAll,
-  tableFormat,
+  displayFormat,
 } from "@/components/transactionHistory/transactions/actions";
 import { getAll as getTClients } from "@/components/transactionHistory/tClients/actions";
 import { Card, CardBody } from "@heroui/react";
@@ -21,15 +21,14 @@ import { Tooltip } from "@heroui/react";
 
 const Transactions = async () => {
   const { record: account } = await retry(getAccount);
-  const { records } = await getAll();
+  const { records: ufRecords } = await getAll();
   const { records: tClients } = await getTClients();
 
   const model = "Transactions";
 
-  const result = computeBalance([...records].reverse());
+  const result = computeBalance([...ufRecords].reverse());
 
   const columns = [
-    { key: "id", name: "ID", sortable: false },
     { key: "date", name: "DATE", sortable: true },
     { key: "voucher", name: "VOUCHER", sortable: true },
     { key: "check", name: "CHECK", sortable: true },
@@ -39,12 +38,11 @@ const Transactions = async () => {
     { key: "debit", name: "DEBIT", sortable: true },
     { key: "status", name: "STATUS", sortable: true },
     { key: "proof", name: "PROOF", sortable: false },
-    { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
-  const rows = await tableFormat(columns, records);
+  const voucher = setVoucher(ufRecords[0]);
 
-  const voucher = setVoucher(records[0]);
+  const records = await displayFormat(columns, ufRecords);
 
   const Buttons = (
     <>
@@ -85,9 +83,11 @@ const Transactions = async () => {
 
             <DataTable
               model={model}
+              columns={[
+                ...columns,
+                { key: "actions", name: "ACTIONS", sortable: false },
+              ]}
               records={records}
-              columns={columns}
-              rows={rows}
               filterKey="date"
               dependencies={{
                 tClients: tClients,

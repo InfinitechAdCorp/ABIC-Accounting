@@ -12,18 +12,11 @@ import {
 import { Column } from "@/components/globals/types";
 import {
   Transaction as Record,
-  TransactionRow as Row,
+  TransactionDisplayFormat,
   TClient,
 } from "@/components/transactionHistory/types";
 import { isPending } from "@/components/globals/utils";
 import ViewProofBtn from "@/components/transactionHistory/transactions/viewProofBtn";
-
-const getRecord = (records: Record[], id: string) => {
-  const record = records.find((record) => {
-    return record.id == id;
-  }) as Record;
-  return record;
-};
 
 const setColor = (record: Record) => {
   let color;
@@ -37,9 +30,8 @@ const setColor = (record: Record) => {
 };
 
 const RenderCell = (
-  record: Record,
   column: string,
-  row: Row,
+  record: Record,
   dependencies: {
     tClients: TClient[];
   }
@@ -58,31 +50,29 @@ const RenderCell = (
         </div>
       );
     case "proof":
-      const value = row[column as keyof Row];
+      const value = record.display_format![column as keyof TransactionDisplayFormat];
       return <ViewProofBtn url={value || "/no-image.png"} />;
     default:
-      return row[column as keyof Row];
+      return record.display_format![column as keyof TransactionDisplayFormat];
   }
 };
 
 const RenderBody = (
-  records: Record[],
   columns: Column[],
-  rows: Row[],
+  records: Record[],
   dependencies: {
     tClients: TClient[];
   }
 ) => {
   return (
     <>
-      {rows.map((row) => (
-        <TableRow key={row.id} className={setColor(getRecord(records, row.id))}>
+      {records.map((record) => (
+        <TableRow key={record.id} className={setColor(record)}>
           {columns.map((column) => (
             <TableCell key={column.key}>
               {RenderCell(
-                getRecord(records, row.id),
                 column.key,
-                row,
+                record,
                 dependencies
               )}
             </TableCell>

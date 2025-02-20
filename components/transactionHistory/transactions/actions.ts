@@ -14,7 +14,7 @@ import * as Yup from "yup";
 import { Column } from "@/components/globals/types";
 import {
   Transaction,
-  TransactionRow,
+  TransactionDisplayFormat,
   TransactionWithTClient,
 } from "@/components/transactionHistory/types";
 import { cookies } from "next/headers";
@@ -47,16 +47,14 @@ export const format = async (ufRecords: TransactionWithTClient[]) => {
   return records;
 };
 
-export const tableFormat = async (
+export const displayFormat = async (
   columns: Column[],
   records: Transaction[]
 ) => {
-  const rows: TransactionRow[] = [];
   const { blobs } = await list();
 
   records.forEach((record) => {
-    const row = {
-      id: "",
+    const display_format = {
       date: "",
       voucher: "",
       check: "",
@@ -66,7 +64,6 @@ export const tableFormat = async (
       debit: "",
       proof: "",
       status: "",
-      actions: "",
     };
 
     columns.forEach((column) => {
@@ -113,14 +110,14 @@ export const tableFormat = async (
       }
 
       if (value || value == 0) {
-        row[key as keyof TransactionRow] = `${value}`;
+        display_format[key as keyof TransactionDisplayFormat] = `${value}`;
       }
     });
 
-    rows.push(row);
+    record.display_format = display_format;
   });
 
-  return rows;
+  return records;
 };
 
 export const getAll = async () => {
