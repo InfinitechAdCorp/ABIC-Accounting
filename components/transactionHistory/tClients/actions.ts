@@ -12,7 +12,7 @@ import * as Yup from "yup";
 import { Column } from "@/components/globals/types";
 import {
   TClient,
-  TClientRow,
+  TClientDisplayFormat,
   TClientWithTransactions,
   Transaction,
 } from "@/components/transactionHistory/types";
@@ -54,17 +54,13 @@ export const format = async (ufRecords: TClientWithTransactions[]) => {
   return records;
 };
 
-export const tableFormat = async (columns: Column[], records: TClient[]) => {
-  const rows: TClientRow[] = [];
-
+export const displayFormat = async (columns: Column[], records: TClient[]) => {
   records.forEach((record) => {
-    const row = {
-      id: "",
+    const display_format = {
       name: "",
       transactions: "",
       starting_fund: "",
       running_balance: "",
-      actions: "",
     };
 
     columns.forEach((column) => {
@@ -107,14 +103,14 @@ export const tableFormat = async (columns: Column[], records: TClient[]) => {
       }
 
       if (value || value == 0) {
-        row[key as keyof TClientRow] = `${value}`;
+        display_format[key as keyof TClientDisplayFormat] = `${value}`;
       }
     });
 
-    rows.push(row);
+    record.display_format = display_format
   });
 
-  return rows;
+  return records;
 };
 
 export const getAll = async () => {

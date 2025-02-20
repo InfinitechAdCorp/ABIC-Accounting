@@ -1,7 +1,7 @@
 import React from "react";
 import {
   getAll,
-  tableFormat,
+  displayFormat,
 } from "@/components/transactionHistory/tClients/actions";
 import { getAll as getTransactions } from "@/components/transactionHistory/transactions/actions";
 import { get as getAccount } from "@/components/accounts/actions";
@@ -16,7 +16,7 @@ import { Tooltip } from "@heroui/react";
 
 const TClients = async () => {
   const { record: account } = await retry(getAccount);
-  const { records } = await getAll();
+  const { records: ufRecords } = await getAll();
   const { records: transactions } = await getTransactions();
 
   const model = "Clients";
@@ -24,15 +24,13 @@ const TClients = async () => {
   const result = computeBalance([...transactions].reverse());
 
   const columns = [
-    { key: "id", name: "ID", sortable: false },
     { key: "name", name: "NAME", sortable: true },
     { key: "transactions", name: "TRANSACTIONS", sortable: true },
     { key: "starting_fund", name: "STARTING FUND", sortable: true },
     { key: "running_balance", name: "RUNNING BALANCE", sortable: true },
-    { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
-  const rows = await tableFormat(columns, records);
+  const records = await displayFormat(columns, ufRecords);
 
   const Buttons = (
     <>
@@ -69,9 +67,11 @@ const TClients = async () => {
 
             <DataTable
               model={model}
+              columns={[
+                ...columns,
+                { key: "actions", name: "ACTIONS", sortable: false },
+              ]}
               records={records}
-              columns={columns}
-              rows={rows}
               RenderBody={RenderBody}
               Buttons={Buttons}
             />

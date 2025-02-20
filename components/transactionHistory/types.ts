@@ -8,24 +8,23 @@ import {
 export type TClient = PrismaTClient & {
   account?: Account;
   transactions?: Transaction[];
+  display_format?: TClientDisplayFormat;
 };
 
-export type TClientRow = {
-  id: string;
+export type TClientDisplayFormat = {
   name: string;
   transactions: string;
   starting_fund: string;
   running_balance: string;
-  actions: string;
 };
 
 export type Transaction = Omit<PrismaTransaction, "amount"> & {
   t_client?: TClient | null;
   amount: number;
+  display_format?: TransactionDisplayFormat;
 };
 
-export type TransactionRow = {
-  id: string;
+export type TransactionDisplayFormat = {
   date: string;
   voucher: string;
   check: string;
@@ -35,7 +34,6 @@ export type TransactionRow = {
   debit: string;
   status: string;
   proof: string;
-  actions: string;
 };
 
 export type TClientWithTransactions = Prisma.TClientGetPayload<{
