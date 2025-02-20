@@ -27,110 +27,97 @@ import {
 } from "@heroui/react";
 import { Column } from "@/components/globals/types";
 import ExportBtn from "@/components/globals/exportBtn";
-import {
-  dateToDateValue,
-  dateValueToDate,
-  stringToDate,
-} from "@/components/globals/utils";
+import { dateToDateValue, dateValueToDate } from "@/components/globals/utils";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { filter as validationSchema } from "@/components/globals/schemas";
 import { Filter } from "@/components/globals/types";
 
 type Props = {
   model: string;
-  records: any[];
   columns: Column[];
-  rows: any[];
+  records: any[];
   filterKey?: string;
   dependencies?: any;
-  RenderBody: (
-    records: any[],
-    columns: Column[],
-    rows: any[],
-    dependencies: any
-  ) => any;
+  RenderBody: (columns: Column[], records: any[], dependencies: any) => any;
   Buttons: ReactElement;
 };
 
 const DataTable = ({
   model,
-  records,
-  columns: ufColumns,
-  rows,
+  columns,
+  records: ufRecords,
   filterKey = "created_at",
   dependencies,
   RenderBody,
   Buttons,
 }: Props) => {
-  const columns = ufColumns.filter((ufColumn) => {
-    return ufColumn.key != "id";
-  });
-
-  const [filterValue, setFilterValue] = useState("");
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
+  const [filterValue, setFilterValue] = useState("");
   const hasSearchFilter = Boolean(filterValue);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "",
     direction: "ascending",
   });
 
-  const start = dateToDateValue(new Date(new Date().getFullYear(), 0, 1))!;
-  const end = dateToDateValue(new Date(new Date().getFullYear(), 12, 0))!;
+  const start = dateToDateValue(new Date(1900, 0, 1))!;
+  const end = dateToDateValue(new Date(2099, 12, 0))!;
+
   const [range, setRange] = useState({
     start: start,
     end: end,
   });
 
-  const dateFilteredItems = useMemo(() => {
+  const dateFilteredRecords = useMemo(() => {
     const start = dateValueToDate(range.start)!.toLocaleDateString("en-CA");
     const end = dateValueToDate(range.end)!.toLocaleDateString(
       "en-CA"
     ) as string;
 
-    const filteredRows = rows.filter((row) => {
-      const date = stringToDate(row[filterKey]);
+    const filteredRecords = ufRecords.filter((ufRecord) => {
+      const date = ufRecord[filterKey].toLocaleDateString("en-CA");
       return date >= start && date <= end;
     });
-    return filteredRows;
-  }, [range, rows, filterKey]);
+    return filteredRecords;
+  }, [range, ufRecords, filterKey]);
 
-  const searchFilteredItems = useMemo(() => {
-    let filteredRows = [...dateFilteredItems];
+  const searchFilteredRecords = useMemo(() => {
+    let filteredRecords = [...dateFilteredRecords];
 
     if (hasSearchFilter) {
-      filteredRows = filteredRows.filter((row) => {
-        const values: string[] = Object.values(row);
+      filteredRecords = filteredRecords.filter((record) => {
+        const values: string[] = Object.values(record.display_format);
 
         const isValid = values.some((value) => {
           return value.toLowerCase().includes(filterValue.toLowerCase());
         });
 
-        if (isValid) return row;
+        if (isValid) return record;
       });
     }
 
-    return filteredRows;
-  }, [filterValue, hasSearchFilter, dateFilteredItems]);
+    return filteredRecords;
+  }, [filterValue, hasSearchFilter, dateFilteredRecords]);
 
-  const pages = Math.ceil(searchFilteredItems.length / rowsPerPage);
+  const pages = Math.ceil(searchFilteredRecords.length / rowsPerPage);
 
-  const items = useMemo(() => {
+  const records = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
-    return searchFilteredItems.slice(start, end);
-  }, [page, searchFilteredItems, rowsPerPage]);
+    return searchFilteredRecords.slice(start, end);
+  }, [page, searchFilteredRecords, rowsPerPage]);
 
-  const sortedItems = useMemo(() => {
-    return [...items].sort((a, b) => {
+  const sortedRecords = useMemo(() => {
+    return [...records].sort((a, b) => {
       const first = a[sortDescriptor.column];
       const second = b[sortDescriptor.column];
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
-  }, [sortDescriptor, items]);
+  }, [sortDescriptor, records]);
 
   const onRowsPerPageChange = useCallback(
     (e: ChangeEvent<HTMLSelectElement>) => {
@@ -153,8 +140,6 @@ const DataTable = ({
     setFilterValue("");
     setPage(1);
   }, []);
-
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const Filter = useMemo(() => {
     const initialValues = {
@@ -231,7 +216,7 @@ const DataTable = ({
         </Modal>
       </>
     );
-  }, [isOpen, model, onOpen, onOpenChange, onClose, range, end, start]);
+  }, [isOpen, onOpen, onOpenChange, onClose, model, range, end, start]);
 
   const topContent = useMemo(() => {
     return (
@@ -250,12 +235,12 @@ const DataTable = ({
             <div className="flex gap-3">
               {Buttons}
               {Filter}
-              <ExportBtn model={model} columns={columns} rows={items} />
+              <ExportBtn model={model} columns={columns} records={records} />
             </div>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-default-400 text-small">
-              Total {rows.length}
+              Total {records.length}
             </span>
             <label className="flex items-center text-default-400 text-small">
               Rows per page:
@@ -273,15 +258,14 @@ const DataTable = ({
       </>
     );
   }, [
+    onRowsPerPageChange,
     filterValue,
     onSearchChange,
     onClear,
-    onRowsPerPageChange,
-    rows.length,
-    Buttons,
-    columns,
-    items,
     model,
+    columns,
+    records,
+    Buttons,
     Filter,
   ]);
 
@@ -324,7 +308,7 @@ const DataTable = ({
           )}
         </TableHeader>
         <TableBody emptyContent={`No ${model} Found`}>
-          {RenderBody(records, columns, sortedItems, dependencies)}
+          {RenderBody(columns, sortedRecords, dependencies)}
         </TableBody>
       </Table>
     </>

@@ -1,5 +1,5 @@
 import React from "react";
-import { getAll, tableFormat } from "@/components/listings/actions";
+import { getAll, displayFormat } from "@/components/listings/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
@@ -10,12 +10,11 @@ import { retry } from "@/components/globals/serverUtils";
 
 const Listings = async () => {
   const { record: account } = await retry(getAccount);
-  const { records } = await getAll();
+  const { records: ufRecords } = await getAll();
 
   const model = "Listings";
 
   const columns = [
-    { key: "id", name: "ID", sortable: false },
     { key: "client", name: "CLIENT", sortable: true },
     { key: "type", name: "TYPE", sortable: true },
     { key: "project", name: "PROJECT", sortable: true },
@@ -31,10 +30,9 @@ const Listings = async () => {
     { key: "extension", name: "EXTENSION", sortable: true },
     { key: "aging", name: "AGING", sortable: true },
     { key: "closed", name: "CLOSED DATE", sortable: true },
-    { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
-  const rows = await tableFormat(columns, records);
+  const records = await displayFormat(columns, ufRecords);
 
   const Buttons = (
     <>
@@ -54,9 +52,11 @@ const Listings = async () => {
             </h1>
             <DataTable
               model={model}
+              columns={[
+                ...columns,
+                { key: "actions", name: "ACTIONS", sortable: false },
+              ]}
               records={records}
-              columns={columns}
-              rows={rows}
               filterKey="res"
               RenderBody={RenderBody}
               Buttons={Buttons}

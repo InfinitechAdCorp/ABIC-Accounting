@@ -11,11 +11,15 @@ type Props = {
     key: string;
     name: string;
   }[];
-  rows: any[];
+  records: any[];
 };
 
-const ExportBtn = ({ model, columns: ufColumns, rows: ufRows }: Props) => {
-  const excluded = ["id", "actions"];
+const ExportBtn = ({
+  model,
+  columns: ufColumns,
+  records: ufRecords,
+}: Props) => {
+  const excluded = ["actions"];
 
   const formatColumns = (
     ufColumns: {
@@ -36,29 +40,29 @@ const ExportBtn = ({ model, columns: ufColumns, rows: ufRows }: Props) => {
 
   const columns = formatColumns(ufColumns);
 
-  const formatRows = (ufRows: any[]) => {
-    const rows: string[][] = [];
+  const formatRecords = (ufRecords: any[]) => {
+    const formattedRecords: string[][] = [];
 
-    ufRows.forEach((ufRow) => {
-      const row: string[] = [];
+    ufRecords.forEach((ufRecord) => {
+      const formattedRecord: string[] = [];
       ufColumns.forEach((ufColumn) => {
         if (!excluded.includes(ufColumn.key)) {
-          row.push(ufRow[ufColumn.key]);
+          formattedRecord.push(ufRecord.display_format[ufColumn.key]);
         }
       });
-      rows.push(row);
+      formattedRecords.push(formattedRecord);
     });
 
-    return rows;
+    return formattedRecords;
   };
 
-  const rows = formatRows(ufRows);
+  const formattedRecords = formatRecords(ufRecords);
 
   const onPress = () => {
     const doc = new jsPDF("l");
     autoTable(doc, {
       head: [columns],
-      body: rows,
+      body: formattedRecords,
       theme: "grid",
     });
     doc.save(`${model}.pdf`);

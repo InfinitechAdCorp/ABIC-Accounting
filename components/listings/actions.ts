@@ -11,7 +11,7 @@ import { destroy as destroySchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { Column } from "@/components/globals/types";
-import { Listing, ListingRow } from "@/components/listings/types";
+import { Listing, DisplayFormat } from "@/components/listings/types";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { Destroy } from "@/components/globals/types";
@@ -38,12 +38,9 @@ export const format = async (ufRecords: PrismaListing[]) => {
   return records;
 };
 
-export const tableFormat = async (columns: Column[], records: Listing[]) => {
-  const rows: ListingRow[] = [];
-
+export const displayFormat = async (columns: Column[], records: Listing[]) => {
   records.forEach((record) => {
-    const row = {
-      id: "",
+    const display_format = {
       client: "",
       type: "",
       project: "",
@@ -59,7 +56,6 @@ export const tableFormat = async (columns: Column[], records: Listing[]) => {
       extension: "",
       aging: "",
       closed: "",
-      actions: "",
     };
 
     columns.forEach((column) => {
@@ -86,14 +82,14 @@ export const tableFormat = async (columns: Column[], records: Listing[]) => {
       }
 
       if (value || value == 0) {
-        row[key as keyof ListingRow] = `${value}`;
+        display_format[key as keyof DisplayFormat] = `${value}`;
       }
     });
 
-    rows.push(row);
+    record.display_format = display_format;
   });
 
-  return rows;
+  return records;
 };
 
 export const getAll = async () => {

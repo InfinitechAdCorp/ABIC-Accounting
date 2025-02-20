@@ -4,10 +4,10 @@ export type Listing = Omit<PrismaListing, "list_price" | "total_price"> & {
   account?: Account;
   list_price: number;
   total_price: number;
+  display_format?: DisplayFormat;
 };
 
-export type ListingRow = {
-  id: string;
+export type DisplayFormat = {
   client: string;
   type: string;
   project: string;
@@ -23,5 +23,4 @@ export type ListingRow = {
   extension: string;
   aging: string;
   closed: string;
-  actions: string;
 };

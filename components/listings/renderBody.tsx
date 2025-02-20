@@ -5,20 +5,13 @@ import { TableRow, TableCell } from "@heroui/react";
 import { Column } from "@/components/globals/types";
 import {
   Listing as Record,
-  ListingRow as Row,
+  DisplayFormat,
 } from "@/components/listings/types";
 import UpdateModal from "@/components/listings/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
 import { destroy } from "@/components/listings/actions";
 
-const getRecord = (records: Record[], id: string) => {
-  const record = records.find((record) => {
-    return record.id == id;
-  }) as Record;
-  return record;
-};
-
-const RenderCell = (record: Record, column: string, row: Row) => {
+const RenderCell = (column: string, record: Record) => {
   switch (column) {
     case "actions":
       return (
@@ -28,25 +21,25 @@ const RenderCell = (record: Record, column: string, row: Row) => {
         </div>
       );
     default:
-      return row[column as keyof Row];
+      return record.display_format![column as keyof DisplayFormat];
   }
 };
 
-const RenderBody = (records: Record[], columns: Column[], rows: Row[]) => {
+const RenderBody = (columns: Column[], records: Record[]) => {
   return (
     <>
-      {rows.map((row) => (
+      {records.map((record) => (
         <TableRow
-          key={row.id}
+          key={record.id}
           className={
-            getRecord(records, row.id).status == "Closed"
+            record.status == "Closed"
               ? "text-[#006FEE]"
               : "text-[#F31260]"
           }
         >
           {columns.map((column) => (
             <TableCell key={column.key}>
-              {RenderCell(getRecord(records, row.id), column.key, row)}
+              {RenderCell(column.key, record)}
             </TableCell>
           ))}
         </TableRow>

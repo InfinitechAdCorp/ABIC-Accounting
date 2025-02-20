@@ -77,35 +77,6 @@ export const dateValueToDate = (dateValue: DateValue | null) => {
   return date;
 };
 
-export const stringToDate = (string: string) => {
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  let [ufMonth, ufDay, ufYear] = string.split(" ");
-
-  ufYear = ufYear.padStart(4, "0");
-  const index = months.findIndex((month) => {
-    return month == ufMonth;
-  });
-  ufMonth = `${index + 1}`.padStart(2, "0");
-  ufDay = ufDay.replace(",", "").padStart(2, "0");
-
-  const date = [ufYear, ufMonth, ufDay].join("-");
-  return date;
-};
-
 export const formatErrors = (ufErrors: Yup.ValidationError) => {
   const errors: { [key: string]: string } = {};
 
