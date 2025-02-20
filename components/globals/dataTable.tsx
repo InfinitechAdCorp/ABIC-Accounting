@@ -26,7 +26,6 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { Column } from "@/components/globals/types";
-import ExportRangeModal from "@/components/globals/exportRangeModal";
 import ExportBtn from "@/components/globals/exportBtn";
 import {
   dateToDateValue,
@@ -58,7 +57,7 @@ const DataTable = ({
   records,
   columns: ufColumns,
   rows,
-  filterKey,
+  filterKey = "created_at",
   dependencies,
   RenderBody,
   Buttons,
@@ -89,12 +88,12 @@ const DataTable = ({
       "en-CA"
     ) as string;
 
-    const fRows = rows.filter((row) => {
-      const date = stringToDate(row["date"]);
+    const filteredRows = rows.filter((row) => {
+      const date = stringToDate(row[filterKey]);
       return date >= start && date <= end;
     });
-    return fRows;
-  }, [range, rows]);
+    return filteredRows;
+  }, [range, rows, filterKey]);
 
   const searchFilteredItems = useMemo(() => {
     let filteredRows = [...dateFilteredItems];
@@ -155,21 +154,6 @@ const DataTable = ({
     setPage(1);
   }, []);
 
-  const ExportComponent = useMemo(() => {
-    if (filterKey) {
-      return (
-        <ExportRangeModal
-          model={model}
-          columns={columns}
-          rows={items}
-          filterKey={filterKey}
-        />
-      );
-    } else {
-      return <ExportBtn model={model} columns={columns} rows={items} />;
-    }
-  }, [columns, filterKey, items, model]);
-
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const Filter = useMemo(() => {
@@ -177,8 +161,13 @@ const DataTable = ({
       range: range,
     };
 
-    const onSubmit = async (values: Filter) => {
+    const onSubmit = (values: Filter) => {
       setRange({ start: values.range.start, end: values.range.end });
+      onClose();
+    };
+
+    const reset = () => {
+      setRange({ start: start, end: end });
       onClose();
     };
 
@@ -190,7 +179,7 @@ const DataTable = ({
 
         <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
           <ModalContent>
-            {(onClose) => (
+            {() => (
               <>
                 <Formik
                   initialValues={initialValues}
@@ -229,8 +218,8 @@ const DataTable = ({
                         <Button color="primary" type="submit">
                           Filter
                         </Button>
-                        <Button color="danger" onPress={onClose}>
-                          Cancel
+                        <Button color="danger" onPress={reset}>
+                          Reset
                         </Button>
                       </ModalFooter>
                     </Form>
@@ -242,7 +231,7 @@ const DataTable = ({
         </Modal>
       </>
     );
-  }, [isOpen, model, onOpen, onOpenChange, onClose, range]);
+  }, [isOpen, model, onOpen, onOpenChange, onClose, range, end, start]);
 
   const topContent = useMemo(() => {
     return (
@@ -261,7 +250,7 @@ const DataTable = ({
             <div className="flex gap-3">
               {Buttons}
               {Filter}
-              {ExportComponent}
+              <ExportBtn model={model} columns={columns} rows={items} />
             </div>
           </div>
           <div className="flex justify-between items-center">
@@ -290,7 +279,9 @@ const DataTable = ({
     onRowsPerPageChange,
     rows.length,
     Buttons,
-    ExportComponent,
+    columns,
+    items,
+    model,
     Filter,
   ]);
 
