@@ -16,11 +16,6 @@ import {
   Input,
   Pagination,
   SortDescriptor,
-} from "@heroui/react";
-import { Column } from "@/components/globals/types";
-import ExportRangeModal from "@/components/globals/exportRangeModal";
-import ExportBtn from "@/components/globals/exportBtn";
-import {
   Modal,
   ModalContent,
   ModalHeader,
@@ -30,6 +25,9 @@ import {
   DateRangePicker,
   useDisclosure,
 } from "@heroui/react";
+import { Column } from "@/components/globals/types";
+import ExportRangeModal from "@/components/globals/exportRangeModal";
+import ExportBtn from "@/components/globals/exportBtn";
 import {
   dateToDateValue,
   dateValueToDate,
@@ -78,8 +76,28 @@ const DataTable = ({
     direction: "ascending",
   });
 
-  const filteredItems = useMemo(() => {
-    let filteredRows = [...rows];
+  const start = dateToDateValue(new Date(new Date().getFullYear(), 0, 1))!;
+  const end = dateToDateValue(new Date(new Date().getFullYear(), 12, 0))!;
+  const [range, setRange] = useState({
+    start: start,
+    end: end,
+  });
+
+  const dateFilteredItems = useMemo(() => {
+    const start = dateValueToDate(range.start)!.toLocaleDateString("en-CA");
+    const end = dateValueToDate(range.end)!.toLocaleDateString(
+      "en-CA"
+    ) as string;
+
+    const fRows = rows.filter((row) => {
+      const date = stringToDate(row["date"]);
+      return date >= start && date <= end;
+    });
+    return fRows;
+  }, [range, rows]);
+
+  const searchFilteredItems = useMemo(() => {
+    let filteredRows = [...dateFilteredItems];
 
     if (hasSearchFilter) {
       filteredRows = filteredRows.filter((row) => {
@@ -94,16 +112,16 @@ const DataTable = ({
     }
 
     return filteredRows;
-  }, [rows, filterValue, hasSearchFilter]);
+  }, [filterValue, hasSearchFilter, dateFilteredItems]);
 
-  const pages = Math.ceil(filteredItems.length / rowsPerPage);
+  const pages = Math.ceil(searchFilteredItems.length / rowsPerPage);
 
   const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
-    return filteredItems.slice(start, end);
-  }, [page, filteredItems, rowsPerPage]);
+    return searchFilteredItems.slice(start, end);
+  }, [page, searchFilteredItems, rowsPerPage]);
 
   const sortedItems = useMemo(() => {
     return [...items].sort((a, b) => {
@@ -152,41 +170,16 @@ const DataTable = ({
     }
   }, [columns, filterKey, items, model]);
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
-  const filterByDate = (
-    rows: any[],
-    key: string,
-    start: string,
-    end: string
-  ) => {
-    const fRows = rows.filter((row) => {
-      const date = stringToDate(row[key]);
-      return date >= start && date <= end;
-    });
-    return fRows;
-  };
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const Filter = useMemo(() => {
-    const start = dateToDateValue(new Date(new Date().getFullYear(), 0, 1))!;
-    const end = dateToDateValue(new Date(new Date().getFullYear(), 12, 0))!;
-
     const initialValues = {
-      range: {
-        start: start,
-        end: end,
-      },
+      range: range,
     };
 
     const onSubmit = async (values: Filter) => {
-      const start = dateValueToDate(values.range.start)!.toLocaleDateString(
-        "en-CA"
-      );
-      const end = dateValueToDate(values.range.end)!.toLocaleDateString(
-        "en-CA"
-      ) as string;
-
-      console.log(filterByDate(rows, "date", start, end));
+      setRange({ start: values.range.start, end: values.range.end });
+      onClose();
     };
 
     return (
@@ -249,7 +242,7 @@ const DataTable = ({
         </Modal>
       </>
     );
-  }, [isOpen, model, onOpen, onOpenChange, rows]);
+  }, [isOpen, model, onOpen, onOpenChange, onClose, range]);
 
   const topContent = useMemo(() => {
     return (
