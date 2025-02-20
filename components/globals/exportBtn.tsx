@@ -64,6 +64,7 @@ const ExportBtn = ({
       head: [columns],
       body: formattedRecords,
       theme: "grid",
+      headStyles: { fillColor: [0, 111, 238] },
     });
     doc.save(`${model}.pdf`);
   };

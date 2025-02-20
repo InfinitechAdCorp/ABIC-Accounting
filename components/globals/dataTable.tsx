@@ -46,7 +46,7 @@ const DataTable = ({
   model,
   columns,
   records: ufRecords,
-  filterKey = "created_at",
+  filterKey,
   dependencies,
   RenderBody,
   Buttons,
@@ -55,7 +55,6 @@ const DataTable = ({
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
   const [filterValue, setFilterValue] = useState("");
-  const hasSearchFilter = Boolean(filterValue);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "",
     direction: "ascending",
@@ -75,30 +74,30 @@ const DataTable = ({
       "en-CA"
     ) as string;
 
-    const filteredRecords = ufRecords.filter((ufRecord) => {
-      const date = ufRecord[filterKey].toLocaleDateString("en-CA");
-      return date >= start && date <= end;
-    });
-    return filteredRecords;
+    if (filterKey) {
+      const filteredRecords = ufRecords.filter((ufRecord) => {
+        const date = ufRecord[filterKey].toLocaleDateString("en-CA");
+        return date >= start && date <= end;
+      });
+      return filteredRecords;
+    }
   }, [range, ufRecords, filterKey]);
 
   const searchFilteredRecords = useMemo(() => {
-    let filteredRecords = [...dateFilteredRecords];
+    let filteredRecords = [...(dateFilteredRecords || ufRecords)];
 
-    if (hasSearchFilter) {
-      filteredRecords = filteredRecords.filter((record) => {
-        const values: string[] = Object.values(record.display_format);
+    filteredRecords = filteredRecords.filter((record) => {
+      const values: string[] = Object.values(record.display_format);
 
-        const isValid = values.some((value) => {
-          return value.toLowerCase().includes(filterValue.toLowerCase());
-        });
-
-        if (isValid) return record;
+      const isValid = values.some((value) => {
+        return value.toLowerCase().includes(filterValue.toLowerCase());
       });
-    }
+
+      if (isValid) return record;
+    });
 
     return filteredRecords;
-  }, [filterValue, hasSearchFilter, dateFilteredRecords]);
+  }, [filterValue, ufRecords, dateFilteredRecords]);
 
   const pages = Math.ceil(searchFilteredRecords.length / rowsPerPage);
 
@@ -234,7 +233,7 @@ const DataTable = ({
             />
             <div className="flex gap-3">
               {Buttons}
-              {Filter}
+              {filterKey && Filter}
               <ExportBtn model={model} columns={columns} records={records} />
             </div>
           </div>
@@ -265,6 +264,7 @@ const DataTable = ({
     model,
     columns,
     records,
+    filterKey,
     Buttons,
     Filter,
   ]);

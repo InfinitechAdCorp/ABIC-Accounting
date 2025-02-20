@@ -107,7 +107,7 @@ export const displayFormat = async (columns: Column[], records: TClient[]) => {
       }
     });
 
-    record.display_format = display_format
+    record.display_format = display_format;
   });
 
   return records;
