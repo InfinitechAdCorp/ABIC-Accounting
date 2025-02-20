@@ -9,17 +9,10 @@ import { destroy } from "@/components/collectionMonitoring/cClients/actions";
 import { Column } from "@/components/globals/types";
 import {
   CClient as Record,
-  CClientRow as Row,
+  CClientDisplayFormat,
 } from "@/components/collectionMonitoring/types";
 
-const getRecord = (records: Record[], id: string) => {
-  const record = records.find((record) => {
-    return record.id == id;
-  }) as Record;
-  return record;
-};
-
-const RenderCell = (record: Record, column: string, row: Row) => {
+const RenderCell = (column: string, record: Record) => {
   switch (column) {
     case "actions":
       return (
@@ -33,18 +26,18 @@ const RenderCell = (record: Record, column: string, row: Row) => {
         </div>
       );
     default:
-      return row[column as keyof Row];
+      return record.display_format![column as keyof CClientDisplayFormat];
   }
 };
 
-const RenderBody = (records: Record[], columns: Column[], rows: Row[]) => {
+const RenderBody = (columns: Column[], records: Record[]) => {
   return (
     <>
-      {rows.map((row) => (
-        <TableRow key={row.id}>
+      {records.map((record) => (
+        <TableRow key={record.id}>
           {columns.map((column) => (
             <TableCell key={column.key}>
-              {RenderCell(getRecord(records, row.id), column.key, row)}
+              {RenderCell(column.key, record)}
             </TableCell>
           ))}
         </TableRow>

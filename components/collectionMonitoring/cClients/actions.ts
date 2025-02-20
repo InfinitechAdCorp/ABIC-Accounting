@@ -13,7 +13,7 @@ import * as Yup from "yup";
 import { Column } from "@/components/globals/types";
 import {
   CClient,
-  CClientRow,
+  CClientDisplayFormat,
   CClientWithCollections,
   Collection,
 } from "@/components/collectionMonitoring/types";
@@ -51,19 +51,15 @@ export const format = async (ufRecords: CClientWithCollections[]) => {
   return records;
 };
 
-export const tableFormat = async (columns: Column[], records: CClient[]) => {
-  const rows: CClientRow[] = [];
-
+export const displayFormat = async (columns: Column[], records: CClient[]) => {
   records.forEach((record) => {
-    const row: CClientRow = {
-      id: "",
+    const display_format = {
       name: "",
       collections: "",
-      actions: "",
     };
 
-    Object.keys(row).forEach((column) => {
-      const key = column;
+    columns.forEach((column) => {
+      const key = column.key;
       let value;
 
       switch (key) {
@@ -76,14 +72,14 @@ export const tableFormat = async (columns: Column[], records: CClient[]) => {
       }
 
       if (value || value == 0) {
-        row[key as keyof CClientRow] = `${value}`;
+        display_format[key as keyof CClientDisplayFormat] = `${value}`;
       }
     });
 
-    rows.push(row);
+    record.display_format = display_format;
   });
 
-  return rows;
+  return records;
 };
 
 export const getAll = async () => {

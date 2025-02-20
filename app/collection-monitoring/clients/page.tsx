@@ -1,7 +1,7 @@
 import React from "react";
 import {
   getAll,
-  tableFormat,
+  displayFormat,
 } from "@/components/collectionMonitoring/cClients/actions";
 import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
@@ -13,18 +13,16 @@ import { retry } from "@/components/globals/serverUtils";
 
 const CClients = async () => {
   const { record: account } = await retry(getAccount);
-  const { records } = await getAll();
+  const { records: ufRecords } = await getAll();
 
   const model = "Clients";
 
   const columns = [
-    { key: "id", name: "ID", sortable: false },
     { key: "name", name: "NAME", sortable: true },
     { key: "collections", name: "COLLECTIONS", sortable: true },
-    { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
-  const rows = await tableFormat(columns, records);
+  const records = await displayFormat(columns, ufRecords);
 
   const Buttons = (
     <>
@@ -44,9 +42,11 @@ const CClients = async () => {
             </h1>
             <DataTable
               model={model}
+              columns={[
+                ...columns,
+                { key: "actions", name: "ACTIONS", sortable: false },
+              ]}
               records={records}
-              columns={columns}
-              rows={rows}
               RenderBody={RenderBody}
               Buttons={Buttons}
             />
