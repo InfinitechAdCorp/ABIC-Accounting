@@ -10,8 +10,8 @@ const LogoutBtn = () => {
 
   const onClick = async () => {
     const response = await logout();
-    toast.success(response.message)
-    router.push("/")
+    toast.success(response.message);
+    router.push("/");
   };
 
   return (
