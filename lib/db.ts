@@ -1,9 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 const prismaClientSingleton = () => {
-  return new PrismaClient({
-    errorFormat: "pretty",
-  });
+  return new PrismaClient();
 };
 
 declare const globalThis: {

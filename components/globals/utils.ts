@@ -20,7 +20,7 @@ export const onPostSubmit = (
     if (response.code == 429) {
       console.log(response.errors);
     } else {
-      console.log(response.error);
+      console.log(response.error.split(' '));
     }
     toast.error(response.message);
   }

@@ -39,12 +39,14 @@ const Dashboard = async () => {
             url="/transaction-history/transactions"
             count={counts.transactions}
           ></CountCard>
-          <CountCard
-            icon={<FaFileSignature size={56} />}
-            model="Collections"
-            url="/collection-monitoring/collections"
-            count={counts.collections}
-          ></CountCard>
+          {account.cm_access && (
+            <CountCard
+              icon={<FaFileSignature size={56} />}
+              model="Collections"
+              url="/collection-monitoring/collections"
+              count={counts.collections}
+            ></CountCard>
+          )}
         </div>
       </div>
     </>
