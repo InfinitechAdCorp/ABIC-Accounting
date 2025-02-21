@@ -19,11 +19,25 @@ export const onPostSubmit = (
   } else {
     if (response.code == 429) {
       console.log(response.errors);
+      toast.error(response.message);
     } else {
-      console.log(response.error.split(' '));
+      const message = response.error.message;
+      console.log(message);
+
+      if (message.includes("Unique constraint")) {
+        const field = getField(message);
+        toast.error(`${capitalize(field)} is Already Taken`);
+      } else {
+        toast.error(response.message);
+      }
     }
-    toast.error(response.message);
   }
+};
+
+export const getField = (message: string) => {
+  const expression = /\(\`([^)]+)\`\)/;
+  const matches = expression.exec(message);
+  return matches![1];
 };
 
 // Formatters
