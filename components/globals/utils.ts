@@ -34,12 +34,6 @@ export const onPostSubmit = (
   }
 };
 
-export const getField = (message: string) => {
-  const expression = /\(\`([^)]+)\`\)/;
-  const matches = expression.exec(message);
-  return matches![1];
-};
-
 // Formatters
 
 export const capitalize = (ufString: string) => {
@@ -156,4 +150,10 @@ export const getUniques = (records: any[], key: string) => {
 
   const uniques: string[] = [...new Set(values)].sort();
   return uniques;
+};
+
+export const getField = (message: string) => {
+  const expression = /\(\`([^)]+)\`\)/;
+  const matches = expression.exec(message);
+  return matches![1];
 };
