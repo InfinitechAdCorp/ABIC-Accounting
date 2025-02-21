@@ -27,18 +27,23 @@ const Dashboard = async () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 px-5 lg:px-24 xl:px-60 gap-3 mb-3">
-          <CountCard
-            icon={<FaUsers size={56} />}
-            model="Clients"
-            url="/transaction-history/clients"
-            count={counts.tClients}
-          ></CountCard>
-          <CountCard
-            icon={<GrTransaction size={56} />}
-            model="Transactions"
-            url="/transaction-history/transactions"
-            count={counts.transactions}
-          ></CountCard>
+          {account.th_access && (
+            <>
+              <CountCard
+                icon={<FaUsers size={56} />}
+                model="Clients"
+                url="/transaction-history/clients"
+                count={counts.tClients}
+              ></CountCard>
+              <CountCard
+                icon={<GrTransaction size={56} />}
+                model="Transactions"
+                url="/transaction-history/transactions"
+                count={counts.transactions}
+              ></CountCard>
+            </>
+          )}
+
           {account.cm_access && (
             <CountCard
               icon={<FaFileSignature size={56} />}
