@@ -1,8 +1,9 @@
 import React from "react";
 import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
-import TaxComputationForm from "@/components/tools/taxComputation/taxComputationForm";
+import TaxCalculatorForm from "@/components/tools/taxCalculator/taxCalculatorForm";
 import { retry } from "@/components/globals/serverUtils";
+import { Card, CardBody } from "@heroui/react";
 
 const TaxComputation = async () => {
   const { record: account } = await retry(getAccount);
@@ -11,8 +12,16 @@ const TaxComputation = async () => {
     <>
       <Navbar record={account!} />
 
+      <Card radius="none" className="py-[0.10rem] px-2">
+        <CardBody>
+          <div className="flex justify-between items-center">
+            <h3 className="text-lg font-semibold">TAX CALCULATOR</h3>
+          </div>
+        </CardBody>
+      </Card>
+
       <div className="flex justify-center">
-        <TaxComputationForm />
+        <TaxCalculatorForm />
       </div>
     </>
   );

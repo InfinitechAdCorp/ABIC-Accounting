@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@heroui/react";
 import { FaEye } from "react-icons/fa";
 import { useRouter } from "next/navigation";
@@ -11,7 +11,14 @@ type Props = {
 };
 
 const ViewBtn = ({ title, url }: Props) => {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  const onPress = () => {
+    setIsLoading(true);
+    router.push(url);
+    setIsLoading(false);
+  };
 
   return (
     <>
@@ -20,7 +27,8 @@ const ViewBtn = ({ title, url }: Props) => {
         color="primary"
         isIconOnly={true}
         title={title}
-        onPress={() => router.push(url)}
+        isLoading={isLoading}
+        onPress={onPress}
       >
         <FaEye size={14} />
       </Button>

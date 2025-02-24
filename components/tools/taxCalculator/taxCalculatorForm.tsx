@@ -12,7 +12,7 @@ import {
 } from "@heroui/react";
 import { formatNumber } from "@/components/globals/utils";
 
-const TaxComputationForm = () => {
+const TaxCalculatorForm = () => {
   const [period, setPeriod] = useState(2);
   const [fields, setFields] = useState({
     basic: 0,
@@ -100,7 +100,8 @@ const TaxComputationForm = () => {
     computeResults();
   }, [fields, period]);
 
-  const handleChange = (field: string, value: number) => {
+  const handleChange = (field: string, ufValue: string) => {
+    const value = Number(ufValue);
     if (field in fields.nonTaxable) {
       setFields((prevFields) => ({
         ...prevFields,
@@ -141,8 +142,7 @@ const TaxComputationForm = () => {
               placeholder="Select Payroll Period"
               defaultSelectedKeys={[`${period}`]}
               onChange={(e) => {
-                const value = Number(e.target.value);
-                setPeriod(value);
+                setPeriod(Number(e.target.value));
               }}
             >
               <SelectItem key="22">Daily</SelectItem>
@@ -166,9 +166,7 @@ const TaxComputationForm = () => {
                   label="Basic Salary"
                   labelPlacement="outside"
                   placeholder="Enter Basic Salary"
-                  onChange={(e) =>
-                    handleChange("basic", Number(e.target.value))
-                  }
+                  onChange={(e) => handleChange("basic", e.target.value)}
                 />
 
                 <Input
@@ -180,7 +178,7 @@ const TaxComputationForm = () => {
                   labelPlacement="outside"
                   placeholder="Enter Representation Allowance"
                   onChange={(e) =>
-                    handleChange("representation", Number(e.target.value))
+                    handleChange("representation", e.target.value)
                   }
                 />
 
@@ -193,7 +191,7 @@ const TaxComputationForm = () => {
                   labelPlacement="outside"
                   placeholder="Enter Transportation Allowance"
                   onChange={(e) =>
-                    handleChange("transportation", Number(e.target.value))
+                    handleChange("transportation", e.target.value)
                   }
                 />
               </div>
@@ -207,9 +205,7 @@ const TaxComputationForm = () => {
                   label="Cost of Living Allowance"
                   labelPlacement="outside"
                   placeholder="Enter Cost of Living Allowance"
-                  onChange={(e) =>
-                    handleChange("living", Number(e.target.value))
-                  }
+                  onChange={(e) => handleChange("living", e.target.value)}
                 />
 
                 <Input
@@ -220,9 +216,7 @@ const TaxComputationForm = () => {
                   label="Fixed Housing Allowance"
                   labelPlacement="outside"
                   placeholder="Enter Fixed Housing Allowance"
-                  onChange={(e) =>
-                    handleChange("housing", Number(e.target.value))
-                  }
+                  onChange={(e) => handleChange("housing", e.target.value)}
                 />
 
                 <Input
@@ -233,9 +227,7 @@ const TaxComputationForm = () => {
                   label="Other Compensation"
                   labelPlacement="outside"
                   placeholder="Enter Other Compensation"
-                  onChange={(e) =>
-                    handleChange("otherTaxable", Number(e.target.value))
-                  }
+                  onChange={(e) => handleChange("otherTaxable", e.target.value)}
                 />
               </div>
             </div>
@@ -254,9 +246,7 @@ const TaxComputationForm = () => {
                   label="Commission"
                   labelPlacement="outside"
                   placeholder="Enter Commission"
-                  onChange={(e) =>
-                    handleChange("commission", Number(e.target.value))
-                  }
+                  onChange={(e) => handleChange("commission", e.target.value)}
                 />
 
                 <Input
@@ -267,9 +257,7 @@ const TaxComputationForm = () => {
                   label="Profit Sharing"
                   labelPlacement="outside"
                   placeholder="Enter Profit Sharing"
-                  onChange={(e) =>
-                    handleChange("sharing", Number(e.target.value))
-                  }
+                  onChange={(e) => handleChange("sharing", e.target.value)}
                 />
 
                 <Input
@@ -280,9 +268,7 @@ const TaxComputationForm = () => {
                   label="Directors Fee"
                   labelPlacement="outside"
                   placeholder="Enter Directors Fee"
-                  onChange={(e) =>
-                    handleChange("directors", Number(e.target.value))
-                  }
+                  onChange={(e) => handleChange("directors", e.target.value)}
                 />
               </div>
 
@@ -295,9 +281,7 @@ const TaxComputationForm = () => {
                   label="Taxable 13th Month Pay"
                   labelPlacement="outside"
                   placeholder="Enter Taxable 13th Month Pay"
-                  onChange={(e) =>
-                    handleChange("taxable13th", Number(e.target.value))
-                  }
+                  onChange={(e) => handleChange("taxable13th", e.target.value)}
                 />
 
                 <Input
@@ -308,9 +292,7 @@ const TaxComputationForm = () => {
                   label="Hazard Pay"
                   labelPlacement="outside"
                   placeholder="Enter Hazard Pay"
-                  onChange={(e) =>
-                    handleChange("hazard", Number(e.target.value))
-                  }
+                  onChange={(e) => handleChange("hazard", e.target.value)}
                 />
 
                 <Input
@@ -321,7 +303,7 @@ const TaxComputationForm = () => {
                   label="Overtime Pay"
                   labelPlacement="outside"
                   placeholder="Enter Overtime Pay"
-                  onChange={(e) => handleChange("oT", Number(e.target.value))}
+                  onChange={(e) => handleChange("oT", e.target.value)}
                 />
               </div>
 
@@ -335,7 +317,7 @@ const TaxComputationForm = () => {
                   labelPlacement="outside"
                   placeholder="Enter Other Compensation"
                   onChange={(e) =>
-                    handleChange("otherSupplementary", Number(e.target.value))
+                    handleChange("otherSupplementary", e.target.value)
                   }
                 />
               </div>
@@ -355,9 +337,7 @@ const TaxComputationForm = () => {
                   label="Statutory Minimum Wage"
                   labelPlacement="outside"
                   placeholder="Enter Statutory Minimum Wage"
-                  onChange={(e) =>
-                    handleChange("statutory", Number(e.target.value))
-                  }
+                  onChange={(e) => handleChange("statutory", e.target.value)}
                 />
 
                 <Input
@@ -369,7 +349,7 @@ const TaxComputationForm = () => {
                   labelPlacement="outside"
                   placeholder="Enter Holiday Pay"
                   onChange={(e) =>
-                    handleChange("nonTaxableHoliday", Number(e.target.value))
+                    handleChange("nonTaxableHoliday", e.target.value)
                   }
                 />
 
@@ -381,9 +361,7 @@ const TaxComputationForm = () => {
                   label="Overtime Pay"
                   labelPlacement="outside"
                   placeholder="Enter Overtime Pay"
-                  onChange={(e) =>
-                    handleChange("nonTaxableOT", Number(e.target.value))
-                  }
+                  onChange={(e) => handleChange("nonTaxableOT", e.target.value)}
                 />
               </div>
 
@@ -396,9 +374,7 @@ const TaxComputationForm = () => {
                   label="Night Shift Differential"
                   labelPlacement="outside"
                   placeholder="Enter Night Shift Differential"
-                  onChange={(e) =>
-                    handleChange("differential", Number(e.target.value))
-                  }
+                  onChange={(e) => handleChange("differential", e.target.value)}
                 />
 
                 <Input
@@ -410,7 +386,7 @@ const TaxComputationForm = () => {
                   labelPlacement="outside"
                   placeholder="Enter Hazard Pay"
                   onChange={(e) =>
-                    handleChange("nonTaxableHazard", Number(e.target.value))
+                    handleChange("nonTaxableHazard", e.target.value)
                   }
                 />
 
@@ -423,7 +399,7 @@ const TaxComputationForm = () => {
                   labelPlacement="outside"
                   placeholder="Enter Non Taxable 13th Month Pay"
                   onChange={(e) =>
-                    handleChange("nonTaxable13th", Number(e.target.value))
+                    handleChange("nonTaxable13th", e.target.value)
                   }
                 />
               </div>
@@ -437,9 +413,7 @@ const TaxComputationForm = () => {
                   label="De Minimis Benefits"
                   labelPlacement="outside"
                   placeholder="Enter De Minimis Benefits"
-                  onChange={(e) =>
-                    handleChange("deMinimis", Number(e.target.value))
-                  }
+                  onChange={(e) => handleChange("deMinimis", e.target.value)}
                 />
 
                 <Input
@@ -451,7 +425,7 @@ const TaxComputationForm = () => {
                   labelPlacement="outside"
                   placeholder="Enter Contributions"
                   onChange={(e) =>
-                    handleChange("contributions", Number(e.target.value))
+                    handleChange("contributions", e.target.value)
                   }
                 />
 
@@ -463,7 +437,7 @@ const TaxComputationForm = () => {
                   labelPlacement="outside"
                   placeholder="Enter Other Non Taxable Income"
                   onChange={(e) =>
-                    handleChange("otherNonTaxable", Number(e.target.value))
+                    handleChange("otherNonTaxable", e.target.value)
                   }
                 />
               </div>
@@ -505,4 +479,4 @@ const TaxComputationForm = () => {
   );
 };
 
-export default TaxComputationForm;
+export default TaxCalculatorForm;

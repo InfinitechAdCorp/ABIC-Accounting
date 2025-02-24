@@ -5,35 +5,22 @@ import { createBS as action } from "@/components/tools/actions";
 import toast from "react-hot-toast";
 import { ActionResponse } from "@/components/globals/types";
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/react";
+import { getField, capitalize } from "@/components/globals/utils";
 
 type Props = {
   number: string;
 };
 
-const Invoice = ({ number }: Props) => {
+const BillingStatementForm = ({ number }: Props) => {
   const [bSNumber, setbSNumber] = useState(number);
-  const [companyName, setCompanyName] = useState("Company Name");
-  const [companyAddress, setCompanyAddress] = useState("Company Address");
-  const [companyContact, setCompanyContact] = useState("Contact Details");
-  const [billingCompanyName, setBillingCompanyName] =
-    useState("Click to add text");
-  const [billingAmount, setBillingAmount] = useState("Click to add amount");
+  const [companyName, setCompanyName] = useState("");
+  const [companyAddress, setCompanyAddress] = useState("");
+  const [companyContact, setCompanyContact] = useState("");
+  const [billingCompanyName, setBillingCompanyName] = useState("");
 
   const [items, setItems] = useState([
     { qty: 10, price: 500, name: "Item A", purpose: "For Office" },
   ]);
-
-  const hasEdited = (initialValue: any, currentValue: any): boolean => {
-    if (
-      initialValue === null ||
-      initialValue === undefined ||
-      currentValue === null ||
-      currentValue === undefined
-    ) {
-      return false;
-    }
-    return initialValue !== currentValue;
-  };
 
   const addItemRow = () => {
     setItems([...items, { qty: 0, price: 0, name: "", purpose: "" }]);
@@ -57,10 +44,18 @@ const Invoice = ({ number }: Props) => {
       } else {
         if (response.code == 429) {
           console.log(response.errors);
+          toast.error(response.message);
         } else {
-          console.log(response.error);
+          const message = response.error.message;
+          console.log(message);
+
+          if (message.includes("Unique constraint")) {
+            const field = getField(message);
+            toast.error(`${capitalize(field)} is Already Taken`);
+          } else {
+            toast.error(response.message);
+          }
         }
-        toast.error(response.message);
       }
     });
 
@@ -90,11 +85,7 @@ const Invoice = ({ number }: Props) => {
                 type="text"
                 value={number}
                 onChange={(e) => setbSNumber(e.target.value)}
-                className={`focus:outline-none ml-2 ${
-                  hasEdited("001234", bSNumber)
-                    ? ""
-                    : "border-b border-gray-400"
-                }`}
+                className={`focus:outline-none ml-2`}
               />
             </div>
 
@@ -103,34 +94,25 @@ const Invoice = ({ number }: Props) => {
                 <h1 className="text-xl font-bold">
                   <input
                     type="text"
+                    placeholder="Company Name"
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
-                    className={`w-full overflow-x-auto text-center focus:outline-none ${
-                      hasEdited("Company Name", companyName)
-                        ? ""
-                        : "border-gray-400"
-                    }`}
+                    className={`w-full overflow-x-auto text-center focus:outline-none`}
                   />
                 </h1>
                 <input
                   type="text"
+                  placeholder="Company Address"
                   value={companyAddress}
                   onChange={(e) => setCompanyAddress(e.target.value)}
-                  className={`text-gray-600 focus:outline-none w-full overflow-x-auto text-center ${
-                    hasEdited("123 Main St, City, Country", companyAddress)
-                      ? ""
-                      : "border-b border-gray-400"
-                  }`}
+                  className={`text-gray-600 focus:outline-none w-full overflow-x-auto text-center`}
                 />
                 <input
                   type="text"
+                  placeholder="Contact Details"
                   value={companyContact}
                   onChange={(e) => setCompanyContact(e.target.value)}
-                  className={`text-gray-600 text-center focus:outline-none ${
-                    hasEdited("(123) 456-7890", companyContact)
-                      ? ""
-                      : "border-b border-gray-400"
-                  }`}
+                  className={`text-gray-600 text-center focus:outline-none`}
                 />
               </div>
             </div>
@@ -144,20 +126,16 @@ const Invoice = ({ number }: Props) => {
               This is to certify that{" "}
               <input
                 type="text"
+                placeholder="Click to add text"
                 value={billingCompanyName}
                 onChange={(e) => setBillingCompanyName(e.target.value)}
                 className="focus:outline-none w-full max-w-xs mx-auto text-center"
-              />
-              {" is hereby billed the amount of "}
-              <input
-                type="text"
-                value={billingAmount}
-                onChange={(e) => setBillingAmount(e.target.value)}
-                className="focus:outline-none w-full max-w-xs mx-auto text-center"
-              />
-              {
-                " for the payment of website development, hosting, and related services. This billing statement serves as a formal request for payment and outlines the details of the charges incurred."
-              }
+              />{" "}
+              is hereby billed the amount of{" "}
+              <span>{`₱ ${computeGrandTotal().toFixed(2)}`}</span> for the
+              payment of website development, hosting, and related services.
+              This billing statement serves as a formal request for payment and
+              outlines the details of the charges incurred.
             </p>
           </div>
 
@@ -263,4 +241,4 @@ const Invoice = ({ number }: Props) => {
   );
 };
 
-export default Invoice;
+export default BillingStatementForm;

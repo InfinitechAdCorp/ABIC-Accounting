@@ -5,19 +5,23 @@ import { Card, CardHeader, CardBody, CardFooter } from "@heroui/react";
 import { createAR as action } from "@/components/tools/actions";
 import toast from "react-hot-toast";
 import { ActionResponse } from "@/components/globals/types";
+import { getField, capitalize } from "@/components/globals/utils";
 
 type Props = {
   number: string;
 };
 
-const AcknowledgmentReceiptForm = ({ number }: Props) => {
+const AcknowledgementReceiptForm = ({ number }: Props) => {
   const [arNumber, setArNumber] = useState(number);
-  const [companyName, setCompanyName] = useState("Company Name");
-  const [companyAddress, setCompanyAddress] = useState("Company Address");
-  const [companyContact, setCompanyContact] = useState("Contact Details");
+  const [companyName, setCompanyName] = useState("");
+  const [companyAddress, setCompanyAddress] = useState("");
+  const [companyContact, setCompanyContact] = useState("");
+  const [items, setItems] = useState([{ name: "Item A", purpose: "1000" }]);
+  const [bankDetails, setBankDetails] = useState("");
+  const [accountName, setAccountName] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
   const [receivedBy, setReceivedBy] = useState("");
   const [issuedBy, setIssuedBy] = useState("");
-  const [items, setItems] = useState([{ name: "Item A", purpose: "1000" }]);
 
   const addRowBtnRef = useRef<HTMLButtonElement>(null);
   const printBtnRef = useRef<HTMLButtonElement>(null);
@@ -39,10 +43,18 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
       } else {
         if (response.code == 429) {
           console.log(response.errors);
+          toast.error(response.message);
         } else {
-          console.log(response.error);
+          const message = response.error.message;
+          console.log(message);
+
+          if (message.includes("Unique constraint")) {
+            const field = getField(message);
+            toast.error(`${capitalize(field)} is Already Taken`);
+          } else {
+            toast.error(response.message);
+          }
         }
-        toast.error(response.message);
       }
     });
 
@@ -61,12 +73,12 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
         <CardHeader>
           <div className="w-full">
             <div className="flex justify-end">
-              <p className="font-semibold text-gray-700">AR Number:</p>
+              <p className="font-semibold">AR Number:</p>
               <input
                 type="text"
                 value={arNumber}
                 onChange={(e) => setArNumber(e.target.value)}
-                className="ml-2 text-gray-700 focus:outline-none"
+                className="ml-2 focus:outline-none"
               />
             </div>
 
@@ -75,6 +87,7 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
                 <h1 className="text-lg font-bold">
                   <input
                     type="text"
+                    placeholder="Company Name"
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
                     className="w-full text-center focus:outline-none"
@@ -82,15 +95,17 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
                 </h1>
                 <input
                   type="text"
+                  placeholder="Company Address"
                   value={companyAddress}
                   onChange={(e) => setCompanyAddress(e.target.value)}
-                  className="text-gray-600 focus:outline-none w-full text-center"
+                  className="focus:outline-none w-full text-center"
                 />
                 <input
                   type="text"
+                  placeholder="Contact Details"
                   value={companyContact}
                   onChange={(e) => setCompanyContact(e.target.value)}
-                  className="text-gray-600 focus:outline-none text-center"
+                  className="focus:outline-none text-center"
                 />
               </div>
             </div>
@@ -122,7 +137,7 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
                           newItems[index].name = e.target.value;
                           setItems(newItems);
                         }}
-                        className="w-full focus:outline-none text-gray-700"
+                        className="w-full focus:outline-none"
                       />
                     </td>
                     <td className="border border-gray-300 px-4 py-2 w-1/4 text-right">
@@ -134,7 +149,7 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
                           newItems[index].purpose = e.target.value;
                           setItems(newItems);
                         }}
-                        className="w-full text-right focus:outline-none text-gray-700"
+                        className="w-full text-right focus:outline-none"
                       />
                     </td>
                   </tr>
@@ -161,7 +176,7 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
           </div>
 
           {/* Payment Instructions */}
-          <div className="mt-6 text-sm text-gray-700">
+          <div className="mt-6 text-sm">
             <p>
               <strong>For check payment,</strong> please make check payable to{" "}
               <strong>{companyName}</strong>. <br />
@@ -180,7 +195,12 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
                     Bank Details:
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
-                    Security Bank Pasay Taft Branch
+                    <input
+                      type="text"
+                      value={bankDetails}
+                      onChange={(e) => setBankDetails(e.target.value)}
+                      className="w-full focus:outline-none text-center"
+                    />
                   </td>
                 </tr>
                 <tr>
@@ -188,7 +208,12 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
                     Account Name:
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
-                    ABIC REALTY CORPORATION
+                    <input
+                      type="text"
+                      value={accountName}
+                      onChange={(e) => setAccountName(e.target.value)}
+                      className="w-full focus:outline-none text-center"
+                    />
                   </td>
                 </tr>
                 <tr>
@@ -196,7 +221,12 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
                     Account Number:
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
-                    0000043381202
+                    <input
+                      type="text"
+                      value={accountNumber}
+                      onChange={(e) => setAccountNumber(e.target.value)}
+                      className="w-full focus:outline-none text-center"
+                    />
                   </td>
                 </tr>
               </tbody>
@@ -208,21 +238,21 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
           <div className="w-full mt-6 flex justify-between">
             <div className="flex flex-col text-sm">
               <div className="flex items-center">
-                <p className="font-semibold text-gray-700">Received By:</p>
+                <p className="font-semibold">Received By:</p>
                 <input
                   type="text"
                   value={receivedBy}
                   onChange={(e) => setReceivedBy(e.target.value)}
-                  className="ml-2 focus:outline-none text-gray-700"
+                  className="ml-2 focus:outline-none"
                 />
               </div>
               <div className="flex items-center mt-4">
-                <p className="font-semibold text-gray-700">Issued By:</p>
+                <p className="font-semibold">Issued By:</p>
                 <input
                   type="text"
                   value={issuedBy}
                   onChange={(e) => setIssuedBy(e.target.value)}
-                  className="ml-2 focus:outline-none text-gray-700"
+                  className="ml-2 focus:outline-none"
                 />
               </div>
             </div>
@@ -243,4 +273,4 @@ const AcknowledgmentReceiptForm = ({ number }: Props) => {
   );
 };
 
-export default AcknowledgmentReceiptForm;
+export default AcknowledgementReceiptForm;

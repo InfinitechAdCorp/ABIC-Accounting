@@ -1,9 +1,10 @@
 import React from "react";
 import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
-import AcknowldegmentReceiptForm from "@/components/tools/acknowledgmentReceipt/acknowledgmentReceiptForm";
+import AcknowledgementReceiptForm from "@/components/tools/acknowledgementReceipt/acknowledgementReceiptForm";
 import { getAllARs } from "@/components/tools/actions";
 import { retry } from "@/components/globals/serverUtils";
+import { Card, CardBody } from "@heroui/react";
 
 const AcknowledgmentReceipt = async () => {
   const { record: account } = await retry(getAccount);
@@ -25,8 +26,16 @@ const AcknowledgmentReceipt = async () => {
     <>
       <Navbar record={account!} />
 
+      <Card radius="none" className="py-[0.10rem] px-2">
+        <CardBody>
+          <div className="flex justify-between items-center">
+            <h3 className="text-lg font-semibold">ACKNOWLEDGMENT RECEIPT</h3>
+          </div>
+        </CardBody>
+      </Card>
+
       <div className="flex justify-center items-center">
-        <AcknowldegmentReceiptForm number={number} />
+        <AcknowledgementReceiptForm number={number} />
       </div>
     </>
   );

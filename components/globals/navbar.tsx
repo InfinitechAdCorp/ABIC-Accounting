@@ -162,10 +162,10 @@ const Navbar = ({ record }: Props) => {
                 <h3 className="font-semibold">Currency Converter</h3>
               </DropdownItem>
               <DropdownItem
-                onPress={() => router.push("/tools/tax-computation")}
-                key="Tax Computation"
+                onPress={() => router.push("/tools/tax-calculator")}
+                key="Tax Calculator"
               >
-                <h3 className="font-semibold">Tax Computation</h3>
+                <h3 className="font-semibold">Tax Calculator</h3>
               </DropdownItem>
               <DropdownItem
                 onPress={() => router.push("/tools/acknowledgement-receipt")}
