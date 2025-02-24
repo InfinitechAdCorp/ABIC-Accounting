@@ -61,8 +61,10 @@ const DataTable = ({
   const baseModel = model.split(" ").at(-1)!;
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
+  
   const [filterValue, setFilterValue] = useState("");
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "",
@@ -71,7 +73,6 @@ const DataTable = ({
 
   const start = dateToDateValue(new Date(1900, 0, 1))!;
   const end = dateToDateValue(new Date(2099, 12, 0))!;
-
   const [range, setRange] = useState({
     start: start,
     end: end,

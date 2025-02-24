@@ -33,6 +33,7 @@ import {
   dateToDateValue,
   dateValueToDate,
   getUniques,
+  filterRecords,
 } from "@/components/globals/utils";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { filter as validationSchema } from "@/components/globals/schemas";
@@ -62,30 +63,38 @@ const DataTable = ({
   const baseModel = model.split(" ").at(-1)!;
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
+
   const [filterValue, setFilterValue] = useState("");
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "",
     direction: "ascending",
   });
 
-  const locations = getUniques(ufRecords, "location");
+  const locations = ["All", ...getUniques(ufRecords, "location")];
   const [selectedLocation, setSelectedLocation] = useState(locations[0]);
 
   const start = dateToDateValue(new Date(1900, 0, 1))!;
   const end = dateToDateValue(new Date(2099, 12, 0))!;
-
   const [range, setRange] = useState({
     start: start,
     end: end,
   });
 
   const locationFilteredRecords = useMemo(() => {
-    const filteredRecords = ufRecords.filter((record) => {
-      return record.location == selectedLocation;
-    });
-    return filteredRecords;
+    if (selectedLocation == "All") {
+      const filteredRecords = ufRecords;
+      return filteredRecords;
+    } else {
+      const filteredRecords = filterRecords(
+        ufRecords,
+        "location",
+        selectedLocation
+      );
+      return filteredRecords;
+    }
   }, [ufRecords, selectedLocation]);
 
   const dateFilteredRecords = useMemo(() => {
@@ -297,14 +306,7 @@ const DataTable = ({
         </label>
       </div>
     );
-  }, [page, pages]);
-
-  const getCount = (location: string) => {
-    const count = ufRecords.filter((ufRecord) => {
-      return ufRecord.location == location;
-    }).length;
-    return count;
-  };
+  }, [page, pages, records]);
 
   return (
     <>
@@ -360,7 +362,11 @@ const DataTable = ({
                 key={location}
                 onPress={() => setSelectedLocation(location)}
               >
-                {location} ({getCount(location)})
+                {location} (
+                {location == "All"
+                  ? ufRecords.length
+                  : filterRecords(ufRecords, "location", location).length}
+                )
               </Button>
             ))}
           </div>

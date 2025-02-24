@@ -157,3 +157,10 @@ export const getField = (message: string) => {
   const matches = expression.exec(message);
   return matches![1];
 };
+
+export const filterRecords = (records: any[], key: string, value: string) => {
+  const filteredRecords = records.filter((record) => {
+    return record[key] == value;
+  });
+  return filteredRecords;
+};
