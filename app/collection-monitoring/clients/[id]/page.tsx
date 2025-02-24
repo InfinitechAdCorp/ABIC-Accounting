@@ -63,7 +63,7 @@ const TransactionClient = async ({
       <Navbar record={account!} />
 
       <div className="flex justify-center max-h-[93vh]">
-        <Card className="m-5 md:m-7 p-3">
+        <Card className="m-5 md:my-7 md:mx-32 p-3">
           <CardBody>
             <h1 className="text-lg font-semibold mb-3">
               {`${record?.name}'s ${model}`.toUpperCase()}

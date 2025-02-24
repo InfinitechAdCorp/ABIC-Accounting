@@ -237,7 +237,7 @@ const DataTable = ({
               <ExportBtn model={model} columns={columns} records={records} />
             </div>
           </div>
-          <div className="flex justify-between items-center">
+          {/* <div className="flex justify-between items-center">
             <span className="text-default-400 text-small">
               Total {records.length}
             </span>
@@ -252,7 +252,7 @@ const DataTable = ({
                 <option>15</option>
               </select>
             </label>
-          </div>
+          </div> */}
         </div>
       </>
     );
@@ -271,7 +271,10 @@ const DataTable = ({
 
   const bottomContent = useMemo(() => {
     return (
-      <div className="p2 flex justify-center items-center">
+      <div className="px-2 flex justify-between items-center">
+        <span className="w-[30%] text-default-400 text-small">
+          Total: {records.length}
+        </span>
         <Pagination
           isCompact
           showControls
@@ -281,6 +284,17 @@ const DataTable = ({
           total={pages}
           onChange={setPage}
         />
+        <label className="flex w-[30%] justify-end items-center gap-1 text-default-400 text-small">
+          Rows:
+          <select
+            className="bg-transparent outline-none text-default-400 text-small"
+            onChange={onRowsPerPageChange}
+          >
+            <option>5</option>
+            <option>10</option>
+            <option>15</option>
+          </select>
+        </label>
       </div>
     );
   }, [page, pages]);
