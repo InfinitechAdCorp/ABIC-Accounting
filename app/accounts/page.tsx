@@ -6,6 +6,7 @@ import CreateModal from "@/components/accounts/createModal";
 import AccountCard from "@/components/accounts/accountCard";
 import { retry } from "@/components/globals/serverUtils";
 import { Account } from "@prisma/client";
+import { Card, CardBody } from "@heroui/react";
 
 const Accounts = async () => {
   const { records }: { records?: Account[] } = await retry(getAll);
@@ -25,17 +26,26 @@ const Accounts = async () => {
         </div>
       </div>
 
-      <div className="m-5 md:mx-7 xl:mx-14 2xl:mx-60">
-        <div className="text-center">
-          <h1 className="font-bold text-2xl mb-5">BANK ACCOUNTS</h1>
+      <div className="max-h-[93vh]">
+        <Card radius="none" className="py-[0.10rem] px-2">
+          <CardBody>
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold">Bank Accounts</h3>
+            </div>
+          </CardBody>
+        </Card>
 
-          <div className="grid grid-cols-4 gap-5">
-            <CreateModal />
-            {records!.map((record) => (
-              <AccountCard key={record.id} record={record} />
-            ))}
-          </div>
-        </div>
+        <Card className="m-5 md:my-7 md:mx-96 py-3 px-5">
+          <CardBody>
+            <div className="grid grid-cols-4 gap-5">
+              <CreateModal />
+              {records &&
+                records.map((record) => (
+                  <AccountCard key={record.id} record={record} />
+                ))}
+            </div>
+          </CardBody>
+        </Card>
       </div>
     </>
   );

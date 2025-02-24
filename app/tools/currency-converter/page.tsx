@@ -15,7 +15,7 @@ const CurrencyConverter = async () => {
       <Card radius="none" className="py-[0.10rem] px-2">
         <CardBody>
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">CURRENCY CONVERTER</h3>
+            <h3 className="text-lg font-semibold">Currency Converter</h3>
           </div>
         </CardBody>
       </Card>

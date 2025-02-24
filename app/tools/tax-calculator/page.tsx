@@ -5,7 +5,7 @@ import TaxCalculatorForm from "@/components/tools/taxCalculator/taxCalculatorFor
 import { retry } from "@/components/globals/serverUtils";
 import { Card, CardBody } from "@heroui/react";
 
-const TaxComputation = async () => {
+const TaxCalculator = async () => {
   const { record: account } = await retry(getAccount);
 
   return (
@@ -15,7 +15,7 @@ const TaxComputation = async () => {
       <Card radius="none" className="py-[0.10rem] px-2">
         <CardBody>
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">TAX CALCULATOR</h3>
+            <h3 className="text-lg font-semibold">Tax Calculator</h3>
           </div>
         </CardBody>
       </Card>
@@ -27,4 +27,4 @@ const TaxComputation = async () => {
   );
 };
 
-export default TaxComputation;
+export default TaxCalculator;

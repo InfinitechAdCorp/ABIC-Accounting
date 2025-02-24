@@ -29,7 +29,7 @@ const BillingStatement = async () => {
       <Card radius="none" className="py-[0.10rem] px-2">
         <CardBody>
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">BILLING STATEMENT</h3>
+            <h3 className="text-lg font-semibold">Billing Statement</h3>
           </div>
         </CardBody>
       </Card>

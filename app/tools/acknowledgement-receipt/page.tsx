@@ -29,7 +29,7 @@ const AcknowledgmentReceipt = async () => {
       <Card radius="none" className="py-[0.10rem] px-2">
         <CardBody>
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">ACKNOWLEDGMENT RECEIPT</h3>
+            <h3 className="text-lg font-semibold">Acknowledgment Receipt</h3>
           </div>
         </CardBody>
       </Card>

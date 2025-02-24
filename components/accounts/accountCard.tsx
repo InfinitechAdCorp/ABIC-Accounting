@@ -28,7 +28,7 @@ const AccountCard = ({ record }: Props) => {
         isPressable
         onPress={onPress}
       >
-        <CardBody className="flex items-center justify-center h-60">
+        <CardBody className="flex items-center justify-center">
           <h3 className="text-sm md:text-xl font-bold">{record.name}</h3>
         </CardBody>
       </Card>
