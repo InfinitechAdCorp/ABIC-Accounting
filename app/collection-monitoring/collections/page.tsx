@@ -6,7 +6,7 @@ import {
 } from "@/components/collectionMonitoring/collections/actions";
 import { getAll as getCClients } from "@/components/collectionMonitoring/cClients/actions";
 import Navbar from "@/components/globals/navbar";
-import DataTable from "@/components/globals/dataTable";
+import DataTable from "@/components/collectionMonitoring/collections/dataTable";
 import RenderBody from "@/components/collectionMonitoring/collections/renderBody";
 import CreateCollectionModal from "@/components/collectionMonitoring/collections/createModal";
 import CreateCClientModal from "@/components/collectionMonitoring/cClients/createModal";
@@ -20,7 +20,6 @@ const Collections = async () => {
   const model = "Collections";
 
   const locations = [
-    { key: "All", name: "All" },
     { key: "Bacoor", name: "Bacoor" },
     { key: "Makati", name: "Makati" },
     { key: "BGC", name: "BGC" },

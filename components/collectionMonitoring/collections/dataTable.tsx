@@ -32,6 +32,7 @@ import ExportBtn from "@/components/globals/exportBtn";
 import {
   dateToDateValue,
   dateValueToDate,
+  getUniques,
 } from "@/components/globals/utils";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { filter as validationSchema } from "@/components/globals/schemas";
@@ -69,6 +70,9 @@ const DataTable = ({
     direction: "ascending",
   });
 
+  const locations = getUniques(ufRecords, "location");
+  const [selectedLocation, setSelectedLocation] = useState(locations[0]);
+
   const start = dateToDateValue(new Date(1900, 0, 1))!;
   const end = dateToDateValue(new Date(2099, 12, 0))!;
 
@@ -77,6 +81,13 @@ const DataTable = ({
     end: end,
   });
 
+  const locationFilteredRecords = useMemo(() => {
+    const filteredRecords = ufRecords.filter((record) => {
+      return record.location == selectedLocation;
+    });
+    return filteredRecords;
+  }, [ufRecords, selectedLocation]);
+
   const dateFilteredRecords = useMemo(() => {
     const start = dateValueToDate(range.start)!.toLocaleDateString("en-CA");
     const end = dateValueToDate(range.end)!.toLocaleDateString(
@@ -84,13 +95,13 @@ const DataTable = ({
     ) as string;
 
     if (filterKey) {
-      const filteredRecords = ufRecords.filter((record) => {
+      const filteredRecords = locationFilteredRecords.filter((record) => {
         const date = record[filterKey].toLocaleDateString("en-CA");
         return date >= start && date <= end;
       });
       return filteredRecords;
     }
-  }, [range, ufRecords, filterKey]);
+  }, [range, locationFilteredRecords, filterKey]);
 
   const searchFilteredRecords = useMemo(() => {
     let filteredRecords = [...(dateFilteredRecords || ufRecords)];
@@ -288,6 +299,13 @@ const DataTable = ({
     );
   }, [page, pages]);
 
+  const getCount = (location: string) => {
+    const count = ufRecords.filter((ufRecord) => {
+      return ufRecord.location == location;
+    }).length;
+    return count;
+  };
+
   return (
     <>
       <Card radius="none" className="py-[0.10rem] px-2">
@@ -334,6 +352,18 @@ const DataTable = ({
               {RenderBody(columns, sortedRecords, dependencies)}
             </TableBody>
           </Table>
+
+          <div className="flex justify-start gap-2 my-3">
+            {locations.map((location) => (
+              <Button
+                color="primary"
+                key={location}
+                onPress={() => setSelectedLocation(location)}
+              >
+                {location} ({getCount(location)})
+              </Button>
+            ))}
+          </div>
         </CardBody>
       </Card>
     </>

@@ -135,9 +135,7 @@ const UpdateModal = ({ record, locations, cClients }: Props) => {
                                 label="Location"
                                 labelPlacement="outside"
                                 placeholder="Select Location"
-                                items={locations.filter(
-                                  (location) => location.name != "All"
-                                )}
+                                items={locations}
                                 defaultSelectedKeys={[field.value]}
                               >
                                 {(location) => (

@@ -23,7 +23,6 @@ const TransactionClient = async ({
   const model = `Collections`;
 
   const locations = [
-    { key: "All", name: "All" },
     { key: "Bacoor", name: "Bacoor" },
     { key: "Makati", name: "Makati" },
     { key: "BGC", name: "BGC" },

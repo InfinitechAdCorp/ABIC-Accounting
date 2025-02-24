@@ -82,7 +82,7 @@ const CreateModal = ({ locations, cClients }: Props) => {
                     <ModalHeader>Add Collection</ModalHeader>
                     <ModalBody>
                       <div className="grid grid-cols-2 gap-3">
-                        <Field name="collection_client_id">
+                        <Field name="c_client_id">
                           {({ field, meta }: FieldProps) => (
                             <div>
                               <Select
@@ -119,9 +119,7 @@ const CreateModal = ({ locations, cClients }: Props) => {
                                 label="Location"
                                 labelPlacement="outside"
                                 placeholder="Select Location"
-                                items={locations.filter((location) => {
-                                  return location.name != "All";
-                                })}
+                                items={locations}
                               >
                                 {(location) => (
                                   <SelectItem key={location.key}>
