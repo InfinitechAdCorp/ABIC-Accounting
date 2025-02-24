@@ -15,7 +15,7 @@ const RenderCell = (column: string, record: Record) => {
   switch (column) {
     case "actions":
       return (
-        <div className="relative flex justify-end items-center gap-2">
+        <div className="relative flex justify-start items-center gap-2">
           <UpdateModal record={record} />
           <DestroyModal title="Listing" action={destroy} id={record.id} />
         </div>

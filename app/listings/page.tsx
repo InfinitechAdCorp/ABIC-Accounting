@@ -1,6 +1,5 @@
 import React from "react";
 import { getAll, displayFormat } from "@/components/listings/actions";
-import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";
@@ -44,25 +43,18 @@ const Listings = async () => {
     <>
       <Navbar record={account!} />
 
-      <div className="flex justify-center max-h-[93vh]">
-        <Card className="m-5 md:my-7 md:mx-32 p-3">
-          <CardBody>
-            <h1 className="text-lg font-semibold mb-3">
-              {model.toUpperCase()}
-            </h1>
-            <DataTable
-              model={model}
-              columns={[
-                ...columns,
-                { key: "actions", name: "ACTIONS", sortable: false },
-              ]}
-              records={records}
-              filterKey="res"
-              RenderBody={RenderBody}
-              Buttons={Buttons}
-            />
-          </CardBody>
-        </Card>
+      <div className="max-h-[93vh]">
+        <DataTable
+          model={model}
+          columns={[
+            ...columns,
+            { key: "actions", name: "ACTIONS", sortable: false },
+          ]}
+          records={records}
+          filterKey="res"
+          RenderBody={RenderBody}
+          Buttons={Buttons}
+        />
       </div>
     </>
   );

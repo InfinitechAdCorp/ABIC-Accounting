@@ -24,6 +24,8 @@ import {
   Button,
   DateRangePicker,
   useDisclosure,
+  Card,
+  CardBody,
 } from "@heroui/react";
 import { Column } from "@/components/globals/types";
 import ExportBtn from "@/components/globals/exportBtn";
@@ -40,6 +42,7 @@ type Props = {
   dependencies?: any;
   RenderBody: (columns: Column[], records: any[], dependencies: any) => any;
   Buttons: ReactElement;
+  SideContent?: ReactElement;
 };
 
 const DataTable = ({
@@ -50,7 +53,10 @@ const DataTable = ({
   dependencies,
   RenderBody,
   Buttons,
+  SideContent,
 }: Props) => {
+  const baseModel = model.split(' ').at(-1)! 
+
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
@@ -172,7 +178,7 @@ const DataTable = ({
                 >
                   {(props) => (
                     <Form>
-                      <ModalHeader>Export {model}</ModalHeader>
+                      <ModalHeader>Export {baseModel}</ModalHeader>
                       <ModalBody>
                         <Field name="range">
                           {({ field, meta }: FieldProps) => (
@@ -215,7 +221,7 @@ const DataTable = ({
         </Modal>
       </>
     );
-  }, [isOpen, onOpen, onOpenChange, onClose, model, range, end, start]);
+  }, [isOpen, onOpen, onOpenChange, onClose, baseModel, range, end, start]);
 
   const topContent = useMemo(() => {
     return (
@@ -231,28 +237,9 @@ const DataTable = ({
               onClear={onClear}
               onValueChange={onSearchChange}
             />
-            <div className="flex gap-3">
-              {Buttons}
-              {filterKey && Filter}
-              <ExportBtn model={model} columns={columns} records={records} />
-            </div>
+
+            {SideContent}
           </div>
-          {/* <div className="flex justify-between items-center">
-            <span className="text-default-400 text-small">
-              Total {records.length}
-            </span>
-            <label className="flex items-center text-default-400 text-small">
-              Rows per page:
-              <select
-                className="bg-transparent outline-none text-default-400 text-small"
-                onChange={onRowsPerPageChange}
-              >
-                <option>5</option>
-                <option>10</option>
-                <option>15</option>
-              </select>
-            </label>
-          </div> */}
         </div>
       </>
     );
@@ -261,7 +248,6 @@ const DataTable = ({
     filterValue,
     onSearchChange,
     onClear,
-    model,
     columns,
     records,
     filterKey,
@@ -301,30 +287,48 @@ const DataTable = ({
 
   return (
     <>
-      <Table
-        aria-label="DataTable"
-        isHeaderSticky
-        bottomContent={bottomContent}
-        bottomContentPlacement="outside"
-        classNames={{
-          wrapper: "max-h-[400px]",
-        }}
-        topContent={topContent}
-        topContentPlacement="outside"
-        sortDescriptor={sortDescriptor}
-        onSortChange={setSortDescriptor}
-      >
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn key={column.key} allowsSorting={column.sortable}>
-              {column.name}
-            </TableColumn>
-          )}
-        </TableHeader>
-        <TableBody emptyContent={`No ${model} Found`}>
-          {RenderBody(columns, sortedRecords, dependencies)}
-        </TableBody>
-      </Table>
+      <Card radius="none" className="py-[0.10rem] px-2">
+        <CardBody>
+          <div className="flex justify-between items-center">
+            <h3 className="text-lg font-semibold">{model.toUpperCase()}</h3>
+
+            <div className="flex gap-3">
+              {Buttons}
+              {filterKey && Filter}
+              <ExportBtn model={baseModel} columns={columns} records={records} />
+            </div>
+          </div>
+        </CardBody>
+      </Card>
+
+      <Card className="m-5 md:my-7 md:mx-32 p-3">
+        <CardBody>
+          <Table
+            aria-label="DataTable"
+            isHeaderSticky
+            bottomContent={bottomContent}
+            bottomContentPlacement="outside"
+            classNames={{
+              wrapper: "max-h-[400px]",
+            }}
+            topContent={topContent}
+            topContentPlacement="outside"
+            sortDescriptor={sortDescriptor}
+            onSortChange={setSortDescriptor}
+          >
+            <TableHeader columns={columns}>
+              {(column) => (
+                <TableColumn key={column.key} allowsSorting={column.sortable}>
+                  {column.name}
+                </TableColumn>
+              )}
+            </TableHeader>
+            <TableBody emptyContent={`No ${baseModel} Found`}>
+              {RenderBody(columns, sortedRecords, dependencies)}
+            </TableBody>
+          </Table>
+        </CardBody>
+      </Card>
     </>
   );
 };

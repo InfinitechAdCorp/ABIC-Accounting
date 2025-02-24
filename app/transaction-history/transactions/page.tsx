@@ -5,7 +5,6 @@ import {
   displayFormat,
 } from "@/components/transactionHistory/transactions/actions";
 import { getAll as getTClients } from "@/components/transactionHistory/tClients/actions";
-import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/transactionHistory/transactions/renderBody";
@@ -54,49 +53,43 @@ const Transactions = async () => {
     </>
   );
 
+  const SideContent = (
+    <div role="button">
+      <Tooltip
+        content={
+          <>
+            <h3>Credit: {formatNumber(result.credit)}</h3>
+            <h3>Debit: {formatNumber(result.debit)}</h3>
+          </>
+        }
+      >
+        <h1 className="text-md font-semibold mb-3">
+          RUNNING BALANCE: {formatNumber(result.balance)}
+        </h1>
+      </Tooltip>
+    </div>
+  );
+
   return (
     <>
       <Navbar record={account!} />
 
-      <div className="flex justify-center max-h-[93vh]">
-        <Card className="m-5 md:my-7 md:mx-32 p-3">
-          <CardBody>
-            <div className="flex justify-between">
-              <h1 className="text-lg font-semibold mb-3">
-                {model.toUpperCase()}
-              </h1>
-              <div>
-                <Tooltip
-                  content={
-                    <>
-                      <h3>Credit: {formatNumber(result.credit)}</h3>
-                      <h3>Debit: {formatNumber(result.debit)}</h3>
-                    </>
-                  }
-                >
-                  <h1 className="text-md font-semibold mb-3">
-                    RUNNING BALANCE: {formatNumber(result.balance)}
-                  </h1>
-                </Tooltip>
-              </div>
-            </div>
-
-            <DataTable
-              model={model}
-              columns={[
-                ...columns,
-                { key: "actions", name: "ACTIONS", sortable: false },
-              ]}
-              records={records}
-              filterKey="date"
-              dependencies={{
-                tClients: tClients,
-              }}
-              RenderBody={RenderBody}
-              Buttons={Buttons}
-            />
-          </CardBody>
-        </Card>
+      <div className="max-h-[93vh]">
+        <DataTable
+          model={model}
+          columns={[
+            ...columns,
+            { key: "actions", name: "ACTIONS", sortable: false },
+          ]}
+          records={records}
+          filterKey="date"
+          dependencies={{
+            tClients: tClients,
+          }}
+          RenderBody={RenderBody}
+          Buttons={Buttons}
+          SideContent={SideContent}
+        />
       </div>
     </>
   );
