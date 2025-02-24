@@ -1,6 +1,4 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-// import { accounts } from "@/prisma/accounts";
-// import { listings } from "@/prisma/listings";
 
 const prisma = new PrismaClient();
 
@@ -8,17 +6,17 @@ const accounts: Prisma.AccountCreateInput[] = [
   {
     name: "SCB 443",
     th_access: true,
-    cm_access: true,
+    cm_access: false,
   },
   {
     name: "SCB 483",
-    th_access: false,
+    th_access: true,
     cm_access: false,
   },
   {
     name: "SCB 202",
     th_access: true,
-    cm_access: false,
+    cm_access: true,
   },
 ];
 
@@ -26,8 +24,8 @@ const tClients: Prisma.TClientCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[0].name },
-        create: accounts[0],
+        where: { name: accounts[2].name },
+        create: accounts[2],
       },
     },
     name: "Hu Yanchong",
@@ -35,8 +33,8 @@ const tClients: Prisma.TClientCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[0].name },
-        create: accounts[0],
+        where: { name: accounts[2].name },
+        create: accounts[2],
       },
     },
     name: "Weiwei Chen",
@@ -44,8 +42,8 @@ const tClients: Prisma.TClientCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[0].name },
-        create: accounts[0],
+        where: { name: accounts[2].name },
+        create: accounts[2],
       },
     },
     name: "Dan Li",
@@ -113,8 +111,8 @@ const cClients: Prisma.CClientCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[0].name },
-        create: accounts[0],
+        where: { name: accounts[2].name },
+        create: accounts[2],
       },
     },
     name: "Jun Xie",
@@ -122,8 +120,8 @@ const cClients: Prisma.CClientCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[0].name },
-        create: accounts[0],
+        where: { name: accounts[2].name },
+        create: accounts[2],
       },
     },
     name: "Quan Long",
@@ -131,8 +129,8 @@ const cClients: Prisma.CClientCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[0].name },
-        create: accounts[0],
+        where: { name: accounts[2].name },
+        create: accounts[2],
       },
     },
     name: "Zong Guofeng",
@@ -210,8 +208,8 @@ const listings: Prisma.ListingCreateInput[] = [
     unit: "607 Marantina",
     res: "2024-12-01T00:00:00.000Z",
     terms: "50-50 bf",
-    consultant: "Joyce Roa",
-    manager: "Aldrin Tapia",
+    ps: "Joyce Roa",
+    sm: "Aldrin Tapia",
     list_price: "3264000",
     total_price: "2937600",
     status: "Closed",
@@ -232,8 +230,8 @@ const listings: Prisma.ListingCreateInput[] = [
     unit: "517 Raja",
     res: "2024-12-06T00:00:00.000Z",
     terms: "15-33; 85-bf",
-    consultant: "Ella Marie Serrano",
-    manager: "Josephine Javier",
+    ps: "Ella Marie Serrano",
+    sm: "Josephine Javier",
     list_price: "3311000",
     total_price: "2979900",
     status: "Closed",
@@ -254,8 +252,8 @@ const listings: Prisma.ListingCreateInput[] = [
     unit: "1519",
     res: "2024-12-07T00:00:00.000Z",
     terms: "30-58, 70-bf",
-    consultant: "Jimmy Ala",
-    manager: "Roberto Dalusung",
+    ps: "Jimmy Ala",
+    sm: "Roberto Dalusung",
     list_price: "3400000",
     total_price: "3060000",
     status: "Back Out",

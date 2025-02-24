@@ -59,28 +59,6 @@ model Transaction {
   @@map(name: "transactions")
 }
 
-model Listing {
-  id          String    @id @default(cuid())
-  account     Account?  @relation(fields: [account_id], references: [id], onDelete: Cascade)
-  account_id  String?
-  client      String
-  type        String
-  project     String
-  unit        String
-  res         DateTime  @db.Date
-  terms       String
-  consultant  String
-  manager     String
-  list_price  Decimal   @db.Decimal(15, 2)
-  total_price Decimal   @db.Decimal(15, 2)
-  status      String
-  source      String
-  extension   DateTime? @db.Date
-  closed      DateTime? @db.Date
-
-  @@map(name: "listings")
-}
-
 model CClient {
   id          String       @id @default(cuid())
   account     Account?     @relation(fields: [account_id], references: [id], onDelete: Cascade)
@@ -113,12 +91,38 @@ model Collection {
   @@map(name: "collections")
 }
 
+model Listing {
+  id          String    @id @default(cuid())
+  account     Account?  @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  account_id  String?
+  client      String
+  type        String
+  project     String
+  unit        String
+  res         DateTime  @db.Date
+  terms       String
+  ps          String
+  sm          String
+  list_price  Decimal   @db.Decimal(15, 2)
+  total_price Decimal   @db.Decimal(15, 2)
+  status      String
+  source      String
+  extension   DateTime? @db.Date
+  closed      DateTime? @db.Date
+
+  @@map(name: "listings")
+}
+
 model AR {
   id     String @id @default(cuid())
   number String @unique
+
+    @@map(name: "ars")
 }
 
 model BS {
   id     String @id @default(cuid())
   number String @unique
+
+    @@map(name: "bss")
 }
