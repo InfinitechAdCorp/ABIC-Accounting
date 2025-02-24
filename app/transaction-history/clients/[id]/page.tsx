@@ -40,6 +40,7 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
     { key: "debit", name: "DEBIT", sortable: true },
     { key: "status", name: "STATUS", sortable: true },
     { key: "proof", name: "PROOF", sortable: true },
+    { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
   const voucher = setVoucher(transactions[0]);
@@ -76,10 +77,7 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
       <div className="max-h-[93vh]">
         <DataTable
           model={`${record?.name}'s ${model}`}
-          columns={[
-            ...columns,
-            { key: "actions", name: "ACTIONS", sortable: false },
-          ]}
+          columns={columns}
           records={records}
           filterKey="date"
           dependencies={{

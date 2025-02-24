@@ -29,6 +29,7 @@ const Listings = async () => {
     { key: "extension", name: "EXTENSION", sortable: true },
     { key: "aging", name: "AGING", sortable: true },
     { key: "closed", name: "CLOSED DATE", sortable: true },
+    { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
   const records = await displayFormat(columns, ufRecords);
@@ -46,10 +47,7 @@ const Listings = async () => {
       <div className="max-h-[93vh]">
         <DataTable
           model={model}
-          columns={[
-            ...columns,
-            { key: "actions", name: "ACTIONS", sortable: false },
-          ]}
+          columns={columns}
           records={records}
           filterKey="res"
           RenderBody={RenderBody}

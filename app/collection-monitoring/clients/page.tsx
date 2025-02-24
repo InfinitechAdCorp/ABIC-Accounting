@@ -19,7 +19,10 @@ const CClients = async () => {
   const columns = [
     { key: "name", name: "NAME", sortable: true },
     { key: "collections", name: "COLLECTIONS", sortable: true },
+    { key: "actions", name: "ACTIONS", sortable: false },
   ];
+
+  const initialVisibleColumns = ["name"];
 
   const records = await displayFormat(columns, ufRecords);
 
@@ -36,11 +39,9 @@ const CClients = async () => {
       <div className="max-h-[93vh]">
         <DataTable
           model={model}
-          columns={[
-            ...columns,
-            { key: "actions", name: "ACTIONS", sortable: false },
-          ]}
+          columns={columns}
           records={records}
+          initialVisibleColumns={initialVisibleColumns}
           RenderBody={RenderBody}
           Buttons={Buttons}
         />

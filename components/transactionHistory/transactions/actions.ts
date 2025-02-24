@@ -92,10 +92,10 @@ export const displayFormat = async (
           }
           break;
         case "status":
-          if (isPending(record.date)) {
+          value = record[key as keyof Transaction];
+          if (value != "Cancelled" && isPending(record.date)) {
             value = "Pending";
           } else {
-            value = record[key as keyof Transaction];
             if (value == "Active") value = "";
           }
           break;

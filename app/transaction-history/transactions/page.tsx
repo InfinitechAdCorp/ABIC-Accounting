@@ -37,6 +37,7 @@ const Transactions = async () => {
     { key: "debit", name: "DEBIT", sortable: true },
     { key: "status", name: "STATUS", sortable: true },
     { key: "proof", name: "PROOF", sortable: false },
+    { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
   const voucher = setVoucher(ufRecords[0]);
@@ -77,10 +78,7 @@ const Transactions = async () => {
       <div className="max-h-[93vh]">
         <DataTable
           model={model}
-          columns={[
-            ...columns,
-            { key: "actions", name: "ACTIONS", sortable: false },
-          ]}
+          columns={columns}
           records={records}
           filterKey="date"
           dependencies={{

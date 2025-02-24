@@ -44,6 +44,7 @@ const Collections = async () => {
     { key: "due", name: "DUE DATE", sortable: true },
     { key: "status", name: "STATUS", sortable: true },
     { key: "payments", name: "PAYMENTS", sortable: true },
+    { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
   const records = await displayFormat(columns, ufRecords);
@@ -64,10 +65,7 @@ const Collections = async () => {
       <div className="max-h-[93vh]">
         <DataTable
           model={model}
-          columns={[
-            ...columns,
-            { key: "actions", name: "ACTIONS", sortable: false },
-          ]}
+          columns={columns}
           records={records}
           filterKey="start"
           dependencies={{

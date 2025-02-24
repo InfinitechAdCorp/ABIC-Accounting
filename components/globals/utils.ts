@@ -5,8 +5,6 @@ import { ActionResponse } from "@/components/globals/types";
 import { DateValue, parseDate } from "@internationalized/date";
 import { isAfter } from "date-fns";
 
-// Event Handlers
-
 export const onPostSubmit = (
   response: ActionResponse,
   actions: { resetForm: () => void },
@@ -33,8 +31,6 @@ export const onPostSubmit = (
     }
   }
 };
-
-// Formatters
 
 export const capitalize = (ufString: string) => {
   const string = ufString.charAt(0).toUpperCase() + ufString.slice(1);

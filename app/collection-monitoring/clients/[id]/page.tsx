@@ -46,6 +46,7 @@ const TransactionClient = async ({
     { key: "due", name: "DUE DATE", sortable: true },
     { key: "status", name: "STATUS", sortable: true },
     { key: "payments", name: "PAYMENTS", sortable: true },
+    { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
   const records = await displayFormat(columns, record?.collections || []);
@@ -63,10 +64,7 @@ const TransactionClient = async ({
       <div className="max-h-[93vh]">
         <DataTable
           model={`${record?.name}'s ${model}`}
-          columns={[
-            ...columns,
-            { key: "actions", name: "ACTIONS", sortable: false },
-          ]}
+          columns={columns}
           records={records}
           filterKey="start"
           dependencies={{

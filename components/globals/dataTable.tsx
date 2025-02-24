@@ -29,10 +29,7 @@ import {
 } from "@heroui/react";
 import { Column } from "@/components/globals/types";
 import ExportBtn from "@/components/globals/exportBtn";
-import {
-  dateToDateValue,
-  dateValueToDate,
-} from "@/components/globals/utils";
+import { dateToDateValue, dateValueToDate } from "@/components/globals/utils";
 import { Formik, Form, Field, FieldProps } from "formik";
 import { filter as validationSchema } from "@/components/globals/schemas";
 import { Filter } from "@/components/globals/types";
@@ -41,6 +38,7 @@ type Props = {
   model: string;
   columns: Column[];
   records: any[];
+  initialVisibleColumns: string[];
   filterKey?: string;
   dependencies?: any;
   RenderBody: (columns: Column[], records: any[], dependencies: any) => any;
@@ -52,6 +50,7 @@ const DataTable = ({
   model,
   columns,
   records: ufRecords,
+  initialVisibleColumns,
   filterKey,
   dependencies,
   RenderBody,
@@ -62,9 +61,14 @@ const DataTable = ({
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
+  const [visibleColumns, setVisibleColumns] = useState(
+    new Set(initialVisibleColumns)
+  );
+
+
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
-  
+
   const [filterValue, setFilterValue] = useState("");
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
     column: "",
@@ -77,6 +81,12 @@ const DataTable = ({
     start: start,
     end: end,
   });
+
+  const headerColumns = useMemo(() => {
+    return columns.filter((column) =>
+      Array.from(visibleColumns).includes(column.key)
+    );
+  }, [visibleColumns]);
 
   const dateFilteredRecords = useMemo(() => {
     const start = dateValueToDate(range.start)!.toLocaleDateString("en-CA");
@@ -182,7 +192,7 @@ const DataTable = ({
                 >
                   {(props) => (
                     <Form>
-                      <ModalHeader>Export {baseModel}</ModalHeader>
+                      <ModalHeader>Filter {baseModel}</ModalHeader>
                       <ModalBody>
                         <Field name="range">
                           {({ field, meta }: FieldProps) => (
@@ -287,7 +297,7 @@ const DataTable = ({
         </label>
       </div>
     );
-  }, [page, pages]);
+  }, [page, pages, records]);
 
   return (
     <>

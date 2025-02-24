@@ -28,6 +28,7 @@ const TClients = async () => {
     { key: "transactions", name: "TRANSACTIONS", sortable: true },
     { key: "starting_fund", name: "STARTING FUND", sortable: true },
     { key: "running_balance", name: "RUNNING BALANCE", sortable: true },
+    { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
   const records = await displayFormat(columns, ufRecords);
@@ -62,10 +63,7 @@ const TClients = async () => {
       <div className="max-h-[93vh]">
         <DataTable
           model={model}
-          columns={[
-            ...columns,
-            { key: "actions", name: "ACTIONS", sortable: false },
-          ]}
+          columns={columns}
           records={records}
           RenderBody={RenderBody}
           Buttons={Buttons}

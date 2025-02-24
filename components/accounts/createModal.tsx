@@ -47,7 +47,9 @@ const CreateModal = () => {
       <Card className="mb-1" onPress={onOpen} isHoverable isPressable>
         <CardBody className="flex items-center justify-center py-16">
           <PlusIcon size={50} />
-          <h3 className="text-sm md:text-xl font-bold">Add Account</h3>
+          <div className="text-center">
+            <h3 className="text-sm md:text-xl font-bold">Add Account</h3>
+          </div>
         </CardBody>
       </Card>
 
@@ -101,7 +103,7 @@ const CreateModal = () => {
                             </div>
                           )}
                         </Field>
-                       
+
                         <Field name="cm_access">
                           {({ field, meta }: FieldProps) => (
                             <div>
