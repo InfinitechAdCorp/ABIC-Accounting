@@ -9,8 +9,8 @@ const rules = {
     .typeError("Date Res must be a valid date")
     .required("Date Res is a required field"),
   terms: Yup.string().trim().required("Terms is a required field"),
-  consultant: Yup.string().trim().required("Consultant is a required field"),
-  manager: Yup.string().trim().required("Manager is a required field"),
+  specialist: Yup.string().trim().required("Property Specialist is a required field"),
+  manager: Yup.string().trim().required("Sales Manager is a required field"),
   list_price: Yup.number()
     .typeError("List Price must be a number")
     .moreThan(-1, "List Price must be a positive number"),

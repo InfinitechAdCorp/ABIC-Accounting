@@ -101,8 +101,8 @@ model Listing {
   unit        String
   res         DateTime  @db.Date
   terms       String
-  ps          String
-  sm          String
+  specialist  String
+  manager     String
   list_price  Decimal   @db.Decimal(15, 2)
   total_price Decimal   @db.Decimal(15, 2)
   status      String
@@ -117,12 +117,12 @@ model AR {
   id     String @id @default(cuid())
   number String @unique
 
-    @@map(name: "ars")
+  @@map(name: "ars")
 }
 
 model BS {
   id     String @id @default(cuid())
   number String @unique
 
-    @@map(name: "bss")
+  @@map(name: "bss")
 }

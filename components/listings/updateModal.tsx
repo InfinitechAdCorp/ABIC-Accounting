@@ -42,7 +42,7 @@ const UpdateModal = ({ record }: Props) => {
     unit: record.unit,
     res: record.res,
     terms: record.terms,
-    consultant: record.consultant,
+    specialist: record.specialist,
     manager: record.manager,
     list_price: record.list_price,
     total_price: record.total_price,
@@ -240,7 +240,7 @@ const UpdateModal = ({ record }: Props) => {
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
-                        <Field name="consultant">
+                        <Field name="specialist">
                           {({ field, meta }: FieldProps) => (
                             <div>
                               <Input
@@ -248,9 +248,9 @@ const UpdateModal = ({ record }: Props) => {
                                 type="text"
                                 size="md"
                                 variant="bordered"
-                                label="Property Consultant"
+                                label="Property Specialist"
                                 labelPlacement="outside"
-                                placeholder="Enter Property Consultant"
+                                placeholder="Enter Property Specialist"
                               />
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">

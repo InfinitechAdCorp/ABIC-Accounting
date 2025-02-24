@@ -35,7 +35,7 @@ const CreateModal = () => {
     unit: "",
     res: "",
     terms: "",
-    consultant: "",
+    specialist: "",
     manager: "",
     list_price: "",
     total_price: "",
@@ -217,7 +217,7 @@ const CreateModal = () => {
                       </div>
 
                       <div className="grid grid-cols-2 gap-3">
-                        <Field name="consultant">
+                        <Field name="specialist">
                           {({ field, meta }: FieldProps) => (
                             <div>
                               <Input
@@ -225,9 +225,9 @@ const CreateModal = () => {
                                 type="text"
                                 size="md"
                                 variant="bordered"
-                                label="Property Consultant"
+                                label="Property Specialist"
                                 labelPlacement="outside"
-                                placeholder="Enter Property Consultant"
+                                placeholder="Enter Property Specialist"
                               />
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">

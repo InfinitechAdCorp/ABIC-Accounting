@@ -14,7 +14,7 @@ export type ListingDisplayFormat = {
   unit: string;
   res: string;
   terms: string;
-  consultant: string;
+  specialist: string;
   manager: string;
   list_price: string;
   total_price: string;

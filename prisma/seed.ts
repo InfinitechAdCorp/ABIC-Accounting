@@ -198,8 +198,8 @@ const listings: Prisma.ListingCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[0].name },
-        create: accounts[0],
+        where: { name: accounts[2].name },
+        create: accounts[2],
       },
     },
     client: "Mary Rose",
@@ -208,8 +208,8 @@ const listings: Prisma.ListingCreateInput[] = [
     unit: "607 Marantina",
     res: "2024-12-01T00:00:00.000Z",
     terms: "50-50 bf",
-    ps: "Joyce Roa",
-    sm: "Aldrin Tapia",
+    specialist: "Joyce Roa",
+    manager: "Aldrin Tapia",
     list_price: "3264000",
     total_price: "2937600",
     status: "Closed",
@@ -220,8 +220,8 @@ const listings: Prisma.ListingCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[0].name },
-        create: accounts[0],
+        where: { name: accounts[2].name },
+        create: accounts[2],
       },
     },
     client: "Yeonseo Oh",
@@ -230,8 +230,8 @@ const listings: Prisma.ListingCreateInput[] = [
     unit: "517 Raja",
     res: "2024-12-06T00:00:00.000Z",
     terms: "15-33; 85-bf",
-    ps: "Ella Marie Serrano",
-    sm: "Josephine Javier",
+    specialist: "Ella Marie Serrano",
+    manager: "Josephine Javier",
     list_price: "3311000",
     total_price: "2979900",
     status: "Closed",
@@ -242,8 +242,8 @@ const listings: Prisma.ListingCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[0].name },
-        create: accounts[0],
+        where: { name: accounts[2].name },
+        create: accounts[2],
       },
     },
     client: "Elaine Marie Pena",
@@ -252,8 +252,8 @@ const listings: Prisma.ListingCreateInput[] = [
     unit: "1519",
     res: "2024-12-07T00:00:00.000Z",
     terms: "30-58, 70-bf",
-    ps: "Jimmy Ala",
-    sm: "Roberto Dalusung",
+    specialist: "Jimmy Ala",
+    manager: "Roberto Dalusung",
     list_price: "3400000",
     total_price: "3060000",
     status: "Back Out",
