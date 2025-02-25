@@ -60,6 +60,19 @@ model Transaction {
   @@map(name: "transactions")
 }
 
+model PDCSet {
+  id     String   @id @default(cuid())
+  name   String
+  pay_to String
+  start  DateTime @db.Date
+  end    DateTime @db.Date
+  check  String
+  type   String
+  amount Decimal  @db.Decimal(15, 2)
+
+  @@map(name: "pdc_sets")
+}
+
 model PDC {
   id         String   @id @default(cuid())
   account    Account? @relation(fields: [account_id], references: [id], onDelete: Cascade)
