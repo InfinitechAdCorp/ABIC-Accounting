@@ -28,8 +28,10 @@ const AccountCard = ({ record }: Props) => {
         isPressable
         onPress={onPress}
       >
-        <CardBody className="flex items-center justify-center">
-          <h3 className="text-sm md:text-xl font-bold">{record.name}</h3>
+        <CardBody>
+          <div className="flex items-center justify-center text-center h-[5rem]">
+            <h3 className="text-sm md:text-xl font-bold">{record.name}</h3>
+          </div>
         </CardBody>
       </Card>
     </>

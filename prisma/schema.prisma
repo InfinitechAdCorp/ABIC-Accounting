@@ -46,8 +46,8 @@ model Transaction {
   t_client    TClient? @relation(fields: [t_client_id], references: [id], onDelete: Cascade)
   t_client_id String?
   date        DateTime @db.Date
-  voucher     String?   @unique
-  check       String?   @unique
+  voucher     String?  @unique
+  check       String?  @unique
   particulars String   @db.Text
   type        String
   amount      Decimal  @db.Decimal(15, 2)
@@ -57,6 +57,18 @@ model Transaction {
   updated_at  DateTime @updatedAt
 
   @@map(name: "transactions")
+}
+
+model PDC {
+  id     String   @id @default(cuid())
+  name   String
+  pay_to String
+  date   DateTime @db.Date
+  check  String
+  type   String
+  amount Decimal  @db.Decimal(15, 2)
+
+  @@map(name: "pdcs")
 }
 
 model CClient {
