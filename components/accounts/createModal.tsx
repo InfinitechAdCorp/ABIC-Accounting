@@ -44,12 +44,9 @@ const CreateModal = () => {
 
   return (
     <>
-      <Card className="mb-1" onPress={onOpen} isHoverable isPressable>
-        <CardBody className="flex items-center justify-center py-16">
-          <PlusIcon size={50} />
-          <div className="text-center">
-            <h3 className="text-sm md:text-xl font-bold">Add Account</h3>
-          </div>
+      <Card className="py-16 mb-1" onPress={onOpen} isHoverable isPressable>
+        <CardBody className="flex items-center justify-center text-center">
+          <h3 className="text-sm md:text-xl font-bold">Add Account</h3>
         </CardBody>
       </Card>
 

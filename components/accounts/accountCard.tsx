@@ -22,7 +22,7 @@ const AccountCard = ({ record }: Props) => {
   return (
     <>
       <Card
-        className="mb-1"
+        className="py-16 mb-1"
         data-pressed={record.id}
         isHoverable
         isPressable

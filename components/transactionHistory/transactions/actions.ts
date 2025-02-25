@@ -263,7 +263,6 @@ export const update = async (values: TransactionCreateInput) => {
       });
     }
 
-
     const data = {
       t_client: { connect: { id: values.t_client_id } },
       date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
