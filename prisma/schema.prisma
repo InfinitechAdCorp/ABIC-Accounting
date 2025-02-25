@@ -25,6 +25,7 @@ model Account {
   cm_access  Boolean
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
+  PDC        PDC[]
 
   @@map(name: "accounts")
 }
@@ -60,13 +61,15 @@ model Transaction {
 }
 
 model PDC {
-  id     String   @id @default(cuid())
-  name   String
-  pay_to String
-  date   DateTime @db.Date
-  check  String
-  type   String
-  amount Decimal  @db.Decimal(15, 2)
+  id         String   @id @default(cuid())
+  account    Account? @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  account_id String?
+  name       String
+  pay_to     String
+  date       DateTime @db.Date
+  check      String
+  type       String
+  amount     Decimal  @db.Decimal(15, 2)
 
   @@map(name: "pdcs")
 }
