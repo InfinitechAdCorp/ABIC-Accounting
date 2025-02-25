@@ -22,8 +22,6 @@ const CClients = async () => {
     { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
-  const initialVisibleColumns = ["name"];
-
   const records = await displayFormat(columns, ufRecords);
 
   const Buttons = (
@@ -41,7 +39,6 @@ const CClients = async () => {
           model={model}
           columns={columns}
           records={records}
-          initialVisibleColumns={initialVisibleColumns}
           RenderBody={RenderBody}
           Buttons={Buttons}
         />

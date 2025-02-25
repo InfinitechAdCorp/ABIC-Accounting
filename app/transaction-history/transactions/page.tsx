@@ -55,7 +55,7 @@ const Transactions = async () => {
   );
 
   const SideContent = (
-    <div role="button">
+    <div className="text-end">
       <Tooltip
         content={
           <>
@@ -64,9 +64,9 @@ const Transactions = async () => {
           </>
         }
       >
-        <h1 className="text-md font-semibold mb-3">
+        <h3 className="inline text-md font-semibold" role="button">
           RUNNING BALANCE: {formatNumber(result.balance)}
-        </h1>
+        </h3>
       </Tooltip>
     </div>
   );

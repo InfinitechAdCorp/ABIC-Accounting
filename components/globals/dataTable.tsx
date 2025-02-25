@@ -26,6 +26,11 @@ import {
   useDisclosure,
   Card,
   CardBody,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Selection,
 } from "@heroui/react";
 import { Column } from "@/components/globals/types";
 import ExportBtn from "@/components/globals/exportBtn";
@@ -37,8 +42,8 @@ import { Filter } from "@/components/globals/types";
 type Props = {
   model: string;
   columns: Column[];
+  initialColumns?: string[];
   records: any[];
-  initialVisibleColumns: string[];
   filterKey?: string;
   dependencies?: any;
   RenderBody: (columns: Column[], records: any[], dependencies: any) => any;
@@ -48,9 +53,9 @@ type Props = {
 
 const DataTable = ({
   model,
-  columns,
+  columns: ufColumns,
+  initialColumns: ufInitialColumns,
   records: ufRecords,
-  initialVisibleColumns,
   filterKey,
   dependencies,
   RenderBody,
@@ -61,10 +66,15 @@ const DataTable = ({
 
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
-  const [visibleColumns, setVisibleColumns] = useState(
-    new Set(initialVisibleColumns)
+  const initialColumns = ufInitialColumns || [];
+  if (initialColumns.length == 0) {
+    ufColumns.forEach((ufColumn) => {
+      initialColumns.push(ufColumn.key);
+    });
+  }
+  const [visibleColumns, setVisibleColumns] = useState<Selection>(
+    new Set(initialColumns)
   );
-
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
@@ -82,9 +92,9 @@ const DataTable = ({
     end: end,
   });
 
-  const headerColumns = useMemo(() => {
-    return columns.filter((column) =>
-      Array.from(visibleColumns).includes(column.key)
+  const columns = useMemo(() => {
+    return ufColumns.filter((ufColumn) =>
+      Array.from(visibleColumns).includes(ufColumn.key)
     );
   }, [visibleColumns]);
 
@@ -240,19 +250,43 @@ const DataTable = ({
   const topContent = useMemo(() => {
     return (
       <>
+        {SideContent}
+
         <div className="flex flex-col gap-4">
           <div className="flex justify-between gap-3 items-end">
-            <Input
-              isClearable
-              className="w-full sm:max-w-[44%]"
-              placeholder={`Search`}
-              startContent={<SearchIcon />}
-              value={filterValue}
-              onClear={onClear}
-              onValueChange={onSearchChange}
-            />
+            <div className="w-full sm:max-w-[50%]">
+              <Input
+                isClearable
+                placeholder={`Search`}
+                startContent={<SearchIcon />}
+                value={filterValue}
+                onClear={onClear}
+                onValueChange={onSearchChange}
+              />
+            </div>
 
-            {SideContent}
+            <div className="flex justify-end gap-2">
+              {filterKey && Filter}
+              <Dropdown>
+                <DropdownTrigger className="hidden sm:flex">
+                  <Button color="primary">Columns</Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  disallowEmptySelection
+                  aria-label="Table Columns"
+                  closeOnSelect={false}
+                  selectedKeys={visibleColumns}
+                  selectionMode="multiple"
+                  onSelectionChange={setVisibleColumns}
+                >
+                  {ufColumns.map((ufColumn) => (
+                    <DropdownItem key={ufColumn.key}>
+                      {ufColumn.name}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
+            </div>
           </div>
         </div>
       </>
@@ -308,7 +342,6 @@ const DataTable = ({
 
             <div className="flex gap-3">
               {Buttons}
-              {filterKey && Filter}
               <ExportBtn
                 model={baseModel}
                 columns={columns}
