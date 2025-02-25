@@ -3,8 +3,8 @@ import { PDC as PrismaPDC, Account } from "@prisma/client";
 export type PDCSet = {
   name: string;
   pay_to: string;
-  start: Date;
-  end: Date;
+  start: Date | string;
+  end: Date | string;
   check: string;
   type: string;
   amount: number;
