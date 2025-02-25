@@ -67,7 +67,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
     type: "Credit",
     amount: 5000,
     status: "Active",
-    proof: "no-image.jpg",
+    proof: null,
   },
   {
     t_client: {
@@ -85,7 +85,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
     type: "Debit",
     amount: 3000,
     status: "Active",
-    proof: "no-image.jpg",
+    proof: null,
   },
   {
     t_client: {
@@ -103,7 +103,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
     type: "Credit",
     amount: 4000,
     status: "Active",
-    proof: "no-image.jpg",
+    proof: null,
   },
 ];
 
@@ -236,7 +236,7 @@ const listings: Prisma.ListingCreateInput[] = [
     total_price: "2979900",
     status: "Closed",
     source: "Personal ADs",
-    extension: undefined,
+    extension: null,
     closed: "2025-01-19T00:00:00.000Z",
   },
   {
@@ -258,8 +258,8 @@ const listings: Prisma.ListingCreateInput[] = [
     total_price: "3060000",
     status: "Back Out",
     source: "Personal ADs",
-    extension: undefined,
-    closed: undefined,
+    extension: null,
+    closed: null,
   },
 ];
 

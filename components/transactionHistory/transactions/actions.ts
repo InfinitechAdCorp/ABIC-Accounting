@@ -263,6 +263,7 @@ export const update = async (values: TransactionCreateInput) => {
       });
     }
 
+
     const data = {
       t_client: { connect: { id: values.t_client_id } },
       date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
@@ -274,10 +275,6 @@ export const update = async (values: TransactionCreateInput) => {
       status: values.status,
       proof: proof,
     };
-
-    if (proof) {
-      delete data.proof;
-    }
 
     await prisma.transaction.update({
       where: { id: values.id },

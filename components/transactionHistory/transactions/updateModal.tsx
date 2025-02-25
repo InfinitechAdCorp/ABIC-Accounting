@@ -46,8 +46,8 @@ const UpdateModal = ({ record, tClients }: Props) => {
   const initialValues = {
     id: record.id,
     date: record.date,
-    voucher: record.voucher,
-    check: record.check,
+    voucher: record.voucher || "",
+    check: record.check || "",
     t_client_id: record.t_client_id,
     particulars: record.particulars,
     type: record.type,
