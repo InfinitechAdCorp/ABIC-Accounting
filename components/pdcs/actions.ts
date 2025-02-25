@@ -5,7 +5,7 @@ import { Prisma, PDC as PrismaPDC } from "@prisma/client";
 import { ActionResponse } from "@/components/globals/types";
 import { cookies } from "next/headers";
 import { PDC, PDCSet } from "@/components/pdcs/types";
-import { eachMonthOfInterval } from "date-fns";
+import { eachMonthOfInterval, setDate, setHours } from "date-fns";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { create as createSchema } from "@/components/pdcs/schemas";
@@ -76,12 +76,11 @@ export const create = async (values: PDCSet) => {
     return response;
   }
 
-  const dueDay = new Date(values.start).getDate();
-  console.log(dueDay)
   const months = eachMonthOfInterval({
     start: new Date(new Date(values.start).setUTCHours(0, 0, 0, 0)),
     end: new Date(new Date(values.end).setUTCHours(0, 0, 0, 0)),
   });
+  const dueDay = new Date(values.start).getDate() + 1;
 
   try {
     let check = Number(values.check);
@@ -91,7 +90,7 @@ export const create = async (values: PDCSet) => {
           account: { connect: { id: accountID } },
           name: values.name,
           pay_to: values.pay_to,
-          date: month,
+          date: setDate(month, dueDay),
           check: `${check}`,
           type: values.type,
           amount: values.amount,
