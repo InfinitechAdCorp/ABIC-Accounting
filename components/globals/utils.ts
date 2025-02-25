@@ -129,7 +129,7 @@ export const isPending = (date: Date) => {
   return isPending;
 };
 
-export const setVoucher = (transaction: Transaction) => {
+export const setVoucher = (transaction: Transaction | undefined) => {
   let id = 1;
   if (transaction) {
     id = Number(transaction.voucher) + 1;

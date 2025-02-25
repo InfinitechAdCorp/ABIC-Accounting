@@ -181,18 +181,23 @@ export const create = async (values: TransactionCreateInput) => {
 
   try {
     const file = values.proof;
-    const extension = file.name.split(".").at(-1);
-    const proof = `${ulid()}.${extension}`;
-    await put(proof, file, {
-      access: "public",
-    });
+    let proof;
+
+    if (file) {
+      const file = values.proof;
+      const extension = file.name.split(".").at(-1);
+      proof = `${ulid()}.${extension}`;
+      await put(proof, file, {
+        access: "public",
+      });
+    }
 
     await prisma.transaction.create({
       data: {
         t_client: { connect: { id: values.t_client_id } },
         date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
-        voucher: values.voucher,
-        check: values.check,
+        voucher: values.voucher || null,
+        check: values.check || null,
         particulars: values.particulars,
         type: values.type,
         amount: values.amount,
@@ -261,8 +266,8 @@ export const update = async (values: TransactionCreateInput) => {
     const data = {
       t_client: { connect: { id: values.t_client_id } },
       date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
-      voucher: values.voucher,
-      check: values.check,
+      voucher: values.voucher || null,
+      check: values.check || null,
       particulars: values.particulars,
       type: values.type,
       amount: values.amount,
