@@ -34,7 +34,7 @@ export const sendOTP = async () => {
   session.set("otp", otp);
 };
 
-export const retry = async (action: () => Promise<GetResponse>, max = 3) => {
+export const retry = async (action: () => Promise<GetResponse>, max = 10) => {
   let response;
   let count = 1;
 

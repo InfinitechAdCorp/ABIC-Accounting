@@ -4,6 +4,7 @@ import {
   CClient as PrismaCClient,
   Collection as PrismaCollection,
 } from "@prisma/client";
+import { Override } from "@/components/globals/types";
 
 export type CClient = PrismaCClient & {
   account?: Account;
@@ -16,16 +17,16 @@ export type CClientDisplayFormat = {
   collections: string;
 };
 
-export type Collection = Omit<
+export type Collection = Override<
   PrismaCollection,
-  "tenant_price" | "owner_income" | "abic_income"
-> & {
-  c_client?: CClient | null;
-  tenant_price: number;
-  owner_income: number;
-  abic_income: number;
-  display_format?: CollectionDisplayFormat;
-};
+  {
+    c_client?: CClient | null;
+    tenant_price: number;
+    owner_income: number;
+    abic_income: number;
+    display_format?: CollectionDisplayFormat;
+  }
+>;
 
 export type CollectionDisplayFormat = {
   client: string;

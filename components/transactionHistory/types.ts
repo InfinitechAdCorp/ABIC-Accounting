@@ -4,6 +4,7 @@ import {
   TClient as PrismaTClient,
   Transaction as PrismaTransaction,
 } from "@prisma/client";
+import { Override } from "@/components/globals/types";
 
 export type TClient = PrismaTClient & {
   account?: Account;
@@ -18,11 +19,14 @@ export type TClientDisplayFormat = {
   running_balance: string;
 };
 
-export type Transaction = Omit<PrismaTransaction, "amount"> & {
-  t_client?: TClient | null;
-  amount: number;
-  display_format?: TransactionDisplayFormat;
-};
+export type Transaction = Override<
+  PrismaTransaction,
+  {
+    t_client?: TClient | null;
+    amount: number;
+    display_format?: TransactionDisplayFormat;
+  }
+>;
 
 export type TransactionDisplayFormat = {
   date: string;

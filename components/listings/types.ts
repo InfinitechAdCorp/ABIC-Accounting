@@ -1,11 +1,15 @@
 import { Account, Listing as PrismaListing } from "@prisma/client";
+import { Override } from "@/components/globals/types";
 
-export type Listing = Omit<PrismaListing, "list_price" | "total_price"> & {
-  account?: Account;
-  list_price: number;
-  total_price: number;
-  display_format?: ListingDisplayFormat;
-};
+export type Listing = Override<
+  PrismaListing,
+  {
+    account?: Account;
+    list_price: number;
+    total_price: number;
+    display_format?: ListingDisplayFormat;
+  }
+>;
 
 export type ListingDisplayFormat = {
   client: string;

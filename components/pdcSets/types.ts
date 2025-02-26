@@ -4,11 +4,12 @@ import {
   PDC as PrismaPDC,
   Account,
 } from "@prisma/client";
+import { Override } from "@/components/globals/types";
 
-export type PDCSet = Omit<PrismaPDCSet, "amount"> & {
-  account?: Account | null;
-  amount: number;
-};
+export type PDCSet = Override<
+  PrismaPDCSet,
+  { account?: Account | null; amount: number }
+>;
 
 export type CreatePDCSet = Prisma.PDCSetCreateInput & {
   check: string;
