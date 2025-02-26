@@ -20,12 +20,12 @@ model Account {
   listings   Listing[]
   t_clients  TClient[]
   c_clients  CClient[]
+  pdc_sets   PDCSet[]
   name       String    @unique
   th_access  Boolean
   cm_access  Boolean
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
-  PDC        PDC[]
 
   @@map(name: "accounts")
 }
@@ -61,28 +61,26 @@ model Transaction {
 }
 
 model PDCSet {
-  id     String   @id @default(cuid())
-  name   String
-  pay_to String
-  start  DateTime @db.Date
-  end    DateTime @db.Date
-  check  String
-  type   String
-  amount Decimal  @db.Decimal(15, 2)
+  id         String   @id @default(cuid())
+  account    Account? @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  account_id String?
+  pdcs       PDC[]
+  name       String
+  pay_to     String
+  start      DateTime @db.Date
+  end        DateTime @db.Date
+  check      String
+  type       String
+  amount     Decimal  @db.Decimal(15, 2)
 
   @@map(name: "pdc_sets")
 }
 
 model PDC {
   id         String   @id @default(cuid())
-  account    Account? @relation(fields: [account_id], references: [id], onDelete: Cascade)
-  account_id String?
-  name       String
-  pay_to     String
+  pdc_set    PDCSet?  @relation(fields: [pdc_set_id], references: [id], onDelete: Cascade)
+  pdc_set_id String?
   date       DateTime @db.Date
-  check      String
-  type       String
-  amount     Decimal  @db.Decimal(15, 2)
 
   @@map(name: "pdcs")
 }
