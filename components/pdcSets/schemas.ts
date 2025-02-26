@@ -8,7 +8,8 @@ const rules = {
     .required("Start Date is a required field"),
   end: Yup.date()
     .typeError("End Date must be a valid date")
-    .required("End Date is a required field"),
+    .required("End Date is a required field")
+    .min(Yup.ref("start"), "End Date must be after Start Date"),
   check: Yup.string().trim().required("Check is a required field"),
   type: Yup.string().trim().required("Type is a required field"),
   amount: Yup.number()

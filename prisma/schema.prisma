@@ -69,7 +69,6 @@ model PDCSet {
   pay_to     String
   start      DateTime @db.Date
   end        DateTime @db.Date
-  check      String
   type       String
   amount     Decimal  @db.Decimal(15, 2)
 
@@ -80,6 +79,7 @@ model PDC {
   id         String   @id @default(cuid())
   pdc_set    PDCSet?  @relation(fields: [pdc_set_id], references: [id], onDelete: Cascade)
   pdc_set_id String?
+  check      String
   date       DateTime @db.Date
 
   @@map(name: "pdcs")

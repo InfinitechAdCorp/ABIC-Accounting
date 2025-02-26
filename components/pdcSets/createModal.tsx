@@ -14,10 +14,10 @@ import {
   Select,
   SelectItem,
 } from "@heroui/react";
-import { create as validationSchema } from "@/components/pdcs/schemas";
+import { create as validationSchema } from "@/components/pdcSets/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
-import { create as action } from "@/components/pdcs/actions";
-import { PDCSet } from "@/components/pdcs/types";
+import { create as action } from "@/components/pdcSets/actions";
+import { PDCSet } from "@/components/pdcSets/types";
 import {
   onPostSubmit,
   dateToDateValue,

@@ -89,9 +89,7 @@ const Navbar = ({ record }: Props) => {
                   <h3 className="font-semibold">Transactions</h3>
                 </DropdownItem>
                 <DropdownItem
-                  onPress={() =>
-                    router.push("/transaction-history/pdcs")
-                  }
+                  onPress={() => router.push("/transaction-history/pdc-sets")}
                   key="PDCs"
                   textValue="PDCs"
                 >
