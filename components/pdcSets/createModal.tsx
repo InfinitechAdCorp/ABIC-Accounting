@@ -17,7 +17,7 @@ import {
 import { create as validationSchema } from "@/components/pdcSets/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
 import { create as action } from "@/components/pdcSets/actions";
-import { CreatePDCSet } from "@/components/pdcSets/types";
+import { PDCSetCreateInput } from "@/components/pdcSets/types";
 import {
   onPostSubmit,
   dateToDateValue,
@@ -39,7 +39,7 @@ const CreateModal = () => {
   };
 
   const onSubmit = async (
-    values: CreatePDCSet,
+    values: PDCSetCreateInput,
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);

@@ -1,20 +1,25 @@
 "use server";
 
 import prisma from "@/lib/db";
-import { PDCSet as PrismaPDCSet } from "@prisma/client";
 import { ActionResponse } from "@/components/globals/types";
 import { cookies } from "next/headers";
-import { PDCSet, CreatePDCSet } from "@/components/pdcSets/types";
+import {
+  PDCSet,
+  PDCSetCreateInput,
+  PDCSetDisplayFormat,
+  PDCSetWithPDCs,
+} from "@/components/pdcSets/types";
 import { eachMonthOfInterval, setDate } from "date-fns";
-import { formatErrors } from "@/components/globals/utils";
+import { formatDate, formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { create as createSchema } from "@/components/pdcSets/schemas";
 import { revalidatePath } from "next/cache";
+import { Column } from "@/components/globals/types";
 
 const model = "PDC Set";
 const url = "/transaction-history/pdc-sets";
 
-export const format = async (ufRecords: PrismaPDCSet[]) => {
+export const format = async (ufRecords: PDCSetWithPDCs[]) => {
   const records: PDCSet[] = [];
 
   ufRecords.forEach((ufRecord) => {
@@ -24,6 +29,52 @@ export const format = async (ufRecords: PrismaPDCSet[]) => {
     };
 
     records.push(record);
+  });
+
+  return records;
+};
+
+export const displayFormat = async (columns: Column[], records: PDCSet[]) => {
+  records.forEach((record) => {
+    const display_format = {
+      name: "",
+      pay_to: "",
+      start: "",
+      end: "",
+      pdcs: "",
+      type: "",
+      total_amount: "",
+    };
+
+    columns.forEach((column) => {
+      const key = column.key;
+      let value;
+      const pdcs = record.pdcs?.length;
+
+      switch (key) {
+        case "start":
+          value = formatDate(record[key as keyof PDCSet] as Date);
+          break;
+        case "end":
+          value = formatDate(record[key as keyof PDCSet] as Date);
+          break;
+        case "pdcs":
+          value = pdcs;
+          break;
+        case "total_amount":
+          value = 500;
+          break;
+        default:
+          value = record[key as keyof PDCSet];
+          break;
+      }
+
+      if (value || value == 0) {
+        display_format[key as keyof PDCSetDisplayFormat] = `${value}`;
+      }
+    });
+
+    record.display_format = display_format;
   });
 
   return records;
@@ -60,7 +111,7 @@ export const getAll = async () => {
   return response;
 };
 
-export const create = async (values: CreatePDCSet) => {
+export const create = async (values: PDCSetCreateInput) => {
   const session = await cookies();
   const accountID = session.get("accountID")?.value || "";
 

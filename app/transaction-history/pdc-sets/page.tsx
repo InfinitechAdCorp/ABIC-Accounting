@@ -4,9 +4,24 @@ import { retry } from "@/components/globals/serverUtils";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import CreateModal from "@/components/pdcSets/createModal";
+import { getAll, displayFormat } from "@/components/pdcSets/actions";
 
 const PDCs = async () => {
   const { record: account } = await retry(getAccount);
+  const { records: ufRecords } = await getAll();
+
+  const columns = [
+    { key: "name", name: "NAME", sortable: true },
+    { key: "pay_to", name: "PAY TO", sortable: true },
+    { key: "start", name: "START", sortable: true },
+    { key: "end", name: "END", sortable: true },
+    { key: "pdcs", name: "PDCs", sortable: true },
+    { key: "type", name: "TYPE", sortable: true },
+    { key: "total", name: "TOTAL", sortable: true },
+    { key: "actions", name: "ACTIONS", sortable: false },
+  ];
+
+  const records = await displayFormat(columns, ufRecords);
 
   return (
     <>
