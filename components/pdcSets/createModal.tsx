@@ -52,7 +52,7 @@ const CreateModal = () => {
   return (
     <>
       <Button color="primary" onPress={onOpen}>
-        Add PDCs
+        Add PDC Set
       </Button>
 
       <Modal size="md" isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -66,7 +66,7 @@ const CreateModal = () => {
               >
                 {(props: FormikProps<any>) => (
                   <Form>
-                    <ModalHeader>Add PDCs</ModalHeader>
+                    <ModalHeader>Add PDC Set</ModalHeader>
                     <ModalBody>
                       <Field name="name">
                         {({ field, meta }: FieldProps) => (

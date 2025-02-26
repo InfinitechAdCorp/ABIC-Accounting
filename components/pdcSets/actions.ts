@@ -102,7 +102,7 @@ export const create = async (values: CreatePDCSet) => {
       },
     });
 
-    months.forEach(async (month) => {
+    for (const month of months) {
       await prisma.pDC.create({
         data: {
           pdc_set: { connect: { id: record.id } },
@@ -111,7 +111,7 @@ export const create = async (values: CreatePDCSet) => {
         },
       });
       ++check;
-    });
+    }
   } catch (error) {
     const response: ActionResponse = {
       code: 500,
