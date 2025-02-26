@@ -1,4 +1,5 @@
 import {
+  Prisma,
   PDCSet as PrismaPDCSet,
   PDC as PrismaPDC,
   Account,
@@ -9,7 +10,9 @@ export type PDCSet = Omit<PrismaPDCSet, "amount"> & {
   amount: number;
 };
 
-export type CreatePDCSet = PDCSet & { check: string };
+export type CreatePDCSet = Prisma.PDCSetCreateInput & {
+  check: string;
+};
 
 export type PDC = PrismaPDC & {
   pdc_set?: PrismaPDCSet | null;

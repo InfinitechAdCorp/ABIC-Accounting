@@ -17,7 +17,7 @@ import {
 import { create as validationSchema } from "@/components/pdcSets/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
 import { create as action } from "@/components/pdcSets/actions";
-import { PDCSet } from "@/components/pdcSets/types";
+import { CreatePDCSet } from "@/components/pdcSets/types";
 import {
   onPostSubmit,
   dateToDateValue,
@@ -39,7 +39,7 @@ const CreateModal = () => {
   };
 
   const onSubmit = async (
-    values: PDCSet,
+    values: CreatePDCSet,
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
@@ -52,10 +52,10 @@ const CreateModal = () => {
   return (
     <>
       <Button color="primary" onPress={onOpen}>
-        Add PDC
+        Add PDCs
       </Button>
 
-      <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal size="md" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
@@ -66,7 +66,7 @@ const CreateModal = () => {
               >
                 {(props: FormikProps<any>) => (
                   <Form>
-                    <ModalHeader>Add PDC</ModalHeader>
+                    <ModalHeader>Add PDCs</ModalHeader>
                     <ModalBody>
                       <Field name="name">
                         {({ field, meta }: FieldProps) => (

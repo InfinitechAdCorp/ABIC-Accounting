@@ -1,10 +1,10 @@
 "use server";
 
 import prisma from "@/lib/db";
-import { Prisma, PDCSet as PrismaPDCSet } from "@prisma/client";
+import { PDCSet as PrismaPDCSet } from "@prisma/client";
 import { ActionResponse } from "@/components/globals/types";
 import { cookies } from "next/headers";
-import { PDC, PDCSet, CreatePDCSet } from "@/components/pdcSets/types";
+import { PDCSet, CreatePDCSet } from "@/components/pdcSets/types";
 import { eachMonthOfInterval, setDate } from "date-fns";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
@@ -80,41 +80,48 @@ export const create = async (values: CreatePDCSet) => {
   }
 
   const dueDay = new Date(values.start).getDate() + 1;
-  const start = new Date(new Date(values.start).setUTCHours(0, 0, 0, 0)).setDate(dueDay)
-  const end = new Date(new Date(values.end).setUTCHours(0, 0, 0, 0)).setDate(dueDay)
-  console.log(end)
+  let start = new Date(new Date(values.start).setUTCHours(0, 0, 0, 0));
+  let end = new Date(new Date(values.end).setUTCHours(0, 0, 0, 0));
 
   const months = eachMonthOfInterval({
     start: start,
     end: end,
   });
 
-  // try {
-  //   let check = Number(values.check);
-  //   for (const month of months) {
-  //     await prisma.pDCSet.create({
-  //       data: {
-  //         account: { connect: { id: accountID } },
-  //         name: values.name,
-  //         pay_to: values.pay_to,
-  //         start: start,
-  //         end: end,
-  //         type: values.type,
-  //         amount: values.amount,
-  //       },
-  //     });
-  //     ++check;
-  //   }
-  // } catch (error) {
-  //   const response: ActionResponse = {
-  //     code: 500,
-  //     message: "Server Error",
-  //     error: error,
-  //   };
-  //   return response;
-  // }
+  try {
+    let check = Number(values.check);
+    const record = await prisma.pDCSet.create({
+      data: {
+        account: { connect: { id: accountID } },
+        name: values.name,
+        pay_to: values.pay_to,
+        start: start,
+        end: end,
+        type: values.type,
+        amount: values.amount,
+      },
+    });
 
-  // revalidatePath(url);
-  // const response: ActionResponse = { code: 200, message: `Added ${model}` };
-  // return response;
+    months.forEach(async (month) => {
+      await prisma.pDC.create({
+        data: {
+          pdc_set: { connect: { id: record.id } },
+          check: `${check}`,
+          date: setDate(month, dueDay),
+        },
+      });
+      ++check;
+    });
+  } catch (error) {
+    const response: ActionResponse = {
+      code: 500,
+      message: "Server Error",
+      error: error,
+    };
+    return response;
+  }
+
+  revalidatePath(url);
+  const response: ActionResponse = { code: 200, message: `Added ${model}` };
+  return response;
 };
