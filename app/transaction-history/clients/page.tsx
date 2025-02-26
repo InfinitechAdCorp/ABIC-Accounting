@@ -40,7 +40,7 @@ const TClients = async () => {
   );
 
   const SideContent = (
-    <div role="button">
+    <div className="text-end">
       <Tooltip
         content={
           <>
@@ -49,7 +49,7 @@ const TClients = async () => {
           </>
         }
       >
-        <h1 className="text-md font-semibold mb-3">
+        <h1 className="inline text-md font-semibold" role="button">
           RUNNING BALANCE: {formatNumber(result.balance)}
         </h1>
       </Tooltip>

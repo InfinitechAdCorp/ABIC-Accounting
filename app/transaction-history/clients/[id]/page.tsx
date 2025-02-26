@@ -54,7 +54,7 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
   );
 
   const SideContent = (
-    <div role="button">
+    <div className="text-end">
       <Tooltip
         content={
           <>
@@ -63,7 +63,7 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
           </>
         }
       >
-        <h1 className="text-md font-semibold mb-3">
+        <h1 className="inline text-md font-semibold" role="button">
           RUNNING BALANCE: {formatNumber(result.balance)}
         </h1>
       </Tooltip>
