@@ -18,7 +18,7 @@ export type PDCSetDisplayFormat = {
   end: string;        
   pdcs: string;
   type: string;       
-  total_amount: string;     
+  total: string;     
 } 
 
 export type PDC = PrismaPDC & {

@@ -15,6 +15,8 @@ import * as Yup from "yup";
 import { create as createSchema } from "@/components/pdcSets/schemas";
 import { revalidatePath } from "next/cache";
 import { Column } from "@/components/globals/types";
+import { Destroy } from "@/components/globals/types";
+import { destroy as destroySchema } from "@/components/globals/schemas";
 
 const model = "PDC Set";
 const url = "/transaction-history/pdc-sets";
@@ -43,7 +45,7 @@ export const displayFormat = async (columns: Column[], records: PDCSet[]) => {
       end: "",
       pdcs: "",
       type: "",
-      total_amount: "",
+      total: "",
     };
 
     columns.forEach((column) => {
@@ -61,8 +63,8 @@ export const displayFormat = async (columns: Column[], records: PDCSet[]) => {
         case "pdcs":
           value = pdcs;
           break;
-        case "total_amount":
-          value = 500;
+        case "total":
+          value = record.amount * (pdcs || 0);
           break;
         default:
           value = record[key as keyof PDCSet];
@@ -174,5 +176,52 @@ export const create = async (values: PDCSetCreateInput) => {
 
   revalidatePath(url);
   const response: ActionResponse = { code: 200, message: `Added ${model}` };
+  return response;
+};
+
+export const destroy = async (values: Destroy) => {
+  const session = await cookies();
+  const otp = session.get("otp")?.value;
+
+  const schema = destroySchema;
+
+  try {
+    await schema.validate(values, { abortEarly: false });
+  } catch (ufErrors) {
+    const errors = formatErrors(ufErrors as Yup.ValidationError);
+
+    const response: ActionResponse = {
+      code: 429,
+      message: "Validation Error",
+      errors: errors,
+    };
+    return response;
+  }
+
+  if (otp == values.otp) {
+    try {
+      await prisma.pDCSet.delete({
+        where: { id: values.id },
+      });
+    } catch (error) {
+      const response: ActionResponse = {
+        code: 500,
+        message: "Server Error",
+        error: error,
+      };
+      return response;
+    }
+
+    session.delete("otp");
+  } else {
+    const response: ActionResponse = {
+      code: 401,
+      message: "Invalid Token",
+    };
+    return response;
+  }
+
+  revalidatePath(url);
+  const response: ActionResponse = { code: 200, message: `Deleted ${model}` };
   return response;
 };

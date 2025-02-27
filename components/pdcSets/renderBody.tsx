@@ -7,18 +7,17 @@ import {
   PDCSet as Record,
   PDCSetDisplayFormat,
 } from "@/components/pdcSets/types";
-import UpdateModal from "@/components/listings/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
-import { destroy } from "@/components/listings/actions";
+import { destroy } from "@/components/pdcSets/actions";
 
 const RenderCell = (column: string, record: Record) => {
   switch (column) {
     case "actions":
-      return "Actions";
-      // <div className="relative flex justify-start items-center gap-2">
-      //   <UpdateModal record={record} />
-      //   <DestroyModal title="Listing" action={destroy} id={record.id} />
-      // </div>
+      return (
+        <div className="relative flex justify-start items-center gap-2">
+          <DestroyModal title="PDC Set" action={destroy} id={record.id} />
+        </div>
+      );
     default:
       return record.display_format![column as keyof PDCSetDisplayFormat];
   }

@@ -15,7 +15,9 @@ export const onPostSubmit = (
     toast.success(response.message);
     onClose();
   } else {
-    if (response.code == 429) {
+    if (response.code == 401) {
+      toast.error(response.message);
+    } else if (response.code == 429) {
       console.log(response.errors);
       toast.error(response.message);
     } else {
