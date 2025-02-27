@@ -6,7 +6,6 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter,
   Button,
   useDisclosure,
   Table,
@@ -19,13 +18,24 @@ import {
 import { PDCSet } from "@/components/pdcSets/types";
 import { FaEye } from "react-icons/fa";
 import { formatDate } from "@/components/globals/utils";
+import { differenceInDays } from "date-fns";
 
 type Props = {
   record: PDCSet;
 };
 
 const ViewPDCsModal = ({ record }: Props) => {
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const hasLine = (date: Date) => {
+    let result = "";
+    const today = new Date(new Date().setHours(0, 0, 0, 0));
+    if (date) {
+      const difference = differenceInDays(date.setHours(0, 0, 0, 0), today);
+      difference <= 0 ? (result = "line-through") : (result = "");
+    }
+    return result;
+  };
 
   return (
     <>
@@ -43,12 +53,14 @@ const ViewPDCsModal = ({ record }: Props) => {
         <ModalContent>
           {(onClose) => (
             <>
-            <ModalHeader className="py-3">
-            <div>
+              <ModalHeader className="py-3">
+                <div>
                   <h3 className="text-md font-bold">{record.name}</h3>
-                  <h3 className="text-sm font-semibold">Pay to: {record.pay_to}</h3>
+                  <h3 className="text-sm font-semibold">
+                    Pay to: {record.pay_to}
+                  </h3>
                 </div>
-            </ModalHeader>
+              </ModalHeader>
               <ModalBody>
                 <Table aria-label="PDCs Table">
                   <TableHeader>
@@ -57,11 +69,17 @@ const ViewPDCsModal = ({ record }: Props) => {
                     <TableColumn>AMOUNT</TableColumn>
                   </TableHeader>
                   <TableBody>
-                    {record.pdcs!.map((pdc) => (
+                    {(record.pdcs || []).map((pdc) => (
                       <TableRow key={pdc.id}>
-                        <TableCell>{formatDate(pdc.date)}</TableCell>
-                        <TableCell>{pdc.check}</TableCell>
-                        <TableCell>{record.amount}</TableCell>
+                        <TableCell className={hasLine(pdc.date)}>
+                          {formatDate(pdc.date)}
+                        </TableCell>
+                        <TableCell className={hasLine(pdc.date)}>
+                          {pdc.check}
+                        </TableCell>
+                        <TableCell className={hasLine(pdc.date)}>
+                          {record.amount}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
