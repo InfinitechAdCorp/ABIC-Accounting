@@ -1,5 +1,5 @@
 import { SVGProps } from "react";
-import { CalendarDate } from "@heroui/react";
+import { CalendarDate, DateValue } from "@heroui/react";
 
 export type Override<T1, T2> = Omit<T1, keyof T2> & T2;
 
@@ -11,10 +11,8 @@ export type ExportAsPDF = {
 };
 
 export type Filter = {
-  range: {
-    start: CalendarDate;
-    end: CalendarDate;
-  };
+  start: Date;
+  end: Date;
 };
 
 export type Destroy = {

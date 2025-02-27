@@ -22,7 +22,7 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  DateRangePicker,
+  DatePicker,
   useDisclosure,
   Card,
   CardBody,
@@ -85,8 +85,8 @@ const DataTable = ({
     direction: "ascending",
   });
 
-  const start = dateToDateValue(new Date(1900, 0, 1))!;
-  const end = dateToDateValue(new Date(2099, 12, 0))!;
+  const start = new Date("January 1, 1900 00:00:00");
+  const end = new Date("December 31, 2099 00:00:00");
   const [range, setRange] = useState({
     start: start,
     end: end,
@@ -99,10 +99,8 @@ const DataTable = ({
   }, [visibleColumns]);
 
   const dateFilteredRecords = useMemo(() => {
-    const start = dateValueToDate(range.start)!.toLocaleDateString("en-CA");
-    const end = dateValueToDate(range.end)!.toLocaleDateString(
-      "en-CA"
-    ) as string;
+    const start = range.start.toLocaleDateString("en-CA");
+    const end = range.end.toLocaleDateString("en-CA");
 
     if (filterKey) {
       const filteredRecords = ufRecords.filter((record) => {
@@ -172,11 +170,12 @@ const DataTable = ({
 
   const Filter = useMemo(() => {
     const initialValues = {
-      range: range,
+      start: start,
+      end: end,
     };
 
     const onSubmit = (values: Filter) => {
-      setRange({ start: values.range.start, end: values.range.end });
+      setRange({ start: values.start, end: values.end });
       onClose();
     };
 
@@ -204,29 +203,55 @@ const DataTable = ({
                     <Form>
                       <ModalHeader>Filter {baseModel}</ModalHeader>
                       <ModalBody>
-                        <Field name="range">
-                          {({ field, meta }: FieldProps) => (
-                            <div>
-                              <DateRangePicker
-                                {...field}
-                                label="Select Date Range"
-                                labelPlacement="outside"
-                                onChange={(value) => {
-                                  const range = {
-                                    start: value?.start,
-                                    end: value?.end,
-                                  };
-                                  props.setFieldValue(field.name, range);
-                                }}
-                              />
-                              {meta.touched && meta.error && (
-                                <small className="text-red-500">
-                                  {meta.error}
-                                </small>
-                              )}
-                            </div>
-                          )}
-                        </Field>
+                        <div className="grid grid-cols-2 gap-3">
+                          <Field name="start">
+                            {({ field, meta }: FieldProps) => (
+                              <div>
+                                <DatePicker
+                                  {...field}
+                                  size="md"
+                                  variant="bordered"
+                                  label="Start Date"
+                                  labelPlacement="outside"
+                                  value={dateToDateValue(field.value)}
+                                  onChange={(value) => {
+                                    const date = dateValueToDate(value);
+                                    props.setFieldValue(field.name, date);
+                                  }}
+                                />
+                                {meta.touched && meta.error && (
+                                  <small className="text-red-500">
+                                    {meta.error}
+                                  </small>
+                                )}
+                              </div>
+                            )}
+                          </Field>
+
+                          <Field name="end">
+                            {({ field, meta }: FieldProps) => (
+                              <div>
+                                <DatePicker
+                                  {...field}
+                                  size="md"
+                                  variant="bordered"
+                                  label="End Date"
+                                  labelPlacement="outside"
+                                  value={dateToDateValue(field.value)}
+                                  onChange={(value) => {
+                                    const date = dateValueToDate(value);
+                                    props.setFieldValue(field.name, date);
+                                  }}
+                                />
+                                {meta.touched && meta.error && (
+                                  <small className="text-red-500">
+                                    {meta.error}
+                                  </small>
+                                )}
+                              </div>
+                            )}
+                          </Field>
+                        </div>
                       </ModalBody>
                       <ModalFooter>
                         <Button color="primary" type="submit">

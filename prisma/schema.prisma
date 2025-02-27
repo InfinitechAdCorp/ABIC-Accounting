@@ -65,7 +65,7 @@ model PDCSet {
   account    Account? @relation(fields: [account_id], references: [id], onDelete: Cascade)
   account_id String?
   pdcs       PDC[]
-  name       String
+  name       String   @unique
   pay_to     String
   start      DateTime @db.Date
   end        DateTime @db.Date
