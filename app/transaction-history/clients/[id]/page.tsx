@@ -76,6 +76,7 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
 
       <div className="max-h-[93vh]">
         <DataTable
+          baseModel={model}
           model={`${record?.name}'s ${model}`}
           columns={columns}
           records={records}

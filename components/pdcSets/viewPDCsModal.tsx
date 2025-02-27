@@ -27,6 +27,8 @@ type Props = {
 const ViewPDCsModal = ({ record }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  const columns = ["DATE", "CHECK", "AMOUNT"];
+
   const hasLine = (date: Date) => {
     let result = "";
     const today = new Date(new Date().setHours(0, 0, 0, 0));
@@ -64,9 +66,9 @@ const ViewPDCsModal = ({ record }: Props) => {
               <ModalBody>
                 <Table aria-label="PDCs Table">
                   <TableHeader>
-                    <TableColumn>DATE</TableColumn>
-                    <TableColumn>CHECK</TableColumn>
-                    <TableColumn>AMOUNT</TableColumn>
+                    {columns.map((column) => (
+                      <TableColumn key={column}>{column}</TableColumn>
+                    ))}
                   </TableHeader>
                   <TableBody>
                     {(record.pdcs || []).map((pdc) => (

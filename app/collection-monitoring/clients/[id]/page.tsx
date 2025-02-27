@@ -63,6 +63,7 @@ const TransactionClient = async ({
 
       <div className="max-h-[93vh]">
         <DataTable
+          baseModel={model}
           model={`${record?.name}'s ${model}`}
           columns={columns}
           records={records}

@@ -40,7 +40,8 @@ import { filter as validationSchema } from "@/components/globals/schemas";
 import { Filter } from "@/components/globals/types";
 
 type Props = {
-  model: string;
+  baseModel: string;
+  model?: string;
   columns: Column[];
   initialColumns?: string[];
   records: any[];
@@ -52,6 +53,7 @@ type Props = {
 };
 
 const DataTable = ({
+  baseModel,
   model,
   columns: ufColumns,
   initialColumns: ufInitialColumns,
@@ -62,8 +64,6 @@ const DataTable = ({
   Buttons,
   SideContent,
 }: Props) => {
-  const baseModel = model.split(" ").at(-1)!;
-
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const initialColumns = ufInitialColumns || [];
@@ -338,7 +338,7 @@ const DataTable = ({
       <Card radius="none" className="py-[0.10rem] px-2">
         <CardBody>
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">{model}</h3>
+            <h3 className="text-lg font-semibold">{model || baseModel}</h3>
 
             <div className="flex gap-3">
               {Buttons}

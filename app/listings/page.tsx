@@ -46,7 +46,7 @@ const Listings = async () => {
 
       <div className="max-h-[93vh]">
         <DataTable
-          model={model}
+          baseModel={model}
           columns={columns}
           records={records}
           filterKey="res"

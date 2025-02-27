@@ -45,7 +45,8 @@ import { filter as validationSchema } from "@/components/globals/schemas";
 import { Filter } from "@/components/globals/types";
 
 type Props = {
-  model: string;
+  baseModel: string;
+  model?: string;
   columns: Column[];
   initialColumns?: string[];
   records: any[];
@@ -57,6 +58,7 @@ type Props = {
 };
 
 const DataTable = ({
+  baseModel,
   model,
   columns: ufColumns,
   initialColumns: ufInitialColumns,
@@ -67,8 +69,6 @@ const DataTable = ({
   Buttons,
   SideContent,
 }: Props) => {
-  const baseModel = model.split(" ").at(-1)!;
-
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const initialColumns = ufInitialColumns || [];
@@ -106,6 +106,20 @@ const DataTable = ({
     );
   }, [visibleColumns]);
 
+  const locationFilteredRecords = useMemo(() => {
+    if (selectedLocation == "All") {
+      const filteredRecords = ufRecords;
+      return filteredRecords;
+    } else {
+      const filteredRecords = filterRecords(
+        ufRecords,
+        "location",
+        selectedLocation
+      );
+      return filteredRecords;
+    }
+  }, [ufRecords, selectedLocation]);
+
   const dateFilteredRecords = useMemo(() => {
     const start = dateValueToDate(range.start)!.toLocaleDateString("en-CA");
     const end = dateValueToDate(range.end)!.toLocaleDateString(
@@ -113,13 +127,13 @@ const DataTable = ({
     ) as string;
 
     if (filterKey) {
-      const filteredRecords = ufRecords.filter((record) => {
+      const filteredRecords = locationFilteredRecords.filter((record) => {
         const date = record[filterKey].toLocaleDateString("en-CA");
         return date >= start && date <= end;
       });
       return filteredRecords;
     }
-  }, [range, ufRecords, filterKey]);
+  }, [range, locationFilteredRecords, filterKey]);
 
   const searchFilteredRecords = useMemo(() => {
     let filteredRecords = [...(dateFilteredRecords || ufRecords)];
@@ -346,7 +360,7 @@ const DataTable = ({
       <Card radius="none" className="py-[0.10rem] px-2">
         <CardBody>
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">{model}</h3>
+            <h3 className="text-lg font-semibold">{model || baseModel}</h3>
 
             <div className="flex gap-3">
               {Buttons}
@@ -392,7 +406,9 @@ const DataTable = ({
               <Button
                 color="primary"
                 key={location}
-                onPress={() => setSelectedLocation(location)}
+                onPress={() => {
+                  setSelectedLocation(location);
+                }}
               >
                 {location} (
                 {location == "All"

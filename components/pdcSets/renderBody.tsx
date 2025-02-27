@@ -16,8 +16,8 @@ const RenderCell = (column: string, record: Record) => {
     case "actions":
       return (
         <div className="relative flex justify-start items-center gap-2">
-          <ViewPDCsModal record={record} />
           <DestroyModal title="PDC Set" action={destroy} id={record.id} />
+          <ViewPDCsModal record={record} />
         </div>
       );
     default:
