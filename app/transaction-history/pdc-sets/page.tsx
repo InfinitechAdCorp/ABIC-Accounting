@@ -5,10 +5,13 @@ import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import CreateModal from "@/components/pdcSets/createModal";
 import { getAll, displayFormat } from "@/components/pdcSets/actions";
+import RenderBody from "@/components/pdcSets/renderBody";
 
 const PDCs = async () => {
   const { record: account } = await retry(getAccount);
   const { records: ufRecords } = await getAll();
+
+  const model = "PDC Sets";
 
   const columns = [
     { key: "name", name: "NAME", sortable: true },
@@ -23,11 +26,26 @@ const PDCs = async () => {
 
   const records = await displayFormat(columns, ufRecords);
 
+  const Buttons = (
+    <>
+      <CreateModal />
+    </>
+  );
+
   return (
     <>
       <Navbar record={account!} />
 
-      <CreateModal />
+      <div className="max-h-[93vh]">
+        <DataTable
+          model={model}
+          columns={columns}
+          records={records}
+          filterKey="start"
+          RenderBody={RenderBody}
+          Buttons={Buttons}
+        />
+      </div>
     </>
   );
 };
