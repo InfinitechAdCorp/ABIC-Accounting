@@ -9,12 +9,14 @@ import {
 } from "@/components/pdcSets/types";
 import DestroyModal from "@/components/globals/destroyModal";
 import { destroy } from "@/components/pdcSets/actions";
+import ViewPDCsModal from "@/components/pdcSets/viewPDCsModal";
 
 const RenderCell = (column: string, record: Record) => {
   switch (column) {
     case "actions":
       return (
         <div className="relative flex justify-start items-center gap-2">
+          <ViewPDCsModal record={record} />
           <DestroyModal title="PDC Set" action={destroy} id={record.id} />
         </div>
       );
