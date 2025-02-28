@@ -5,8 +5,8 @@ import { cookies } from "next/headers";
 
 export const getCounts = async () => {
   const session = await cookies();
-  const accountID = session.get("accountID")?.value
-  
+  const accountID = session.get("accountID")?.value;
+
   const counts = {
     tClients: 0,
     transactions: 0,
@@ -14,30 +14,27 @@ export const getCounts = async () => {
   };
 
   try {
-    const account = await prisma.account.findUnique({
-      where: { id: accountID },
+    const tClients = await prisma.tClient.findMany({
       include: {
-        t_clients: true,
+        transactions: {
+          where: { account_id: accountID },
+        },
       },
     });
 
     const transactions = await prisma.transaction.findMany({
       where: {
-        t_client: {
-          account_id: accountID,
-        },
+        account_id: accountID,
       },
     });
 
     const collections = await prisma.collection.findMany({
       where: {
-        c_client: {
-          account_id: accountID,
-        },
+        account_id: accountID,
       },
     });
 
-    counts.tClients = account?.t_clients.length || 0;
+    counts.tClients = tClients.length;
     counts.transactions = transactions.length;
     counts.collections = collections.length;
   } catch {
