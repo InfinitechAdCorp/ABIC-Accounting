@@ -97,7 +97,7 @@ export const displayFormat = async (
           }
           break;
         case "payments":
-          value = differenceInMonths(record.due, record.start) - 1;
+          value = differenceInMonths(record.due, record.start);
           if (value < 0) {
             value = 0;
           }
