@@ -36,7 +36,7 @@ const Listings = async () => {
 
   const Buttons = (
     <>
-      <CreateModal />
+      <CreateModal records={records} />
     </>
   );
 

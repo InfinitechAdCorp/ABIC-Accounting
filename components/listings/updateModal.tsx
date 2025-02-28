@@ -13,6 +13,8 @@ import {
   DatePicker,
   Select,
   SelectItem,
+  Autocomplete,
+  AutocompleteItem,
 } from "@heroui/react";
 import { update as validationSchema } from "@/components/listings/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
@@ -22,15 +24,17 @@ import {
   onPostSubmit,
   dateToDateValue,
   dateValueToDate,
+  getUniques,
 } from "@/components/globals/utils";
 import { Listing as Record } from "@/components/listings/types";
 import { FaPenToSquare } from "react-icons/fa6";
 
 type Props = {
   record: Record;
+  records: Record[];
 };
 
-const UpdateModal = ({ record }: Props) => {
+const UpdateModal = ({ record, records }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState(record.status);
@@ -102,15 +106,29 @@ const UpdateModal = ({ record }: Props) => {
                         <Field name="client">
                           {({ field, meta }: FieldProps) => (
                             <div>
-                              <Input
-                                {...field}
-                                type="text"
+                              <Autocomplete
+                                allowsCustomValue
                                 size="md"
                                 variant="bordered"
-                                label="Client Name"
+                                label="Client"
                                 labelPlacement="outside"
-                                placeholder="Enter Client Name"
-                              />
+                                placeholder="Enter Client"
+                                onInputChange={(value: string) => {
+                                  props.setFieldValue(field.name, value);
+                                }}
+                                onSelectionChange={(key: React.Key | null) => {
+                                  props.setFieldValue(field.name, key);
+                                }}
+                                defaultSelectedKey={field.value}
+                              >
+                                {getUniques(records, field.name).map(
+                                  (value) => (
+                                    <AutocompleteItem key={value}>
+                                      {value}
+                                    </AutocompleteItem>
+                                  )
+                                )}
+                              </Autocomplete>
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">
                                   {meta.error}
@@ -152,15 +170,29 @@ const UpdateModal = ({ record }: Props) => {
                         <Field name="project">
                           {({ field, meta }: FieldProps) => (
                             <div>
-                              <Input
-                                {...field}
-                                type="text"
+                              <Autocomplete
+                                allowsCustomValue
                                 size="md"
                                 variant="bordered"
                                 label="Project"
                                 labelPlacement="outside"
                                 placeholder="Enter Project"
-                              />
+                                onInputChange={(value: string) => {
+                                  props.setFieldValue(field.name, value);
+                                }}
+                                onSelectionChange={(key: React.Key | null) => {
+                                  props.setFieldValue(field.name, key);
+                                }}
+                                defaultSelectedKey={field.value}
+                              >
+                                {getUniques(records, field.name).map(
+                                  (value) => (
+                                    <AutocompleteItem key={value}>
+                                      {value}
+                                    </AutocompleteItem>
+                                  )
+                                )}
+                              </Autocomplete>
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">
                                   {meta.error}
@@ -243,15 +275,29 @@ const UpdateModal = ({ record }: Props) => {
                         <Field name="specialist">
                           {({ field, meta }: FieldProps) => (
                             <div>
-                              <Input
-                                {...field}
-                                type="text"
+                              <Autocomplete
+                                allowsCustomValue
                                 size="md"
                                 variant="bordered"
                                 label="Property Specialist"
                                 labelPlacement="outside"
                                 placeholder="Enter Property Specialist"
-                              />
+                                onInputChange={(value: string) => {
+                                  props.setFieldValue(field.name, value);
+                                }}
+                                onSelectionChange={(key: React.Key | null) => {
+                                  props.setFieldValue(field.name, key);
+                                }}
+                                defaultSelectedKey={field.value}
+                              >
+                                {getUniques(records, field.name).map(
+                                  (value) => (
+                                    <AutocompleteItem key={value}>
+                                      {value}
+                                    </AutocompleteItem>
+                                  )
+                                )}
+                              </Autocomplete>
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">
                                   {meta.error}
@@ -264,15 +310,29 @@ const UpdateModal = ({ record }: Props) => {
                         <Field name="manager">
                           {({ field, meta }: FieldProps) => (
                             <div>
-                              <Input
-                                {...field}
-                                type="text"
+                              <Autocomplete
+                                allowsCustomValue
                                 size="md"
                                 variant="bordered"
                                 label="Sales Manager"
                                 labelPlacement="outside"
                                 placeholder="Enter Sales Manager"
-                              />
+                                onInputChange={(value: string) => {
+                                  props.setFieldValue(field.name, value);
+                                }}
+                                onSelectionChange={(key: React.Key | null) => {
+                                  props.setFieldValue(field.name, key);
+                                }}
+                                defaultSelectedKey={field.value}
+                              >
+                                {getUniques(records, field.name).map(
+                                  (value) => (
+                                    <AutocompleteItem key={value}>
+                                      {value}
+                                    </AutocompleteItem>
+                                  )
+                                )}
+                              </Autocomplete>
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">
                                   {meta.error}
@@ -362,15 +422,29 @@ const UpdateModal = ({ record }: Props) => {
                         <Field name="source">
                           {({ field, meta }: FieldProps) => (
                             <div>
-                              <Input
-                                {...field}
-                                type="text"
+                              <Autocomplete
+                                allowsCustomValue
                                 size="md"
                                 variant="bordered"
                                 label="Source"
                                 labelPlacement="outside"
                                 placeholder="Enter Source"
-                              />
+                                onInputChange={(value: string) => {
+                                  props.setFieldValue(field.name, value);
+                                }}
+                                onSelectionChange={(key: React.Key | null) => {
+                                  props.setFieldValue(field.name, key);
+                                }}
+                                defaultSelectedKey={field.value}
+                              >
+                                {getUniques(records, field.name).map(
+                                  (value) => (
+                                    <AutocompleteItem key={value}>
+                                      {value}
+                                    </AutocompleteItem>
+                                  )
+                                )}
+                              </Autocomplete>
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">
                                   {meta.error}

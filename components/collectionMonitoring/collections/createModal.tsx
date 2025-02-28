@@ -18,7 +18,6 @@ import {
 } from "@heroui/react";
 import {
   CClient,
-  CollectionCreateInput,
 } from "@/components/collectionMonitoring/types";
 import { create as validationSchema } from "@/components/collectionMonitoring/collections/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";

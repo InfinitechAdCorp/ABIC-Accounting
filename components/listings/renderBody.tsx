@@ -11,12 +11,12 @@ import UpdateModal from "@/components/listings/updateModal";
 import DestroyModal from "@/components/globals/destroyModal";
 import { destroy } from "@/components/listings/actions";
 
-const RenderCell = (column: string, record: Record) => {
+const RenderCell = (column: string, record: Record, records: Record[]) => {
   switch (column) {
     case "actions":
       return (
         <div className="relative flex justify-start items-center gap-2">
-          <UpdateModal record={record} />
+          <UpdateModal record={record} records={records} />
           <DestroyModal title="Listing" action={destroy} id={record.id} />
         </div>
       );
@@ -37,7 +37,7 @@ const RenderBody = (columns: Column[], records: Record[]) => {
         >
           {columns.map((column) => (
             <TableCell key={column.key}>
-              {RenderCell(column.key, record)}
+              {RenderCell(column.key, record, records)}
             </TableCell>
           ))}
         </TableRow>
