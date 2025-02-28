@@ -8,8 +8,7 @@ import { getAll as getCClients } from "@/components/collectionMonitoring/cClient
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/collectionMonitoring/collections/dataTable";
 import RenderBody from "@/components/collectionMonitoring/collections/renderBody";
-import CreateCollectionModal from "@/components/collectionMonitoring/collections/createModal";
-import CreateCClientModal from "@/components/collectionMonitoring/cClients/createModal";
+import CreateModal from "@/components/collectionMonitoring/collections/createModal";
 import { retry } from "@/components/globals/serverUtils";
 
 const Collections = async () => {
@@ -51,10 +50,7 @@ const Collections = async () => {
 
   const Buttons = (
     <>
-      <div className="hidden sm:flex">
-        <CreateCClientModal />
-      </div>
-      <CreateCollectionModal locations={locations} cClients={cClients} />
+      <CreateModal locations={locations} cClients={cClients} />
     </>
   );
 

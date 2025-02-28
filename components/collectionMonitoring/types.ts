@@ -7,7 +7,6 @@ import {
 import { Override } from "@/components/globals/types";
 
 export type CClient = PrismaCClient & {
-  account?: Account;
   collections?: Collection[];
   display_format?: CClientDisplayFormat;
 };
@@ -20,6 +19,7 @@ export type CClientDisplayFormat = {
 export type Collection = Override<
   PrismaCollection,
   {
+    account?: Account;
     c_client?: CClient | null;
     tenant_price: number;
     owner_income: number;
@@ -55,3 +55,10 @@ export type CollectionWithCClient = Prisma.CollectionGetPayload<{
     c_client: true;
   };
 }>;
+
+export type CollectionCreateInput = Override<
+  Prisma.CollectionCreateInput,
+  {
+    c_client_name?: string;
+  }
+>;

@@ -3,9 +3,12 @@ import { get as getAccount } from "@/components/accounts/actions";
 import { retry } from "@/components/globals/serverUtils";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
-import CreateModal from "@/components/pdcSets/createModal";
-import { getAll, displayFormat } from "@/components/pdcSets/actions";
-import RenderBody from "@/components/pdcSets/renderBody";
+import CreateModal from "@/components/transactionHistory/pdcSets/createModal";
+import {
+  getAll,
+  displayFormat,
+} from "@/components/transactionHistory/pdcSets/actions";
+import RenderBody from "@/components/transactionHistory/pdcSets/renderBody";
 
 const PDCs = async () => {
   const { record: account } = await retry(getAccount);

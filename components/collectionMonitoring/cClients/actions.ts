@@ -90,9 +90,8 @@ export const getAll = async () => {
 
   try {
     records = await prisma.cClient.findMany({
-      where: { account_id: accountID },
       include: {
-        collections: true,
+        collections: { where: { account_id: accountID } },
       },
     });
   } catch {
@@ -172,7 +171,6 @@ export const create = async (values: Prisma.CClientCreateInput) => {
   try {
     await prisma.cClient.create({
       data: {
-        account: { connect: { id: accountID } },
         name: values.name,
       },
     });
@@ -215,7 +213,6 @@ export const update = async (values: Prisma.CClientCreateInput) => {
         id: values.id,
       },
       data: {
-        account: { connect: { id: accountID } },
         name: values.name,
       },
     });

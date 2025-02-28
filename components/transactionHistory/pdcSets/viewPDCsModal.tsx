@@ -15,7 +15,7 @@ import {
   TableRow,
   TableCell,
 } from "@heroui/react";
-import { PDCSet } from "@/components/pdcSets/types";
+import { PDCSet } from "@/components/transactionHistory/pdcSets/types";
 import { FaEye } from "react-icons/fa";
 import { formatDate } from "@/components/globals/utils";
 import { differenceInDays } from "date-fns";

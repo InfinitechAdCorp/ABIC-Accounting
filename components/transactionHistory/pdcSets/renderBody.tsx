@@ -6,10 +6,10 @@ import { Column } from "@/components/globals/types";
 import {
   PDCSet as Record,
   PDCSetDisplayFormat,
-} from "@/components/pdcSets/types";
+} from "@/components/transactionHistory/pdcSets/types";
 import DestroyModal from "@/components/globals/destroyModal";
-import { destroy } from "@/components/pdcSets/actions";
-import ViewPDCsModal from "@/components/pdcSets/viewPDCsModal";
+import { destroy } from "@/components/transactionHistory/pdcSets/actions";
+import ViewPDCsModal from "@/components/transactionHistory/pdcSets/viewPDCsModal";
 
 const RenderCell = (column: string, record: Record) => {
   switch (column) {

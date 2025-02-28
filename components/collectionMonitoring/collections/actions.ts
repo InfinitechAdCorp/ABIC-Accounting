@@ -17,16 +17,13 @@ import {
   Collection,
   CollectionDisplayFormat,
   CollectionWithCClient,
+  CollectionCreateInput,
 } from "@/components/collectionMonitoring/types";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { Destroy } from "@/components/globals/types";
 import { formatDate, formatNumber } from "@/components/globals/utils";
 import { differenceInDays, differenceInMonths } from "date-fns";
-
-type CollectionCreateInput = Prisma.CollectionCreateInput & {
-  c_client_id?: string;
-};
 
 const model = "Collection";
 const url = "/collection-monitoring/collections";
@@ -48,7 +45,10 @@ export const format = async (ufRecords: CollectionWithCClient[]) => {
   return records;
 };
 
-export const displayFormat = async (columns: Column[], records: Collection[]) => {
+export const displayFormat = async (
+  columns: Column[],
+  records: Collection[]
+) => {
   records.forEach((record) => {
     const display_format = {
       client: "",
@@ -126,13 +126,11 @@ export const getAll = async () => {
 
   try {
     records = await prisma.collection.findMany({
-      where: {
-        c_client: {
-          account_id: accountID,
-        },
-      },
       include: {
         c_client: true,
+      },
+      where: {
+        account_id: accountID,
       },
     });
   } catch {
@@ -154,6 +152,9 @@ export const getAll = async () => {
 };
 
 export const create = async (values: CollectionCreateInput) => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value;
+
   const schema = createSchema;
 
   try {
@@ -170,9 +171,19 @@ export const create = async (values: CollectionCreateInput) => {
   }
 
   try {
+    const c_client = {
+      name: values.c_client_name as string,
+    };
+
     await prisma.collection.create({
       data: {
-        c_client: { connect: { id: values.c_client_id } },
+        account: { connect: { id: accountID } },
+        c_client: {
+          connectOrCreate: {
+            where: c_client,
+            create: c_client,
+          },
+        },
         property: values.property,
         location: values.location,
         start: new Date(new Date(values.start).setUTCHours(0, 0, 0, 0)),
@@ -200,6 +211,9 @@ export const create = async (values: CollectionCreateInput) => {
 };
 
 export const update = async (values: CollectionCreateInput) => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value;
+
   const schema = updateSchema;
 
   try {
@@ -216,10 +230,20 @@ export const update = async (values: CollectionCreateInput) => {
   }
 
   try {
+    const c_client = {
+      name: values.c_client_name as string,
+    };
+
     await prisma.collection.update({
       where: { id: values.id },
       data: {
-        c_client: { connect: { id: values.c_client_id } },
+        account: { connect: { id: accountID } },
+        c_client: {
+          connectOrCreate: {
+            where: c_client,
+            create: c_client,
+          },
+        },
         property: values.property,
         location: values.location,
         start: new Date(new Date(values.start).setUTCHours(0, 0, 0, 0)),

@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 const rules = {
-  c_client_id: Yup.string().trim().required("Client ID is a required field"),
+  c_client_name: Yup.string().trim().required("Client is a required field"),
   property: Yup.string().trim().required("Property is a required field"),
   location: Yup.string().trim().required("Location is a required field"),
   start: Yup.date()

@@ -158,9 +158,9 @@ const CreateModal = ({ voucher, tClients }: Props) => {
                               allowsCustomValue
                               size="md"
                               variant="bordered"
-                              label="Select Client"
+                              label="Client"
                               labelPlacement="outside"
-                              placeholder="Select Client"
+                              placeholder="Enter Client"
                               items={tClients}
                               onInputChange={(value: string) => {
                                 props.setFieldValue(field.name, value);

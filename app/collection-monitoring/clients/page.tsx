@@ -6,7 +6,6 @@ import {
 import Navbar from "@/components/globals/navbar";
 import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";
-import CreateModal from "@/components/collectionMonitoring/cClients/createModal";
 import RenderBody from "@/components/collectionMonitoring/cClients/renderBody";
 import { retry } from "@/components/globals/serverUtils";
 
@@ -24,12 +23,6 @@ const CClients = async () => {
 
   const records = await displayFormat(columns, ufRecords);
 
-  const Buttons = (
-    <>
-      <CreateModal />
-    </>
-  );
-
   return (
     <>
       <Navbar record={account!} />
@@ -40,7 +33,6 @@ const CClients = async () => {
           columns={columns}
           records={records}
           RenderBody={RenderBody}
-          Buttons={Buttons}
         />
       </div>
     </>

@@ -13,10 +13,13 @@ import {
   DatePicker,
   Select,
   SelectItem,
+  Autocomplete,
+  AutocompleteItem,
 } from "@heroui/react";
 import {
   Collection as Record,
   CClient,
+  CollectionCreateInput,
 } from "@/components/collectionMonitoring/types";
 import { update as validationSchema } from "@/components/collectionMonitoring/collections/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
@@ -44,7 +47,7 @@ const UpdateModal = ({ record, locations, cClients }: Props) => {
 
   const initialValues = {
     id: record.id,
-    c_client_id: record.c_client_id,
+    c_client_name: record.c_client?.name,
     property: record.property,
     location: record.location,
     start: record.start,
@@ -97,25 +100,31 @@ const UpdateModal = ({ record, locations, cClients }: Props) => {
                       <Field type="hidden" name="id" />
 
                       <div className="grid grid-cols-2 gap-3">
-                        <Field name="c_client_id">
+                        <Field name="c_client_name">
                           {({ field, meta }: FieldProps) => (
                             <div>
-                              <Select
-                                {...field}
+                              <Autocomplete
+                                allowsCustomValue
                                 size="md"
                                 variant="bordered"
                                 label="Client"
                                 labelPlacement="outside"
-                                placeholder="Select Client"
+                                placeholder="Enter Client"
                                 items={cClients}
-                                defaultSelectedKeys={[field.value]}
+                                onInputChange={(value: string) => {
+                                  props.setFieldValue(field.name, value);
+                                }}
+                                onSelectionChange={(key: React.Key | null) => {
+                                  props.setFieldValue(field.name, key);
+                                }}
+                                defaultSelectedKey={field.value}
                               >
                                 {(cClient) => (
-                                  <SelectItem key={cClient.id}>
+                                  <AutocompleteItem key={cClient.name}>
                                     {cClient.name}
-                                  </SelectItem>
+                                  </AutocompleteItem>
                                 )}
-                              </Select>
+                              </Autocomplete>
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">
                                   {meta.error}
