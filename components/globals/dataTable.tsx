@@ -48,7 +48,7 @@ type Props = {
   filterKey?: string;
   dependencies?: any;
   RenderBody: (columns: Column[], records: any[], dependencies: any) => any;
-  Buttons: ReactElement;
+  Buttons?: ReactElement;
   SideContent?: ReactElement;
 };
 

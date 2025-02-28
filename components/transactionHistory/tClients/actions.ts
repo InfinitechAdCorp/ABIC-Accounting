@@ -121,9 +121,9 @@ export const getAll = async () => {
 
   try {
     records = await prisma.tClient.findMany({
-      where: { account_id: accountID },
       include: {
         transactions: {
+          where: { account_id: accountID },
           orderBy: {
             date: "desc",
           },
@@ -213,7 +213,6 @@ export const create = async (values: Prisma.TClientCreateInput) => {
   try {
     await prisma.tClient.create({
       data: {
-        account: { connect: { id: accountID } },
         name: values.name,
       },
     });
@@ -252,7 +251,6 @@ export const update = async (values: Prisma.TClientCreateInput) => {
         id: values.id,
       },
       data: {
-        account: { connect: { id: accountID } },
         name: values.name,
       },
     });

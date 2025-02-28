@@ -16,6 +16,7 @@ import {
   Transaction,
   TransactionDisplayFormat,
   TransactionWithTClient,
+  TransactionCreateInput,
 } from "@/components/transactionHistory/types";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
@@ -24,11 +25,6 @@ import { ulid } from "ulidx";
 import { Destroy } from "@/components/globals/types";
 import { formatDate, formatNumber } from "@/components/globals/utils";
 import { isPending } from "@/components/globals/utils";
-
-type TransactionCreateInput = Prisma.TransactionCreateInput & {
-  proof: File;
-  t_client_id?: string;
-};
 
 const model = "Transaction";
 const url = "/transaction-history/transactions";
@@ -128,13 +124,11 @@ export const getAll = async () => {
 
   try {
     records = await prisma.transaction.findMany({
-      where: {
-        t_client: {
-          account_id: accountID,
-        },
-      },
       include: {
         t_client: true,
+      },
+      where: {
+        account_id: accountID,
       },
       orderBy: [
         {
@@ -164,6 +158,9 @@ export const getAll = async () => {
 };
 
 export const create = async (values: TransactionCreateInput) => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value;
+
   const schema = createSchema;
 
   try {
@@ -185,16 +182,26 @@ export const create = async (values: TransactionCreateInput) => {
 
     if (file) {
       const file = values.proof;
-      const extension = file.name.split(".").at(-1);
+      const extension = (file as File).name.split(".").at(-1);
       proof = `${ulid()}.${extension}`;
       await put(proof, file, {
         access: "public",
       });
     }
 
+    const t_client = {
+      name: values.t_client_name as string,
+    };
+
     await prisma.transaction.create({
       data: {
-        t_client: { connect: { id: values.t_client_id } },
+        account: { connect: { id: accountID } },
+        t_client: {
+          connectOrCreate: {
+            where: t_client,
+            create: t_client,
+          },
+        },
         date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
         voucher: values.voucher || null,
         check: values.check || null,
@@ -220,6 +227,9 @@ export const create = async (values: TransactionCreateInput) => {
 };
 
 export const update = async (values: TransactionCreateInput) => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value;
+
   const schema = updateSchema;
 
   try {
@@ -256,28 +266,36 @@ export const update = async (values: TransactionCreateInput) => {
         await del(blob.url || "");
       }
 
-      const extension = file.name.split(".").at(-1);
+      const extension = (file as File).name.split(".").at(-1);
       proof = `${ulid()}.${extension}`;
       await put(proof, file, {
         access: "public",
       });
     }
 
-    const data = {
-      t_client: { connect: { id: values.t_client_id } },
-      date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
-      voucher: values.voucher || null,
-      check: values.check || null,
-      particulars: values.particulars,
-      type: values.type,
-      amount: values.amount,
-      status: values.status,
-      proof: proof,
+    const t_client = {
+      name: values.t_client_name as string,
     };
 
     await prisma.transaction.update({
       where: { id: values.id },
-      data: data,
+      data: {
+        account: { connect: { id: accountID } },
+        t_client: {
+          connectOrCreate: {
+            where: t_client,
+            create: t_client,
+          },
+        },
+        date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
+        voucher: values.voucher || null,
+        check: values.check || null,
+        particulars: values.particulars,
+        type: values.type,
+        amount: values.amount,
+        status: values.status,
+        proof: proof,
+      },
     });
   } catch (error) {
     const response: ActionResponse = {

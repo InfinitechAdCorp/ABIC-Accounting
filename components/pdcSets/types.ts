@@ -8,25 +8,26 @@ import { Override } from "@/components/globals/types";
 
 export type PDCSet = Override<
   PrismaPDCSet,
-  { account?: Account | null; pdcs?: PDC[]; amount: number, display_format?: PDCSetDisplayFormat }
+  {
+    account?: Account | null;
+    pdcs?: PDC[];
+    amount: number;
+    display_format?: PDCSetDisplayFormat;
+  }
 >;
 
 export type PDCSetDisplayFormat = {
   name: string;
-  pay_to: string;     
-  start: string;      
-  end: string;        
+  pay_to: string;
+  start: string;
+  end: string;
   pdcs: string;
-  type: string;       
-  total: string;     
-} 
+  type: string;
+  total: string;
+};
 
 export type PDC = PrismaPDC & {
   pdc_set?: PrismaPDCSet | null;
-};
-
-export type PDCSetCreateInput = Prisma.PDCSetCreateInput & {
-  check: string;
 };
 
 export type PDCSetWithPDCs = Prisma.PDCSetGetPayload<{
@@ -34,3 +35,7 @@ export type PDCSetWithPDCs = Prisma.PDCSetGetPayload<{
     pdcs: true;
   };
 }>;
+
+export type PDCSetCreateInput = Prisma.PDCSetCreateInput & {
+  check: string;
+};

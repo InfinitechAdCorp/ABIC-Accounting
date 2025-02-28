@@ -8,8 +8,7 @@ import { getAll as getTClients } from "@/components/transactionHistory/tClients/
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/transactionHistory/transactions/renderBody";
-import CreateTransactionModal from "@/components/transactionHistory/transactions/createModal";
-import CreateTClientModal from "@/components/transactionHistory/tClients/createModal";
+import CreateModal from "@/components/transactionHistory/transactions/createModal";
 import {
   computeBalance,
   formatNumber,
@@ -49,11 +48,7 @@ const Transactions = async () => {
 
   const Buttons = (
     <>
-      <div className="hidden sm:flex">
-        <CreateTClientModal />
-      </div>
-
-      <CreateTransactionModal voucher={voucher} tClients={tClients} />
+      <CreateModal voucher={voucher} tClients={tClients} />
     </>
   );
 

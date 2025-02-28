@@ -9,7 +9,6 @@ import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/transactionHistory/tClients/renderBody";
-import CreateModal from "@/components/transactionHistory/tClients/createModal";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
 import { retry } from "@/components/globals/serverUtils";
 import { Tooltip } from "@heroui/react";
@@ -32,12 +31,6 @@ const TClients = async () => {
   ];
 
   const records = await displayFormat(columns, ufRecords);
-
-  const Buttons = (
-    <>
-      <CreateModal />
-    </>
-  );
 
   const SideContent = (
     <div className="text-end">
@@ -66,7 +59,6 @@ const TClients = async () => {
           columns={columns}
           records={records}
           RenderBody={RenderBody}
-          Buttons={Buttons}
           SideContent={SideContent}
         />
       </div>

@@ -7,7 +7,6 @@ import {
 import { Override } from "@/components/globals/types";
 
 export type TClient = PrismaTClient & {
-  account?: Account;
   transactions?: Transaction[];
   display_format?: TClientDisplayFormat;
 };
@@ -22,6 +21,7 @@ export type TClientDisplayFormat = {
 export type Transaction = Override<
   PrismaTransaction,
   {
+    account?: Account;
     t_client?: TClient | null;
     amount: number;
     display_format?: TransactionDisplayFormat;
@@ -51,3 +51,11 @@ export type TransactionWithTClient = Prisma.TransactionGetPayload<{
     t_client: true;
   };
 }>;
+
+export type TransactionCreateInput = Override<
+  Prisma.TransactionCreateInput,
+  {
+    t_client_name?: string;
+    proof: string | File;
+  }
+>;

@@ -13,13 +13,17 @@ import {
   DatePicker,
   Select,
   SelectItem,
+  Autocomplete,
+  AutocompleteItem,
   Textarea,
 } from "@heroui/react";
-import { TClient } from "@/components/transactionHistory/types";
+import {
+  TClient,
+  TransactionCreateInput,
+} from "@/components/transactionHistory/types";
 import { create as validationSchema } from "@/components/transactionHistory/transactions/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
 import { create as action } from "@/components/transactionHistory/transactions/actions";
-import { Prisma } from "@prisma/client";
 import {
   onPostSubmit,
   dateToDateValue,
@@ -31,10 +35,6 @@ type Props = {
   tClients: TClient[];
 };
 
-type TransactionCreateInput = Prisma.TransactionCreateInput & {
-  proof: File;
-};
-
 const CreateModal = ({ voucher, tClients }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
@@ -43,7 +43,7 @@ const CreateModal = ({ voucher, tClients }: Props) => {
     date: "",
     voucher: voucher,
     check: "",
-    transaction_client_id: "",
+    t_client_name: "",
     particulars: "",
     type: "",
     amount: "",
@@ -151,24 +151,30 @@ const CreateModal = ({ voucher, tClients }: Props) => {
                         </Field>
                       </div>
 
-                      <Field name="t_client_id">
+                      <Field name="t_client_name">
                         {({ field, meta }: FieldProps) => (
                           <div>
-                            <Select
-                              {...field}
+                            <Autocomplete
+                              allowsCustomValue
                               size="md"
                               variant="bordered"
-                              label="Client"
+                              label="Select Client"
                               labelPlacement="outside"
                               placeholder="Select Client"
                               items={tClients}
+                              onInputChange={(value: string) => {
+                                props.setFieldValue(field.name, value);
+                              }}
+                              onSelectionChange={(key: React.Key | null) => {
+                                props.setFieldValue(field.name, key);
+                              }}
                             >
                               {(tClient) => (
-                                <SelectItem key={tClient.id}>
+                                <AutocompleteItem key={tClient.name}>
                                   {tClient.name}
-                                </SelectItem>
+                                </AutocompleteItem>
                               )}
-                            </Select>
+                            </Autocomplete>
                             {meta.touched && meta.error && (
                               <small className="text-red-500">
                                 {meta.error}

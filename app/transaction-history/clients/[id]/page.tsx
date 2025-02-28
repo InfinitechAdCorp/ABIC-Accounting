@@ -8,7 +8,6 @@ import {
   displayFormat,
 } from "@/components/transactionHistory/transactions/actions";
 import { get as getAccount } from "@/components/accounts/actions";
-import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/transactionHistory/transactions/renderBody";
