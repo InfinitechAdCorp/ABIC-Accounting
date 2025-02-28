@@ -209,6 +209,8 @@ const DataTable = ({
                               <div>
                                 <DatePicker
                                   {...field}
+                                  inert={false}
+                                  showMonthAndYearPickers
                                   size="md"
                                   variant="bordered"
                                   label="Start Date"
@@ -233,6 +235,8 @@ const DataTable = ({
                               <div>
                                 <DatePicker
                                   {...field}
+                                  inert={false}
+                                  showMonthAndYearPickers
                                   size="md"
                                   variant="bordered"
                                   label="End Date"

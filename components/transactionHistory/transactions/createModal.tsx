@@ -88,6 +88,8 @@ const CreateModal = ({ voucher, tClients }: Props) => {
                           <div>
                             <DatePicker
                               {...field}
+                              inert={false}
+                              showMonthAndYearPickers
                               size="md"
                               variant="bordered"
                               label="Voucher Date"

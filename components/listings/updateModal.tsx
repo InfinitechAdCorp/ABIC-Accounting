@@ -230,6 +230,8 @@ const UpdateModal = ({ record, records }: Props) => {
                             <div>
                               <DatePicker
                                 {...field}
+                                inert={false}
+                                showMonthAndYearPickers
                                 size="md"
                                 variant="bordered"
                                 label="Date Res"
@@ -462,6 +464,8 @@ const UpdateModal = ({ record, records }: Props) => {
                               <div>
                                 <DatePicker
                                   {...field}
+                                  inert={false}
+                                  showMonthAndYearPickers
                                   size="md"
                                   variant="bordered"
                                   label="Extension"
@@ -486,6 +490,8 @@ const UpdateModal = ({ record, records }: Props) => {
                               <div>
                                 <DatePicker
                                   {...field}
+                                  inert={false}
+                                  showMonthAndYearPickers
                                   size="md"
                                   variant="bordered"
                                   label="Closed Date"

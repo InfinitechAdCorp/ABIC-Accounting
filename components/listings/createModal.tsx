@@ -209,6 +209,8 @@ const CreateModal = ({ records }: Props) => {
                             <div>
                               <DatePicker
                                 {...field}
+                                inert={false}
+                                showMonthAndYearPickers
                                 size="md"
                                 variant="bordered"
                                 label="Date Res"
@@ -437,6 +439,8 @@ const CreateModal = ({ records }: Props) => {
                               <div>
                                 <DatePicker
                                   {...field}
+                                  inert={false}
+                                  showMonthAndYearPickers
                                   size="md"
                                   variant="bordered"
                                   label="Extension"
@@ -461,6 +465,8 @@ const CreateModal = ({ records }: Props) => {
                               <div>
                                 <DatePicker
                                   {...field}
+                                  inert={false}
+                                  showMonthAndYearPickers
                                   size="md"
                                   variant="bordered"
                                   label="Closed Date"

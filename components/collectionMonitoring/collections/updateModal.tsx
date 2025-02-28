@@ -190,6 +190,8 @@ const UpdateModal = ({ record, locations, cClients }: Props) => {
                             <div>
                               <DatePicker
                                 {...field}
+                                inert={false}
+                                showMonthAndYearPickers
                                 size="md"
                                 variant="bordered"
                                 label="Start Date"
@@ -214,6 +216,8 @@ const UpdateModal = ({ record, locations, cClients }: Props) => {
                             <div>
                               <DatePicker
                                 {...field}
+                                inert={false}
+                                showMonthAndYearPickers
                                 size="md"
                                 variant="bordered"
                                 label="End Date"
@@ -348,6 +352,8 @@ const UpdateModal = ({ record, locations, cClients }: Props) => {
                           <div>
                             <DatePicker
                               {...field}
+                              inert={false}
+                              showMonthAndYearPickers
                               size="md"
                               variant="bordered"
                               label="Due Date"
