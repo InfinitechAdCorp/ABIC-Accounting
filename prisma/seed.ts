@@ -20,180 +20,6 @@ const accounts: Prisma.AccountCreateInput[] = [
   },
 ];
 
-const tClients: Prisma.TClientCreateInput[] = [
-  {
-    account: {
-      connectOrCreate: {
-        where: { name: accounts[2].name },
-        create: accounts[2],
-      },
-    },
-    name: "Hu Yanchong",
-  },
-  {
-    account: {
-      connectOrCreate: {
-        where: { name: accounts[2].name },
-        create: accounts[2],
-      },
-    },
-    name: "Weiwei Chen",
-  },
-  {
-    account: {
-      connectOrCreate: {
-        where: { name: accounts[2].name },
-        create: accounts[2],
-      },
-    },
-    name: "Dan Li",
-  },
-];
-
-const transactions: Prisma.TransactionCreateInput[] = [
-  {
-    t_client: {
-      connectOrCreate: {
-        where: { name: tClients[0].name },
-        create: {
-          name: tClients[0].name,
-        },
-      },
-    },
-    date: "2025-02-01T00:00:00.000Z",
-    voucher: "00001",
-    check: "24837",
-    particulars: "Tivoli",
-    type: "Credit",
-    amount: 5000,
-    status: "Active",
-    proof: null,
-  },
-  {
-    t_client: {
-      connectOrCreate: {
-        where: { name: tClients[1].name },
-        create: {
-          name: tClients[1].name,
-        },
-      },
-    },
-    date: "2025-02-05T00:00:00.000Z",
-    voucher: "00002",
-    check: "76598",
-    particulars: "Alea Residences",
-    type: "Debit",
-    amount: 3000,
-    status: "Active",
-    proof: null,
-  },
-  {
-    t_client: {
-      connectOrCreate: {
-        where: { name: tClients[2].name },
-        create: {
-          name: tClients[2].name,
-        },
-      },
-    },
-    date: "2025-02-10T00:00:00.000Z",
-    voucher: "00003",
-    check: "42783",
-    particulars: "Jazz Residences",
-    type: "Credit",
-    amount: 4000,
-    status: "Active",
-    proof: null,
-  },
-];
-
-const cClients: Prisma.CClientCreateInput[] = [
-  {
-    account: {
-      connectOrCreate: {
-        where: { name: accounts[2].name },
-        create: accounts[2],
-      },
-    },
-    name: "Jun Xie",
-  },
-  {
-    account: {
-      connectOrCreate: {
-        where: { name: accounts[2].name },
-        create: accounts[2],
-      },
-    },
-    name: "Quan Long",
-  },
-  {
-    account: {
-      connectOrCreate: {
-        where: { name: accounts[2].name },
-        create: accounts[2],
-      },
-    },
-    name: "Zong Guofeng",
-  },
-];
-
-const collections: Prisma.CollectionCreateInput[] = [
-  {
-    c_client: {
-      connectOrCreate: {
-        where: { name: cClients[0].name },
-        create: cClients[0],
-      },
-    },
-    property: "Alea Residences",
-    location: "Bacoor",
-    start: "2025-03-25T00:00:00.000Z",
-    end: "2027-03-25T00:00:00.000Z",
-    advance: 1,
-    deposit: 1,
-    tenant_price: 3000,
-    owner_income: 3000,
-    abic_income: 3000,
-    due: "2025-05-25T00:00:00.000Z",
-  },
-  {
-    c_client: {
-      connectOrCreate: {
-        where: { name: cClients[1].name },
-        create: cClients[1],
-      },
-    },
-    property: "Tivoli Residences",
-    location: "Makati",
-    start: "2025-02-25T00:00:00.000Z",
-    end: "2027-02-25T00:00:00.000Z",
-    advance: 1,
-    deposit: 1,
-    tenant_price: 5000,
-    owner_income: 5000,
-    abic_income: 5000,
-    due: "2025-04-25T00:00:00.000Z",
-  },
-  {
-    c_client: {
-      connectOrCreate: {
-        where: { name: cClients[2].name },
-        create: cClients[2],
-      },
-    },
-    property: "Oriental Place",
-    location: "Makati",
-    start: "2025-04-25T00:00:00.000Z",
-    end: "2027-04-25T00:00:00.000Z",
-    advance: 1,
-    deposit: 1,
-    tenant_price: 7000,
-    owner_income: 7000,
-    abic_income: 7000,
-    due: "2025-06-25T00:00:00.000Z",
-  },
-];
-
 const listings: Prisma.ListingCreateInput[] = [
   {
     account: {
@@ -260,6 +86,180 @@ const listings: Prisma.ListingCreateInput[] = [
     source: "Personal ADs",
     extension: null,
     closed: null,
+  },
+];
+
+const tClients: Prisma.TClientCreateInput[] = [
+  {
+    name: "Hu Yanchong",
+  },
+  {
+    name: "Weiwei Chen",
+  },
+  {
+    name: "Dan Li",
+  },
+];
+
+const transactions: Prisma.TransactionCreateInput[] = [
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[2].name },
+        create: accounts[2],
+      },
+    },
+    t_client: {
+      connectOrCreate: {
+        where: { name: tClients[0].name },
+        create: {
+          name: tClients[0].name,
+        },
+      },
+    },
+    date: "2025-02-01T00:00:00.000Z",
+    voucher: "00001",
+    check: "24837",
+    particulars: "Tivoli",
+    type: "Credit",
+    amount: 5000,
+    status: "Active",
+    proof: null,
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[2].name },
+        create: accounts[2],
+      },
+    },
+    t_client: {
+      connectOrCreate: {
+        where: { name: tClients[1].name },
+        create: {
+          name: tClients[1].name,
+        },
+      },
+    },
+    date: "2025-02-05T00:00:00.000Z",
+    voucher: "00002",
+    check: "76598",
+    particulars: "Alea Residences",
+    type: "Debit",
+    amount: 3000,
+    status: "Active",
+    proof: null,
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[2].name },
+        create: accounts[2],
+      },
+    },
+    t_client: {
+      connectOrCreate: {
+        where: { name: tClients[2].name },
+        create: {
+          name: tClients[2].name,
+        },
+      },
+    },
+    date: "2025-02-10T00:00:00.000Z",
+    voucher: "00003",
+    check: "42783",
+    particulars: "Jazz Residences",
+    type: "Credit",
+    amount: 4000,
+    status: "Active",
+    proof: null,
+  },
+];
+
+const cClients: Prisma.CClientCreateInput[] = [
+  {
+    name: "Jun Xie",
+  },
+  {
+    name: "Quan Long",
+  },
+  {
+    name: "Zong Guofeng",
+  },
+];
+
+const collections: Prisma.CollectionCreateInput[] = [
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[2].name },
+        create: accounts[2],
+      },
+    },
+    c_client: {
+      connectOrCreate: {
+        where: { name: cClients[0].name },
+        create: cClients[0],
+      },
+    },
+    property: "Alea Residences",
+    location: "Bacoor",
+    start: "2025-03-25T00:00:00.000Z",
+    end: "2027-03-25T00:00:00.000Z",
+    advance: 1,
+    deposit: 1,
+    tenant_price: 3000,
+    owner_income: 3000,
+    abic_income: 3000,
+    due: "2025-05-25T00:00:00.000Z",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[2].name },
+        create: accounts[2],
+      },
+    },
+    c_client: {
+      connectOrCreate: {
+        where: { name: cClients[1].name },
+        create: cClients[1],
+      },
+    },
+    property: "Tivoli Residences",
+    location: "Makati",
+    start: "2025-02-25T00:00:00.000Z",
+    end: "2027-02-25T00:00:00.000Z",
+    advance: 1,
+    deposit: 1,
+    tenant_price: 5000,
+    owner_income: 5000,
+    abic_income: 5000,
+    due: "2025-04-25T00:00:00.000Z",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[2].name },
+        create: accounts[2],
+      },
+    },
+    c_client: {
+      connectOrCreate: {
+        where: { name: cClients[2].name },
+        create: cClients[2],
+      },
+    },
+    property: "Oriental Place",
+    location: "Makati",
+    start: "2025-04-25T00:00:00.000Z",
+    end: "2027-04-25T00:00:00.000Z",
+    advance: 1,
+    deposit: 1,
+    tenant_price: 7000,
+    owner_income: 7000,
+    abic_income: 7000,
+    due: "2025-06-25T00:00:00.000Z",
   },
 ];
 

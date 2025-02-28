@@ -16,24 +16,44 @@ datasource db {
 }
 
 model Account {
-  id         String    @id @default(cuid())
-  listings   Listing[]
-  t_clients  TClient[]
-  c_clients  CClient[]
-  pdc_sets   PDCSet[]
-  name       String    @unique
-  th_access  Boolean
-  cm_access  Boolean
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
+  id           String        @id @default(cuid())
+  listings     Listing[]
+  transactions Transaction[]
+  pdc_sets     PDCSet[]
+  collections  Collection[]
+  name         String        @unique
+  th_access    Boolean
+  cm_access    Boolean
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
 
   @@map(name: "accounts")
 }
 
+model Listing {
+  id          String    @id @default(cuid())
+  account     Account?  @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  account_id  String?
+  client      String
+  type        String
+  project     String
+  unit        String
+  res         DateTime  @db.Date
+  terms       String
+  specialist  String
+  manager     String
+  list_price  Decimal   @db.Decimal(15, 2)
+  total_price Decimal   @db.Decimal(15, 2)
+  status      String
+  source      String
+  extension   DateTime? @db.Date
+  closed      DateTime? @db.Date
+
+  @@map(name: "listings")
+}
+
 model TClient {
   id           String        @id @default(cuid())
-  account      Account?      @relation(fields: [account_id], references: [id], onDelete: Cascade)
-  account_id   String?
   transactions Transaction[]
   name         String        @unique
   created_at   DateTime      @default(now())
@@ -44,6 +64,8 @@ model TClient {
 
 model Transaction {
   id          String   @id @default(cuid())
+  account     Account? @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  account_id  String?
   t_client    TClient? @relation(fields: [t_client_id], references: [id], onDelete: Cascade)
   t_client_id String?
   date        DateTime @db.Date
@@ -87,8 +109,6 @@ model PDC {
 
 model CClient {
   id          String       @id @default(cuid())
-  account     Account?     @relation(fields: [account_id], references: [id], onDelete: Cascade)
-  account_id  String?
   collections Collection[]
   name        String       @unique
   created_at  DateTime     @default(now())
@@ -99,6 +119,8 @@ model CClient {
 
 model Collection {
   id           String   @id @default(cuid())
+  account      Account? @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  account_id   String?
   c_client     CClient? @relation(fields: [c_client_id], references: [id], onDelete: Cascade)
   c_client_id  String?
   property     String
@@ -115,28 +137,6 @@ model Collection {
   updated_at   DateTime @updatedAt
 
   @@map(name: "collections")
-}
-
-model Listing {
-  id          String    @id @default(cuid())
-  account     Account?  @relation(fields: [account_id], references: [id], onDelete: Cascade)
-  account_id  String?
-  client      String
-  type        String
-  project     String
-  unit        String
-  res         DateTime  @db.Date
-  terms       String
-  specialist  String
-  manager     String
-  list_price  Decimal   @db.Decimal(15, 2)
-  total_price Decimal   @db.Decimal(15, 2)
-  status      String
-  source      String
-  extension   DateTime? @db.Date
-  closed      DateTime? @db.Date
-
-  @@map(name: "listings")
 }
 
 model AR {
