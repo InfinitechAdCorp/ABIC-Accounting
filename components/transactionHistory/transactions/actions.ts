@@ -193,24 +193,30 @@ export const create = async (values: TransactionCreateInput) => {
       name: values.t_client_name as string,
     };
 
-    await prisma.transaction.create({
-      data: {
-        account: { connect: { id: accountID } },
-        t_client: {
-          connectOrCreate: {
-            where: t_client,
-            create: t_client,
-          },
+    const data: Prisma.TransactionCreateInput = {
+      account: { connect: { id: accountID } },
+      t_client: {
+        connectOrCreate: {
+          where: t_client,
+          create: t_client,
         },
-        date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
-        voucher: values.voucher || null,
-        check: values.check || null,
-        particulars: values.particulars,
-        type: values.type,
-        amount: values.amount,
-        status: values.status,
-        proof: proof,
       },
+      date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
+      voucher: values.voucher || null,
+      check: values.check || null,
+      particulars: values.particulars,
+      type: values.type,
+      amount: values.amount,
+      status: values.status,
+      proof: proof,
+    };
+
+    if (!values.t_client_name) {
+      delete data.t_client
+    }
+    
+    await prisma.transaction.create({
+      data: data,
     });
   } catch (error) {
     const response: ActionResponse = {
@@ -277,25 +283,31 @@ export const update = async (values: TransactionCreateInput) => {
       name: values.t_client_name as string,
     };
 
+    const data: Prisma.TransactionCreateInput = {
+      account: { connect: { id: accountID } },
+      t_client: {
+        connectOrCreate: {
+          where: t_client,
+          create: t_client,
+        },
+      },
+      date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
+      voucher: values.voucher || null,
+      check: values.check || null,
+      particulars: values.particulars,
+      type: values.type,
+      amount: values.amount,
+      status: values.status,
+      proof: proof,
+    }
+
+    if (!values.t_client_name) {
+      delete data.t_client
+    }
+
     await prisma.transaction.update({
       where: { id: values.id },
-      data: {
-        account: { connect: { id: accountID } },
-        t_client: {
-          connectOrCreate: {
-            where: t_client,
-            create: t_client,
-          },
-        },
-        date: new Date(new Date(values.date).setUTCHours(0, 0, 0, 0)),
-        voucher: values.voucher || null,
-        check: values.check || null,
-        particulars: values.particulars,
-        type: values.type,
-        amount: values.amount,
-        status: values.status,
-        proof: proof,
-      },
+      data: data,
     });
   } catch (error) {
     const response: ActionResponse = {

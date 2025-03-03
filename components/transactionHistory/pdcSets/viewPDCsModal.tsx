@@ -45,9 +45,9 @@ const ViewPDCsModal = ({ record }: Props) => {
 
   const hasLine = (date: Date) => {
     let result = "";
-    const today = new Date(new Date().setHours(0, 0, 0, 0));
+    const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
     if (date) {
-      const difference = differenceInDays(date.setHours(0, 0, 0, 0), today);
+      const difference = differenceInDays(date.setUTCHours(0, 0, 0, 0), today);
       difference <= 0 ? (result = "line-through") : (result = "");
     }
     return result;

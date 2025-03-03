@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 const rules = {
-  t_client_name: Yup.string().trim().required("Client is a required field"),
+  t_client_name: Yup.string().trim().nullable(),
   date: Yup.date()
     .typeError("Date must be a valid date")
     .required("Date is a required field"),

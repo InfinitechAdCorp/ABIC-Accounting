@@ -85,8 +85,8 @@ export const displayFormat = async (
           value = formatNumber(record[key as keyof Collection] as number);
           break;
         case "status":
-          const today = new Date(new Date().setHours(0, 0, 0, 0));
-          const diff = differenceInDays(record.due.setHours(0, 0, 0, 0), today);
+          const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
+          const diff = differenceInDays(record.due.setUTCHours(0, 0, 0, 0), today);
 
           if (diff > 0) {
             value = `${diff} Days Remaining`;

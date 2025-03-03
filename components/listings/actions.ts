@@ -69,8 +69,8 @@ export const displayFormat = async (columns: Column[], records: Listing[]) => {
           value = formatDate(record[key as keyof Listing] as Date);
           break;
         case "aging":
-          const today = new Date(new Date().setHours(0, 0, 0, 0));
-          value = differenceInDays(today, record.res.setHours(0, 0, 0, 0));
+          const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
+          value = differenceInDays(today, record.res.setUTCHours(0, 0, 0, 0));
           break;
         case "list_price":
         case "total_price":

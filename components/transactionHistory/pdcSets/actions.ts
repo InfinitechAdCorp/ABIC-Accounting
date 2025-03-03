@@ -9,17 +9,19 @@ import {
   PDCSetDisplayFormat,
   PDCSetWithPDCs,
 } from "@/components/transactionHistory/pdcSets/types";
-import { eachMonthOfInterval, setDate } from "date-fns";
-import { formatDate, formatErrors } from "@/components/globals/utils";
+import { eachMonthOfInterval, setDate, differenceInDays } from "date-fns";
+import {
+  formatDate,
+  formatErrors,
+  setVoucher,
+} from "@/components/globals/utils";
 import * as Yup from "yup";
 import { create as createSchema } from "@/components/transactionHistory/pdcSets/schemas";
 import { revalidatePath } from "next/cache";
 import { Column } from "@/components/globals/types";
 import { Destroy } from "@/components/globals/types";
 import { destroy as destroySchema } from "@/components/globals/schemas";
-import {
-  getAll as getAllTransactions,
-} from "@/components/transactionHistory/transactions/actions";
+import { getAll as getAllTransactions } from "@/components/transactionHistory/transactions/actions";
 
 const model = "PDC Set";
 const url = "/transaction-history/pdc-sets";
@@ -145,7 +147,9 @@ export const create = async (values: PDCSetCreateInput) => {
   });
 
   try {
+    let date;
     let check = Number(values.check);
+
     const record = await prisma.pDCSet.create({
       data: {
         account: { connect: { id: accountID } },
@@ -159,13 +163,39 @@ export const create = async (values: PDCSetCreateInput) => {
     });
 
     for (const month of months) {
+      date = setDate(month, dueDay);
+
       await prisma.pDC.create({
         data: {
           pdc_set: { connect: { id: record.id } },
           check: `${check}`,
-          date: setDate(month, dueDay),
+          date: date,
         },
       });
+
+      const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
+      const difference = differenceInDays(date.setUTCHours(0, 0, 0, 0), today);
+
+      if (difference <= 0) {
+        const { records: transactions } = await getAllTransactions();
+
+        const last = transactions.find((record) => {
+          return record.voucher;
+        });
+
+        await prisma.transaction.create({
+          data: {
+            account: { connect: { id: accountID } },
+            date: date,
+            voucher: setVoucher(last),
+            check: `${check}`,
+            particulars: `${values.name} ${formatDate(date)}`,
+            type: values.type,
+            amount: values.amount,
+            status: "Active",
+          },
+        });
+      }
 
       ++check;
     }

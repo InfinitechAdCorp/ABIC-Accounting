@@ -122,10 +122,10 @@ export const computeBalance = (records: Transaction[]) => {
 
 export const isPending = (date: Date) => {
   let isPending = false;
-  const today = new Date(new Date().setHours(0, 0, 0, 0));
+  const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
 
   if (date) {
-    isPending = isAfter(date.setHours(0, 0, 0, 0), today);
+    isPending = isAfter(date.setUTCHours(0, 0, 0, 0), today);
   }
 
   return isPending;
