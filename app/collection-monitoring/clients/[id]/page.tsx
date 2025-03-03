@@ -4,19 +4,16 @@ import {
   getAll as getCClients,
 } from "@/components/collectionMonitoring/cClients/actions";
 import { displayFormat } from "@/components/collectionMonitoring/collections/actions";
-import { get as getAccount } from "@/components/accounts/actions";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/collectionMonitoring/collections/renderBody";
 import CreateModal from "@/components/collectionMonitoring/collections/createModal";
-import { retry } from "@/components/globals/serverUtils";
 
 const TransactionClient = async ({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) => {
-  const { record: account } = await retry(getAccount);
   const { record } = await get((await params).id);
   const { records: cClients } = await getCClients();
 
@@ -59,7 +56,7 @@ const TransactionClient = async ({
 
   return (
     <>
-      <Navbar record={account!} />
+      <Navbar />
 
       <div className="max-h-[93vh]">
         <DataTable

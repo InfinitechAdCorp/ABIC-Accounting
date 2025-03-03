@@ -7,7 +7,6 @@ import {
   getAll as getTransactions,
   displayFormat,
 } from "@/components/transactionHistory/transactions/actions";
-import { get as getAccount } from "@/components/accounts/actions";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/transactionHistory/transactions/renderBody";
@@ -17,11 +16,9 @@ import {
   formatNumber,
   setVoucher,
 } from "@/components/globals/utils";
-import { retry } from "@/components/globals/serverUtils";
 import { Tooltip } from "@heroui/react";
 
 const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
-  const { record: account } = await retry(getAccount);
   const { record } = await get((await params).id);
   const { records: tClients } = await getTClients();
   const { records: transactions } = await getTransactions();
@@ -71,7 +68,7 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <>
-      <Navbar record={account!} />
+      <Navbar />
 
       <div className="max-h-[93vh]">
         <DataTable

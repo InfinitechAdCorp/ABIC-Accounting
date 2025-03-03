@@ -1,5 +1,4 @@
 import React from "react";
-import { get as getAccount } from "@/components/accounts/actions";
 import {
   getAll,
   displayFormat,
@@ -14,11 +13,9 @@ import {
   formatNumber,
   setVoucher,
 } from "@/components/globals/utils";
-import { retry } from "@/components/globals/serverUtils";
 import { Tooltip } from "@heroui/react";
 
 const Transactions = async () => {
-  const { record: account } = await retry(getAccount);
   const { records: ufRecords } = await getAll();
   const { records: tClients } = await getTClients();
 
@@ -71,7 +68,7 @@ const Transactions = async () => {
 
   return (
     <>
-      <Navbar record={account!} />
+      <Navbar />
 
       <div className="max-h-[93vh]">
         <DataTable

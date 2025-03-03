@@ -1,5 +1,4 @@
 import React from "react";
-import { get as getAccount } from "@/components/accounts/actions";
 import {
   getAll,
   displayFormat,
@@ -9,10 +8,8 @@ import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/collectionMonitoring/collections/dataTable";
 import RenderBody from "@/components/collectionMonitoring/collections/renderBody";
 import CreateModal from "@/components/collectionMonitoring/collections/createModal";
-import { retry } from "@/components/globals/serverUtils";
 
 const Collections = async () => {
-  const { record: account } = await retry(getAccount);
   const { records: ufRecords } = await getAll();
   const { records: cClients } = await getCClients();
 
@@ -56,7 +53,7 @@ const Collections = async () => {
 
   return (
     <>
-      <Navbar record={account!} />
+      <Navbar />
 
       <div className="max-h-[93vh]">
         <DataTable

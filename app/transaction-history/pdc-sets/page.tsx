@@ -1,6 +1,4 @@
 import React from "react";
-import { get as getAccount } from "@/components/accounts/actions";
-import { retry } from "@/components/globals/serverUtils";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import CreateModal from "@/components/transactionHistory/pdcSets/createModal";
@@ -11,7 +9,6 @@ import {
 import RenderBody from "@/components/transactionHistory/pdcSets/renderBody";
 
 const PDCs = async () => {
-  const { record: account } = await retry(getAccount);
   const { records: ufRecords } = await getAll();
 
   const model = "PDC Sets";
@@ -37,7 +34,7 @@ const PDCs = async () => {
 
   return (
     <>
-      <Navbar record={account!} />
+      <Navbar />
 
       <div className="max-h-[93vh]">
         <DataTable

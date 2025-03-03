@@ -10,6 +10,7 @@ export function middleware(request: NextRequest) {
     "/listings",
     "/tools",
   ];
+  
   const isLoggedIn = request.cookies.get("isLoggedIn");
 
   if (routes.includes(request.nextUrl.pathname)) {

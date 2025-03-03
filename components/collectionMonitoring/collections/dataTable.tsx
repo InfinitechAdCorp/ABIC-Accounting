@@ -410,7 +410,7 @@ const DataTable = ({
             bottomContent={bottomContent}
             bottomContentPlacement="outside"
             classNames={{
-              wrapper: "max-h-[400px]",
+              wrapper: "max-h-[40rem]",
             }}
             topContent={topContent}
             topContentPlacement="outside"

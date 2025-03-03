@@ -1,14 +1,11 @@
 import React from "react";
 import { getAll, displayFormat } from "@/components/listings/actions";
 import Navbar from "@/components/globals/navbar";
-import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";
 import CreateModal from "@/components/listings/createModal";
 import RenderBody from "@/components/listings/renderBody";
-import { retry } from "@/components/globals/serverUtils";
 
 const Listings = async () => {
-  const { record: account } = await retry(getAccount);
   const { records: ufRecords } = await getAll();
 
   const model = "Listings";
@@ -42,7 +39,7 @@ const Listings = async () => {
 
   return (
     <>
-      <Navbar record={account!} />
+      <Navbar />
 
       <div className="max-h-[93vh]">
         <DataTable

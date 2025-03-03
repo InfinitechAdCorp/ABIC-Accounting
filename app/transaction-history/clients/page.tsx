@@ -4,17 +4,13 @@ import {
   displayFormat,
 } from "@/components/transactionHistory/tClients/actions";
 import { getAll as getTransactions } from "@/components/transactionHistory/transactions/actions";
-import { get as getAccount } from "@/components/accounts/actions";
-import { Card, CardBody } from "@heroui/react";
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/transactionHistory/tClients/renderBody";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
-import { retry } from "@/components/globals/serverUtils";
 import { Tooltip } from "@heroui/react";
 
 const TClients = async () => {
-  const { record: account } = await retry(getAccount);
   const { records: ufRecords } = await getAll();
   const { records: transactions } = await getTransactions();
 
@@ -51,7 +47,7 @@ const TClients = async () => {
 
   return (
     <>
-      <Navbar record={account!} />
+      <Navbar />
 
       <div className="max-h-[93vh]">
         <DataTable

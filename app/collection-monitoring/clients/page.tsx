@@ -4,13 +4,10 @@ import {
   displayFormat,
 } from "@/components/collectionMonitoring/cClients/actions";
 import Navbar from "@/components/globals/navbar";
-import { get as getAccount } from "@/components/accounts/actions";
 import DataTable from "@/components/globals/dataTable";
 import RenderBody from "@/components/collectionMonitoring/cClients/renderBody";
-import { retry } from "@/components/globals/serverUtils";
 
 const CClients = async () => {
-  const { record: account } = await retry(getAccount);
   const { records: ufRecords } = await getAll();
 
   const model = "Clients";
@@ -25,7 +22,7 @@ const CClients = async () => {
 
   return (
     <>
-      <Navbar record={account!} />
+      <Navbar />
 
       <div className="max-h-[93vh]">
         <DataTable
