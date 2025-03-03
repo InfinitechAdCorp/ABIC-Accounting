@@ -1,15 +1,26 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import { getAll } from "@/components/accounts/actions";
 import Image from "next/image";
 import LogoutBtn from "@/components/globals/logoutBtn";
 import CreateModal from "@/components/accounts/createModal";
 import AccountCard from "@/components/accounts/accountCard";
-import { retry } from "@/components/globals/serverUtils";
 import { Account } from "@prisma/client";
 import { Card, CardBody } from "@heroui/react";
 
-const Accounts = async () => {
-  const { records }: { records?: Account[] } = await retry(getAll);
+const Accounts = () => {
+  const [records, setRecords] = useState<Account[]>([]);
+
+  useEffect(() => {
+    const fetchRecords = async () => {
+      getAll().then((response) => {
+        setRecords(response.records);
+      });
+    };
+
+    setTimeout(() => fetchRecords(), 500);
+  }, [records]);
 
   return (
     <>
