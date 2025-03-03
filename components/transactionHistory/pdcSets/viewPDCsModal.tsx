@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useMemo } from "react";
 import {
   Modal,
   ModalContent,
@@ -14,10 +14,11 @@ import {
   TableColumn,
   TableRow,
   TableCell,
+  Pagination,
 } from "@heroui/react";
 import { PDCSet } from "@/components/transactionHistory/pdcSets/types";
 import { FaEye } from "react-icons/fa";
-import { formatDate } from "@/components/globals/utils";
+import { formatDate, formatNumber } from "@/components/globals/utils";
 import { differenceInDays } from "date-fns";
 
 type Props = {
@@ -26,6 +27,19 @@ type Props = {
 
 const ViewPDCsModal = ({ record }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const ufPdcs = record.pdcs || [];
+
+  const [page, setPage] = useState(1);
+  const rowsPerPage = 4;
+  const pages = Math.ceil(ufPdcs.length / rowsPerPage);
+
+  const pdcs = useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return ufPdcs.slice(start, end);
+  }, [page, ufPdcs]);
 
   const columns = ["DATE", "CHECK", "AMOUNT"];
 
@@ -53,7 +67,7 @@ const ViewPDCsModal = ({ record }: Props) => {
 
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
-          {(onClose) => (
+          {() => (
             <>
               <ModalHeader className="py-3">
                 <div>
@@ -64,32 +78,52 @@ const ViewPDCsModal = ({ record }: Props) => {
                 </div>
               </ModalHeader>
               <ModalBody>
-                <Table aria-label="PDCs Table">
+                <Table
+                  aria-label="PDCs Table"
+                  bottomContent={
+                    <div className="flex w-full justify-center">
+                      <Pagination
+                        isCompact
+                        showControls
+                        showShadow
+                        color="primary"
+                        page={page}
+                        total={pages}
+                        onChange={setPage}
+                      />
+                    </div>
+                  }
+                  classNames={{
+                    wrapper: "max-h-[20rem]",
+                  }}
+                >
                   <TableHeader>
                     {columns.map((column) => (
                       <TableColumn key={column}>{column}</TableColumn>
                     ))}
                   </TableHeader>
                   <TableBody>
-                    {(record.pdcs || []).map((pdc) => (
-                      <TableRow key={pdc.id}>
-                        <TableCell className={hasLine(pdc.date)}>
-                          {formatDate(pdc.date)}
-                        </TableCell>
-                        <TableCell className={hasLine(pdc.date)}>
-                          {pdc.check}
-                        </TableCell>
-                        <TableCell className={hasLine(pdc.date)}>
-                          {record.amount}
-                        </TableCell>
-                      </TableRow>
+                    {pdcs.map((pdc) => (
+                      <>
+                        <TableRow key={pdc.id}>
+                          <TableCell className={hasLine(pdc.date)}>
+                            {formatDate(pdc.date)}
+                          </TableCell>
+                          <TableCell className={hasLine(pdc.date)}>
+                            {pdc.check}
+                          </TableCell>
+                          <TableCell className={hasLine(pdc.date)}>
+                            {record.amount}
+                          </TableCell>
+                        </TableRow>
+                      </>
                     ))}
                   </TableBody>
                 </Table>
 
                 <div className="text-end mb-3">
                   <h3 className="text-md font-bold">
-                    Total: {record.amount * (record.pdcs?.length || 0)}
+                    Total: {formatNumber(record.amount * ufPdcs.length)}
                   </h3>
                 </div>
               </ModalBody>
