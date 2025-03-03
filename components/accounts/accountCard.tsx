@@ -16,13 +16,13 @@ const AccountCard = ({ record }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const onPress = async (e: any) => {
-    const id = e.target.dataset.pressed;
-
     setIsLoading(true);
+    
+    const id = e.target.dataset.pressed;
     await set(id);
-    setIsLoading(false);
-
     router.push("/dashboard");
+    
+    setIsLoading(false);
   };
 
   return (
