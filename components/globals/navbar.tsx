@@ -24,14 +24,17 @@ const Navbar = () => {
 
   useEffect(() => {
     const fetchRecord = async () => {
-      get().then((response) => {
-        if (response.record) {
-          setRecord(response.record);
-        }
-      });
+      const response = await get();
+      if (response.record) {
+        setRecord(response.record);
+      }
     };
 
-    setTimeout(() => fetchRecord(), 500);
+    setTimeout(() => {
+      if (!record) {
+        fetchRecord();
+      }
+    }, 500);
   }, [record]);
 
   return (
