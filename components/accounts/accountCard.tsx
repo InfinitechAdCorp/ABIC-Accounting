@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardBody } from "@heroui/react";
 import { Account as Record } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { set } from "@/components/globals/auth";
+import { Spinner } from "@heroui/react";
 
 type Props = {
   record: Record;
@@ -12,10 +13,15 @@ type Props = {
 
 const AccountCard = ({ record }: Props) => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onPress = async (e: any) => {
     const id = e.target.dataset.pressed;
+
+    setIsLoading(true);
     await set(id);
+    setIsLoading(false);
+
     router.push("/dashboard");
   };
 
@@ -30,7 +36,11 @@ const AccountCard = ({ record }: Props) => {
       >
         <CardBody>
           <div className="flex items-center justify-center text-center h-[5rem]">
-            <h3 className="text-sm md:text-xl font-bold">{record.name}</h3>
+            {isLoading ? (
+              <Spinner color="primary" />
+            ) : (
+              <h3 className="text-sm md:text-xl font-bold">{record.name}</h3>
+            )}
           </div>
         </CardBody>
       </Card>
