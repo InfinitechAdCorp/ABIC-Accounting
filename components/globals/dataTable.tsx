@@ -85,9 +85,13 @@ const DataTable = ({
     direction: "ascending",
   });
 
-  const start = new Date("January 1, 1900 00:00:00");
-  const end = new Date("December 31, 2099 00:00:00");
-  const [range, setRange] = useState({
+  const start = "";
+  const end = "";
+
+  const [range, setRange] = useState<{
+    start: Date | string;
+    end: Date | string;
+  }>({
     start: start,
     end: end,
   });
@@ -99,15 +103,19 @@ const DataTable = ({
   }, [visibleColumns]);
 
   const dateFilteredRecords = useMemo(() => {
-    const start = range.start.toLocaleDateString("en-CA");
-    const end = range.end.toLocaleDateString("en-CA");
+    if (range.start && range.end) {
+      const start = (range.start as Date).toLocaleDateString("en-CA");
+      const end = (range.end as Date).toLocaleDateString("en-CA");
 
-    if (filterKey) {
-      const filteredRecords = ufRecords.filter((record) => {
-        const date = record[filterKey].toLocaleDateString("en-CA");
-        return date >= start && date <= end;
-      });
-      return filteredRecords;
+      if (filterKey) {
+        const filteredRecords = ufRecords.filter((record) => {
+          const date = record[filterKey].toLocaleDateString("en-CA");
+          return date >= start && date <= end;
+        });
+        return filteredRecords;
+      }
+    } else {
+      return ufRecords;
     }
   }, [range, ufRecords, filterKey]);
 
@@ -169,10 +177,7 @@ const DataTable = ({
   }, []);
 
   const Filter = useMemo(() => {
-    const initialValues = {
-      start: start,
-      end: end,
-    };
+    const initialValues = range;
 
     const onSubmit = (values: Filter) => {
       setRange({ start: values.start, end: values.end });
@@ -180,7 +185,7 @@ const DataTable = ({
     };
 
     const reset = () => {
-      setRange({ start: start, end: end });
+      setRange({ start: "", end: "" });
       onClose();
     };
 

@@ -17,6 +17,9 @@ import { revalidatePath } from "next/cache";
 import { Column } from "@/components/globals/types";
 import { Destroy } from "@/components/globals/types";
 import { destroy as destroySchema } from "@/components/globals/schemas";
+import {
+  getAll as getAllTransactions,
+} from "@/components/transactionHistory/transactions/actions";
 
 const model = "PDC Set";
 const url = "/transaction-history/pdc-sets";
@@ -163,6 +166,7 @@ export const create = async (values: PDCSetCreateInput) => {
           date: setDate(month, dueDay),
         },
       });
+
       ++check;
     }
   } catch (error) {

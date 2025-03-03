@@ -39,6 +39,7 @@ const Transactions = async () => {
   const last = ufRecords.find((ufRecord) => {
     return ufRecord.voucher;
   });
+  
   const voucher = setVoucher(last);
 
   const records = await displayFormat(columns, ufRecords);

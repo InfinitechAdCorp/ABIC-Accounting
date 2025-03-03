@@ -11,8 +11,8 @@ export type ExportAsPDF = {
 };
 
 export type Filter = {
-  start: Date;
-  end: Date;
+  start: Date | string;
+  end: Date | string;
 };
 
 export type Destroy = {
