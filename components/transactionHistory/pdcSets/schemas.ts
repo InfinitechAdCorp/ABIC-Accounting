@@ -5,7 +5,8 @@ const rules = {
   pay_to: Yup.string().trim().required("Pay To is a required field"),
   start: Yup.date()
     .typeError("Start Date must be a valid date")
-    .required("Start Date is a required field"),
+    .required("Start Date is a required field")
+    .min(new Date(), "Start Date must be a future date"),
   end: Yup.date()
     .typeError("End Date must be a valid date")
     .required("End Date is a required field")
