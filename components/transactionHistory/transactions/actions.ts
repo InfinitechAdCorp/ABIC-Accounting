@@ -9,7 +9,7 @@ import {
   setStatus as setStatusSchema,
 } from "@/components/transactionHistory/transactions/schemas";
 import { destroy as destroySchema } from "@/components/globals/schemas";
-import { formatErrors } from "@/components/globals/utils";
+import { formatErrors, setVoucher } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { Column } from "@/components/globals/types";
 import {
@@ -25,6 +25,8 @@ import { ulid } from "ulidx";
 import { Destroy } from "@/components/globals/types";
 import { formatDate, formatNumber } from "@/components/globals/utils";
 import { isPending } from "@/components/globals/utils";
+import { getAll as getAllPDCSets } from "@/components/transactionHistory/pdcSets/actions";
+import { eachMonthOfInterval, setDate, differenceInDays } from "date-fns";
 
 const model = "Transaction";
 const url = "/transaction-history/transactions";
@@ -149,6 +151,7 @@ export const getAll = async () => {
   }
 
   records = await format(records || []);
+  saveAsTransaction()
   const response = {
     code: 200,
     message: `Fetched ${model}s`,
@@ -212,9 +215,9 @@ export const create = async (values: TransactionCreateInput) => {
     };
 
     if (!values.t_client_name) {
-      delete data.t_client
+      delete data.t_client;
     }
-    
+
     await prisma.transaction.create({
       data: data,
     });
@@ -299,10 +302,10 @@ export const update = async (values: TransactionCreateInput) => {
       amount: values.amount,
       status: values.status,
       proof: proof,
-    }
+    };
 
     if (!values.t_client_name) {
-      delete data.t_client
+      delete data.t_client;
     }
 
     await prisma.transaction.update({
@@ -430,4 +433,55 @@ export const setStatus = async (values: { id: string; status: string }) => {
     message: `${values.status == "Active" ? "Restored" : "Cancelled"} ${model}`,
   };
   return response;
+};
+
+export const saveAsTransaction = async () => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value;
+
+  const { records } = await getAllPDCSets();
+
+  records.forEach((record) => {
+    const pdcs = record.pdcs || [];
+
+    for (const pdc of pdcs) {
+      const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
+      const difference = differenceInDays(
+        pdc.date.setUTCHours(0, 0, 0, 0),
+        today
+      );
+
+      if (difference <= 0) {
+        getAll().then(async (response) => {
+          const transactions = response.records;
+          const last = transactions.find((transaction) => {
+            return transaction.voucher;
+          });
+
+          const particulars = `${record.name} - ${formatDate(pdc.date)}`;
+
+          const transaction = await prisma.transaction.findFirst({
+            where: {
+              particulars: particulars,
+            },
+          });
+
+          if (!transaction) {
+            await prisma.transaction.create({
+              data: {
+                account: { connect: { id: accountID } },
+                date: pdc.date,
+                voucher: setVoucher(last),
+                check: `${pdc.check}`,
+                particulars: particulars,
+                type: record.type,
+                amount: record.amount,
+                status: "Active",
+              },
+            });
+          }
+        });
+      }
+    }
+  });
 };

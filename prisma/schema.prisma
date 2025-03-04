@@ -91,6 +91,7 @@ model PDCSet {
   pay_to     String
   start      DateTime @db.Date
   end        DateTime @db.Date
+  check      String
   type       String
   amount     Decimal  @db.Decimal(15, 2)
 

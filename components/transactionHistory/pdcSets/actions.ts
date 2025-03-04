@@ -5,7 +5,6 @@ import { ActionResponse } from "@/components/globals/types";
 import { cookies } from "next/headers";
 import {
   PDCSet,
-  PDCSetCreateInput,
   PDCSetDisplayFormat,
   PDCSetWithPDCs,
 } from "@/components/transactionHistory/pdcSets/types";
@@ -22,6 +21,9 @@ import { Column } from "@/components/globals/types";
 import { Destroy } from "@/components/globals/types";
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { getAll as getAllTransactions } from "@/components/transactionHistory/transactions/actions";
+import {
+  Prisma,
+} from "@prisma/client";
 
 const model = "PDC Set";
 const url = "/transaction-history/pdc-sets";
@@ -119,7 +121,7 @@ export const getAll = async () => {
   return response;
 };
 
-export const create = async (values: PDCSetCreateInput) => {
+export const create = async (values: Prisma.PDCSetCreateInput) => {
   const session = await cookies();
   const accountID = session.get("accountID")?.value || "";
 
@@ -158,6 +160,7 @@ export const create = async (values: PDCSetCreateInput) => {
         pay_to: values.pay_to,
         start: start,
         end: end,
+        check: values.check,
         type: values.type,
         amount: values.amount,
       },
@@ -173,17 +176,6 @@ export const create = async (values: PDCSetCreateInput) => {
           date: date,
         },
       });
-
-      // const transactionValues = {
-      //   account_id: accountID,
-      //   date: date,
-      //   check: check,
-      //   name: values.name,
-      //   type: values.type,
-      //   amount: Number(values.amount),
-      // };
-
-      // saveAsTransaction(transactionValues);
 
       ++check;
     }
@@ -248,40 +240,3 @@ export const destroy = async (values: Destroy) => {
   return response;
 };
 
-type TransactionValues = {
-  account_id: string;
-  date: Date;
-  check: number;
-  name: string;
-  type: string;
-  amount: number;
-};
-
-const saveAsTransaction = async (values: TransactionValues) => {
-  const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
-  const difference = differenceInDays(
-    values.date.setUTCHours(0, 0, 0, 0),
-    today
-  );
-
-  if (difference <= 0) {
-    const { records: transactions } = await getAllTransactions();
-
-    const last = transactions.find((record) => {
-      return record.voucher;
-    });
-
-    await prisma.transaction.create({
-      data: {
-        account: { connect: { id: values.account_id } },
-        date: values.date,
-        voucher: setVoucher(last),
-        check: `${values.check}`,
-        particulars: `${values.name} - ${formatDate(values.date)}`,
-        type: values.type,
-        amount: values.amount,
-        status: "Active",
-      },
-    });
-  }
-};

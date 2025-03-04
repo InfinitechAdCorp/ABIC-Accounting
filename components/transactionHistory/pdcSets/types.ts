@@ -35,7 +35,3 @@ export type PDCSetWithPDCs = Prisma.PDCSetGetPayload<{
     pdcs: true;
   };
 }>;
-
-export type PDCSetCreateInput = Prisma.PDCSetCreateInput & {
-  check: string;
-};

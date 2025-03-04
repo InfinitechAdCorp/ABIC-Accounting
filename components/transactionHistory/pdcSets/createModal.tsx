@@ -17,12 +17,12 @@ import {
 import { create as validationSchema } from "@/components/transactionHistory/pdcSets/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
 import { create as action } from "@/components/transactionHistory/pdcSets/actions";
-import { PDCSetCreateInput } from "@/components/transactionHistory/pdcSets/types";
 import {
   onPostSubmit,
   dateToDateValue,
   dateValueToDate,
 } from "@/components/globals/utils";
+import { Prisma } from "@prisma/client";
 
 const CreateModal = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -39,7 +39,7 @@ const CreateModal = () => {
   };
 
   const onSubmit = async (
-    values: PDCSetCreateInput,
+    values: Prisma.PDCSetCreateInput,
     actions: { resetForm: () => void }
   ) => {
     setSubmitting(true);
