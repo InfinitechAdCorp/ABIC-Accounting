@@ -110,6 +110,7 @@ export const getAll = async () => {
   }
 
   records = await format(records || []);
+
   const response = {
     code: 200,
     message: `Fetched ${model}s`,
@@ -173,29 +174,16 @@ export const create = async (values: PDCSetCreateInput) => {
         },
       });
 
-      const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
-      const difference = differenceInDays(date.setUTCHours(0, 0, 0, 0), today);
+      // const transactionValues = {
+      //   account_id: accountID,
+      //   date: date,
+      //   check: check,
+      //   name: values.name,
+      //   type: values.type,
+      //   amount: Number(values.amount),
+      // };
 
-      if (difference <= 0) {
-        const { records: transactions } = await getAllTransactions();
-
-        const last = transactions.find((record) => {
-          return record.voucher;
-        });
-
-        await prisma.transaction.create({
-          data: {
-            account: { connect: { id: accountID } },
-            date: date,
-            voucher: setVoucher(last),
-            check: `${check}`,
-            particulars: `${values.name} ${formatDate(date)}`,
-            type: values.type,
-            amount: values.amount,
-            status: "Active",
-          },
-        });
-      }
+      // saveAsTransaction(transactionValues);
 
       ++check;
     }
@@ -258,4 +246,42 @@ export const destroy = async (values: Destroy) => {
   revalidatePath(url);
   const response: ActionResponse = { code: 200, message: `Deleted ${model}` };
   return response;
+};
+
+type TransactionValues = {
+  account_id: string;
+  date: Date;
+  check: number;
+  name: string;
+  type: string;
+  amount: number;
+};
+
+const saveAsTransaction = async (values: TransactionValues) => {
+  const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
+  const difference = differenceInDays(
+    values.date.setUTCHours(0, 0, 0, 0),
+    today
+  );
+
+  if (difference <= 0) {
+    const { records: transactions } = await getAllTransactions();
+
+    const last = transactions.find((record) => {
+      return record.voucher;
+    });
+
+    await prisma.transaction.create({
+      data: {
+        account: { connect: { id: values.account_id } },
+        date: values.date,
+        voucher: setVoucher(last),
+        check: `${values.check}`,
+        particulars: `${values.name} - ${formatDate(values.date)}`,
+        type: values.type,
+        amount: values.amount,
+        status: "Active",
+      },
+    });
+  }
 };
