@@ -30,7 +30,7 @@ const CountCard = ({ icon, model, url, count }: Props) => {
             {icon}
           </div>
 
-          <div className="flex flex-col justify-center items-center">
+          <div className="text-center">
             <h1 className="font-extrabold text-3xl">{count}</h1>
             <h4 className="text-neutral-500">{model}</h4>
           </div>

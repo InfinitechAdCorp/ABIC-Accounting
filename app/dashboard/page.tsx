@@ -4,7 +4,7 @@ import { getCounts } from "@/components/dashboard/actions";
 import Navbar from "@/components/globals/navbar";
 import CountCard from "@/components/dashboard/countCard";
 import { GrTransaction } from "react-icons/gr";
-import { FaUsers, FaFileSignature } from "react-icons/fa6";
+import { FaUsers, FaReceipt } from "react-icons/fa6";
 import { retry } from "@/components/globals/serverUtils";
 import { Card, CardBody } from "@heroui/react";
 
@@ -20,7 +20,7 @@ const Dashboard = async () => {
 
   return (
     <>
-      <Navbar record={account!} />
+      <Navbar />
 
       <div className="max-h-[93vh]">
         <Card radius="none" className="py-[0.10rem] px-2">
@@ -31,10 +31,10 @@ const Dashboard = async () => {
           </CardBody>
         </Card>
 
-        <Card className="m-5 md:my-7 md:mx-32 py-3 px-5">
+        <Card className="m-5 md:my-7 md:mx-96 py-3 px-3">
           <CardBody>
             <div
-              className={`grid grid-cols-1 md:grid-cols-3 px-5 lg:px-24 xl:px-60 gap-3 mb-3`}
+              className={`grid grid-cols-1 md:grid-cols-2 px-5 mx-40 gap-3 mb-3`}
             >
               {account.th_access && (
                 <>
@@ -52,15 +52,22 @@ const Dashboard = async () => {
                   ></CountCard>
                 </>
               )}
-
-              {account.cm_access && (
-                <CountCard
-                  icon={<FaFileSignature size={56} />}
-                  model="Collections"
-                  url="/collection-monitoring/collections"
-                  count={counts.collections}
-                ></CountCard>
-              )}
+            </div>
+            <div
+              className={`grid grid-cols-1 md:grid-cols-2 px-5 mx-40 gap-3 mb-3`}
+            >
+              <CountCard
+                icon={<FaReceipt size={56} />}
+                model="ARs"
+                url="/tools/acknowledgement-receipt"
+                count={counts.ars}
+              ></CountCard>
+              <CountCard
+                icon={<FaReceipt size={56} />}
+                model="BSs"
+                url="/tools/billing-statement"
+                count={counts.bss}
+              ></CountCard>
             </div>
           </CardBody>
         </Card>

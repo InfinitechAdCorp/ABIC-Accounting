@@ -10,7 +10,8 @@ export const getCounts = async () => {
   const counts = {
     tClients: 0,
     transactions: 0,
-    collections: 0,
+    ars: 0,
+    bss: 0,
   };
 
   try {
@@ -28,15 +29,14 @@ export const getCounts = async () => {
       },
     });
 
-    const collections = await prisma.collection.findMany({
-      where: {
-        account_id: accountID,
-      },
-    });
+    const ars = await prisma.aR.findMany();
+
+    const bss = await prisma.bS.findMany();
 
     counts.tClients = tClients.length;
     counts.transactions = transactions.length;
-    counts.collections = collections.length;
+    counts.ars = ars.length;
+    counts.bss = bss.length
   } catch {
     const response = {
       code: 500,
