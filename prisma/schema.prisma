@@ -69,8 +69,8 @@ model Transaction {
   t_client    TClient? @relation(fields: [t_client_id], references: [id], onDelete: Cascade)
   t_client_id String?
   date        DateTime @db.Date
-  voucher     String?  @unique
-  check       String?  @unique
+  voucher     String?  
+  check       String?  
   particulars String   @db.Text
   type        String
   amount      Decimal  @db.Decimal(15, 2)
