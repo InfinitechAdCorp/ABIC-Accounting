@@ -26,7 +26,7 @@ import { Destroy } from "@/components/globals/types";
 import { formatDate, formatNumber } from "@/components/globals/utils";
 import { isPending } from "@/components/globals/utils";
 import { getAll as getAllPDCSets } from "@/components/transactionHistory/pdcSets/actions";
-import { eachMonthOfInterval, setDate, differenceInDays } from "date-fns";
+import { differenceInDays } from "date-fns";
 
 const model = "Transaction";
 const url = "/transaction-history/transactions";
@@ -151,7 +151,7 @@ export const getAll = async () => {
   }
 
   records = await format(records || []);
-  checkPDCs();
+  // checkPDCs();
   const response = {
     code: 200,
     message: `Fetched ${model}s`,
