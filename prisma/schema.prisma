@@ -9,11 +9,18 @@ generator client {
   previewFeatures = ["typedSql"]
 }
 
+// Dev
 datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING")
+  provider = "mysql"
+  url      = env("DEV_DATABASE_URL")
 }
+
+// Prod
+// datasource db {
+//   provider  = "postgresql"
+//   url       = env("POSTGRES_PRISMA_URL")
+//   directUrl = env("POSTGRES_URL_NON_POOLING")
+// }
 
 model Account {
   id           String        @id @default(cuid())

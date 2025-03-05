@@ -18,7 +18,11 @@ export async function middleware(request: NextRequest) {
   if (pathname == "/") {
     await logout();
     return NextResponse.next();
-  } else if (routes.includes(pathname)) {
+  } else if (
+    routes.some((route) => {
+      return pathname.startsWith(route);
+    })
+  ) {
     if (isLoggedIn) {
       return NextResponse.next();
     }
