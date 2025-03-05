@@ -123,10 +123,11 @@ const DataTable = ({
     let filteredRecords = [...(dateFilteredRecords || ufRecords)];
 
     filteredRecords = filteredRecords.filter((record) => {
-      const values: string[] = Object.values(record.display_format);
-
-      const isValid = values.some((value) => {
-        return value.toLowerCase().includes(filterValue.toLowerCase());
+      const isValid = columns.some((column) => {
+        const value = record.display_format[column.key];
+        if (value) {
+          return value.toLowerCase().includes(filterValue.toLowerCase());
+        }
       });
 
       if (isValid) return record;
