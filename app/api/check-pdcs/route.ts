@@ -14,7 +14,9 @@ type TransactionValues = {
   amount: number;
 };
 
-export async function GET(request: Request) {
+export async function GET() {
+  await checkPDCs();
+
   const response = {
     code: 200,
     message: `Checked PDCs`,
@@ -22,7 +24,7 @@ export async function GET(request: Request) {
   return NextResponse.json(response);
 }
 
-export const checkPDCs = async () => {
+const checkPDCs = async () => {
   const { records } = await getAllPDCSets();
 
   records.forEach((record) => {
