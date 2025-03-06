@@ -17,8 +17,8 @@ generator client {
 
 // Prod
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Account {
@@ -54,6 +54,8 @@ model Listing {
   source      String
   extension   DateTime? @db.Date
   closed      DateTime? @db.Date
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
 
   @@map(name: "listings")
 }
@@ -75,8 +77,8 @@ model Transaction {
   t_client    TClient? @relation(fields: [t_client_id], references: [id], onDelete: Cascade)
   t_client_id String?
   date        DateTime @db.Date
-  voucher     String?  @unique
-  check       String?  @unique
+  voucher     String?
+  check       String?
   particulars String   @db.Text
   type        String
   amount      Decimal  @db.Decimal(15, 2)
@@ -100,6 +102,8 @@ model PDCSet {
   check      String
   type       String
   amount     Decimal  @db.Decimal(15, 2)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@map(name: "pdc_sets")
 }
@@ -110,6 +114,8 @@ model PDC {
   pdc_set_id String?
   check      String
   date       DateTime @db.Date
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@map(name: "pdcs")
 }
@@ -147,15 +153,19 @@ model Collection {
 }
 
 model AR {
-  id     String @id @default(cuid())
-  number String @unique
+  id         String   @id @default(cuid())
+  number     String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@map(name: "ars")
 }
 
 model BS {
-  id     String @id @default(cuid())
-  number String @unique
+  id         String   @id @default(cuid())
+  number     String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@map(name: "bss")
 }

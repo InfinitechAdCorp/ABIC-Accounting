@@ -21,9 +21,7 @@ import { Column } from "@/components/globals/types";
 import { Destroy } from "@/components/globals/types";
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { getAll as getAllTransactions } from "@/components/transactionHistory/transactions/actions";
-import {
-  Prisma,
-} from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 const model = "PDC Set";
 const url = "/transaction-history/pdc-sets";
@@ -97,10 +95,10 @@ export const getAll = async () => {
 
   try {
     records = await prisma.pDCSet.findMany({
-      where: { account_id: accountID },
       include: {
         pdcs: true,
       },
+      where: { account_id: accountID },
     });
   } catch {
     const response = {
@@ -239,4 +237,3 @@ export const destroy = async (values: Destroy) => {
   const response: ActionResponse = { code: 200, message: `Deleted ${model}` };
   return response;
 };
-

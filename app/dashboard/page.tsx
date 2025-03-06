@@ -7,7 +7,6 @@ import { GrTransaction } from "react-icons/gr";
 import { FaUsers, FaReceipt } from "react-icons/fa6";
 import { retry } from "@/components/globals/serverUtils";
 import { Card, CardBody } from "@heroui/react";
-import Barchart from "@/components/dashboard/barchart";
 
 export type Counts = {
   tClients: number;
@@ -71,12 +70,6 @@ const Dashboard = async () => {
               ></CountCard>
             </div>
           </CardBody>
-
-          <Card className="mb-3 h-72">
-            <CardBody className="text-center pt-7">
-              <Barchart title="Transactions Per Month" />
-            </CardBody>
-          </Card>
         </Card>
       </div>
     </>
