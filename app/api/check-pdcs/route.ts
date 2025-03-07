@@ -4,9 +4,9 @@ import { getAll as getAllPDCSets } from "@/components/transactionHistory/pdcSets
 import { differenceInDays } from "date-fns";
 import prisma from "@/lib/db";
 import { getAll } from "@/components/transactionHistory/transactions/actions";
-import { cookies } from "next/headers";
 
 type TransactionValues = {
+  account_id: string | null,
   date: Date;
   check: string;
   particulars: string;
@@ -24,7 +24,7 @@ export async function GET() {
   return NextResponse.json(response);
 }
 
-const checkPDCs = async () => {
+export const checkPDCs = async () => {
   const { records } = await getAllPDCSets();
 
   records.forEach((record) => {
@@ -40,6 +40,7 @@ const checkPDCs = async () => {
       if (difference <= 0) {
         const particulars = `${record.name} - ${formatDate(pdc.date)}`;
         const transactionValues = {
+          account_id: record.account_id,
           date: pdc.date,
           check: `${pdc.check}`,
           particulars: particulars,
@@ -52,11 +53,10 @@ const checkPDCs = async () => {
   });
 };
 
-export const saveAsTransaction = async (values: TransactionValues) => {
-  const session = await cookies();
-  const accountID = session.get("accountID")?.value;
-
-  const { records: transactions } = await getAll();
+export const saveAsTransaction = async (
+  values: TransactionValues
+) => {
+  const { records: transactions } = await getAll(values.account_id!);
   const last = transactions.find((transaction) => {
     return transaction.voucher;
   });
@@ -71,7 +71,6 @@ export const saveAsTransaction = async (values: TransactionValues) => {
     await prisma.transaction.create({
       data: {
         ...values,
-        account: { connect: { id: accountID } },
         voucher: setVoucher(last),
         status: "Active",
       },

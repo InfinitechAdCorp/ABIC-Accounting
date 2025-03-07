@@ -1,0 +1,8 @@
+{
+    "crons": [
+        {
+            "path": "/api/check-pdcs",
+            "schedule": "0 0 * * *"
+        }
+    ]
+}

@@ -2,7 +2,6 @@ import React from "react";
 import {
   getAll,
   displayFormat,
-  checkPDCs,
 } from "@/components/transactionHistory/transactions/actions";
 import { getAll as getTClients } from "@/components/transactionHistory/tClients/actions";
 import Navbar from "@/components/globals/navbar";
@@ -15,6 +14,7 @@ import {
   setVoucher,
 } from "@/components/globals/utils";
 import { Tooltip } from "@heroui/react";
+import { checkPDCs } from "@/app/api/check-pdcs/route";
 
 const Transactions = async () => {
   await checkPDCs();
