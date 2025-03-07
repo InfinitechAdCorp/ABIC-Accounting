@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "ABIC Accounting",
   description: "Accounting Software",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/images/favicon.ico",
   },
 };
 

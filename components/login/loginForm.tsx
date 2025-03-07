@@ -57,7 +57,7 @@ const LoginForm = () => {
               <CardHeader>
                 <div className="flex w-full justify-center">
                   <Image
-                    src={"/logo.jpg"}
+                    src={"/images/logo.jpg"}
                     width={200}
                     height={200}
                     alt="logo"

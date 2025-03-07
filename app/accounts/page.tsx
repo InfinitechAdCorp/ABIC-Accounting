@@ -26,7 +26,7 @@ const Accounts = () => {
     <>
       <div className="grid grid-cols-2 items-center bg-[#0072F5] p-5">
         <div className="flex gap-1 items-center">
-          <Image src={"/favicon.ico"} width={30} height={30} alt="logo" />
+          <Image src={"/images/favicon.ico"} width={30} height={30} alt="logo" />
           <h3 className="text-sm md:text-base text-white font-semibold">
             ABIC Accounting
           </h3>

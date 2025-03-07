@@ -51,7 +51,7 @@ const RenderCell = (
       );
     case "proof":
       const value = record.display_format![column as keyof TransactionDisplayFormat];
-      return <ViewProofBtn url={value || "/no-image.png"} />;
+      return <ViewProofBtn url={value || "/images/no-image.png"} />;
     default:
       return record.display_format![column as keyof TransactionDisplayFormat];
   }
