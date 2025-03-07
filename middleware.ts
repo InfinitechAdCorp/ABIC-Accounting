@@ -12,8 +12,18 @@ export async function middleware(request: NextRequest) {
     "/tools",
   ];
 
+  const extensions = ["jpg", "jpeg", "png", "gif", "webp"];
+
   const isLoggedIn = request.cookies.get("isLoggedIn");
   const pathname = request.nextUrl.pathname;
+
+  if (
+    extensions.some((extension) => {
+      return pathname.endsWith(extension);
+    })
+  ) {
+    return NextResponse.next();
+  }
 
   if (pathname == "/") {
     await logout();

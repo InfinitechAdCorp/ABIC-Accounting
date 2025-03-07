@@ -2,6 +2,7 @@ import React from "react";
 import {
   getAll,
   displayFormat,
+  checkPDCs,
 } from "@/components/transactionHistory/transactions/actions";
 import { getAll as getTClients } from "@/components/transactionHistory/tClients/actions";
 import Navbar from "@/components/globals/navbar";
@@ -16,6 +17,7 @@ import {
 import { Tooltip } from "@heroui/react";
 
 const Transactions = async () => {
+  await checkPDCs();
   const { records: ufRecords } = await getAll();
   const { records: tClients } = await getTClients();
 
@@ -39,7 +41,7 @@ const Transactions = async () => {
   const last = ufRecords.find((ufRecord) => {
     return ufRecord.voucher;
   });
-  
+
   const voucher = setVoucher(last);
 
   const records = await displayFormat(columns, ufRecords);
