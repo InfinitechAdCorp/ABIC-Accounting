@@ -2,6 +2,10 @@
 
 import prisma from "@/lib/db";
 import { cookies } from "next/headers";
+import {
+  getMonthlyTransactions,
+  getMonthlyCollections,
+} from "@prisma/client/sql";
 
 export const getCounts = async () => {
   const session = await cookies();
@@ -53,3 +57,33 @@ export const getCounts = async () => {
   };
   return response;
 };
+
+export const getCharts = async () => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value;
+
+  const year = new Date().getFullYear();
+
+  const monthlyTransactions = await prisma.$queryRawTyped(
+    getMonthlyTransactions(accountID, year)
+  );
+  const monthlyCollections = await prisma.$queryRawTyped(
+    getMonthlyCollections(accountID, year)
+  );
+
+  const formattedMonthlyTransactions = formatMonthlyData(monthlyTransactions);
+  const formattedMonthlyContracts = formatMonthlyData(monthlyCollections);
+
+  const charts = {
+    monthlyTransactions: formattedMonthlyTransactions,
+    monthlyContracts: formattedMonthlyContracts,
+  };
+
+  const response = {
+    code: 200,
+    message: "Fetched Charts",
+    charts: charts,
+  };
+  return response;
+}
+

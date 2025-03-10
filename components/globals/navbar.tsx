@@ -13,6 +13,7 @@ import LogoutBtn from "@/components/globals/logoutBtn";
 import AccountsBtn from "@/components/globals/accountsBtn";
 import { Account as Record } from "@prisma/client";
 import { get } from "@/components/accounts/actions";
+import Image from "next/image";
 
 const Navbar = () => {
   const [record, setRecord] = useState<Record>();
@@ -43,7 +44,22 @@ const Navbar = () => {
         className="grid grid-cols-2 items-center bg-[#0072F5] p-5"
         id="navbar"
       >
-        <div className="flex justify-evenly sm:justify-start gap-3">
+        <div className="flex justify-evenly sm:justify-start gap-3 items-center">
+          <div
+            className="flex gap-1 items-center mr-3 cursor-pointer"
+            onClick={() => router.push("/dashboard")}
+          >
+            <Image
+              src={"/images/favicon.ico"}
+              width={30}
+              height={30}
+              alt="logo"
+            />
+            <h3 className="text-sm md:text-base text-white font-semibold">
+              ABIC Accounting
+            </h3>
+          </div>
+
           <Link href="/dashboard" className="text-center">
             <h3
               className={`text-sm md:text-base text-white cursor-pointer ${
