@@ -33,10 +33,10 @@ type Props = {
   initialColumns?: string[];
   records: any[];
   filterKey?: string;
-  dependencies?: any;
   RenderBody: (columns: Column[], records: any[], dependencies: any) => any;
   Buttons?: ReactElement;
   SideContent?: ReactElement;
+  dependencies?: any;
 };
 
 const DataTable = ({
@@ -46,10 +46,10 @@ const DataTable = ({
   initialColumns: ufInitialColumns,
   records: ufRecords,
   filterKey,
-  dependencies,
   RenderBody,
   Buttons,
   SideContent,
+  dependencies,
 }: Props) => {
   const initialColumns = ufInitialColumns || [];
   if (initialColumns.length == 0) {

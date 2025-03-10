@@ -77,12 +77,12 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
           columns={columns}
           records={records}
           filterKey="date"
-          dependencies={{
-            tClients: tClients,
-          }}
           RenderBody={RenderBody}
           Buttons={Buttons}
           SideContent={SideContent}
+          dependencies={{
+            tClients: tClients,
+          }}
         />
       </div>
     </>

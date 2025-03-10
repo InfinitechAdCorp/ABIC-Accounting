@@ -79,12 +79,12 @@ const Transactions = async () => {
           columns={columns}
           records={records}
           filterKey="date"
-          dependencies={{
-            tClients: tClients,
-          }}
           RenderBody={RenderBody}
           Buttons={Buttons}
           SideContent={SideContent}
+          dependencies={{
+            tClients: tClients,
+          }}
         />
       </div>
     </>

@@ -16,6 +16,7 @@ import {
   CollectionDisplayFormat,
   CClient,
 } from "@/components/collectionMonitoring/types";
+import ViewPaymentsModal from "@/components/collectionMonitoring/collections/viewPaymentsModal";
 
 const RenderCell = (
   column: string,
@@ -39,6 +40,7 @@ const RenderCell = (
           />
           <DestroyModal title="Collection" action={destroy} id={record.id} />
           <PaymentModal action={markAsPaid} id={record.id} />
+          <ViewPaymentsModal record={record} />
         </div>
       );
     case "status":

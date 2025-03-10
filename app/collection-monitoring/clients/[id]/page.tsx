@@ -65,12 +65,12 @@ const TransactionClient = async ({
           columns={columns}
           records={records}
           filterKey="start"
+          RenderBody={RenderBody}
+          Buttons={Buttons}
           dependencies={{
             locations: locations,
             cClients: cClients,
           }}
-          RenderBody={RenderBody}
-          Buttons={Buttons}
         />
       </div>
     </>

@@ -9,10 +9,7 @@ import {
   PDCSetWithPDCs,
 } from "@/components/transactionHistory/pdcSets/types";
 import { eachMonthOfInterval, setDate } from "date-fns";
-import {
-  formatDate,
-  formatErrors,
-} from "@/components/globals/utils";
+import { formatDate, formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { create as createSchema } from "@/components/transactionHistory/pdcSets/schemas";
 import { revalidatePath } from "next/cache";
@@ -140,7 +137,7 @@ export const create = async (values: Prisma.PDCSetCreateInput) => {
   let start = new Date(new Date(values.start).setUTCHours(0, 0, 0, 0));
   let end = new Date(new Date(values.end).setUTCHours(0, 0, 0, 0));
 
-  const months = eachMonthOfInterval({
+  const dates = eachMonthOfInterval({
     start: start,
     end: end,
   });
@@ -162,14 +159,12 @@ export const create = async (values: Prisma.PDCSetCreateInput) => {
       },
     });
 
-    for (const month of months) {
-      date = setDate(month, dueDay);
-
+    for (const date of dates) {
       await prisma.pDC.create({
         data: {
           pdc_set: { connect: { id: record.id } },
           check: `${check}`,
-          date: date,
+          date: setDate(date, dueDay),
         },
       });
 
