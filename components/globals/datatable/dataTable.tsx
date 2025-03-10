@@ -14,7 +14,6 @@ import {
   TableColumn,
   TableBody,
   Input,
-  Pagination,
   SortDescriptor,
   Button,
   Card,
@@ -29,6 +28,7 @@ import { Column } from "@/components/globals/types";
 import ExportBtn from "@/components/globals/exportBtn";
 import { Filter } from "@/components/globals/types";
 import DateFilter from "@/components/globals/datatable/dateFilter";
+import BottomContent from "@/components/globals/datatable/bottomContent";
 
 type Props = {
   baseModel: string;
@@ -61,9 +61,15 @@ const DataTable = ({
       initialColumns.push(ufColumn.key);
     });
   }
+
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
     new Set(initialColumns)
   );
+  const columns = useMemo(() => {
+    return ufColumns.filter((ufColumn) =>
+      Array.from(visibleColumns).includes(ufColumn.key)
+    );
+  }, [visibleColumns]);
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
@@ -76,7 +82,6 @@ const DataTable = ({
 
   const start = "";
   const end = "";
-
   const [range, setRange] = useState<{
     start: Date | string;
     end: Date | string;
@@ -84,12 +89,6 @@ const DataTable = ({
     start: start,
     end: end,
   });
-
-  const columns = useMemo(() => {
-    return ufColumns.filter((ufColumn) =>
-      Array.from(visibleColumns).includes(ufColumn.key)
-    );
-  }, [visibleColumns]);
 
   const dateFilteredRecords = useMemo(() => {
     if (range.start && range.end) {
@@ -125,8 +124,6 @@ const DataTable = ({
     return filteredRecords;
   }, [filterValue, ufRecords, dateFilteredRecords]);
 
-  const pages = Math.ceil(searchFilteredRecords.length / rowsPerPage);
-
   const records = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
@@ -144,6 +141,8 @@ const DataTable = ({
     });
   }, [sortDescriptor, records]);
 
+  const pages = Math.ceil(searchFilteredRecords.length / rowsPerPage);
+
   const onRowsPerPageChange = useCallback(
     (e: ChangeEvent<HTMLSelectElement>) => {
       setRowsPerPage(Number(e.target.value));
@@ -152,21 +151,21 @@ const DataTable = ({
     []
   );
 
-  const onSearchChange = useCallback((value?: string) => {
-    if (value) {
-      setFilterValue(value);
-      setPage(1);
-    } else {
-      setFilterValue("");
-    }
-  }, []);
-
-  const onClear = useCallback(() => {
-    setFilterValue("");
-    setPage(1);
-  }, []);
-
   const topContent = useMemo(() => {
+    const onSearchChange = (value?: string) => {
+      if (value) {
+        setFilterValue(value);
+        setPage(1);
+      } else {
+        setFilterValue("");
+      }
+    };
+
+    const onClear = () => {
+      setFilterValue("");
+      setPage(1);
+    };
+
     const initialValues = range;
 
     const onSubmit = (values: Filter) => {
@@ -203,6 +202,7 @@ const DataTable = ({
                   onReset={onReset}
                 />
               )}
+
               <Dropdown>
                 <DropdownTrigger className="hidden sm:flex">
                   <Button color="primary">Columns</Button>
@@ -227,46 +227,7 @@ const DataTable = ({
         </div>
       </>
     );
-  }, [
-    onRowsPerPageChange,
-    filterValue,
-    onSearchChange,
-    onClear,
-    columns,
-    records,
-    filterKey,
-    Buttons,
-  ]);
-
-  const bottomContent = useMemo(() => {
-    return (
-      <div className="px-2 flex justify-between items-center">
-        <span className="w-[30%] text-default-400 text-small">
-          Total: {records.length}
-        </span>
-        <Pagination
-          isCompact
-          showControls
-          showShadow
-          color="primary"
-          page={page}
-          total={pages}
-          onChange={setPage}
-        />
-        <label className="flex w-[30%] justify-end items-center gap-1 text-default-400 text-small">
-          Rows:
-          <select
-            className="bg-transparent outline-none text-default-400 text-small"
-            onChange={onRowsPerPageChange}
-          >
-            <option>5</option>
-            <option>10</option>
-            <option>15</option>
-          </select>
-        </label>
-      </div>
-    );
-  }, [page, pages, records]);
+  }, [filterValue, columns, records, filterKey, Buttons]);
 
   return (
     <>
@@ -292,7 +253,15 @@ const DataTable = ({
           <Table
             aria-label="DataTable"
             isHeaderSticky
-            bottomContent={bottomContent}
+            bottomContent={
+              <BottomContent
+                total={records.length}
+                page={page}
+                pages={pages}
+                onChange={setPage}
+                onSelectionChange={onRowsPerPageChange}
+              />
+            }
             bottomContentPlacement="outside"
             classNames={{
               wrapper: "max-h-[40rem]",
