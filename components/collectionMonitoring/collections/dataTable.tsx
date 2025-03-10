@@ -14,35 +14,18 @@ import {
   TableColumn,
   TableBody,
   Input,
-  Pagination,
   SortDescriptor,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  DatePicker,
-  useDisclosure,
   Card,
   CardBody,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
   Selection,
+  Button,
 } from "@heroui/react";
-import { Column } from "@/components/globals/types";
-import ExportBtn from "@/components/globals/exportBtn";
-import {
-  dateToDateValue,
-  dateValueToDate,
-  getUniques,
-  filterRecords,
-} from "@/components/globals/utils";
-import { Formik, Form, Field, FieldProps } from "formik";
-import { filter as validationSchema } from "@/components/globals/schemas";
-import { Filter } from "@/components/globals/types";
+import { Column, Filter } from "@/components/globals/types";
+import DateFilter from "@/components/globals/datatable/dateFilter";
+import BottomContent from "@/components/globals/datatable/bottomContent";
+import HeaderContent from "@/components/globals/datatable/headerContent";
+import ColumnsDropdown from "@/components/globals/datatable/columnsDropdown";
+import { getUniques, filterRecords } from "@/components/globals/utils";
 
 type Props = {
   baseModel: string;
@@ -69,17 +52,21 @@ const DataTable = ({
   Buttons,
   SideContent,
 }: Props) => {
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-
   const initialColumns = ufInitialColumns || [];
   if (initialColumns.length == 0) {
     ufColumns.forEach((ufColumn) => {
       initialColumns.push(ufColumn.key);
     });
   }
+
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
     new Set(initialColumns)
   );
+  const columns = useMemo(() => {
+    return ufColumns.filter((ufColumn) =>
+      Array.from(visibleColumns).includes(ufColumn.key)
+    );
+  }, [visibleColumns]);
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [page, setPage] = useState(1);
@@ -95,7 +82,6 @@ const DataTable = ({
 
   const start = "";
   const end = "";
-
   const [range, setRange] = useState<{
     start: Date | string;
     end: Date | string;
@@ -104,47 +90,39 @@ const DataTable = ({
     end: end,
   });
 
-  const columns = useMemo(() => {
-    return ufColumns.filter((ufColumn) =>
-      Array.from(visibleColumns).includes(ufColumn.key)
-    );
-  }, [visibleColumns]);
-
   const locationFilteredRecords = useMemo(() => {
     if (selectedLocation == "All") {
-      const filteredRecords = ufRecords;
-      return filteredRecords;
+      const filtered = ufRecords;
+      return filtered;
     } else {
-      const filteredRecords = filterRecords(
-        ufRecords,
-        "location",
-        selectedLocation
-      );
-      return filteredRecords;
+      const filtered = filterRecords(ufRecords, "location", selectedLocation);
+      return filtered;
     }
   }, [ufRecords, selectedLocation]);
 
   const dateFilteredRecords = useMemo(() => {
+    const unfiltered = locationFilteredRecords;
+
     if (range.start && range.end) {
       const start = (range.start as Date).toLocaleDateString("en-CA");
       const end = (range.end as Date).toLocaleDateString("en-CA");
 
       if (filterKey) {
-        const filteredRecords = locationFilteredRecords.filter((record) => {
+        const filtered = unfiltered.filter((record) => {
           const date = record[filterKey].toLocaleDateString("en-CA");
           return date >= start && date <= end;
         });
-        return filteredRecords;
+        return filtered;
       }
     } else {
-      return locationFilteredRecords;
+      return unfiltered;
     }
   }, [range, locationFilteredRecords, filterKey]);
 
   const searchFilteredRecords = useMemo(() => {
-    let filteredRecords = [...(dateFilteredRecords || ufRecords)];
+    const unfiltered = [...(dateFilteredRecords || ufRecords)];
 
-    filteredRecords = filteredRecords.filter((record) => {
+    const filtered = unfiltered.filter((record) => {
       const isValid = columns.some((column) => {
         const value = record.display_format[column.key];
         if (value) {
@@ -155,27 +133,34 @@ const DataTable = ({
       if (isValid) return record;
     });
 
-    return filteredRecords;
+    return filtered;
   }, [filterValue, ufRecords, dateFilteredRecords]);
 
-  const pages = Math.ceil(searchFilteredRecords.length / rowsPerPage);
-
   const records = useMemo(() => {
+    const unfiltered = searchFilteredRecords;
+
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
-    return searchFilteredRecords.slice(start, end);
+    const filtered = unfiltered.slice(start, end);
+    return filtered;
   }, [page, searchFilteredRecords, rowsPerPage]);
 
   const sortedRecords = useMemo(() => {
-    return [...records].sort((a, b) => {
+    const unfiltered = records;
+
+    const filtered = [...unfiltered].sort((a, b) => {
       const first = a[sortDescriptor.column];
       const second = b[sortDescriptor.column];
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
+
+    return filtered;
   }, [sortDescriptor, records]);
+
+  const pages = Math.ceil(searchFilteredRecords.length / rowsPerPage);
 
   const onRowsPerPageChange = useCallback(
     (e: ChangeEvent<HTMLSelectElement>) => {
@@ -185,126 +170,31 @@ const DataTable = ({
     []
   );
 
-  const onSearchChange = useCallback((value?: string) => {
-    if (value) {
-      setFilterValue(value);
-      setPage(1);
-    } else {
+  const topContent = useMemo(() => {
+    const onSearchChange = (value?: string) => {
+      if (value) {
+        setFilterValue(value);
+        setPage(1);
+      } else {
+        setFilterValue("");
+      }
+    };
+
+    const onClear = () => {
       setFilterValue("");
-    }
-  }, []);
+      setPage(1);
+    };
 
-  const onClear = useCallback(() => {
-    setFilterValue("");
-    setPage(1);
-  }, []);
-
-  const Filter = useMemo(() => {
     const initialValues = range;
 
     const onSubmit = (values: Filter) => {
       setRange({ start: values.start, end: values.end });
-      onClose();
     };
 
-    const reset = () => {
+    const onReset = () => {
       setRange({ start: "", end: "" });
-      onClose();
     };
 
-    return (
-      <>
-        <Button size="md" color="primary" onPress={onOpen}>
-          Filter
-        </Button>
-
-        <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
-          <ModalContent>
-            {() => (
-              <>
-                <Formik
-                  initialValues={initialValues}
-                  validationSchema={validationSchema}
-                  onSubmit={onSubmit}
-                >
-                  {(props) => (
-                    <Form>
-                      <ModalHeader>Filter {baseModel}</ModalHeader>
-                      <ModalBody>
-                        <div className="grid grid-cols-2 gap-3">
-                          <Field name="start">
-                            {({ field, meta }: FieldProps) => (
-                              <div>
-                                <DatePicker
-                                  {...field}
-                                  inert={false}
-                                  showMonthAndYearPickers
-                                  size="md"
-                                  variant="bordered"
-                                  label="Start Date"
-                                  labelPlacement="outside"
-                                  value={dateToDateValue(field.value)}
-                                  onChange={(value) => {
-                                    const date = dateValueToDate(value);
-                                    props.setFieldValue(field.name, date);
-                                  }}
-                                />
-                                {meta.touched && meta.error && (
-                                  <small className="text-red-500">
-                                    {meta.error}
-                                  </small>
-                                )}
-                              </div>
-                            )}
-                          </Field>
-
-                          <Field name="end">
-                            {({ field, meta }: FieldProps) => (
-                              <div>
-                                <DatePicker
-                                  {...field}
-                                  inert={false}
-                                  showMonthAndYearPickers
-                                  size="md"
-                                  variant="bordered"
-                                  label="End Date"
-                                  labelPlacement="outside"
-                                  value={dateToDateValue(field.value)}
-                                  onChange={(value) => {
-                                    const date = dateValueToDate(value);
-                                    props.setFieldValue(field.name, date);
-                                  }}
-                                />
-                                {meta.touched && meta.error && (
-                                  <small className="text-red-500">
-                                    {meta.error}
-                                  </small>
-                                )}
-                              </div>
-                            )}
-                          </Field>
-                        </div>
-                      </ModalBody>
-                      <ModalFooter>
-                        <Button color="primary" type="submit">
-                          Filter
-                        </Button>
-                        <Button color="danger" onPress={reset}>
-                          Reset
-                        </Button>
-                      </ModalFooter>
-                    </Form>
-                  )}
-                </Formik>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
-      </>
-    );
-  }, [isOpen, onOpen, onOpenChange, onClose, baseModel, range, end, start]);
-
-  const topContent = useMemo(() => {
     return (
       <>
         {SideContent}
@@ -323,98 +213,50 @@ const DataTable = ({
             </div>
 
             <div className="flex justify-end gap-2">
-              {filterKey && Filter}
-              <Dropdown>
-                <DropdownTrigger className="hidden sm:flex">
-                  <Button color="primary">Columns</Button>
-                </DropdownTrigger>
-                <DropdownMenu
-                  disallowEmptySelection
-                  aria-label="Table Columns"
-                  closeOnSelect={false}
-                  selectedKeys={visibleColumns}
-                  selectionMode="multiple"
-                  onSelectionChange={setVisibleColumns}
-                >
-                  {ufColumns.map((ufColumn) => (
-                    <DropdownItem key={ufColumn.key}>
-                      {ufColumn.name}
-                    </DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
+              {filterKey && (
+                <DateFilter
+                  baseModel={baseModel}
+                  initialValues={initialValues}
+                  onSubmit={onSubmit}
+                  onReset={onReset}
+                />
+              )}
+
+              <ColumnsDropdown
+                columns={ufColumns}
+                visibleColumns={visibleColumns}
+                onSelectionChange={setVisibleColumns}
+              />
             </div>
           </div>
         </div>
       </>
     );
-  }, [
-    onRowsPerPageChange,
-    filterValue,
-    onSearchChange,
-    onClear,
-    columns,
-    records,
-    filterKey,
-    Buttons,
-    Filter,
-  ]);
-
-  const bottomContent = useMemo(() => {
-    return (
-      <div className="px-2 flex justify-between items-center">
-        <span className="w-[30%] text-default-400 text-small">
-          Total: {records.length}
-        </span>
-        <Pagination
-          isCompact
-          showControls
-          showShadow
-          color="primary"
-          page={page}
-          total={pages}
-          onChange={setPage}
-        />
-        <label className="flex w-[30%] justify-end items-center gap-1 text-default-400 text-small">
-          Rows:
-          <select
-            className="bg-transparent outline-none text-default-400 text-small"
-            onChange={onRowsPerPageChange}
-          >
-            <option>5</option>
-            <option>10</option>
-            <option>15</option>
-          </select>
-        </label>
-      </div>
-    );
-  }, [page, pages, records]);
+  }, [filterValue, columns]);
 
   return (
     <>
-      <Card radius="none" className="py-[0.10rem] px-2">
-        <CardBody>
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">{model || baseModel}</h3>
-
-            <div className="flex gap-3">
-              {Buttons}
-              <ExportBtn
-                model={baseModel}
-                columns={columns}
-                records={records}
-              />
-            </div>
-          </div>
-        </CardBody>
-      </Card>
+      <HeaderContent
+        model={model || baseModel}
+        columns={columns}
+        records={records}
+        Buttons={Buttons}
+      />
 
       <Card className="m-5 md:my-7 md:mx-32 p-3">
         <CardBody>
           <Table
             aria-label="DataTable"
             isHeaderSticky
-            bottomContent={bottomContent}
+            bottomContent={
+              <BottomContent
+                total={records.length}
+                page={page}
+                pages={pages}
+                onChange={setPage}
+                onSelectionChange={onRowsPerPageChange}
+              />
+            }
             bottomContentPlacement="outside"
             classNames={{
               wrapper: "max-h-[40rem]",

@@ -15,20 +15,16 @@ import {
   TableBody,
   Input,
   SortDescriptor,
-  Button,
   Card,
   CardBody,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
   Selection,
 } from "@heroui/react";
 import { Column } from "@/components/globals/types";
-import ExportBtn from "@/components/globals/exportBtn";
 import { Filter } from "@/components/globals/types";
 import DateFilter from "@/components/globals/datatable/dateFilter";
 import BottomContent from "@/components/globals/datatable/bottomContent";
+import HeaderContent from "@/components/globals/datatable/headerContent";
+import ColumnsDropdown from "@/components/globals/datatable/columnsDropdown";
 
 type Props = {
   baseModel: string;
@@ -91,26 +87,28 @@ const DataTable = ({
   });
 
   const dateFilteredRecords = useMemo(() => {
+    const unfiltered = ufRecords;
+
     if (range.start && range.end) {
       const start = (range.start as Date).toLocaleDateString("en-CA");
       const end = (range.end as Date).toLocaleDateString("en-CA");
 
       if (filterKey) {
-        const filteredRecords = ufRecords.filter((record) => {
+        const filtered = unfiltered.filter((record) => {
           const date = record[filterKey].toLocaleDateString("en-CA");
           return date >= start && date <= end;
         });
-        return filteredRecords;
+        return filtered;
       }
     } else {
-      return ufRecords;
+      return unfiltered;
     }
   }, [range, ufRecords, filterKey]);
 
   const searchFilteredRecords = useMemo(() => {
-    let filteredRecords = [...(dateFilteredRecords || ufRecords)];
+    const unfiltered = [...(dateFilteredRecords || ufRecords)];
 
-    filteredRecords = filteredRecords.filter((record) => {
+    const filtered = unfiltered.filter((record) => {
       const isValid = columns.some((column) => {
         const value = record.display_format[column.key];
         if (value) {
@@ -121,24 +119,31 @@ const DataTable = ({
       if (isValid) return record;
     });
 
-    return filteredRecords;
+    return filtered;
   }, [filterValue, ufRecords, dateFilteredRecords]);
 
   const records = useMemo(() => {
+    const unfiltered = searchFilteredRecords;
+
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
-    return searchFilteredRecords.slice(start, end);
+    const filtered = unfiltered.slice(start, end);
+    return filtered;
   }, [page, searchFilteredRecords, rowsPerPage]);
 
   const sortedRecords = useMemo(() => {
-    return [...records].sort((a, b) => {
+    const unfiltered = records;
+
+    const filtered = [...unfiltered].sort((a, b) => {
       const first = a[sortDescriptor.column];
       const second = b[sortDescriptor.column];
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
+
+    return filtered;
   }, [sortDescriptor, records]);
 
   const pages = Math.ceil(searchFilteredRecords.length / rowsPerPage);
@@ -203,50 +208,26 @@ const DataTable = ({
                 />
               )}
 
-              <Dropdown>
-                <DropdownTrigger className="hidden sm:flex">
-                  <Button color="primary">Columns</Button>
-                </DropdownTrigger>
-                <DropdownMenu
-                  disallowEmptySelection
-                  aria-label="Table Columns"
-                  closeOnSelect={false}
-                  selectedKeys={visibleColumns}
-                  selectionMode="multiple"
-                  onSelectionChange={setVisibleColumns}
-                >
-                  {ufColumns.map((ufColumn) => (
-                    <DropdownItem key={ufColumn.key}>
-                      {ufColumn.name}
-                    </DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
+              <ColumnsDropdown
+                columns={ufColumns}
+                visibleColumns={visibleColumns}
+                onSelectionChange={setVisibleColumns}
+              />
             </div>
           </div>
         </div>
       </>
     );
-  }, [filterValue, columns, records, filterKey, Buttons]);
+  }, [filterValue, columns]);
 
   return (
     <>
-      <Card radius="none" className="py-[0.10rem] px-2">
-        <CardBody>
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">{model || baseModel}</h3>
-
-            <div className="flex gap-3">
-              {Buttons}
-              <ExportBtn
-                model={baseModel}
-                columns={columns}
-                records={records}
-              />
-            </div>
-          </div>
-        </CardBody>
-      </Card>
+      <HeaderContent
+        model={model || baseModel}
+        columns={columns}
+        records={records}
+        Buttons={Buttons}
+      />
 
       <Card className="m-5 md:my-7 md:mx-32 p-3">
         <CardBody>
