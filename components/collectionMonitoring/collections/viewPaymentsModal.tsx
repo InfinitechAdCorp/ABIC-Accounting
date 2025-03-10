@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { Collection } from "@/components/collectionMonitoring/types";
 import {
   eachMonthOfInterval,
@@ -24,6 +24,7 @@ import {
   Pagination,
 } from "@heroui/react";
 import { FaEye } from "react-icons/fa";
+import { formatDate } from "@/components/globals/utils";
 
 type Props = {
   record: Collection;
@@ -32,18 +33,17 @@ type Props = {
 const ViewPaymentsModal = ({ record }: Props) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const dueDay = new Date(record.start).getDate();
-
   const dates = eachMonthOfInterval({
     start: addMonths(record.start, 1),
     end: record.due,
   });
+  const dueDay = new Date(record.start).getDate();
 
   const ufPayments: { date: Date; status: string }[] = [];
-
-  dates.forEach((date) => {
+  dates.reverse().forEach((date) => {
     const formattedDate = setDate(date, dueDay);
     const difference = differenceInDays(formattedDate, record.due);
+
     const payment = {
       date: formattedDate,
       status: difference < 0 ? "Paid" : "",
@@ -51,32 +51,23 @@ const ViewPaymentsModal = ({ record }: Props) => {
     ufPayments.push(payment);
   });
 
-  console.log(ufPayments);
+  const [page, setPage] = useState(1);
+  const rowsPerPage = 4;
+  const pages = Math.ceil(ufPayments.length / rowsPerPage);
 
-  // const ufPdcs = record.pdcs || [];
+  const payments = useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    return ufPayments.slice(start, end);
+  }, [page, ufPayments]);
 
-  // const [page, setPage] = useState(1);
-  // const rowsPerPage = 4;
-  // const pages = Math.ceil(ufPdcs.length / rowsPerPage);
+  const columns = ["DATE", "STATUS"];
 
-  // const pdcs = useMemo(() => {
-  //   const start = (page - 1) * rowsPerPage;
-  //   const end = start + rowsPerPage;
-
-  //   return ufPdcs.slice(start, end);
-  // }, [page, ufPdcs]);
-
-  // const columns = ["DATE", "CHECK", "AMOUNT"];
-
-  // const hasLine = (date: Date) => {
-  //   let result = "";
-  //   const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
-  //   if (date) {
-  //     const difference = differenceInDays(date.setUTCHours(0, 0, 0, 0), today);
-  //     difference <= 0 ? (result = "line-through") : (result = "");
-  //   }
-  //   return result;
-  // };
+  const hasLine = (status: string) => {
+    let result = "";
+    status == "Paid" ? (result = "line-through") : (result = "");
+    return result;
+  };
 
   return (
     <>
@@ -84,7 +75,7 @@ const ViewPaymentsModal = ({ record }: Props) => {
         size="sm"
         color="primary"
         isIconOnly={true}
-        title="View PDCs"
+        title="View Payments"
         onPress={onOpen}
       >
         <FaEye size={14} />
@@ -102,7 +93,7 @@ const ViewPaymentsModal = ({ record }: Props) => {
               </ModalHeader>
               <ModalBody>
                 <Table
-                  aria-label="PDCs Table"
+                  aria-label="Payments Table"
                   bottomContent={
                     <div className="flex w-full justify-center">
                       <Pagination
@@ -126,18 +117,14 @@ const ViewPaymentsModal = ({ record }: Props) => {
                     ))}
                   </TableHeader>
                   <TableBody>
-                    {pdcs.map((pdc) => (
+                    {payments.map((payment, index) => (
                       <>
-                        <TableRow key={pdc.id}>
-                          <TableCell className={hasLine(pdc.date)}>
-                            {formatDate(pdc.date)}
-                          </TableCell>
-                          <TableCell className={hasLine(pdc.date)}>
-                            {pdc.check}
-                          </TableCell>
-                          <TableCell className={hasLine(pdc.date)}>
-                            {record.amount}
-                          </TableCell>
+                        <TableRow
+                          key={index}
+                          className={hasLine(payment.status)}
+                        >
+                          <TableCell>{formatDate(payment.date)}</TableCell>
+                          <TableCell>{payment.status}</TableCell>
                         </TableRow>
                       </>
                     ))}
@@ -145,7 +132,9 @@ const ViewPaymentsModal = ({ record }: Props) => {
                 </Table>
 
                 <div className="text-end mb-3">
-                  <h3 className="text-md font-bold">Total: 0</h3>
+                  <h3 className="text-md font-bold">
+                    Total: {record.display_format?.payments}
+                  </h3>
                 </div>
               </ModalBody>
             </>

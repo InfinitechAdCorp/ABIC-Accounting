@@ -105,16 +105,10 @@ const ViewPDCsModal = ({ record }: Props) => {
                   <TableBody>
                     {pdcs.map((pdc) => (
                       <>
-                        <TableRow key={pdc.id}>
-                          <TableCell className={hasLine(pdc.date)}>
-                            {formatDate(pdc.date)}
-                          </TableCell>
-                          <TableCell className={hasLine(pdc.date)}>
-                            {pdc.check}
-                          </TableCell>
-                          <TableCell className={hasLine(pdc.date)}>
-                            {record.amount}
-                          </TableCell>
+                        <TableRow key={pdc.id} className={hasLine(pdc.date)}>
+                          <TableCell>{formatDate(pdc.date)}</TableCell>
+                          <TableCell>{pdc.check}</TableCell>
+                          <TableCell>{record.amount}</TableCell>
                         </TableRow>
                       </>
                     ))}
