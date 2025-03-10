@@ -1,0 +1,1 @@
+SELECT MONTHNAME(date) AS month, COUNT(id) AS count FROM transactions WHERE account_id = $1 AND YEAR(date) = $2 GROUP BY month;
