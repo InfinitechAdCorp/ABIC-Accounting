@@ -5,7 +5,7 @@ import {
 } from "@/components/transactionHistory/tClients/actions";
 import { getAll as getTransactions } from "@/components/transactionHistory/transactions/actions";
 import Navbar from "@/components/globals/navbar";
-import DataTable from "@/components/globals/dataTable";
+import DataTable from "@/components/globals/datatable/dataTable";
 import RenderBody from "@/components/transactionHistory/tClients/renderBody";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
 import { Tooltip } from "@heroui/react";

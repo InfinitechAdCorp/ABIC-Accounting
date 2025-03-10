@@ -1,7 +1,7 @@
 import React from "react";
 import { getAll, displayFormat } from "@/components/listings/actions";
 import Navbar from "@/components/globals/navbar";
-import DataTable from "@/components/globals/dataTable";
+import DataTable from "@/components/globals/datatable/dataTable";
 import CreateModal from "@/components/listings/createModal";
 import RenderBody from "@/components/listings/renderBody";
 

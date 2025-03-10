@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "@/components/globals/navbar";
-import DataTable from "@/components/globals/dataTable";
+import DataTable from "@/components/globals/datatable/dataTable";
 import CreateModal from "@/components/transactionHistory/pdcSets/createModal";
 import {
   getAll,

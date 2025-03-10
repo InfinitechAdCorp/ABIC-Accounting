@@ -8,7 +8,7 @@ import {
   displayFormat,
 } from "@/components/transactionHistory/transactions/actions";
 import Navbar from "@/components/globals/navbar";
-import DataTable from "@/components/globals/dataTable";
+import DataTable from "@/components/globals/datatable/dataTable";
 import RenderBody from "@/components/transactionHistory/transactions/renderBody";
 import CreateModal from "@/components/transactionHistory/transactions/createModal";
 import {

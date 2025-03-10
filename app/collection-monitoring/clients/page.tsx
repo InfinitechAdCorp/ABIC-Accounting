@@ -4,7 +4,7 @@ import {
   displayFormat,
 } from "@/components/collectionMonitoring/cClients/actions";
 import Navbar from "@/components/globals/navbar";
-import DataTable from "@/components/globals/dataTable";
+import DataTable from "@/components/globals/datatable/dataTable";
 import RenderBody from "@/components/collectionMonitoring/cClients/renderBody";
 
 const CClients = async () => {

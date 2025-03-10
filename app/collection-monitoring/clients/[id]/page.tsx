@@ -5,7 +5,7 @@ import {
 } from "@/components/collectionMonitoring/cClients/actions";
 import { displayFormat } from "@/components/collectionMonitoring/collections/actions";
 import Navbar from "@/components/globals/navbar";
-import DataTable from "@/components/globals/dataTable";
+import DataTable from "@/components/globals/datatable/dataTable";
 import RenderBody from "@/components/collectionMonitoring/collections/renderBody";
 import CreateModal from "@/components/collectionMonitoring/collections/createModal";
 
