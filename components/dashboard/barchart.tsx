@@ -2,13 +2,11 @@
 
 import React from "react";
 import ReactEcharts from "echarts-for-react";
+import { ChartDatum } from "@/components/globals/types";
 
 type Props = {
   title: string;
-  data: {
-    x: string;
-    y: number;
-  }[];
+  data: ChartDatum[];
 };
 
 const Barchart = ({ title, data }: Props) => {
@@ -48,8 +46,8 @@ const Barchart = ({ title, data }: Props) => {
     },
     color: ["#0072F5"],
     tooltip: {
-        show: true,
-    }
+      show: true,
+    },
   };
 
   return <ReactEcharts option={option} />;

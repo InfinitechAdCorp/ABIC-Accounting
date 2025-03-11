@@ -1,6 +1,6 @@
 import React from "react";
 import { get as getAccount } from "@/components/accounts/actions";
-import { getCounts } from "@/components/dashboard/actions";
+import { getCharts, getCounts } from "@/components/dashboard/actions";
 import Navbar from "@/components/globals/navbar";
 import CountCard from "@/components/dashboard/countCard";
 import { GrTransaction } from "react-icons/gr";
@@ -28,6 +28,8 @@ const Dashboard = async () => {
     { x: "June", y: 3 },
   ];
 
+  const { charts } = await getCharts();
+
   return (
     <>
       <Navbar />
@@ -41,7 +43,7 @@ const Dashboard = async () => {
           </CardBody>
         </Card>
 
-        <Card className="m-5 md:my-7 md:mx-60 p-3">
+        <Card className="m-5 md:my-7 md:mx-20 p-3">
           <CardBody>
             <div className="grid grid-cols-1 md:grid-cols-4 px-5 gap-3 mb-5">
               {account.th_access && (
@@ -78,6 +80,12 @@ const Dashboard = async () => {
               <Card>
                 <CardBody>
                   <Barchart title="Monthly Transactions" data={data} />
+                </CardBody>
+              </Card>
+
+              <Card>
+                <CardBody>
+                  <Barchart title="Client Totals" data={charts.clientTotals} />
                 </CardBody>
               </Card>
             </div>

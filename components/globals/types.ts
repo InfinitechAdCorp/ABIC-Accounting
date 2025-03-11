@@ -50,3 +50,8 @@ export type Column = {
   name: string;
   sortable: boolean;
 };
+
+export type ChartDatum = {
+  x: string;
+  y: number;
+};
