@@ -13,10 +13,10 @@ import { formatDate, formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { create as createSchema } from "@/components/transactionHistory/pdcSets/schemas";
 import { revalidatePath } from "next/cache";
-import { Column } from "@/components/globals/types";
-import { Destroy } from "@/components/globals/types";
+import { Column, Destroy } from "@/components/globals/types";
 import { destroy as destroySchema } from "@/components/globals/schemas";
 import { Prisma } from "@prisma/client";
+import { Transaction } from "@prisma/client";
 
 const model = "PDC Set";
 const url = "/transaction-history/pdc-sets";
@@ -145,13 +145,19 @@ export const create = async (values: Prisma.PDCSetCreateInput) => {
   let checkNumber = Number(values.check_number);
   const lastCheckNumber = checkNumber + dates.length - 1;
 
-  const records = await prisma.transaction.findMany({
-    where: { check_number: { lte: checkNumber, gte: lastCheckNumber } },
+  const checkNumbers: number[] = [];
+  const records: Transaction[] = await prisma.transaction.findMany();
+  records.forEach((record) => {
+    if (record.check_number) {
+      checkNumbers.push(record.check_number);
+    }
   });
 
-  console.log(records)
+  const isTaken = checkNumbers.some((item) => {
+    return item >= checkNumber && item <= lastCheckNumber;
+  });
 
-  if (records.length > 0) {
+  if (isTaken) {
     const response: ActionResponse = {
       code: 429,
       message: "Check Numbers are Already Taken",
