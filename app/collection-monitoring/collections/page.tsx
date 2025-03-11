@@ -43,6 +43,8 @@ const Collections = async () => {
     { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
+  const initialColumns = ['client', 'property', 'location', 'start', 'end', 'due', 'status', 'payments', 'actions']
+
   const records = await displayFormat(columns, ufRecords);
 
   const Buttons = (
@@ -59,6 +61,7 @@ const Collections = async () => {
         <DataTable
           baseModel={model}
           columns={columns}
+          initialColumns={initialColumns}
           records={records}
           filterKey="start"
           RenderBody={RenderBody}
