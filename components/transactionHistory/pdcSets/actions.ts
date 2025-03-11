@@ -145,19 +145,11 @@ export const create = async (values: Prisma.PDCSetCreateInput) => {
   let checkNumber = Number(values.check_number);
   const lastCheckNumber = checkNumber + dates.length - 1;
 
-  const checkNumbers: number[] = [];
-  const records: Transaction[] = await prisma.transaction.findMany();
-  records.forEach((record) => {
-    if (record.check_number) {
-      checkNumbers.push(record.check_number);
-    }
+  const records: Transaction[] = await prisma.transaction.findMany({
+    where: { check_number: { gte: checkNumber, lte: lastCheckNumber } },
   });
 
-  const isTaken = checkNumbers.some((item) => {
-    return item >= checkNumber && item <= lastCheckNumber;
-  });
-
-  if (isTaken) {
+  if (records.length > 0) {
     const response: ActionResponse = {
       code: 429,
       message: "Check Numbers are Already Taken",
