@@ -25,7 +25,7 @@ const CountCard = ({ icon, model, url, count }: Props) => {
           router.push(url);
         }}
       >
-        <CardBody className="grid grid-cols-1 lg:grid-cols-2 px-10 py-7 gap-3">
+        <CardBody className="grid grid-cols-1 lg:grid-cols-2 p-7 gap-3">
           <div className="flex justify-center items-center">
             {icon}
           </div>

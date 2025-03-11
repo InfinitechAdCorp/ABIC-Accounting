@@ -31,10 +31,10 @@ const Dashboard = async () => {
           </CardBody>
         </Card>
 
-        <Card className="m-5 md:my-7 md:mx-96 py-3 px-3">
+        <Card className="m-5 md:my-7 md:mx-60 p-3">
           <CardBody>
             <div
-              className={`grid grid-cols-1 md:grid-cols-2 px-5 mx-40 gap-3 mb-3`}
+              className={`grid grid-cols-1 md:grid-cols-4 px-5 gap-3 mb-3`}
             >
               {account.th_access && (
                 <>
@@ -50,24 +50,20 @@ const Dashboard = async () => {
                     url="/transaction-history/transactions"
                     count={counts.transactions}
                   ></CountCard>
+                  <CountCard
+                    icon={<FaReceipt size={56} />}
+                    model="ARs"
+                    url="/tools/acknowledgement-receipt"
+                    count={counts.ars}
+                  ></CountCard>
+                  <CountCard
+                    icon={<FaReceipt size={56} />}
+                    model="BSs"
+                    url="/tools/billing-statement"
+                    count={counts.bss}
+                  ></CountCard>
                 </>
               )}
-            </div>
-            <div
-              className={`grid grid-cols-1 md:grid-cols-2 px-5 mx-40 gap-3 mb-3`}
-            >
-              <CountCard
-                icon={<FaReceipt size={56} />}
-                model="ARs"
-                url="/tools/acknowledgement-receipt"
-                count={counts.ars}
-              ></CountCard>
-              <CountCard
-                icon={<FaReceipt size={56} />}
-                model="BSs"
-                url="/tools/billing-statement"
-                count={counts.bss}
-              ></CountCard>
             </div>
           </CardBody>
         </Card>

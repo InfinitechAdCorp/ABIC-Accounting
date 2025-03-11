@@ -91,7 +91,7 @@ const ViewPaymentsModal = ({ record }: Props) => {
                   <h3 className="text-sm font-semibold">{record.property}</h3>
                 </div>
               </ModalHeader>
-              <ModalBody>
+              <ModalBody className="mb-3">
                 <Table
                   aria-label="Payments Table"
                   bottomContent={
@@ -130,12 +130,6 @@ const ViewPaymentsModal = ({ record }: Props) => {
                     ))}
                   </TableBody>
                 </Table>
-
-                <div className="text-end mb-3">
-                  <h3 className="text-md font-bold">
-                    Total: {record.display_format?.payments}
-                  </h3>
-                </div>
               </ModalBody>
             </>
           )}
