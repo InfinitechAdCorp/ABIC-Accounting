@@ -19,15 +19,6 @@ const Dashboard = async () => {
   const { record: account } = await retry(getAccount);
   const { counts } = await getCounts();
 
-  const data = [
-    { x: "January", y: 5 },
-    { x: "February", y: 7 },
-    { x: "March", y: 10 },
-    { x: "April", y: 4 },
-    { x: "May", y: 6 },
-    { x: "June", y: 3 },
-  ];
-
   const { charts } = await getCharts();
 
   return (
@@ -79,7 +70,7 @@ const Dashboard = async () => {
             <div className="grid grid-cols-1 md:grid-cols-2 px-5 gap-3">
               <Card>
                 <CardBody>
-                  <Barchart title="Monthly Transactions" data={data} />
+                  <Barchart title="Monthly Transactions" data={charts.monthlyTransactions} />
                 </CardBody>
               </Card>
 

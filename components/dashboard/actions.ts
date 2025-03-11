@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { getAll as getAllTClients } from "@/components/transactionHistory/tClients/actions";
 import { computeBalance } from "@/components/globals/utils";
 import { ChartDatum } from "@/components/globals/types";
+import { getMonthlyTransactions } from "@prisma/client/sql";
 
 export const getCounts = async () => {
   const session = await cookies();
@@ -58,6 +59,9 @@ export const getCounts = async () => {
 };
 
 export const getCharts = async () => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value;
+
   const clientTotals: ChartDatum[] = [];
 
   const { records: clients } = await getAllTClients();
@@ -70,8 +74,22 @@ export const getCharts = async () => {
     clientTotals.push(clientTotal);
   });
 
+  clientTotals.sort((a, b) => {
+    return a.y - b.y;
+  });
+
+  const today = new Date();
+  const year = today.getFullYear();
+
+  const ufMonthlyTransactions = await prisma.$queryRawTyped(
+    getMonthlyTransactions(accountID!, year)
+  );
+
+  const monthlyTransactions = formatMonthlyData(ufMonthlyTransactions);
+
   const charts = {
     clientTotals: clientTotals,
+    monthlyTransactions: monthlyTransactions,
   };
 
   const response = {
@@ -80,4 +98,40 @@ export const getCharts = async () => {
     charts: charts,
   };
   return response;
+};
+
+const formatMonthlyData = (records: getMonthlyTransactions.Result[]) => {
+  let months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "June",
+    "July",
+    "Aug",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  if (new Date().getMonth() > 5) {
+    months = months.slice(6, 12);
+  } else {
+    months = months.slice(0, 6);
+  }
+
+  const chartData: ChartDatum[] = [];
+  months.forEach((month) => {
+    const chartDatum = { x: month, y: 0 };
+    records.forEach((record) => {
+      if (record.month?.startsWith(month)) {
+        chartDatum.y = Number(record.count);
+      }
+    });
+    chartData.push(chartDatum);
+  });
+
+  return chartData;
 };

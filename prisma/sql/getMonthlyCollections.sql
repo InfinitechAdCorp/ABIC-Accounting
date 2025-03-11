@@ -1,0 +1,1 @@
+SELECT MONTHNAME(start) AS month, COUNT(id) AS count FROM collections WHERE account_id = ? AND YEAR(start) = ? GROUP BY month;
