@@ -10,6 +10,7 @@ export const onPostSubmit = (
   actions: { resetForm: () => void },
   onClose: () => void
 ) => {
+  console.log(response);
   if (response.code == 200) {
     actions.resetForm();
     toast.success(response.message);
@@ -150,10 +151,13 @@ export const getUniques = (records: any[], key: string) => {
   return uniques;
 };
 
-export const getField = (message: string) => {
-  const expression = /\(\`([^)]+)\`\)/;
-  const matches = expression.exec(message);
-  return matches![1];
+export const getField = (ufMessage: string) => {
+  const message = ufMessage.split("\n\n\n").at(-1);
+  const expression = /(?<=`).+?(?=`)/;
+  const matches = expression.exec(message!);
+  const match = matches![0];
+  const field = match.split("_")[1];
+  return field;
 };
 
 export const filterRecords = (records: any[], key: string, value: string) => {
