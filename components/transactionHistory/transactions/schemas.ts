@@ -5,8 +5,10 @@ const rules = {
   date: Yup.date()
     .typeError("Date must be a valid date")
     .required("Date is a required field"),
-  voucher: Yup.string().trim().nullable(),
-  check: Yup.string().trim().nullable(),
+  voucher_number: Yup.string().trim().nullable(),
+  check_number: Yup.number()
+    .typeError("Check Number must be a number")
+    .moreThan(-1, "Check Number must be a positive number"),
   particulars: Yup.string().trim().required("Particulars is a required field"),
   type: Yup.string().trim().required("Type is a required field"),
   amount: Yup.number()

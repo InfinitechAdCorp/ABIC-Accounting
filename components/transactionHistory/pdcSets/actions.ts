@@ -142,10 +142,27 @@ export const create = async (values: Prisma.PDCSetCreateInput) => {
     end: end,
   });
 
-  try {
-    let date;
-    let check = Number(values.check);
+  let checkNumber = Number(values.check_number);
+  const lastCheckNumber = checkNumber + dates.length - 1;
 
+  const records = await prisma.transaction.findMany({
+    where: { check_number: { lte: checkNumber, gte: lastCheckNumber } },
+  });
+
+  console.log(records)
+
+  if (records.length > 0) {
+    const response: ActionResponse = {
+      code: 429,
+      message: "Check Numbers are Already Taken",
+      errors: {
+        check_number: "Check Numbers are Already Taken",
+      },
+    };
+    return response;
+  }
+
+  try {
     const record = await prisma.pDCSet.create({
       data: {
         account: { connect: { id: accountID } },
@@ -153,7 +170,7 @@ export const create = async (values: Prisma.PDCSetCreateInput) => {
         pay_to: values.pay_to,
         start: start,
         end: end,
-        check: values.check,
+        check_number: checkNumber,
         type: values.type,
         amount: values.amount,
       },
@@ -163,12 +180,12 @@ export const create = async (values: Prisma.PDCSetCreateInput) => {
       await prisma.pDC.create({
         data: {
           pdc_set: { connect: { id: record.id } },
-          check: `${check}`,
+          check_number: checkNumber,
           date: setDate(date, dueDay),
         },
       });
 
-      ++check;
+      ++checkNumber;
     }
   } catch (error) {
     const response: ActionResponse = {

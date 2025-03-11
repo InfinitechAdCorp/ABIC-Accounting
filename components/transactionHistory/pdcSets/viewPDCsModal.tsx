@@ -41,7 +41,7 @@ const ViewPDCsModal = ({ record }: Props) => {
     return ufPdcs.slice(start, end);
   }, [page, ufPdcs]);
 
-  const columns = ["DATE", "CHECK", "AMOUNT"];
+  const columns = ["DATE", "CHECK NO.", "AMOUNT"];
 
   const hasLine = (date: Date) => {
     let result = "";
@@ -107,7 +107,7 @@ const ViewPDCsModal = ({ record }: Props) => {
                       <>
                         <TableRow key={pdc.id} className={hasLine(pdc.date)}>
                           <TableCell>{formatDate(pdc.date)}</TableCell>
-                          <TableCell>{pdc.check}</TableCell>
+                          <TableCell>{pdc.check_number}</TableCell>
                           <TableCell>{record.amount}</TableCell>
                         </TableRow>
                       </>

@@ -6,12 +6,14 @@ const rules = {
   start: Yup.date()
     .typeError("Start Date must be a valid date")
     .required("Start Date is a required field"),
-    // .min(new Date(), "Start Date must be a future date"),
+  // .min(new Date(), "Start Date must be a future date"),
   end: Yup.date()
     .typeError("End Date must be a valid date")
     .required("End Date is a required field")
     .min(Yup.ref("start"), "End Date must be after Start Date"),
-  check: Yup.string().trim().required("Check is a required field"),
+  check_number: Yup.number()
+    .typeError("Check Number must be a number")
+    .moreThan(-1, "Check Number must be a positive number"),
   type: Yup.string().trim().required("Type is a required field"),
   amount: Yup.number()
     .typeError("Amount must be a number")

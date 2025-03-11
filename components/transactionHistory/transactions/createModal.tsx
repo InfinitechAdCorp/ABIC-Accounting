@@ -31,18 +31,18 @@ import {
 } from "@/components/globals/utils";
 
 type Props = {
-  voucher: string;
+  voucherNumber: string;
   tClients: TClient[];
 };
 
-const CreateModal = ({ voucher, tClients }: Props) => {
+const CreateModal = ({ voucherNumber, tClients }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
 
   const initialValues = {
     date: "",
-    voucher: voucher,
-    check: "",
+    voucher_number: voucherNumber,
+    check_number: 0,
     t_client_name: "",
     particulars: "",
     type: "",
@@ -110,7 +110,7 @@ const CreateModal = ({ voucher, tClients }: Props) => {
                       </Field>
 
                       <div className="grid grid-cols-2 gap-3">
-                        <Field name="voucher">
+                        <Field name="voucher_number">
                           {({ field, meta }: FieldProps) => (
                             <div>
                               <Input
@@ -131,7 +131,7 @@ const CreateModal = ({ voucher, tClients }: Props) => {
                           )}
                         </Field>
 
-                        <Field name="check">
+                        <Field name="check_number">
                           {({ field, meta }: FieldProps) => (
                             <div>
                               <Input

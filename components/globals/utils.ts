@@ -10,7 +10,8 @@ export const onPostSubmit = (
   actions: { resetForm: () => void },
   onClose: () => void
 ) => {
-  console.log(response);
+  console.log(response)
+
   if (response.code == 200) {
     actions.resetForm();
     toast.success(response.message);
@@ -19,12 +20,9 @@ export const onPostSubmit = (
     if (response.code == 401) {
       toast.error(response.message);
     } else if (response.code == 429) {
-      console.log(response.errors);
       toast.error(response.message);
     } else {
       const message = response.error.message;
-      console.log(message);
-
       if (message.includes("Unique constraint")) {
         const field = getField(message);
         toast.error(`${capitalize(field)} is Already Taken`);
@@ -132,13 +130,13 @@ export const isPending = (date: Date) => {
   return isPending;
 };
 
-export const setVoucher = (transaction: Transaction | undefined) => {
+export const setVoucherNumber = (transaction: Transaction | undefined) => {
   let id = 1;
   if (transaction) {
-    id = Number(transaction.voucher) + 1;
+    id = Number(transaction.voucher_number) + 1;
   }
-  const voucher = `${id}`.padStart(5, "0");
-  return voucher;
+  const voucherNumber = `${id}`.padStart(5, "0");
+  return voucherNumber;
 };
 
 export const getUniques = (records: any[], key: string) => {

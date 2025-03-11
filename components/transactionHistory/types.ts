@@ -30,8 +30,8 @@ export type Transaction = Override<
 
 export type TransactionDisplayFormat = {
   date: string;
-  voucher: string;
-  check: string;
+  voucher_number: string;
+  check_number: string;
   client: string;
   particulars: string;
   credit: string;

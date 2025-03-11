@@ -33,7 +33,7 @@ const CreateModal = () => {
     pay_to: "",
     start: "",
     end: "",
-    check: "",
+    check_number: 0,
     type: "",
     amount: 0,
   };
@@ -61,7 +61,7 @@ const CreateModal = () => {
             <>
               <Formik
                 initialValues={initialValues}
-                validationSchema={validationSchema}
+                // validationSchema={validationSchema}
                 onSubmit={onSubmit}
               >
                 {(props: FormikProps<any>) => (
@@ -163,7 +163,7 @@ const CreateModal = () => {
                         </Field>
                       </div>
 
-                      <Field name="check">
+                      <Field name="check_number">
                         {({ field, meta }: FieldProps) => (
                           <div>
                             <Input

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { setVoucher, formatDate } from "@/components/globals/utils";
+import { setVoucherNumber, formatDate } from "@/components/globals/utils";
 import { getAll as getAllPDCSets } from "@/components/transactionHistory/pdcSets/actions";
 import { differenceInDays } from "date-fns";
 import prisma from "@/lib/db";
@@ -8,7 +8,7 @@ import { getAll } from "@/components/transactionHistory/transactions/actions";
 type TransactionValues = {
   account_id: string | null,
   date: Date;
-  check: string;
+  check_number: number;
   particulars: string;
   type: string;
   amount: number;
@@ -42,7 +42,7 @@ export const checkPDCs = async () => {
         const transactionValues = {
           account_id: record.account_id,
           date: pdc.date,
-          check: `${pdc.check}`,
+          check_number: pdc.check_number,
           particulars: particulars,
           type: record.type,
           amount: record.amount,
@@ -58,7 +58,7 @@ export const saveAsTransaction = async (
 ) => {
   const { records: transactions } = await getAll(values.account_id!);
   const last = transactions.find((transaction) => {
-    return transaction.voucher;
+    return transaction.voucher_number;
   });
 
   const transaction = await prisma.transaction.findFirst({
@@ -71,7 +71,7 @@ export const saveAsTransaction = async (
     await prisma.transaction.create({
       data: {
         ...values,
-        voucher: setVoucher(last),
+        voucher_number: setVoucherNumber(last),
         status: "Active",
       },
     });

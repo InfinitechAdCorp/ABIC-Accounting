@@ -42,13 +42,12 @@ const BillingStatementForm = ({ number }: Props) => {
       if (response.code == 200) {
         toast.success(response.message);
       } else {
-        if (response.code == 429) {
-          console.log(response.errors);
+        if (response.code == 401) {
+          toast.error(response.message);
+        } else if (response.code == 429) {
           toast.error(response.message);
         } else {
           const message = response.error.message;
-          console.log(message);
-
           if (message.includes("Unique constraint")) {
             const field = getField(message);
             toast.error(`${capitalize(field)} is Already Taken`);

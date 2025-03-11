@@ -16,15 +16,15 @@ const AcknowledgmentReceipt = async () => {
       id = Number(ar.number.split("-").at(-1)) + 1;
     }
     const year = new Date().getFullYear();
-    const voucher = `${year}-AR-${id.toString().padStart(5, "0")}`;
-    return voucher;
+    const voucherNumber = `${year}-AR-${id.toString().padStart(5, "0")}`;
+    return voucherNumber;
   };
 
   const number = setNumber(records.at(-1));
 
   return (
     <>
-      <Navbar record={account!} />
+      <Navbar />
 
       <Card radius="none" className="py-[0.10rem] px-2">
         <CardBody>

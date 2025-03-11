@@ -11,7 +11,7 @@ import CreateModal from "@/components/transactionHistory/transactions/createModa
 import {
   computeBalance,
   formatNumber,
-  setVoucher,
+  setVoucherNumber,
 } from "@/components/globals/utils";
 import { Tooltip } from "@heroui/react";
 import { checkPDCs } from "@/app/api/check-pdcs/route";
@@ -27,8 +27,8 @@ const Transactions = async () => {
 
   const columns = [
     { key: "date", name: "DATE", sortable: true },
-    { key: "voucher", name: "VOUCHER", sortable: true },
-    { key: "check", name: "CHECK", sortable: true },
+    { key: "voucher_number", name: "VOUCHER", sortable: true },
+    { key: "check_number", name: "CHECK", sortable: true },
     { key: "client", name: "CLIENT", sortable: true },
     { key: "particulars", name: "PARTICULARS", sortable: true },
     { key: "credit", name: "CREDIT", sortable: true },
@@ -39,16 +39,16 @@ const Transactions = async () => {
   ];
 
   const last = ufRecords.find((ufRecord) => {
-    return ufRecord.voucher;
+    return ufRecord.voucher_number;
   });
 
-  const voucher = setVoucher(last);
+  const voucherNumber = setVoucherNumber(last);
 
   const records = await displayFormat(columns, ufRecords);
 
   const Buttons = (
     <>
-      <CreateModal voucher={voucher} tClients={tClients} />
+      <CreateModal voucherNumber={voucherNumber} tClients={tClients} />
     </>
   );
 

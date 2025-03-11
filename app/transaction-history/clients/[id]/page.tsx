@@ -14,7 +14,7 @@ import CreateModal from "@/components/transactionHistory/transactions/createModa
 import {
   computeBalance,
   formatNumber,
-  setVoucher,
+  setVoucherNumber,
 } from "@/components/globals/utils";
 import { Tooltip } from "@heroui/react";
 
@@ -29,8 +29,8 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   const columns = [
     { key: "date", name: "DATE", sortable: true },
-    { key: "voucher", name: "VOUCHER", sortable: true },
-    { key: "check", name: "CHECK", sortable: true },
+    { key: "voucher_number", name: "VOUCHER", sortable: true },
+    { key: "check_number", name: "CHECK", sortable: true },
     { key: "particulars", name: "PARTICULARS", sortable: true },
     { key: "credit", name: "CREDIT", sortable: true },
     { key: "debit", name: "DEBIT", sortable: true },
@@ -39,13 +39,13 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
     { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
-  const voucher = setVoucher(transactions[0]);
+  const voucherNumber = setVoucherNumber(transactions[0]);
 
   const records = await displayFormat(columns, record?.transactions || []);
 
   const Buttons = (
     <>
-      <CreateModal voucher={voucher} tClients={tClients} />
+      <CreateModal voucherNumber={voucherNumber} tClients={tClients} />
     </>
   );
 
