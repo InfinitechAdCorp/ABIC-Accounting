@@ -5,8 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["typedSql"]
+  provider = "prisma-client-js"
 }
 
 // Dev
@@ -77,7 +76,7 @@ model Transaction {
   t_client    TClient? @relation(fields: [t_client_id], references: [id], onDelete: Cascade)
   t_client_id String?
   date        DateTime @db.Date
-  voucher     String? 
+  voucher     String?
   check       String?
   particulars String   @db.Text
   type        String
