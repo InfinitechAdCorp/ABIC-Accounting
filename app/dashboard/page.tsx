@@ -7,6 +7,7 @@ import { GrTransaction } from "react-icons/gr";
 import { FaUsers, FaReceipt } from "react-icons/fa6";
 import { retry } from "@/components/globals/serverUtils";
 import { Card, CardBody } from "@heroui/react";
+import Barchart from "@/components/dashboard/barchart";
 
 export type Counts = {
   tClients: number;
@@ -17,6 +18,15 @@ export type Counts = {
 const Dashboard = async () => {
   const { record: account } = await retry(getAccount);
   const { counts } = await getCounts();
+
+  const data = [
+    { x: "January", y: 5 },
+    { x: "February", y: 7 },
+    { x: "March", y: 10 },
+    { x: "April", y: 4 },
+    { x: "May", y: 6 },
+    { x: "June", y: 3 },
+  ];
 
   return (
     <>
@@ -33,9 +43,7 @@ const Dashboard = async () => {
 
         <Card className="m-5 md:my-7 md:mx-60 p-3">
           <CardBody>
-            <div
-              className={`grid grid-cols-1 md:grid-cols-4 px-5 gap-3 mb-3`}
-            >
+            <div className="grid grid-cols-1 md:grid-cols-4 px-5 gap-3 mb-5">
               {account.th_access && (
                 <>
                   <CountCard
@@ -64,6 +72,14 @@ const Dashboard = async () => {
                   ></CountCard>
                 </>
               )}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 px-5 gap-3">
+              <Card>
+                <CardBody>
+                  <Barchart title="Monthly Transactions" data={data} />
+                </CardBody>
+              </Card>
             </div>
           </CardBody>
         </Card>

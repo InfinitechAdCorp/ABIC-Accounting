@@ -6,24 +6,21 @@ import ReactEcharts from "echarts-for-react";
 type Props = {
   title: string;
   data: {
-    [key: string]: string | number;
+    x: string;
+    y: number;
   }[];
 };
 
 const Barchart = ({ title, data }: Props) => {
-  const x: string[] = [];
-  const y: number[] = [];
+  let x: string[] = [];
+  let y: number[] = [];
 
   if (data) {
-    data.forEach((datum) => {
-      Object.entries(datum).forEach((entry) => {
-        const [key, value] = entry;
-        if (key == "count") {
-          y.push(value as number);
-        } else {
-          x.push(value as string);
-        }
-      });
+    x = data.map((datum) => {
+      return datum.x;
+    });
+    y = data.map((datum) => {
+      return datum.y;
     });
   }
 
@@ -50,6 +47,9 @@ const Barchart = ({ title, data }: Props) => {
       fontFamily: "Montserrat",
     },
     color: ["#0072F5"],
+    tooltip: {
+        show: true,
+    }
   };
 
   return <ReactEcharts option={option} />;
