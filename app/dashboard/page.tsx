@@ -67,10 +67,13 @@ const Dashboard = async () => {
               )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 px-5 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 px-5 gap-3 mb-3">
               <Card>
                 <CardBody>
-                  <Barchart title="Monthly Transactions" data={charts.monthlyTransactions} />
+                  <Barchart
+                    title="Monthly Transactions"
+                    data={charts.monthlyTransactions}
+                  />
                 </CardBody>
               </Card>
 
@@ -79,6 +82,19 @@ const Dashboard = async () => {
                   <Barchart title="Client Totals" data={charts.clientTotals} />
                 </CardBody>
               </Card>
+            </div>
+
+            <div className="flex items-center justify-center">
+              <div className="px-5 w-[50%]">
+                <Card>
+                  <CardBody>
+                    <Barchart
+                      title="Monthly Collections"
+                      data={charts.monthlyCollections}
+                    />
+                  </CardBody>
+                </Card>
+              </div>
             </div>
           </CardBody>
         </Card>

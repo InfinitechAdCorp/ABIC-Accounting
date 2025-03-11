@@ -5,7 +5,10 @@ import { cookies } from "next/headers";
 import { getAll as getAllTClients } from "@/components/transactionHistory/tClients/actions";
 import { computeBalance } from "@/components/globals/utils";
 import { ChartDatum } from "@/components/globals/types";
-import { getMonthlyTransactions } from "@prisma/client/sql";
+import {
+  getMonthlyCollections,
+  getMonthlyTransactions,
+} from "@prisma/client/sql";
 
 export const getCounts = async () => {
   const session = await cookies();
@@ -84,12 +87,17 @@ export const getCharts = async () => {
   const ufMonthlyTransactions = await prisma.$queryRawTyped(
     getMonthlyTransactions(accountID!, year)
   );
+  const ufMonthlyCollections = await prisma.$queryRawTyped(
+    getMonthlyCollections(accountID!, year)
+  );
 
   const monthlyTransactions = formatMonthlyData(ufMonthlyTransactions);
+  const monthlyCollections = formatMonthlyData(ufMonthlyCollections);
 
   const charts = {
     clientTotals: clientTotals,
     monthlyTransactions: monthlyTransactions,
+    monthlyCollections: monthlyCollections,
   };
 
   const response = {
