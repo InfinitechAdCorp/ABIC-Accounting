@@ -9,12 +9,6 @@ import { retry } from "@/components/globals/serverUtils";
 import { Card, CardBody } from "@heroui/react";
 import Barchart from "@/components/dashboard/barchart";
 
-export type Counts = {
-  tClients: number;
-  transactions: number;
-  collections: number;
-};
-
 const Dashboard = async () => {
   const { record: account } = await retry(getAccount);
   const { counts } = await getCounts();
@@ -69,7 +63,7 @@ const Dashboard = async () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 px-5 gap-3 mb-3">
               <Card>
-                <CardBody>
+                <CardBody className="pt-10">
                   <Barchart
                     title="Monthly Transactions"
                     data={charts.monthlyTransactions}
@@ -78,23 +72,10 @@ const Dashboard = async () => {
               </Card>
 
               <Card>
-                <CardBody>
+                <CardBody className="pt-10">
                   <Barchart title="Client Totals" data={charts.clientTotals} />
                 </CardBody>
               </Card>
-            </div>
-
-            <div className="flex items-center justify-center">
-              <div className="px-5 w-[50%]">
-                <Card>
-                  <CardBody>
-                    <Barchart
-                      title="Monthly Collections"
-                      data={charts.monthlyCollections}
-                    />
-                  </CardBody>
-                </Card>
-              </div>
             </div>
           </CardBody>
         </Card>

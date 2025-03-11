@@ -87,17 +87,11 @@ export const getCharts = async () => {
   const ufMonthlyTransactions = await prisma.$queryRawTyped(
     getMonthlyTransactions(accountID!, year)
   );
-  const ufMonthlyCollections = await prisma.$queryRawTyped(
-    getMonthlyCollections(accountID!, year)
-  );
-
   const monthlyTransactions = formatMonthlyData(ufMonthlyTransactions);
-  const monthlyCollections = formatMonthlyData(ufMonthlyCollections);
 
   const charts = {
     clientTotals: clientTotals,
     monthlyTransactions: monthlyTransactions,
-    monthlyCollections: monthlyCollections,
   };
 
   const response = {

@@ -72,70 +72,62 @@ const Navbar = () => {
 
           {record && (
             <>
-              {record.th_access && (
-                <Link href="/listings" className="text-center">
+              <Link href="/listings" className="text-center">
+                <h3
+                  className={`text-sm md:text-base text-white cursor-pointer ${
+                    isActive("/listings") ? "font-black" : "font-semibold"
+                  }`}
+                >
+                  Listings
+                </h3>
+              </Link>
+
+              <Dropdown
+                classNames={{
+                  content: "min-w-0",
+                }}
+              >
+                <DropdownTrigger className="text-center">
                   <h3
                     className={`text-sm md:text-base text-white cursor-pointer ${
-                      isActive("/listings") ? "font-black" : "font-semibold"
+                      isActive("/transaction-history")
+                        ? "font-black"
+                        : "font-semibold"
                     }`}
                   >
-                    Listings
+                    <span className="hidden lg:inline">
+                      Transaction History
+                    </span>
+                    <span className="inline lg:hidden">Transactions</span>
                   </h3>
-                </Link>
-              )}
+                </DropdownTrigger>
 
-              {record.th_access && (
-                <Dropdown
-                  classNames={{
-                    content: "min-w-0",
-                  }}
-                >
-                  <DropdownTrigger className="text-center">
-                    <h3
-                      className={`text-sm md:text-base text-white cursor-pointer ${
-                        isActive("/transaction-history")
-                          ? "font-black"
-                          : "font-semibold"
-                      }`}
-                    >
-                      <span className="hidden lg:inline">
-                        Transaction History
-                      </span>
-                      <span className="inline lg:hidden">Transactions</span>
-                    </h3>
-                  </DropdownTrigger>
-
-                  <DropdownMenu className="text-center">
-                    <DropdownItem
-                      onPress={() =>
-                        router.push("/transaction-history/clients")
-                      }
-                      key="Clients"
-                      textValue="Clients"
-                    >
-                      <h3 className="font-semibold">Clients</h3>
-                    </DropdownItem>
-                    <DropdownItem
-                      onPress={() =>
-                        router.push("/transaction-history/transactions")
-                      }
-                      key="Transactions"
-                      textValue="Transactions"
-                    >
-                      <h3 className="font-semibold">Transactions</h3>
-                    </DropdownItem>
-                    <DropdownItem
-                      onPress={() =>
-                        router.push("/transaction-history/pdc-sets")
-                      }
-                      key="PDCs"
-                      textValue="PDCs"
-                    >
-                      <h3 className="font-semibold">PDCs</h3>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-              )}
+                <DropdownMenu className="text-center">
+                  <DropdownItem
+                    onPress={() => router.push("/transaction-history/clients")}
+                    key="Clients"
+                    textValue="Clients"
+                  >
+                    <h3 className="font-semibold">Clients</h3>
+                  </DropdownItem>
+                  <DropdownItem
+                    onPress={() =>
+                      router.push("/transaction-history/transactions")
+                    }
+                    key="Transactions"
+                    textValue="Transactions"
+                  >
+                    <h3 className="font-semibold">Transactions</h3>
+                  </DropdownItem>
+                  <DropdownItem
+                    onPress={() => router.push("/transaction-history/pdc-sets")}
+                    key="PDCs"
+                    textValue="PDCs"
+                  >
+                    <h3 className="font-semibold">PDCs</h3>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
 
               {record.cm_access && (
                 <Dropdown
