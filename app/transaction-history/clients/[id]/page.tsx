@@ -43,7 +43,7 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
     return transaction.voucher_number;
   });
 
-  const voucherNumber = setVoucherNumber(last);
+  const voucherNumber = setVoucherNumber(last?.voucher_number || null);
 
   const records = await displayFormat(columns, record?.transactions || []);
 

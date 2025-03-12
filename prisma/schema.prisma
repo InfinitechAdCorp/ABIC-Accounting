@@ -78,7 +78,7 @@ model Transaction {
   t_client_id    String?
   date           DateTime @db.Date
   voucher_number String?  @unique()
-  check_number   String?     @unique
+  check_number   String?  @unique
   particulars    String   @db.Text
   type           String
   amount         Decimal  @db.Decimal(15, 2)

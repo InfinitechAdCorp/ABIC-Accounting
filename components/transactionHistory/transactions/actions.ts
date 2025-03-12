@@ -440,9 +440,16 @@ export const setStatus = async (values: { id: string; status: string }) => {
 };
 
 export const checkPDCs = async () => {
-  const { records } = await getAllPDCSets();
+  const { records: transactions } = await getAll();
+  const last = transactions.findLast((transaction) => {
+    return transaction.voucher_number;
+  });
+  let voucherNumber = setVoucherNumber(last?.voucher_number || null);
 
-  records.forEach((record) => {
+  const { records } = await getAllPDCSets();
+  const data = [];
+
+  for (const record of records) {
     const pdcs = record.pdcs || [];
 
     for (const pdc of pdcs) {
@@ -454,48 +461,24 @@ export const checkPDCs = async () => {
 
       if (difference <= 0) {
         const particulars = `${record.name} - ${formatDate(pdc.date)}`;
-        const transactionValues = {
+        const datum = {
           account_id: record.account_id,
           date: pdc.date,
+          voucher_number: `${voucherNumber}`,
           check_number: pdc.check_number,
           particulars: particulars,
           type: record.type,
           amount: record.amount,
+          status: "Active",
         };
-        saveAsTransaction(transactionValues);
+        data.push(datum);
+        voucherNumber = setVoucherNumber(voucherNumber);
       }
     }
-  });
-};
-
-type TransactionValues = {
-  account_id: string | null;
-  date: Date;
-  check_number: string;
-  particulars: string;
-  type: string;
-  amount: number;
-};
-
-export const saveAsTransaction = async (values: TransactionValues) => {
-  const { records: transactions } = await getAll();
-  const last = transactions.findLast((transaction) => {
-    return transaction.voucher_number;
-  });
-
-  const transaction = await prisma.transaction.findFirst({
-    where: {
-      particulars: values.particulars,
-    },
-  });
-
-  if (!transaction) {
-    await prisma.transaction.create({
-      data: {
-        ...values,
-        voucher_number: setVoucherNumber(last),
-        status: "Active",
-      },
-    });
   }
+
+  await prisma.transaction.createMany({
+    data: data,
+    skipDuplicates: true,
+  });
 };

@@ -10,7 +10,7 @@ export const onPostSubmit = (
   actions: { resetForm: () => void },
   onClose: () => void
 ) => {
-  console.log(response)
+  console.log(response);
 
   if (response.code == 200) {
     actions.resetForm();
@@ -130,13 +130,13 @@ export const isPending = (date: Date) => {
   return isPending;
 };
 
-export const setVoucherNumber = (transaction: Transaction | undefined) => {
+export const setVoucherNumber = (last: string | null) => {
   let id = 1;
-  if (transaction) {
-    id = Number(transaction.voucher_number) + 1;
+  if (last) {
+    id = Number(last) + 1;
   }
-  const voucherNumber = `${id}`.padStart(5, "0");
-  return voucherNumber;
+  const number = `${id}`.padStart(5, "0");
+  return number;
 };
 
 export const getUniques = (records: any[], key: string) => {

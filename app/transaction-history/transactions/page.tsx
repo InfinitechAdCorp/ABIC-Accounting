@@ -42,7 +42,7 @@ const Transactions = async () => {
     return ufRecord.voucher_number;
   });
 
-  const voucherNumber = setVoucherNumber(last);
+  const voucherNumber = setVoucherNumber(last?.voucher_number || null);
 
   const records = await displayFormat(columns, ufRecords);
 
