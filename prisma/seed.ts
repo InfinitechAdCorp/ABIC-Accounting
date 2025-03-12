@@ -6,7 +6,7 @@ const accounts: Prisma.AccountCreateInput[] = [
   {
     name: "SCB 443",
     th_access: true,
-    cm_access: false,
+    cm_access: true,
   },
   {
     name: "SCB 483",
@@ -16,7 +16,7 @@ const accounts: Prisma.AccountCreateInput[] = [
   {
     name: "SCB 202",
     th_access: true,
-    cm_access: true,
+    cm_access: false,
   },
 ];
 
@@ -24,8 +24,8 @@ const listings: Prisma.ListingCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[2].name },
-        create: accounts[2],
+        where: { name: accounts[1].name },
+        create: accounts[1],
       },
     },
     client: "Mary Rose",
@@ -46,8 +46,8 @@ const listings: Prisma.ListingCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[2].name },
-        create: accounts[2],
+        where: { name: accounts[1].name },
+        create: accounts[1],
       },
     },
     client: "Yeonseo Oh",
@@ -68,8 +68,8 @@ const listings: Prisma.ListingCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[2].name },
-        create: accounts[2],
+        where: { name: accounts[1].name },
+        create: accounts[1],
       },
     },
     client: "Elaine Marie Pena",
@@ -87,104 +87,418 @@ const listings: Prisma.ListingCreateInput[] = [
     extension: null,
     closed: null,
   },
-];
-
-const tClients: Prisma.TClientCreateInput[] = [
   {
-    name: "Hu Yanchong",
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[1].name },
+        create: accounts[1],
+      },
+    },
+    client: "Stephani Joy Macalino",
+    type: "Sale",
+    project: "Infina Towers",
+    unit: "1128 North",
+    res: "2024-12-06T00:00:00.000Z",
+    terms: "30-72; 70-bf",
+    specialist: "Mary Ann Ibe",
+    manager: "Erika Fe Francisco",
+    list_price: "2596000",
+    total_price: "2336400",
+    status: "Closed",
+    source: "Personal ADs",
+    extension: null,
+    closed: "2025-01-10T00:00:00.000Z",
   },
   {
-    name: "Weiwei Chen",
-  },
-  {
-    name: "Dan Li",
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[1].name },
+        create: accounts[1],
+      },
+    },
+    client: "George Bungcayao",
+    type: "Sale",
+    project: "Infina Towers",
+    unit: "3818 North",
+    res: "2024-12-06T00:00:00.000Z",
+    terms: "5-1; -72; 0-bf",
+    specialist: "Mary Ann Ibe",
+    manager: "Aldrin Tapia",
+    list_price: "3436000",
+    total_price: "3092400",
+    status: "Closed",
+    source: "Personal ADs",
+    extension: "2025-02-15T00:00:00.000Z",
+    closed: "2025-02-01T00:00:00.000Z",
   },
 ];
 
 const transactions: Prisma.TransactionCreateInput[] = [
+  // 443
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[2].name },
-        create: accounts[2],
+        where: { name: accounts[0].name },
+        create: accounts[0],
       },
     },
     t_client: {
       connectOrCreate: {
-        where: { name: tClients[0].name },
+        where: { name: "Zhou Chen" },
         create: {
-          name: tClients[0].name,
+          name: "Zhou Chen",
         },
       },
     },
-    date: "2025-02-01T00:00:00.000Z",
-    voucher_number: "00001",
-    check_number: "24837",
-    particulars: "Tivoli",
+    date: "2025-01-06T00:00:00.000Z",
+    voucher_number: null,
+    check_number: "77968",
+    particulars: "PMR Celeste 3131 - December 2024 Rental",
     type: "Credit",
-    amount: 5000,
+    amount: 20000,
     status: "Active",
     proof: null,
   },
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[2].name },
-        create: accounts[2],
+        where: { name: accounts[0].name },
+        create: accounts[0],
       },
     },
     t_client: {
       connectOrCreate: {
-        where: { name: tClients[1].name },
+        where: { name: "Huan Xiong" },
         create: {
-          name: tClients[1].name,
+          name: "Huan Xiong",
         },
       },
     },
-    date: "2025-02-02T00:00:00.000Z",
-    voucher_number: "00002",
-    check_number: "76598",
-    particulars: "Alea Residences",
+    date: "2025-01-06T00:00:00.000Z",
+    voucher_number: null,
+    check_number: "77970",
+    particulars: "BXP Brent 1207 - December 2024 Rental",
+    type: "Credit",
+    amount: 26000,
+    status: "Active",
+    proof: null,
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    t_client: {
+      connectOrCreate: {
+        where: { name: "Jiang Huijin" },
+        create: {
+          name: "Jiang Huijin",
+        },
+      },
+    },
+    date: "2025-01-06T00:00:00.000Z",
+    voucher_number: null,
+    check_number: "77971",
+    particulars: "Acqua Sutherland 2319 - December 2024 Rental",
+    type: "Credit",
+    amount: 22000,
+    status: "Active",
+    proof: null,
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    t_client: {
+      connectOrCreate: {
+        where: { name: "Dandan Li" },
+        create: {
+          name: "Dandan Li",
+        },
+      },
+    },
+    date: "2025-01-06T00:00:00.000Z",
+    voucher_number: null,
+    check_number: "77972",
+    particulars: "Jaxx Residences TD 3203 - December 2024 Rental",
+    type: "Credit",
+    amount: 21000,
+    status: "Active",
+    proof: null,
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    t_client: {
+      connectOrCreate: {
+        where: { name: "Zhou Chen" },
+        create: {
+          name: "Zhou Chen",
+        },
+      },
+    },
+    date: "2025-01-06T00:00:00.000Z",
+    voucher_number: null,
+    check_number: "77973",
+    particulars: "BXP W 1516 - December 2024 Rental",
+    type: "Credit",
+    amount: 24000,
+    status: "Active",
+    proof: null,
+  },
+
+  // 483
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[1].name },
+        create: accounts[1],
+      },
+    },
+    t_client: {
+      connectOrCreate: {
+        where: { name: "Abic Realty" },
+        create: {
+          name: "Abic Realty",
+        },
+      },
+    },
+    date: "2025-01-09T00:00:00.000Z",
+    voucher_number: null,
+    check_number: "LIND",
+    particulars: "Toyota Hi-Ace Payment for the Month of January 2025",
     type: "Debit",
-    amount: 3000,
+    amount: 9737.38,
     status: "Active",
     proof: null,
   },
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[2].name },
-        create: accounts[2],
+        where: { name: accounts[1].name },
+        create: accounts[1],
       },
     },
     t_client: {
       connectOrCreate: {
-        where: { name: tClients[2].name },
+        where: { name: "Abic Realty" },
         create: {
-          name: tClients[2].name,
+          name: "Abic Realty",
         },
       },
     },
-    date: "2025-02-03T00:00:00.000Z",
-    voucher_number: "00003",
-    check_number: "42783",
-    particulars: "Jazz Residences",
+    date: "2025-01-10T00:00:00.000Z",
+    voucher_number: null,
+    check_number: "73115",
+    particulars:
+      "KGR Icho 315 - Excess payment for Monthly Amortization - January 2025 (Jui Long Hsu) LAST",
+    type: "Debit",
+    amount: 209261.44,
+    status: "Active",
+    proof: null,
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[1].name },
+        create: accounts[1],
+      },
+    },
+    t_client: {
+      connectOrCreate: {
+        where: { name: "Xu Zhang" },
+        create: {
+          name: "Xu Zhang",
+        },
+      },
+    },
+    date: "2025-01-13T00:00:00.000Z",
+    voucher_number: null,
+    check_number: "78005",
+    particulars: "Gramercy Res. 6603 - Mark up",
     type: "Credit",
     amount: 4000,
     status: "Active",
     proof: null,
   },
-];
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[1].name },
+        create: accounts[1],
+      },
+    },
+    t_client: {
+      connectOrCreate: {
+        where: { name: "Huan Xiong" },
+        create: {
+          name: "Huan Xiong",
+        },
+      },
+    },
+    date: "2025-01-13T00:00:00.000Z",
+    voucher_number: null,
+    check_number: "78008",
+    particulars: "PMR Astra 2305 - Mark up",
+    type: "Credit",
+    amount: 1000,
+    status: "Active",
+    proof: null,
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[1].name },
+        create: accounts[1],
+      },
+    },
+    t_client: {
+      connectOrCreate: {
+        where: { name: "Dandan Li" },
+        create: {
+          name: "Dandan Li",
+        },
+      },
+    },
+    date: "2025-01-13T00:00:00.000Z",
+    voucher_number: null,
+    check_number: "78010",
+    particulars: "Tivoli Iris 3004 - Abic Comm.",
+    type: "Credit",
+    amount: 400000,
+    status: "Active",
+    proof: null,
+  },
 
-const cClients: Prisma.CClientCreateInput[] = [
+  // 202
   {
-    name: "Jun Xie",
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[2].name },
+        create: accounts[2],
+      },
+    },
+    t_client: {
+      connectOrCreate: {
+        where: { name: "Zhou Chen" },
+        create: {
+          name: "Zhou Chen",
+        },
+      },
+    },
+    date: "2025-01-06T00:00:00.000Z",
+    voucher_number: null,
+    check_number: "77968",
+    particulars: "PMR Celeste 3131 - December 2024 Rental",
+    type: "Debit",
+    amount: 20000,
+    status: "Active",
+    proof: null,
   },
   {
-    name: "Quan Long",
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[2].name },
+        create: accounts[2],
+      },
+    },
+    t_client: {
+      connectOrCreate: {
+        where: { name: "Huan Xiong" },
+        create: {
+          name: "Huan Xiong",
+        },
+      },
+    },
+    date: "2025-01-06T00:00:00.000Z",
+    voucher_number: null,
+    check_number: "77970",
+    particulars: "BXP Brent 1207 - December 2024 Rental",
+    type: "Debit",
+    amount: 26000,
+    status: "Active",
+    proof: null,
   },
   {
-    name: "Zong Guofeng",
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[2].name },
+        create: accounts[2],
+      },
+    },
+    t_client: {
+      connectOrCreate: {
+        where: { name: "Jiang Huijin" },
+        create: {
+          name: "Jiang Huijin",
+        },
+      },
+    },
+    date: "2025-01-06T00:00:00.000Z",
+    voucher_number: null,
+    check_number: "77971",
+    particulars: "Acqua Sutherland 2319 - December 2024 Rental",
+    type: "Debit",
+    amount: 22000,
+    status: "Active",
+    proof: null,
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[2].name },
+        create: accounts[2],
+      },
+    },
+    t_client: {
+      connectOrCreate: {
+        where: { name: "Dandan Li" },
+        create: {
+          name: "Dandan Li",
+        },
+      },
+    },
+    date: "2025-01-06T00:00:00.000Z",
+    voucher_number: null,
+    check_number: "77972",
+    particulars: "Jazz Residences TD 3203 - December 2024 Rental",
+    type: "Debit",
+    amount: 21000,
+    status: "Active",
+    proof: null,
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[2].name },
+        create: accounts[2],
+      },
+    },
+    t_client: {
+      connectOrCreate: {
+        where: { name: "Zhao Xixian" },
+        create: {
+          name: "Zhao Xixian",
+        },
+      },
+    },
+    date: "2025-01-06T00:00:00.000Z",
+    voucher_number: null,
+    check_number: "77974",
+    particulars: "ADB 6K - December 2024 Rental",
+    type: "Debit",
+    amount: 17000,
+    status: "Active",
+    proof: null,
   },
 ];
 
@@ -192,74 +506,122 @@ const collections: Prisma.CollectionCreateInput[] = [
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[2].name },
-        create: accounts[2],
+        where: { name: accounts[0].name },
+        create: accounts[0],
       },
     },
     c_client: {
       connectOrCreate: {
-        where: { name: cClients[0].name },
-        create: cClients[0],
+        where: { name: "Hu Yanchong" },
+        create: { name: "Hu Yanchong" },
       },
     },
-    property: "Alea Residences",
-    location: "Bacoor",
-    start: "2025-03-25T00:00:00.000Z",
-    end: "2027-03-25T00:00:00.000Z",
+    property: "Lerato Unit 2506",
+    location: "Makati",
+    start: "2024-03-05T00:00:00.000Z",
+    end: "2027-03-05T00:00:00.000Z",
     advance: 1,
     deposit: 1,
-    tenant_price: 3000,
-    owner_income: 3000,
-    abic_income: 3000,
-    due: "2025-05-25T00:00:00.000Z",
+    tenant_price: 25000,
+    owner_income: null,
+    abic_income: null,
+    due: "2024-12-05T00:00:00.000Z",
   },
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[2].name },
-        create: accounts[2],
+        where: { name: accounts[0].name },
+        create: accounts[0],
       },
     },
     c_client: {
       connectOrCreate: {
-        where: { name: cClients[1].name },
-        create: cClients[1],
+        where: { name: "Dandan Li" },
+        create: { name: "Dandan Li" },
       },
     },
-    property: "Tivoli Residences",
+    property: "Jazz Residences Unit 5202 Tower D",
     location: "Makati",
-    start: "2025-02-25T00:00:00.000Z",
-    end: "2027-02-25T00:00:00.000Z",
+    start: "2023-05-15T00:00:00.000Z",
+    end: "2027-05-15T00:00:00.000Z",
     advance: 1,
     deposit: 1,
-    tenant_price: 5000,
-    owner_income: 5000,
-    abic_income: 5000,
-    due: "2025-04-25T00:00:00.000Z",
+    tenant_price: 20000,
+    owner_income: null,
+    abic_income: null,
+    due: "2024-11-15T00:00:00.000Z",
   },
   {
     account: {
       connectOrCreate: {
-        where: { name: accounts[2].name },
-        create: accounts[2],
+        where: { name: accounts[0].name },
+        create: accounts[0],
       },
     },
     c_client: {
       connectOrCreate: {
-        where: { name: cClients[2].name },
-        create: cClients[2],
+        where: { name: "Jun Xie" },
+        create: { name: "Jun Xie" },
       },
     },
-    property: "Oriental Place",
+    property: "The Ellis 17H",
     location: "Makati",
-    start: "2025-04-25T00:00:00.000Z",
-    end: "2027-04-25T00:00:00.000Z",
+    start: "2023-06-06T00:00:00.000Z",
+    end: "2027-06-06T00:00:00.000Z",
     advance: 1,
     deposit: 1,
-    tenant_price: 7000,
-    owner_income: 7000,
-    abic_income: 7000,
-    due: "2025-06-25T00:00:00.000Z",
+    tenant_price: 13000,
+    owner_income: null,
+    abic_income: null,
+    due: "2024-11-06T00:00:00.000Z",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    c_client: {
+      connectOrCreate: {
+        where: { name: "Quan Long" },
+        create: { name: "Quan Long" },
+      },
+    },
+    property: "The Rise 46F East Wing",
+    location: "Makati",
+    start: "2023-08-15T00:00:00.000Z",
+    end: "2027-08-15T00:00:00.000Z",
+    advance: 1,
+    deposit: 1,
+    tenant_price: 16000,
+    owner_income: null,
+    abic_income: null,
+    due: "2024-10-15T00:00:00.000Z",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    c_client: {
+      connectOrCreate: {
+        where: { name: "Chanxiang Huang" },
+        create: { name: "Chanxiang Huang" },
+      },
+    },
+    property: "Knightsbridge Res. Unit 5113",
+    location: "Makati",
+    start: "2023-10-03T00:00:00.000Z",
+    end: "2027-10-03T00:00:00.000Z",
+    advance: 1,
+    deposit: 1,
+    tenant_price: 16000,
+    owner_income: null,
+    abic_income: null,
+    due: "2024-11-03T00:00:00.000Z",
   },
 ];
 
@@ -273,24 +635,10 @@ async function seeder() {
     });
   }
 
-  console.log("Seeding Transaction Clients");
-  for (const tClient of tClients) {
-    await prisma.tClient.create({
-      data: tClient,
-    });
-  }
-
   console.log("Seeding Transactions");
   for (const transaction of transactions) {
     await prisma.transaction.create({
       data: transaction,
-    });
-  }
-
-  console.log("Seeding Collection Clients");
-  for (const cClient of cClients) {
-    await prisma.cClient.create({
-      data: cClient,
     });
   }
 
