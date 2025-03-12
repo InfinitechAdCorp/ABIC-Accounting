@@ -225,7 +225,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
     date: "2025-01-06T00:00:00.000Z",
     voucher_number: null,
     check_number: "77972",
-    particulars: "Jaxx Residences TD 3203 - December 2024 Rental",
+    particulars: "Jazz Residences TD 3203 - December 2024 Rental",
     type: "Credit",
     amount: 21000,
     status: "Active",

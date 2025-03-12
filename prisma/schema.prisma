@@ -77,8 +77,8 @@ model Transaction {
   t_client       TClient? @relation(fields: [t_client_id], references: [id], onDelete: Cascade)
   t_client_id    String?
   date           DateTime @db.Date
-  voucher_number String?  @unique()
-  check_number   String?  @unique
+  voucher_number String?  
+  check_number   String?  
   particulars    String   @db.Text
   type           String
   amount         Decimal  @db.Decimal(15, 2)
@@ -154,7 +154,7 @@ model Collection {
 
 model AR {
   id         String   @id @default(cuid())
-  number     String   @unique
+  number     String   
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -163,7 +163,7 @@ model AR {
 
 model BS {
   id         String   @id @default(cuid())
-  number     String   @unique
+  number     String   
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
