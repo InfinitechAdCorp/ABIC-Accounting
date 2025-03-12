@@ -122,12 +122,9 @@ export const displayFormat = async (
   return records;
 };
 
-export const getAll = async (ufAccountID?: string) => {
-  let accountID = ufAccountID;
-  if (!accountID) {
-    const session = await cookies();
-    accountID = session.get("accountID")?.value;
-  }
+export const getAll = async () => {
+  const session = await cookies();
+  const accountID = session.get("accountID")?.value;
 
   let records;
 
@@ -481,7 +478,7 @@ type TransactionValues = {
 };
 
 export const saveAsTransaction = async (values: TransactionValues) => {
-  const { records: transactions } = await getAll(values.account_id!);
+  const { records: transactions } = await getAll();
   const last = transactions.findLast((transaction) => {
     return transaction.voucher_number;
   });

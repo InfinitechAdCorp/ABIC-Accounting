@@ -227,9 +227,23 @@ export const destroy = async (values: Destroy) => {
 
   if (otp == values.otp) {
     try {
-      await prisma.pDCSet.delete({
+      const record = await prisma.pDCSet.findUnique({
         where: { id: values.id },
       });
+
+      if (record) {
+        await prisma.pDCSet.delete({
+          where: { id: values.id },
+        });
+
+        await prisma.transaction.deleteMany({
+          where: {
+            particulars: {
+              startsWith: `${record.name} -`,
+            },
+          },
+        });
+      }
     } catch (error) {
       const response: ActionResponse = {
         code: 500,
