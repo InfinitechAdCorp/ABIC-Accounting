@@ -14,6 +14,7 @@ import {
   formatDate,
   formatNumber,
   isPending,
+  setVoucherNumber
 } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { Column } from "@/components/globals/types";
@@ -28,6 +29,8 @@ import { revalidatePath } from "next/cache";
 import { list, put, del } from "@vercel/blob";
 import { ulid } from "ulidx";
 import { Destroy } from "@/components/globals/types";
+import { getAll as getAllPDCSets } from "@/components/transactionHistory/pdcSets/actions";
+import { differenceInDays } from "date-fns";
 
 const model = "Transaction";
 const url = "/transaction-history/transactions";
@@ -437,4 +440,67 @@ export const setStatus = async (values: { id: string; status: string }) => {
     message: `${values.status == "Active" ? "Restored" : "Cancelled"} ${model}`,
   };
   return response;
+};
+
+export const checkPDCs = async () => {
+  const { records } = await getAllPDCSets();
+
+  records.forEach((record) => {
+    const pdcs = record.pdcs || [];
+
+    for (const pdc of pdcs) {
+      const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
+      const difference = differenceInDays(
+        pdc.date.setUTCHours(0, 0, 0, 0),
+        today
+      );
+
+      if (difference <= 0) {
+        const particulars = `${record.name} - ${formatDate(pdc.date)}`;
+        const transactionValues = {
+          account_id: record.account_id,
+          date: pdc.date,
+          check_number: pdc.check_number,
+          particulars: particulars,
+          type: record.type,
+          amount: record.amount,
+        };
+        saveAsTransaction(transactionValues);
+      }
+    }
+  });
+};
+
+type TransactionValues = {
+  account_id: string | null,
+  date: Date;
+  check_number: string;
+  particulars: string;
+  type: string;
+  amount: number;
+};
+
+export const saveAsTransaction = async (
+  values: TransactionValues
+) => {
+  const { records: transactions } = await getAll(values.account_id!);
+  const last = transactions.find((transaction) => {
+    return transaction.voucher_number;
+  });
+
+  const transaction = await prisma.transaction.findFirst({
+    where: {
+      particulars: values.particulars,
+    },
+  });
+
+  if (!transaction) {
+    await prisma.transaction.create({
+      data: {
+        ...values,
+        voucher_number: setVoucherNumber(last),
+        status: "Active",
+      },
+    });
+  }
 };

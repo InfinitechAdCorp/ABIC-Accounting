@@ -33,7 +33,7 @@ const CreateModal = () => {
     pay_to: "",
     start: "",
     end: "",
-    check_number: 0,
+    check_number: "",
     type: "",
     amount: 0,
   };

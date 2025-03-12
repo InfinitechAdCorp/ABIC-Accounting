@@ -45,7 +45,7 @@ const UpdateModal = ({ record, tClients }: Props) => {
     id: record.id,
     date: record.date,
     voucher_number: record.voucher_number || "",
-    check_number: record.check_number || 0,
+    check_number: record.check_number || "",
     t_client_name: record.t_client?.name,
     particulars: record.particulars,
     type: record.type,
@@ -121,7 +121,7 @@ const UpdateModal = ({ record, tClients }: Props) => {
                       </Field>
 
                       <div className="grid grid-cols-2 gap-3">
-                        <Field name="voucher">
+                        <Field name="voucher_number">
                           {({ field, meta }: FieldProps) => (
                             <div>
                               <Input

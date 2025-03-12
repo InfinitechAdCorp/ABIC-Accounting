@@ -42,7 +42,7 @@ const CreateModal = ({ voucherNumber, tClients }: Props) => {
   const initialValues = {
     date: "",
     voucher_number: voucherNumber,
-    check_number: 0,
+    check_number: "",
     t_client_name: "",
     particulars: "",
     type: "",

@@ -14,7 +14,7 @@ import {
   setVoucherNumber,
 } from "@/components/globals/utils";
 import { Tooltip } from "@heroui/react";
-import { checkPDCs } from "@/app/api/check-pdcs/route";
+import { checkPDCs } from "@/components/transactionHistory/transactions/actions";
 
 const Transactions = async () => {
   await checkPDCs();
