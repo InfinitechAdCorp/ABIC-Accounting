@@ -14,7 +14,7 @@ import {
   formatDate,
   formatNumber,
   isPending,
-  setVoucherNumber
+  setVoucherNumber,
 } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { Column } from "@/components/globals/types";
@@ -141,10 +141,10 @@ export const getAll = async (ufAccountID?: string) => {
       },
       orderBy: [
         {
-          date: "desc",
+          date: "asc",
         },
         {
-          created_at: "desc",
+          created_at: "asc",
         },
       ],
     });
@@ -472,7 +472,7 @@ export const checkPDCs = async () => {
 };
 
 type TransactionValues = {
-  account_id: string | null,
+  account_id: string | null;
   date: Date;
   check_number: string;
   particulars: string;
@@ -480,11 +480,9 @@ type TransactionValues = {
   amount: number;
 };
 
-export const saveAsTransaction = async (
-  values: TransactionValues
-) => {
+export const saveAsTransaction = async (values: TransactionValues) => {
   const { records: transactions } = await getAll(values.account_id!);
-  const last = transactions.find((transaction) => {
+  const last = transactions.findLast((transaction) => {
     return transaction.voucher_number;
   });
 

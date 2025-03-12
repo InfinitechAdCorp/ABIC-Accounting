@@ -125,7 +125,7 @@ export const getAll = async () => {
         transactions: {
           where: { account_id: accountID },
           orderBy: {
-            date: "desc",
+            date: "asc",
           },
         },
       },
@@ -159,7 +159,7 @@ export const get = async (id: string) => {
       include: {
         transactions: {
           orderBy: {
-            date: "desc",
+            date: "asc",
           },
         },
       },

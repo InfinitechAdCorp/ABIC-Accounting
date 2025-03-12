@@ -1,7 +1,6 @@
 "use server";
 
 import prisma from "@/lib/db";
-import { ActionResponse } from "@/components/globals/types";
 import { cookies } from "next/headers";
 import {
   PDCSet,
@@ -13,10 +12,9 @@ import { formatDate, formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { create as createSchema } from "@/components/transactionHistory/pdcSets/schemas";
 import { revalidatePath } from "next/cache";
-import { Column, Destroy } from "@/components/globals/types";
+import { Column, Destroy, ActionResponse } from "@/components/globals/types";
 import { destroy as destroySchema } from "@/components/globals/schemas";
-import { Prisma } from "@prisma/client";
-import { Transaction } from "@prisma/client";
+import { Prisma, Transaction } from "@prisma/client";
 
 const model = "PDC Set";
 const url = "/transaction-history/pdc-sets";
@@ -91,7 +89,11 @@ export const getAll = async () => {
   try {
     records = await prisma.pDCSet.findMany({
       include: {
-        pdcs: true,
+        pdcs: {
+          orderBy: {
+            date: "asc",
+          },
+        },
       },
       where: { account_id: accountID },
     });

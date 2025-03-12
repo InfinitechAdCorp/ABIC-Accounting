@@ -232,7 +232,7 @@ const DataTable = ({
         </div>
       </>
     );
-  }, [filterValue, columns]);
+  }, [filterValue, columns, records]);
 
   return (
     <>

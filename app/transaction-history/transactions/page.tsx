@@ -23,7 +23,7 @@ const Transactions = async () => {
 
   const model = "Transactions";
 
-  const result = computeBalance([...ufRecords].reverse());
+  const result = computeBalance(ufRecords);
 
   const columns = [
     { key: "date", name: "DATE", sortable: true },
@@ -38,7 +38,7 @@ const Transactions = async () => {
     { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
-  const last = ufRecords.find((ufRecord) => {
+  const last = ufRecords.findLast((ufRecord) => {
     return ufRecord.voucher_number;
   });
 

@@ -40,7 +40,7 @@ const ViewPaymentsModal = ({ record }: Props) => {
   const dueDay = new Date(record.start).getDate();
 
   const ufPayments: { date: Date; status: string }[] = [];
-  dates.reverse().forEach((date) => {
+  dates.forEach((date) => {
     const formattedDate = setDate(date, dueDay);
     const difference = differenceInDays(formattedDate, record.due);
 

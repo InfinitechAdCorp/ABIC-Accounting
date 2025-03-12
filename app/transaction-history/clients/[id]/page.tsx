@@ -25,7 +25,7 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   const model = `Transactions`;
 
-  const result = computeBalance([...(record?.transactions || [])].reverse());
+  const result = computeBalance(record?.transactions || []);
 
   const columns = [
     { key: "date", name: "DATE", sortable: true },
@@ -39,7 +39,11 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
     { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
-  const voucherNumber = setVoucherNumber(transactions[0]);
+  const last = transactions.findLast((transaction) => {
+    return transaction.voucher_number;
+  });
+
+  const voucherNumber = setVoucherNumber(last);
 
   const records = await displayFormat(columns, record?.transactions || []);
 

@@ -16,7 +16,7 @@ const TClients = async () => {
 
   const model = "Clients";
 
-  const result = computeBalance([...transactions].reverse());
+  const result = computeBalance(transactions);
 
   const columns = [
     { key: "name", name: "NAME", sortable: true },
