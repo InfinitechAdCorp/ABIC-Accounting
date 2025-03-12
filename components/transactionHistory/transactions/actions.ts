@@ -446,34 +446,39 @@ export const checkPDCs = async () => {
   });
   let voucherNumber = setVoucherNumber(last?.voucher_number || null);
 
-  const { records } = await getAllPDCSets();
   const data = [];
 
+  const records = await prisma.pDC.findMany({
+    include: {
+      pdc_set: true,
+    },
+  });
+
   for (const record of records) {
-    const pdcs = record.pdcs || [];
+    const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
+    const difference = differenceInDays(
+      record.date.setUTCHours(0, 0, 0, 0),
+      today
+    );
 
-    for (const pdc of pdcs) {
-      const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
-      const difference = differenceInDays(
-        pdc.date.setUTCHours(0, 0, 0, 0),
-        today
-      );
+    if (difference <= 0) {
+      const particulars = `${record.pdc_set?.name} - ${formatDate(
+        record.date
+      )}`;
 
-      if (difference <= 0) {
-        const particulars = `${record.name} - ${formatDate(pdc.date)}`;
-        const datum = {
-          account_id: record.account_id,
-          date: pdc.date,
-          voucher_number: `${voucherNumber}`,
-          check_number: pdc.check_number,
-          particulars: particulars,
-          type: record.type,
-          amount: record.amount,
-          status: "Active",
-        };
-        data.push(datum);
-        voucherNumber = setVoucherNumber(voucherNumber);
-      }
+      const datum = {
+        account_id: record.pdc_set!.account_id,
+        date: record.date,
+        voucher_number: `${voucherNumber}`,
+        check_number: record.check_number,
+        particulars: particulars,
+        type: record.pdc_set!.type,
+        amount: record.pdc_set!.amount,
+        status: "Active",
+      };
+
+      data.push(datum);
+      voucherNumber = setVoucherNumber(voucherNumber);
     }
   }
 
