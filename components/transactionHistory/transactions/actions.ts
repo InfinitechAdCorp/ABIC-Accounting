@@ -2,7 +2,6 @@
 
 import prisma from "@/lib/db";
 import { Prisma } from "@prisma/client";
-import { ActionResponse } from "@/components/globals/types";
 import {
   create as createSchema,
   update as updateSchema,
@@ -13,11 +12,11 @@ import {
   formatErrors,
   formatDate,
   formatNumber,
-  isPending,
   setVoucherNumber,
+  getTransactionStatus,
 } from "@/components/globals/utils";
 import * as Yup from "yup";
-import { Column } from "@/components/globals/types";
+import { Column, Destroy, ActionResponse } from "@/components/globals/types";
 import {
   Transaction,
   TransactionDisplayFormat,
@@ -28,7 +27,6 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { list, put, del } from "@vercel/blob";
 import { ulid } from "ulidx";
-import { Destroy } from "@/components/globals/types";
 import { differenceInDays } from "date-fns";
 
 const model = "Transaction";
@@ -94,11 +92,7 @@ export const displayFormat = async (
           break;
         case "status":
           value = record[key as keyof Transaction];
-          if (value != "Cancelled" && isPending(record.date)) {
-            value = "Pending";
-          } else {
-            if (value == "Active") value = "";
-          }
+          if (value == "Active") value = "";
           break;
         case "proof":
           const proof = record[key as keyof Transaction];
@@ -199,6 +193,8 @@ export const create = async (values: TransactionCreateInput) => {
       name: values.t_client_name as string,
     };
 
+    const status = getTransactionStatus(values.date as string);
+
     const data: Prisma.TransactionCreateInput = {
       account: { connect: { id: accountID } },
       t_client: {
@@ -213,7 +209,7 @@ export const create = async (values: TransactionCreateInput) => {
       particulars: values.particulars,
       type: values.type,
       amount: values.amount,
-      status: values.status,
+      status: status,
       proof: proof,
     };
 
@@ -289,6 +285,11 @@ export const update = async (values: TransactionCreateInput) => {
       name: values.t_client_name as string,
     };
 
+    let status = values.status;
+    if (status != "Cancelled") {
+      status = getTransactionStatus(values.date as string);
+    }
+
     const data: Prisma.TransactionCreateInput = {
       account: { connect: { id: accountID } },
       t_client: {
@@ -303,7 +304,7 @@ export const update = async (values: TransactionCreateInput) => {
       particulars: values.particulars,
       type: values.type,
       amount: values.amount,
-      status: values.status,
+      status: status,
       proof: proof,
     };
 
@@ -414,11 +415,21 @@ export const setStatus = async (values: { id: string; status: string }) => {
     return response;
   }
 
+  let status = values.status;
+  if (status != "Cancelled") {
+    const record = await prisma.transaction.findUnique({
+      where: {
+        id: values.id,
+      },
+    });
+    status = getTransactionStatus(record!.date);
+  }
+
   try {
     await prisma.transaction.update({
       where: { id: values.id },
       data: {
-        status: values.status,
+        status: status,
       },
     });
   } catch (error) {
@@ -433,9 +444,35 @@ export const setStatus = async (values: { id: string; status: string }) => {
   revalidatePath(url);
   const response: ActionResponse = {
     code: 200,
-    message: `${values.status == "Active" ? "Restored" : "Cancelled"} ${model}`,
+    message: `${values.status} ${model}`,
   };
   return response;
+};
+
+export const checkTransactions = async () => {
+  const ids: string[] = [];
+
+  const { records } = await getAll();
+
+  records.forEach((record) => {
+    if (
+      getTransactionStatus(record.date) == "Active" &&
+      record.status == "Pending"
+    ) {
+      ids.push(record.id);
+    }
+  });
+
+  await prisma.transaction.updateMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+    data: {
+      status: "Active",
+    },
+  });
 };
 
 export const checkPDCs = async () => {
@@ -455,10 +492,7 @@ export const checkPDCs = async () => {
 
   for (const record of records) {
     const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
-    const difference = differenceInDays(
-      record.date.setUTCHours(0, 0, 0, 0),
-      today
-    );
+    const difference = differenceInDays(record.date, today);
 
     if (difference <= 0) {
       const particulars = `${record.pdc_set?.name} - ${formatDate(

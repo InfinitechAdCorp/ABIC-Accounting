@@ -15,12 +15,11 @@ import {
   TransactionDisplayFormat,
   TClient,
 } from "@/components/transactionHistory/types";
-import { isPending } from "@/components/globals/utils";
 import ViewProofBtn from "@/components/transactionHistory/transactions/viewProofBtn";
 
 const setColor = (record: Record) => {
   let color;
-  if (isPending(record.date)) {
+  if (record.status == "Pending") {
     color = "text-[#F5A524]";
   }
   if (record.status == "Cancelled") {

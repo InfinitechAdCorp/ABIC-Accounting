@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { ActionResponse } from "@/components/globals/types";
 import { DateValue, parseDate } from "@internationalized/date";
-import { isAfter } from "date-fns";
+import { differenceInDays } from "date-fns";
 
 export const onPostSubmit = (
   response: ActionResponse,
@@ -105,7 +105,7 @@ export const computeBalance = (records: Transaction[]) => {
 
   if (records) {
     records.forEach((record) => {
-      if (record.status != "Cancelled" && !isPending(record.date)) {
+      if (!["Pending", "Cancelled"].includes(record.status)) {
         if (record.type == "Credit") {
           result.credit += record.amount;
         } else {
@@ -117,17 +117,6 @@ export const computeBalance = (records: Transaction[]) => {
   }
 
   return result;
-};
-
-export const isPending = (date: Date) => {
-  let isPending = false;
-  const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
-
-  if (date) {
-    isPending = isAfter(date.setUTCHours(0, 0, 0, 0), today);
-  }
-
-  return isPending;
 };
 
 export const setVoucherNumber = (last: string | null) => {
@@ -163,4 +152,14 @@ export const filterRecords = (records: any[], key: string, value: string) => {
     return record[key] == value;
   });
   return filteredRecords;
+};
+
+export const getTransactionStatus = (string: string | Date) => {
+  const date = new Date(new Date(string).setUTCHours(0, 0, 0, 0));
+  const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
+  const difference = differenceInDays(date, today);
+
+  let status = "Active";
+  difference <= 0 ? (status = "Active") : (status = "Pending");
+  return status;
 };

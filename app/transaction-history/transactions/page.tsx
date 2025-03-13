@@ -2,6 +2,8 @@ import React from "react";
 import {
   getAll,
   displayFormat,
+  checkTransactions,
+  checkPDCs,
 } from "@/components/transactionHistory/transactions/actions";
 import { getAll as getTClients } from "@/components/transactionHistory/tClients/actions";
 import Navbar from "@/components/globals/navbar";
@@ -14,10 +16,11 @@ import {
   setVoucherNumber,
 } from "@/components/globals/utils";
 import { Tooltip } from "@heroui/react";
-import { checkPDCs } from "@/components/transactionHistory/transactions/actions";
 
 const Transactions = async () => {
+  await checkTransactions();
   await checkPDCs();
+
   const { records: ufRecords } = await getAll();
   const { records: tClients } = await getTClients();
 

@@ -23,7 +23,6 @@ import {
   formatErrors,
   formatNumber,
   computeBalance,
-  isPending,
 } from "@/components/globals/utils";
 
 const model = "Client";
@@ -77,7 +76,7 @@ export const displayFormat = async (columns: Column[], records: TClient[]) => {
           const transaction = transactions?.find((transaction) => {
             if (
               transaction.status != "Cancelled" &&
-              !isPending(transaction.date)
+              transaction.status 
             ) {
               return transaction;
             }

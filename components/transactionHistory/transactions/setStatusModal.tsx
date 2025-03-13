@@ -29,7 +29,7 @@ const SetStatusModal = ({ action, id, status }: Props) => {
 
   const initialValues = {
     id: id,
-    status: status == "Active" ? "Cancelled" : "Active",
+    status: status == "Cancelled" ? "Restored" : "Cancelled",
   };
 
   const onSubmit = async (
@@ -49,11 +49,11 @@ const SetStatusModal = ({ action, id, status }: Props) => {
         className="text-white"
         size="sm"
         isIconOnly={true}
-        color={status == "Active" ? "danger" : "success"}
-        title={status == "Active" ? "Cancel" : "Restore"}
+        color={status == "Cancelled" ? "success" : "danger"}
+        title={status == "Cancelled" ? "Restore" : "Cancel"}
         onPress={onOpen}
       >
-        {status == "Active" ? <FaXmark size={14} /> : <FaCheck size={14} />}
+        {status == "Cancelled" ? <FaCheck size={14} /> : <FaXmark size={14} />}
       </Button>
 
       <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -68,14 +68,14 @@ const SetStatusModal = ({ action, id, status }: Props) => {
                 {() => (
                   <Form>
                     <ModalHeader>
-                      {status == "Active" ? "Cancel" : "Restore"} Transaction
+                      {status == "Cancelled" ? "Restore" : "Cancel"} Transaction
                     </ModalHeader>
                     <ModalBody>
                       <Field type="hidden" name="id" />
-                      <Field type="hidden" name="status" />
+                      <Field type="hidden" name="action" />
                       <h6>
                         Are you sure that you want to{" "}
-                        {status == "Active" ? "cancel" : "restore"} this
+                        {status == "Cancelled" ? "restore" : "cancel"} this
                         transaction?
                       </h6>
                     </ModalBody>
