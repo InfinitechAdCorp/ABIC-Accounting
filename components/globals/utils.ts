@@ -154,22 +154,10 @@ export const filterRecords = (records: any[], key: string, value: string) => {
   return filteredRecords;
 };
 
-export const getTransactionStatus = (ufDate: string | Date) => {
+export const daysFromToday = (ufDate: string | Date) => {
   const date = new Date(new Date(ufDate).setUTCHours(0, 0, 0, 0));
   const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
-  const difference = differenceInDays(date, today);
 
-  let status = "Active";
-  difference <= 0 ? (status = "Active") : (status = "Pending");
-  return status;
+  const days = differenceInDays(date, today);
+  return days;
 };
-
-export const getCollectionStatus = (ufDate: string | Date) => {
-  const date = new Date(new Date(ufDate).setUTCHours(0, 0, 0, 0));
-  const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
-  const difference = differenceInDays(date, today);
-
-  let status = "Expired";
-  difference < 0 ? (status = "Expired") : (status = "Active");
-  return status;
-}

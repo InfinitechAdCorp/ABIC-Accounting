@@ -13,7 +13,7 @@ import {
   formatDate,
   formatNumber,
   setVoucherNumber,
-  getTransactionStatus,
+  daysFromToday,
 } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { Column, Destroy, ActionResponse } from "@/components/globals/types";
@@ -193,7 +193,9 @@ export const create = async (values: TransactionCreateInput) => {
       name: values.t_client_name as string,
     };
 
-    const status = getTransactionStatus(values.date as string);
+    let status = "Active";
+    const days = daysFromToday(values.date);
+    days <= 0 ? (status = "Active") : (status = "Pending");
 
     const data: Prisma.TransactionCreateInput = {
       account: { connect: { id: accountID } },
@@ -287,7 +289,8 @@ export const update = async (values: TransactionCreateInput) => {
 
     let status = values.status;
     if (status != "Cancelled") {
-      status = getTransactionStatus(values.date as string);
+      const days = daysFromToday(values.date);
+      days <= 0 ? (status = "Active") : (status = "Pending");
     }
 
     const data: Prisma.TransactionCreateInput = {
@@ -422,7 +425,8 @@ export const setStatus = async (values: { id: string; status: string }) => {
         id: values.id,
       },
     });
-    status = getTransactionStatus(record!.date);
+    const days = daysFromToday(record!.date);
+    days <= 0 ? (status = "Active") : (status = "Pending");
   }
 
   try {
@@ -455,10 +459,7 @@ export const checkTransactions = async () => {
   const { records } = await getAll();
 
   records.forEach((record) => {
-    if (
-      getTransactionStatus(record.date) == "Active" &&
-      record.status == "Pending"
-    ) {
+    if (daysFromToday(record.date) <= 0 && record.status == "Pending") {
       ids.push(record.id);
     }
   });

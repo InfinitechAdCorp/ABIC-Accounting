@@ -53,6 +53,7 @@ const CreateModal = ({ locations, cClients }: Props) => {
     owner_income: "",
     abic_income: "",
     due: "",
+    status: "Active",
   };
 
   const onSubmit = async (

@@ -23,7 +23,7 @@ import {
   formatDate,
   formatNumber,
   formatErrors,
-  getCollectionStatus,
+  daysFromToday,
 } from "@/components/globals/utils";
 import { differenceInDays, differenceInMonths } from "date-fns";
 
@@ -178,11 +178,11 @@ export const create = async (values: CollectionCreateInput) => {
     return response;
   }
 
-  try {
-    const c_client = {
-      name: values.c_client_name as string,
-    };
+  const c_client = {
+    name: values.c_client_name as string,
+  };
 
+  try {
     await prisma.collection.create({
       data: {
         account: { connect: { id: accountID } },
@@ -238,11 +238,15 @@ export const update = async (values: CollectionCreateInput) => {
     return response;
   }
 
-  try {
-    const c_client = {
-      name: values.c_client_name as string,
-    };
+  const c_client = {
+    name: values.c_client_name as string,
+  };
 
+  let status = "Active";
+  const days = daysFromToday(values.end);
+  days < 0 ? (status = "Expired") : (status = "Active");
+
+  try {
     await prisma.collection.update({
       where: { id: values.id },
       data: {
@@ -263,6 +267,7 @@ export const update = async (values: CollectionCreateInput) => {
         owner_income: values.owner_income,
         abic_income: values.abic_income,
         due: new Date(new Date(values.due).setUTCHours(0, 0, 0, 0)),
+        status: status,
       },
     });
   } catch (error) {
@@ -377,7 +382,7 @@ export const checkCollections = async () => {
   const { records } = await getAll();
 
   records.forEach((record) => {
-    if (getCollectionStatus(record.end) == "Expired") {
+    if (daysFromToday(record.end) < 0) {
       ids.push(record.id);
     }
   });

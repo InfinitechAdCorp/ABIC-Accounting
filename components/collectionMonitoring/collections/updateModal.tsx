@@ -19,7 +19,6 @@ import {
 import {
   Collection as Record,
   CClient,
-  CollectionCreateInput,
 } from "@/components/collectionMonitoring/types";
 import { update as validationSchema } from "@/components/collectionMonitoring/collections/schemas";
 import { Formik, Form, Field, FormikProps, FieldProps } from "formik";
@@ -58,6 +57,7 @@ const UpdateModal = ({ record, locations, cClients }: Props) => {
     owner_income: record.owner_income,
     abic_income: record.abic_income,
     due: record.due,
+    status: record.status,
   };
 
   const onSubmit = async (
