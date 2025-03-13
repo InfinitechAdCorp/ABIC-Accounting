@@ -377,7 +377,7 @@ export const checkCollections = async () => {
   const { records } = await getAll();
 
   records.forEach((record) => {
-    if (getCollectionStatus(record.end) == "Closed") {
+    if (getCollectionStatus(record.end) == "Expired") {
       ids.push(record.id);
     }
   });
@@ -389,7 +389,7 @@ export const checkCollections = async () => {
       },
     },
     data: {
-      status: "Closed",
+      status: "Expired",
     },
   });
 };

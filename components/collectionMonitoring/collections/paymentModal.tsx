@@ -19,9 +19,10 @@ import { MdPayments } from "react-icons/md";
 type Props = {
   action: (values: { id: string }) => Promise<ActionResponse>;
   id: string;
+  status: string;
 };
 
-const PaymentModal = ({ action, id }: Props) => {
+const PaymentModal = ({ action, id, status }: Props) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [submitting, setSubmitting] = useState(false);
 
@@ -49,6 +50,7 @@ const PaymentModal = ({ action, id }: Props) => {
         isIconOnly={true}
         title="Mark as Paid"
         onPress={onOpen}
+        isDisabled={status == "Expired" ? true : false}
       >
         <MdPayments size={14} />
       </Button>

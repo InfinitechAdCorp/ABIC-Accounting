@@ -169,7 +169,7 @@ export const getCollectionStatus = (ufDate: string | Date) => {
   const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
   const difference = differenceInDays(date, today);
 
-  let status = "Closed";
-  difference < 0 ? (status = "Closed") : (status = "Active");
+  let status = "Expired";
+  difference < 0 ? (status = "Expired") : (status = "Active");
   return status;
 }

@@ -39,7 +39,7 @@ const RenderCell = (
             cClients={dependencies.cClients}
           />
           <DestroyModal title="Collection" action={destroy} id={record.id} />
-          <PaymentModal action={markAsPaid} id={record.id} />
+          <PaymentModal action={markAsPaid} id={record.id} status={record.status} />
           <ViewPaymentsModal record={record} />
         </div>
       );
@@ -52,7 +52,7 @@ const RenderCell = (
       let color = "primary";
       if (value.includes("Remaining")) {
         color = "success";
-      } else if (value.includes("Past") || value == "Closed") {
+      } else if (value.includes("Past") || value == "Expired") {
         color = "danger";
       }
 
