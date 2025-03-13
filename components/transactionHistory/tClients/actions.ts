@@ -59,6 +59,8 @@ export const displayFormat = async (columns: Column[], records: TClient[]) => {
       name: "",
       transactions: "",
       starting_fund: "",
+      credit: "",
+      debit: "",
       running_balance: "",
     };
 
@@ -66,6 +68,7 @@ export const displayFormat = async (columns: Column[], records: TClient[]) => {
       const key = column.key;
       let value;
       const transactions = record.transactions;
+      const result = computeBalance(transactions || []);
 
       switch (key) {
         case "transactions":
@@ -74,10 +77,7 @@ export const displayFormat = async (columns: Column[], records: TClient[]) => {
         case "starting_fund":
           value = 0;
           const transaction = transactions?.find((transaction) => {
-            if (
-              transaction.status != "Cancelled" &&
-              transaction.status 
-            ) {
+            if (transaction.status != "Cancelled") {
               return transaction;
             }
           });
@@ -92,8 +92,13 @@ export const displayFormat = async (columns: Column[], records: TClient[]) => {
 
           value = formatNumber(value);
           break;
+        case "credit":
+          value = formatNumber(result.credit);
+          break;
+        case "debit":
+          value = formatNumber(result.debit);
+          break;
         case "running_balance":
-          const result = computeBalance(transactions || []);
           value = formatNumber(result.balance);
           break;
         default:

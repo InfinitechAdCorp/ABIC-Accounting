@@ -15,6 +15,8 @@ export type TClientDisplayFormat = {
   name: string;
   transactions: string;
   starting_fund: string;
+  credit: string;
+  debit: string;
   running_balance: string;
 };
 

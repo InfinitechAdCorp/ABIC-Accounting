@@ -22,6 +22,8 @@ const TClients = async () => {
     { key: "name", name: "NAME", sortable: true },
     { key: "transactions", name: "TRANSACTIONS", sortable: true },
     { key: "starting_fund", name: "STARTING FUND", sortable: true },
+    { key: "credit", name: "CREDIT", sortable: true },
+    { key: "debit", name: "DEBIT", sortable: true },
     { key: "running_balance", name: "RUNNING BALANCE", sortable: true },
     { key: "actions", name: "ACTIONS", sortable: false },
   ];
