@@ -22,42 +22,18 @@ datasource db {
 }
 
 model Account {
-  id           String        @id @default(cuid())
-  listings     Listing[]
-  transactions Transaction[]
-  pdc_sets     PDCSet[]
-  collections  Collection[]
-  name         String        @unique
-  th_access    Boolean
-  cm_access    Boolean
-  created_at   DateTime      @default(now())
-  updated_at   DateTime      @updatedAt
+  id                 String        @id @default(cuid())
+  transactions       Transaction[]
+  pdc_sets           PDCSet[]
+  listings           Listing[]
+  collections        Collection[]
+  name               String        @unique
+  listings_access    Boolean
+  collections_access Boolean
+  created_at         DateTime      @default(now())
+  updated_at         DateTime      @updatedAt
 
   @@map(name: "accounts")
-}
-
-model Listing {
-  id          String    @id @default(cuid())
-  account     Account?  @relation(fields: [account_id], references: [id], onDelete: Cascade)
-  account_id  String?
-  client      String
-  type        String
-  project     String
-  unit        String
-  res         DateTime  @db.Date
-  terms       String
-  specialist  String
-  manager     String
-  list_price  Decimal   @db.Decimal(15, 2)
-  total_price Decimal   @db.Decimal(15, 2)
-  status      String
-  source      String
-  extension   DateTime? @db.Date
-  closed      DateTime? @db.Date
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
-
-  @@map(name: "listings")
 }
 
 model TClient {
@@ -77,8 +53,8 @@ model Transaction {
   t_client       TClient? @relation(fields: [t_client_id], references: [id], onDelete: Cascade)
   t_client_id    String?
   date           DateTime @db.Date
-  voucher_number String?  
-  check_number   String?  
+  voucher_number String?
+  check_number   String?
   particulars    String   @db.Text
   type           String
   amount         Decimal  @db.Decimal(15, 2)
@@ -120,6 +96,30 @@ model PDC {
   @@map(name: "pdcs")
 }
 
+model Listing {
+  id          String    @id @default(cuid())
+  account     Account?  @relation(fields: [account_id], references: [id], onDelete: Cascade)
+  account_id  String?
+  client      String
+  type        String
+  project     String
+  unit        String
+  res         DateTime  @db.Date
+  terms       String
+  specialist  String
+  manager     String
+  list_price  Decimal   @db.Decimal(15, 2)
+  total_price Decimal   @db.Decimal(15, 2)
+  status      String
+  source      String
+  extension   DateTime? @db.Date
+  closed      DateTime? @db.Date
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  @@map(name: "listings")
+}
+
 model CClient {
   id          String       @id @default(cuid())
   collections Collection[]
@@ -154,7 +154,7 @@ model Collection {
 
 model AR {
   id         String   @id @default(cuid())
-  number     String   
+  number     String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -163,7 +163,7 @@ model AR {
 
 model BS {
   id         String   @id @default(cuid())
-  number     String   
+  number     String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 

@@ -27,8 +27,8 @@ const CreateModal = () => {
 
   const initialValues = {
     name: "",
-    th_access: false,
-    cm_access: false,
+    listings_access: false,
+    collections_access: false,
   };
 
   const onSubmit = async (
@@ -46,7 +46,10 @@ const CreateModal = () => {
     <>
       <Card className="py-16 mb-1" onPress={onOpen} isHoverable isPressable>
         <CardBody>
-          <div className="flex items-center justify-center h-[5rem]" title="Add Account">
+          <div
+            className="flex items-center justify-center h-[5rem]"
+            title="Add Account"
+          >
             <PlusIcon size={50} />
           </div>
         </CardBody>
@@ -87,13 +90,11 @@ const CreateModal = () => {
                       </Field>
 
                       <label>Select Access</label>
-                      <div className="flex gap-3">
-                        <Field name="th_access">
+                      <div className="flex gap-3 items-center justify-center">
+                        <Field name="listings_access">
                           {({ field, meta }: FieldProps) => (
                             <div>
-                              <Checkbox {...field}>
-                                Transaction History
-                              </Checkbox>
+                              <Checkbox {...field}>Listings</Checkbox>
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">
                                   {meta.error}
@@ -103,11 +104,11 @@ const CreateModal = () => {
                           )}
                         </Field>
 
-                        <Field name="cm_access">
+                        <Field name="collections_access">
                           {({ field, meta }: FieldProps) => (
                             <div>
                               <Checkbox {...field}>
-                                Collection Monitoring
+                                Collections
                               </Checkbox>
                               {meta.touched && meta.error && (
                                 <small className="text-red-500">

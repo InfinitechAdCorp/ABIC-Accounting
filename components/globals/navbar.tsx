@@ -62,16 +62,6 @@ const Navbar = () => {
                 </h3>
               </Link>
 
-              <Link href="/listings" className="text-center">
-                <h3
-                  className={`text-sm md:text-base text-white cursor-pointer ${
-                    isActive("/listings") ? "font-black" : "font-semibold"
-                  }`}
-                >
-                  Listings
-                </h3>
-              </Link>
-
               <Dropdown
                 classNames={{
                   content: "min-w-0",
@@ -119,7 +109,19 @@ const Navbar = () => {
                 </DropdownMenu>
               </Dropdown>
 
-              {record.cm_access && (
+              {record.listings_access && (
+                <Link href="/listings" className="text-center">
+                  <h3
+                    className={`text-sm md:text-base text-white cursor-pointer ${
+                      isActive("/listings") ? "font-black" : "font-semibold"
+                    }`}
+                  >
+                    Listings
+                  </h3>
+                </Link>
+              )}
+
+              {record.collections_access && (
                 <Dropdown
                   classNames={{
                     content: "min-w-0",

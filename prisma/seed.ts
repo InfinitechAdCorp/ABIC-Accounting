@@ -5,18 +5,18 @@ const prisma = new PrismaClient();
 const accounts: Prisma.AccountCreateInput[] = [
   {
     name: "SCB 443",
-    th_access: true,
-    cm_access: true,
+    listings_access: false,
+    collections_access: true,
   },
   {
     name: "SCB 483",
-    th_access: true,
-    cm_access: false,
+    listings_access: true,
+    collections_access: false,
   },
   {
     name: "SCB 202",
-    th_access: true,
-    cm_access: false,
+    listings_access: false,
+    collections_access: false,
   },
 ];
 

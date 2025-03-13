@@ -83,8 +83,8 @@ export const create = async (values: Prisma.AccountCreateInput) => {
     await prisma.account.create({
       data: {
         name: values.name,
-        th_access: values.th_access,
-        cm_access: values.cm_access,
+        collections_access: values.collections_access,
+        listings_access: values.listings_access,
       },
     });
   } catch (error) {
