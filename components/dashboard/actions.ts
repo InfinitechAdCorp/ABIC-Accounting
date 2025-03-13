@@ -5,10 +5,7 @@ import { cookies } from "next/headers";
 import { getAll as getAllTClients } from "@/components/transactionHistory/tClients/actions";
 import { computeBalance } from "@/components/globals/utils";
 import { ChartDatum } from "@/components/globals/types";
-import {
-  getMonthlyCollections,
-  getMonthlyTransactions,
-} from "@prisma/client/sql";
+import { getMonthlyTransactions } from "@prisma/client/sql";
 
 export const getCounts = async () => {
   const session = await cookies();

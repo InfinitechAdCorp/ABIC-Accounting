@@ -243,8 +243,7 @@ export const update = async (values: CollectionCreateInput) => {
   };
 
   let status = "Active";
-  const days = daysFromToday(values.end);
-  days < 0 ? (status = "Expired") : (status = "Active");
+  daysFromToday(values.end) < 0 ? (status = "Expired") : (status = "Active");
 
   try {
     await prisma.collection.update({
@@ -376,7 +375,7 @@ export const markAsPaid = async (values: { id: string }) => {
   return response;
 };
 
-export const checkCollections = async () => {
+export const checkRecords = async () => {
   const ids: string[] = [];
 
   const { records } = await getAll();

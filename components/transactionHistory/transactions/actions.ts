@@ -194,8 +194,9 @@ export const create = async (values: TransactionCreateInput) => {
     };
 
     let status = "Active";
-    const days = daysFromToday(values.date);
-    days <= 0 ? (status = "Active") : (status = "Pending");
+    daysFromToday(values.date) <= 0
+      ? (status = "Active")
+      : (status = "Pending");
 
     const data: Prisma.TransactionCreateInput = {
       account: { connect: { id: accountID } },
@@ -289,8 +290,9 @@ export const update = async (values: TransactionCreateInput) => {
 
     let status = values.status;
     if (status != "Cancelled") {
-      const days = daysFromToday(values.date);
-      days <= 0 ? (status = "Active") : (status = "Pending");
+      daysFromToday(values.date) <= 0
+        ? (status = "Active")
+        : (status = "Pending");
     }
 
     const data: Prisma.TransactionCreateInput = {
@@ -425,8 +427,9 @@ export const setStatus = async (values: { id: string; status: string }) => {
         id: values.id,
       },
     });
-    const days = daysFromToday(record!.date);
-    days <= 0 ? (status = "Active") : (status = "Pending");
+    daysFromToday(record!.date) <= 0
+      ? (status = "Active")
+      : (status = "Pending");
   }
 
   try {
@@ -453,7 +456,7 @@ export const setStatus = async (values: { id: string; status: string }) => {
   return response;
 };
 
-export const checkTransactions = async () => {
+export const checkRecords = async () => {
   const ids: string[] = [];
 
   const { records } = await getAll();

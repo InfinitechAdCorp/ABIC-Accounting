@@ -2,7 +2,7 @@ import React from "react";
 import {
   getAll,
   displayFormat,
-  checkTransactions,
+  checkRecords,
   checkPDCs,
 } from "@/components/transactionHistory/transactions/actions";
 import { getAll as getTClients } from "@/components/transactionHistory/tClients/actions";
@@ -18,7 +18,7 @@ import {
 import { Tooltip } from "@heroui/react";
 
 const Transactions = async () => {
-  await checkTransactions();
+  await checkRecords();
   await checkPDCs();
 
   const { records: ufRecords } = await getAll();
