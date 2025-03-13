@@ -121,10 +121,10 @@ export const getAll = async () => {
   const session = await cookies();
   const accountID = session.get("accountID")?.value;
 
-  let records;
+  let ufRecords;
 
   try {
-    records = await prisma.tClient.findMany({
+    ufRecords = await prisma.tClient.findMany({
       include: {
         transactions: {
           where: { account_id: accountID },
@@ -144,7 +144,12 @@ export const getAll = async () => {
     return response;
   }
 
-  records = await format(records || []);
+  const fRecords = await format(ufRecords || []);
+
+  const records = fRecords.filter((fRecord) => {
+    return (fRecord.transactions || []).length > 0;
+  });
+
   const response = {
     code: 200,
     message: `Fetched ${model}s`,

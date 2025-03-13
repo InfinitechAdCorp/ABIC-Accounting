@@ -46,7 +46,7 @@ const Navbar = () => {
         <div className="flex justify-evenly sm:justify-start gap-3 items-center">
           {record && (
             <>
-              <Link href="/dashboard" className="text-center">
+              <Link href="/dashboard" className="text-center mr-3">
                 <h3 className="text-base md:text-lg text-white cursor-pointer font-semibold">
                   {record?.name}
                 </h3>
