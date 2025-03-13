@@ -28,9 +28,9 @@ const Dashboard = async () => {
           </CardBody>
         </Card>
 
-        <Card className="m-5 md:my-7 md:mx-20 p-3">
+        <Card className="m-5 md:my-7 md:mx-52 p-3">
           <CardBody>
-            <div className="grid grid-cols-1 md:grid-cols-4 px-5 gap-3 mb-5">
+            <div className="grid grid-cols-1 md:grid-cols-4 px-5 gap-3 mb-3">
               {account.th_access && (
                 <>
                   <CountCard
@@ -61,7 +61,7 @@ const Dashboard = async () => {
               )}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 px-5 gap-3 mb-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 px-5 gap-3">
               <Card>
                 <CardBody className="pt-10">
                   <Barchart
