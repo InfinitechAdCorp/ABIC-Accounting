@@ -48,11 +48,11 @@ const RenderCell = (
 
       const value =
         record.display_format![column as keyof CollectionDisplayFormat];
-      let color = "primary";
 
+      let color = "primary";
       if (value.includes("Remaining")) {
         color = "success";
-      } else if (value.includes("Past")) {
+      } else if (value.includes("Past") || value == "Closed") {
         color = "danger";
       }
 

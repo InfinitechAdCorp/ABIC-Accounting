@@ -526,6 +526,7 @@ const collections: Prisma.CollectionCreateInput[] = [
     owner_income: null,
     abic_income: null,
     due: "2024-12-05T00:00:00.000Z",
+    status: "Active",
   },
   {
     account: {
@@ -550,6 +551,7 @@ const collections: Prisma.CollectionCreateInput[] = [
     owner_income: null,
     abic_income: null,
     due: "2024-11-15T00:00:00.000Z",
+    status: "Active",
   },
   {
     account: {
@@ -574,6 +576,7 @@ const collections: Prisma.CollectionCreateInput[] = [
     owner_income: null,
     abic_income: null,
     due: "2024-11-06T00:00:00.000Z",
+    status: "Active",
   },
   {
     account: {
@@ -598,6 +601,7 @@ const collections: Prisma.CollectionCreateInput[] = [
     owner_income: null,
     abic_income: null,
     due: "2024-10-15T00:00:00.000Z",
+    status: "Active",
   },
   {
     account: {
@@ -622,6 +626,7 @@ const collections: Prisma.CollectionCreateInput[] = [
     owner_income: null,
     abic_income: null,
     due: "2024-11-03T00:00:00.000Z",
+    status: "Active",
   },
 ];
 

@@ -154,8 +154,8 @@ export const filterRecords = (records: any[], key: string, value: string) => {
   return filteredRecords;
 };
 
-export const getTransactionStatus = (string: string | Date) => {
-  const date = new Date(new Date(string).setUTCHours(0, 0, 0, 0));
+export const getTransactionStatus = (ufDate: string | Date) => {
+  const date = new Date(new Date(ufDate).setUTCHours(0, 0, 0, 0));
   const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
   const difference = differenceInDays(date, today);
 
@@ -163,3 +163,13 @@ export const getTransactionStatus = (string: string | Date) => {
   difference <= 0 ? (status = "Active") : (status = "Pending");
   return status;
 };
+
+export const getCollectionStatus = (ufDate: string | Date) => {
+  const date = new Date(new Date(ufDate).setUTCHours(0, 0, 0, 0));
+  const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
+  const difference = differenceInDays(date, today);
+
+  let status = "Closed";
+  difference < 0 ? (status = "Closed") : (status = "Active");
+  return status;
+}

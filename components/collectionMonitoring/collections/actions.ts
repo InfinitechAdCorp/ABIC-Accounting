@@ -19,7 +19,12 @@ import {
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { ActionResponse, Destroy } from "@/components/globals/types";
-import { formatDate, formatNumber, formatErrors } from "@/components/globals/utils";
+import {
+  formatDate,
+  formatNumber,
+  formatErrors,
+  getCollectionStatus,
+} from "@/components/globals/utils";
 import { differenceInDays, differenceInMonths } from "date-fns";
 
 const model = "Collection";
@@ -82,15 +87,21 @@ export const displayFormat = async (
           value = formatNumber(record[key as keyof Collection] as number);
           break;
         case "status":
-          const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
-          const diff = differenceInDays(record.due.setUTCHours(0, 0, 0, 0), today);
+          value = record[key as keyof Collection];
+          if (value == "Active") {
+            const today = new Date(new Date().setUTCHours(0, 0, 0, 0));
+            const diff = differenceInDays(
+              record.due.setUTCHours(0, 0, 0, 0),
+              today
+            );
 
-          if (diff > 0) {
-            value = `${diff} Days Remaining`;
-          } else if (diff < 0) {
-            value = `${diff} Days Past Due`.replace("-", "");
-          } else if (diff == 0) {
-            value = "Today";
+            if (diff > 0) {
+              value = `${diff} Days Remaining`;
+            } else if (diff < 0) {
+              value = `${diff} Days Past Due`.replace("-", "");
+            } else if (diff == 0) {
+              value = "Today";
+            }
           }
           break;
         case "payments":
@@ -191,6 +202,7 @@ export const create = async (values: CollectionCreateInput) => {
         owner_income: values.owner_income,
         abic_income: values.abic_income,
         due: new Date(new Date(values.due).setUTCHours(0, 0, 0, 0)),
+        status: "Active",
       },
     });
   } catch (error) {
@@ -357,4 +369,27 @@ export const markAsPaid = async (values: { id: string }) => {
     message: "Successfully Made Payment",
   };
   return response;
+};
+
+export const checkCollections = async () => {
+  const ids: string[] = [];
+
+  const { records } = await getAll();
+
+  records.forEach((record) => {
+    if (getCollectionStatus(record.end) == "Closed") {
+      ids.push(record.id);
+    }
+  });
+
+  await prisma.collection.updateMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+    data: {
+      status: "Closed",
+    },
+  });
 };

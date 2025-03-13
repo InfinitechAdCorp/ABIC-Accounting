@@ -146,6 +146,7 @@ model Collection {
   owner_income Decimal? @db.Decimal(15, 2)
   abic_income  Decimal? @db.Decimal(15, 2)
   due          DateTime @db.Date
+  status       String
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
 

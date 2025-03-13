@@ -2,6 +2,7 @@ import React from "react";
 import {
   getAll,
   displayFormat,
+  checkCollections,
 } from "@/components/collectionMonitoring/collections/actions";
 import { getAll as getCClients } from "@/components/collectionMonitoring/cClients/actions";
 import Navbar from "@/components/globals/navbar";
@@ -10,6 +11,8 @@ import RenderBody from "@/components/collectionMonitoring/collections/renderBody
 import CreateModal from "@/components/collectionMonitoring/collections/createModal";
 
 const Collections = async () => {
+  await checkCollections();
+
   const { records: ufRecords } = await getAll();
   const { records: cClients } = await getCClients();
 
