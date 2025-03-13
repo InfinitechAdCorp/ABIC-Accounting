@@ -5,6 +5,7 @@ import { login as loginSchema } from "@/components/globals/schemas";
 import { formatErrors } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { cookies } from "next/headers";
+import prisma from "@/lib/db";
 
 export const login = async (values: Login) => {
   const schema = loginSchema;
@@ -12,7 +13,7 @@ export const login = async (values: Login) => {
   try {
     await schema.validate(values, { abortEarly: false });
   } catch (ufErrors) {
-    const errors = formatErrors(ufErrors as Yup.ValidationError)
+    const errors = formatErrors(ufErrors as Yup.ValidationError);
 
     const response = {
       code: 429,
@@ -40,8 +41,17 @@ export const login = async (values: Login) => {
 };
 
 export const set = async (id: string) => {
+  const record = await prisma.account.findUnique({
+    where: { id: id },
+  });
+
   const session = await cookies();
-  session.set("accountID", id);
+  session.set("id", id);
+  session.set("name", record!.name);
+  session.set("listingsAccess", `${record!.listings_access}`);
+  session.set("collectionsAccess", `${record!.collections_access}`);
+
+  console.log(session.getAll());
 
   const response = {
     code: 200,
@@ -53,7 +63,7 @@ export const set = async (id: string) => {
 
 export const unset = async () => {
   const session = await cookies();
-  session.delete("accountID");
+  session.delete("id");
 
   const response = {
     code: 200,
@@ -66,7 +76,13 @@ export const unset = async () => {
 export const logout = async () => {
   const session = await cookies();
 
-  const keys = ["isLoggedIn", "accountID"];
+  const keys = [
+    "isLoggedIn",
+    "id",
+    "name",
+    "listingsAccess",
+    "collectionsAccess",
+  ];
   keys.forEach((key) => {
     session.delete(key);
   });

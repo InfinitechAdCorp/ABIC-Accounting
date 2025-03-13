@@ -117,7 +117,7 @@ export const displayFormat = async (
 
 export const getAll = async () => {
   const session = await cookies();
-  const accountID = session.get("accountID")?.value;
+  const accountID = session.get("id")?.value;
 
   let records;
 
@@ -159,7 +159,7 @@ export const getAll = async () => {
 
 export const create = async (values: TransactionCreateInput) => {
   const session = await cookies();
-  const accountID = session.get("accountID")?.value;
+  const accountID = session.get("id")?.value;
 
   const schema = createSchema;
 
@@ -239,7 +239,7 @@ export const create = async (values: TransactionCreateInput) => {
 
 export const update = async (values: TransactionCreateInput) => {
   const session = await cookies();
-  const accountID = session.get("accountID")?.value;
+  const accountID = session.get("id")?.value;
 
   const schema = updateSchema;
 

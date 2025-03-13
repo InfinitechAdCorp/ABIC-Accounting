@@ -119,7 +119,7 @@ export const displayFormat = async (columns: Column[], records: TClient[]) => {
 
 export const getAll = async () => {
   const session = await cookies();
-  const accountID = session.get("accountID")?.value;
+  const accountID = session.get("id")?.value;
 
   let ufRecords;
 
@@ -202,7 +202,7 @@ export const get = async (id: string) => {
 
 export const create = async (values: Prisma.TClientCreateInput) => {
   const session = await cookies();
-  const accountID = session.get("accountID")?.value;
+  const accountID = session.get("id")?.value;
 
   const schema = createSchema;
 
@@ -236,9 +236,6 @@ export const create = async (values: Prisma.TClientCreateInput) => {
 };
 
 export const update = async (values: Prisma.TClientCreateInput) => {
-  const session = await cookies();
-  const accountID = session.get("accountID")?.value;
-
   const schema = updateSchema;
 
   try {

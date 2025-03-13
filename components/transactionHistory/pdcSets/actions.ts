@@ -82,7 +82,7 @@ export const displayFormat = async (columns: Column[], records: PDCSet[]) => {
 
 export const getAll = async () => {
   const session = await cookies();
-  const accountID = session.get("accountID")?.value || "";
+  const accountID = session.get("id")?.value || "";
 
   let records;
 
@@ -118,7 +118,7 @@ export const getAll = async () => {
 
 export const create = async (values: Prisma.PDCSetCreateInput) => {
   const session = await cookies();
-  const accountID = session.get("accountID")?.value || "";
+  const accountID = session.get("id")?.value || "";
 
   const schema = createSchema;
 

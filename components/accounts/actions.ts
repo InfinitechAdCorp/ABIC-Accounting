@@ -36,7 +36,7 @@ export const getAll = async () => {
 
 export const get = async () => {
   const session = await cookies();
-  const id = session.get("accountID")?.value;
+  const id = session.get("id")?.value;
 
   let record;
 

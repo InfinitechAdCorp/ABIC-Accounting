@@ -9,7 +9,7 @@ import { getMonthlyTransactions } from "@prisma/client/sql";
 
 export const getCounts = async () => {
   const session = await cookies();
-  const accountID = session.get("accountID")?.value;
+  const accountID = session.get("id")?.value;
 
   const counts = {
     tClients: 0,
@@ -60,7 +60,7 @@ export const getCounts = async () => {
 
 export const getCharts = async () => {
   const session = await cookies();
-  const accountID = session.get("accountID")?.value;
+  const accountID = session.get("id")?.value;
 
   const clientTotals: ChartDatum[] = [];
 

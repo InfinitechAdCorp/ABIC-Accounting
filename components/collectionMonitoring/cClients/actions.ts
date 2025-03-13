@@ -84,7 +84,7 @@ export const displayFormat = async (columns: Column[], records: CClient[]) => {
 
 export const getAll = async () => {
   const session = await cookies();
-  const accountID = session.get("accountID")?.value || "";
+  const accountID = session.get("id")?.value || "";
 
   let records;
 
@@ -151,7 +151,7 @@ export const get = async (id: string) => {
 
 export const create = async (values: Prisma.CClientCreateInput) => {
   const session = await cookies();
-  const accountID = session.get("accountID")?.value || "";
+  const accountID = session.get("id")?.value || "";
 
   const schema = createSchema;
 
@@ -190,7 +190,7 @@ export const create = async (values: Prisma.CClientCreateInput) => {
 
 export const update = async (values: Prisma.CClientCreateInput) => {
   const session = await cookies();
-  const accountID = session.get("accountID")?.value || "";
+  const accountID = session.get("id")?.value || "";
 
   const schema = updateSchema;
 
