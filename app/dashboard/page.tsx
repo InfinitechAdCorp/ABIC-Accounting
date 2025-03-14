@@ -6,14 +6,16 @@ import { GrTransaction } from "react-icons/gr";
 import { FaUsers, FaReceipt } from "react-icons/fa6";
 import { Card, CardBody } from "@heroui/react";
 import Barchart from "@/components/dashboard/barchart";
+import { get as getCookies } from "@/components/globals/auth";
 
 const Dashboard = async () => {
+  const { record: cookies } = await getCookies();
   const { counts } = await getCounts();
   const { charts } = await getCharts();
 
   return (
     <>
-      <Navbar />
+      <Navbar record={cookies} />
 
       <div className="max-h-[93vh]">
         <Card radius="none" className="py-[0.10rem] px-2">

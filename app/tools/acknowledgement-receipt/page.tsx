@@ -1,13 +1,12 @@
 import React from "react";
 import Navbar from "@/components/globals/navbar";
-import { get as getAccount } from "@/components/accounts/actions";
 import AcknowledgementReceiptForm from "@/components/tools/acknowledgementReceipt/acknowledgementReceiptForm";
 import { getAllARs } from "@/components/tools/actions";
-import { retry } from "@/components/globals/serverUtils";
 import { Card, CardBody } from "@heroui/react";
+import { get as getCookies } from "@/components/globals/auth";
 
 const AcknowledgmentReceipt = async () => {
-  const { record: account } = await retry(getAccount);
+  const { record: cookies } = await getCookies();
   const { records } = await getAllARs();
 
   const setNumber = (ar: any) => {
@@ -24,7 +23,7 @@ const AcknowledgmentReceipt = async () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar record={cookies} />
 
       <Card radius="none" className="py-[0.10rem] px-2">
         <CardBody>

@@ -16,8 +16,11 @@ import {
   setVoucherNumber,
 } from "@/components/globals/utils";
 import { Tooltip } from "@heroui/react";
+import { get as getCookies } from "@/components/globals/auth";
 
 const Transactions = async () => {
+  const { record: cookies } = await getCookies();
+
   await checkRecords();
   await checkPDCs();
 
@@ -74,7 +77,7 @@ const Transactions = async () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar record={cookies} />
 
       <div className="max-h-[93vh]">
         <DataTable

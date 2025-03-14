@@ -7,8 +7,10 @@ import {
   displayFormat,
 } from "@/components/transactionHistory/pdcSets/actions";
 import RenderBody from "@/components/transactionHistory/pdcSets/renderBody";
+import { get as getCookies } from "@/components/globals/auth";
 
 const PDCs = async () => {
+    const { record: cookies } = await getCookies();
   const { records: ufRecords } = await getAll();
 
   const model = "PDC Sets";
@@ -34,7 +36,7 @@ const PDCs = async () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar record={cookies} />
 
       <div className="max-h-[93vh]">
         <DataTable

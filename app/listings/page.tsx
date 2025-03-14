@@ -4,8 +4,10 @@ import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/datatable/dataTable";
 import CreateModal from "@/components/listings/createModal";
 import RenderBody from "@/components/listings/renderBody";
+import { get as getCookies } from "@/components/globals/auth";
 
 const Listings = async () => {
+  const { record: cookies } = await getCookies();
   const { records: ufRecords } = await getAll();
 
   const model = "Listings";
@@ -39,7 +41,7 @@ const Listings = async () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar record={cookies} />
 
       <div className="max-h-[93vh]">
         <DataTable

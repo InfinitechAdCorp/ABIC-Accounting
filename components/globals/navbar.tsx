@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import {
   Dropdown,
@@ -11,31 +11,22 @@ import {
 import { useRouter, usePathname } from "next/navigation";
 import LogoutBtn from "@/components/globals/logoutBtn";
 import AccountsBtn from "@/components/globals/accountsBtn";
-import { Account as Record } from "@prisma/client";
-import { get } from "@/components/accounts/actions";
 
-const Navbar = () => {
-  const [record, setRecord] = useState<Record>();
+type Props = {
+  record: {
+    isLoggedIn: boolean;
+    id: string;
+    name: string;
+    listingsAccess: boolean;
+    collectionsAccess: boolean;
+  };
+};
 
+const Navbar = ({ record }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
 
   const isActive = (url: string) => pathname.startsWith(url);
-
-  useEffect(() => {
-    const fetchRecord = async () => {
-      const response = await get();
-      if (response.record) {
-        setRecord(response.record);
-      }
-    };
-
-    setTimeout(() => {
-      if (!record) {
-        fetchRecord();
-      }
-    }, 500);
-  }, [record]);
 
   return (
     <>
@@ -48,7 +39,7 @@ const Navbar = () => {
             <>
               <Link href="/dashboard" className="text-center mr-3">
                 <h3 className="text-base md:text-lg text-white cursor-pointer font-semibold">
-                  {record?.name}
+                  {record.name}
                 </h3>
               </Link>
 
@@ -109,7 +100,7 @@ const Navbar = () => {
                 </DropdownMenu>
               </Dropdown>
 
-              {record.listings_access && (
+              {record.listingsAccess && (
                 <Link href="/listings" className="text-center">
                   <h3
                     className={`text-sm md:text-base text-white cursor-pointer ${
@@ -121,7 +112,7 @@ const Navbar = () => {
                 </Link>
               )}
 
-              {record.collections_access && (
+              {record.collectionsAccess && (
                 <Dropdown
                   classNames={{
                     content: "min-w-0",

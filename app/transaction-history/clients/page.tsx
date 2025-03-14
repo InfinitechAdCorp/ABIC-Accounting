@@ -9,8 +9,10 @@ import DataTable from "@/components/globals/datatable/dataTable";
 import RenderBody from "@/components/transactionHistory/tClients/renderBody";
 import { computeBalance, formatNumber } from "@/components/globals/utils";
 import { Tooltip } from "@heroui/react";
+import { get as getCookies } from "@/components/globals/auth";
 
 const TClients = async () => {
+  const { record: cookies } = await getCookies();
   const { records: ufRecords } = await getAll();
   const { records: transactions } = await getTransactions();
 
@@ -49,7 +51,7 @@ const TClients = async () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar record={cookies} />
 
       <div className="max-h-[93vh]">
         <DataTable

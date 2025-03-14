@@ -8,12 +8,14 @@ import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/datatable/dataTable";
 import RenderBody from "@/components/collectionMonitoring/collections/renderBody";
 import CreateModal from "@/components/collectionMonitoring/collections/createModal";
+import { get as getCookies } from "@/components/globals/auth";
 
 const TransactionClient = async ({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) => {
+  const { record: cookies } = await getCookies();
   const { record } = await get((await params).id);
   const { records: cClients } = await getCClients();
 
@@ -56,7 +58,7 @@ const TransactionClient = async ({
 
   return (
     <>
-      <Navbar />
+      <Navbar record={cookies} />
 
       <div className="max-h-[93vh]">
         <DataTable

@@ -9,8 +9,11 @@ import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/collectionMonitoring/collections/dataTable";
 import RenderBody from "@/components/collectionMonitoring/collections/renderBody";
 import CreateModal from "@/components/collectionMonitoring/collections/createModal";
+import { get as getCookies } from "@/components/globals/auth";
 
 const Collections = async () => {
+  const { record: cookies } = await getCookies();
+  
   await checkRecords();
 
   const { records: ufRecords } = await getAll();
@@ -58,7 +61,7 @@ const Collections = async () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar record={cookies} />
 
       <div className="max-h-[93vh]">
         <DataTable

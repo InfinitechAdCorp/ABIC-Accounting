@@ -6,8 +6,10 @@ import {
 import Navbar from "@/components/globals/navbar";
 import DataTable from "@/components/globals/datatable/dataTable";
 import RenderBody from "@/components/collectionMonitoring/cClients/renderBody";
+import { get as getCookies } from "@/components/globals/auth";
 
 const CClients = async () => {
+  const { record: cookies } = await getCookies();
   const { records: ufRecords } = await getAll();
 
   const model = "Clients";
@@ -22,7 +24,7 @@ const CClients = async () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar record={cookies} />
 
       <div className="max-h-[93vh]">
         <DataTable

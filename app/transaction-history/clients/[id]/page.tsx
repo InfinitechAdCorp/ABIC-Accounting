@@ -17,8 +17,10 @@ import {
   setVoucherNumber,
 } from "@/components/globals/utils";
 import { Tooltip } from "@heroui/react";
+import { get as getCookies } from "@/components/globals/auth";
 
 const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
+  const { record: cookies } = await getCookies();
   const { record } = await get((await params).id);
   const { records: tClients } = await getTClients();
   const { records: transactions } = await getTransactions();
@@ -72,7 +74,7 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
 
   return (
     <>
-      <Navbar />
+      <Navbar record={cookies} />
 
       <div className="max-h-[93vh]">
         <DataTable

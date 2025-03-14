@@ -40,6 +40,26 @@ export const login = async (values: Login) => {
   return response;
 };
 
+export const get = async () => {
+  const session = await cookies();
+
+  const record = {
+    isLoggedIn: session.get("isLoggedIn")!.value === "true",
+    id: session.get("id")!.value,
+    name: session.get("name")!.value,
+    listingsAccess: session.get("listingsAccess")!.value == "true",
+    collectionsAccess: session.get("collectionsAccess")!.value == "true",
+  };
+
+  const response = {
+    code: 200,
+    message: "Fetched Cookies",
+    record: record,
+  };
+
+  return response;
+};
+
 export const set = async (id: string) => {
   const record = await prisma.account.findUnique({
     where: { id: id },
