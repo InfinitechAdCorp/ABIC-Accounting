@@ -8,13 +8,13 @@ import {
   PDCSetWithPDCs,
 } from "@/components/transactionHistory/pdcSets/types";
 import { eachMonthOfInterval, setDate } from "date-fns";
-import { formatDate, formatErrors } from "@/components/globals/utils";
+import { formatDate, formatErrors, formatNumber } from "@/components/globals/utils";
 import * as Yup from "yup";
 import { create as createSchema } from "@/components/transactionHistory/pdcSets/schemas";
 import { revalidatePath } from "next/cache";
 import { Column, Destroy, ActionResponse } from "@/components/globals/types";
 import { destroy as destroySchema } from "@/components/globals/schemas";
-import { Prisma, Transaction } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 const model = "PDC Set";
 const url = "/transaction-history/pdc-sets";
@@ -63,6 +63,7 @@ export const displayFormat = async (columns: Column[], records: PDCSet[]) => {
           break;
         case "total":
           value = record.amount * (pdcs || 0);
+          value = formatNumber(value)
           break;
         default:
           value = record[key as keyof PDCSet];

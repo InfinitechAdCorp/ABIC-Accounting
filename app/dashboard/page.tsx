@@ -26,9 +26,9 @@ const Dashboard = async () => {
           </CardBody>
         </Card>
 
-        <Card className="m-5 md:my-7 md:mx-52 p-3">
+        <Card className="my-7 mx-3 md:mx-16 lg:mx-36 xl:mx-28 2xl:mx-64 p-3">
           <CardBody>
-            <div className="grid grid-cols-1 md:grid-cols-4 px-5 gap-3 mb-3">
+            <div className="grid grid-cols-2 xl:grid-cols-4 px-1 md:px-5 gap-3 mb-3">
               <CountCard
                 icon={<FaUsers size={56} />}
                 model="Clients"
@@ -55,9 +55,9 @@ const Dashboard = async () => {
               ></CountCard>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 px-5 gap-3">
+            <div className="grid grid-cols-1 xl:grid-cols-2 px-1 md:px-5 gap-3">
               <Card>
-                <CardBody className="pt-10">
+                <CardBody className="pt-5 md:pt-10">
                   <Barchart
                     title="Monthly Transactions"
                     data={charts.monthlyTransactions}
@@ -66,7 +66,7 @@ const Dashboard = async () => {
               </Card>
 
               <Card>
-                <CardBody className="pt-10">
+                <CardBody className="pt-5 md:pt-10">
                   <Barchart title="Client Totals" data={charts.clientTotals} />
                 </CardBody>
               </Card>
