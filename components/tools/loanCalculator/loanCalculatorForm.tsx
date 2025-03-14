@@ -18,10 +18,9 @@ const LoanCalculatorForm = () => {
     years: 0,
     months: 0,
     rate: 0,
+    monthly: 0,
+    total: 0,
   });
-
-  const [monthly, setMonthly] = useState(0);
-  const [total, setTotal] = useState(0);
 
   const setter = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -40,8 +39,7 @@ const LoanCalculatorForm = () => {
       ((1 + monthlyRate) ** totalMonths - 1);
     const totalPayment = monthlyPayment * totalMonths;
 
-    setMonthly(monthlyPayment);
-    setTotal(totalPayment);
+    setValues({ ...values, monthly: monthlyPayment, total: totalPayment });
   }, [values.amount, values.years, values.months, values.rate]);
 
   const isValid = values.amount != 0 && values.months != 0 && values.rate != 0;
@@ -141,10 +139,10 @@ const LoanCalculatorForm = () => {
                 </h3>
                 <div className="text-white">
                   <h3>
-                    Monthly Payment: <strong>{formatNumber(monthly)}</strong>
+                    Monthly Payment: <strong>{formatNumber(values.monthly)}</strong>
                   </h3>
                   <h3>
-                    Total Loan Amount: <strong>{formatNumber(total)}</strong>
+                    Total Loan Amount: <strong>{formatNumber(values.total)}</strong>
                   </h3>
                 </div>
               </div>
