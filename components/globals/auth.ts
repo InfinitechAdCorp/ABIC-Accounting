@@ -51,8 +51,6 @@ export const set = async (id: string) => {
   session.set("listingsAccess", `${record!.listings_access}`);
   session.set("collectionsAccess", `${record!.collections_access}`);
 
-  console.log(session.getAll());
-
   const response = {
     code: 200,
     message: "Account Set",

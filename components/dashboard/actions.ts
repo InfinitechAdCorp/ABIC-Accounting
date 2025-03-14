@@ -62,21 +62,23 @@ export const getCharts = async () => {
   const session = await cookies();
   const accountID = session.get("id")?.value;
 
-  const clientTotals: ChartDatum[] = [];
+  const chartData: ChartDatum[] = [];
 
   const { records: clients } = await getAllTClients();
   clients.forEach((client) => {
     const result = computeBalance(client.transactions || []);
-    const clientTotal = {
+    const chartDatum = {
       x: client.name,
       y: result.balance,
     };
-    clientTotals.push(clientTotal);
+    chartData.push(chartDatum);
   });
 
-  clientTotals.sort((a, b) => {
+  chartData.sort((a, b) => {
     return a.y - b.y;
   });
+
+  const clientTotals = chartData.slice(0, 5);
 
   const today = new Date();
   const year = today.getFullYear();
