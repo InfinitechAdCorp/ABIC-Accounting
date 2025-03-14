@@ -17,7 +17,7 @@ const Dashboard = async () => {
     <>
       <Navbar record={cookies} />
 
-      <div className="max-h-[93vh]">
+      <div className="max-h-screen">
         <Card radius="none" className="py-[0.10rem] px-2">
           <CardBody>
             <div className="flex justify-between items-center">

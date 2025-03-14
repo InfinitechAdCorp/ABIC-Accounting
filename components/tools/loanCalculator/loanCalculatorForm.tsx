@@ -13,28 +13,38 @@ import {
 import { formatNumber } from "@/components/globals/utils";
 
 const LoanCalculatorForm = () => {
-  const [amount, setAmount] = useState(0);
-  const [years, setYears] = useState(0);
-  const [months, setMonths] = useState(0);
-  const [rate, setRate] = useState(0);
+  const [values, setValues] = useState({
+    amount: 0,
+    years: 0,
+    months: 0,
+    rate: 0,
+  });
 
   const [monthly, setMonthly] = useState(0);
   const [total, setTotal] = useState(0);
 
+  const setter = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const key = e.target.name;
+    const value = Number(e.target.value);
+    setValues({ ...values, [key]: value });
+  };
+
   useEffect(() => {
-    const totalMonths = years * 12 + months;
-    const monthlyRate = rate / 100 / 12;
+    const totalMonths = values.years * 12 + values.months;
+    const monthlyRate = values.rate / 100 / 12;
 
     const monthlyPayment =
-      (amount * (monthlyRate * (1 + monthlyRate) ** totalMonths)) /
+      (values.amount * (monthlyRate * (1 + monthlyRate) ** totalMonths)) /
       ((1 + monthlyRate) ** totalMonths - 1);
     const totalPayment = monthlyPayment * totalMonths;
 
     setMonthly(monthlyPayment);
     setTotal(totalPayment);
-  }, [amount, years, months, rate]);
+  }, [values.amount, values.years, values.months, values.rate]);
 
-  const isValid = amount != 0 && months != 0 && rate != 0;
+  const isValid = values.amount != 0 && values.months != 0 && values.rate != 0;
 
   return (
     <>
@@ -58,6 +68,7 @@ const LoanCalculatorForm = () => {
 
         <CardBody>
           <Input
+            name="amount"
             className="mb-3"
             type="number"
             size="md"
@@ -65,23 +76,18 @@ const LoanCalculatorForm = () => {
             label="Amount"
             labelPlacement="outside"
             placeholder="Enter Amount"
-            onChange={(e) => {
-              const value = Number(e.target.value);
-              setAmount(value);
-            }}
+            onChange={setter}
           />
 
           <div className="grid grid-cols-2 gap-3 mb-3">
             <Select
+              name="years"
               size="md"
               variant="bordered"
               label="Years"
               labelPlacement="outside"
               placeholder="Select Years"
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                setYears(value);
-              }}
+              onChange={setter}
             >
               {Array.from({ length: 26 }).map((_, index) => (
                 <SelectItem
@@ -94,15 +100,13 @@ const LoanCalculatorForm = () => {
             </Select>
 
             <Select
+              name="months"
               size="md"
               variant="bordered"
               label="Months"
               labelPlacement="outside"
               placeholder="Select Months"
-              onChange={(e) => {
-                const value = Number(e.target.value);
-                setMonths(value);
-              }}
+              onChange={setter}
             >
               {Array.from({ length: 12 }).map((_, index) => (
                 <SelectItem
@@ -116,6 +120,7 @@ const LoanCalculatorForm = () => {
           </div>
 
           <Input
+            name="rate"
             className="mb-3"
             type="number"
             size="md"
@@ -123,10 +128,7 @@ const LoanCalculatorForm = () => {
             label="Interest Rate"
             labelPlacement="outside"
             placeholder="Enter Interest Rate"
-            onChange={(e) => {
-              const value = Number(e.target.value);
-              setRate(value);
-            }}
+            onChange={setter}
           />
         </CardBody>
 

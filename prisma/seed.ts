@@ -503,6 +503,7 @@ const transactions: Prisma.TransactionCreateInput[] = [
 ];
 
 const collections: Prisma.CollectionCreateInput[] = [
+  // Makati
   {
     account: {
       connectOrCreate: {
@@ -626,6 +627,260 @@ const collections: Prisma.CollectionCreateInput[] = [
     owner_income: null,
     abic_income: null,
     due: "2024-11-03T00:00:00.000Z",
+    status: "Active",
+  },
+
+  // Mandaluyong
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    c_client: {
+      connectOrCreate: {
+        where: { name: "Guo Junsheng" },
+        create: { name: "Guo Junsheng" },
+      },
+    },
+    property: "Tivoli Garden Res Unit 3814 Iris Tower",
+    location: "Mandaluyong",
+    start: "2023-12-30T00:00:00.000Z",
+    end: "2027-12-30T00:00:00.000Z",
+    advance: 1,
+    deposit: 1,
+    tenant_price: 27000,
+    owner_income: 25000,
+    abic_income: 2000,
+    due: "2024-04-30T00:00:00.000Z",
+    status: "Active",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    c_client: {
+      connectOrCreate: {
+        where: { name: "Weiwei Chen" },
+        create: { name: "Weiwei Chen" },
+      },
+    },
+    property: "Flair Tower-South Unit 303",
+    location: "Mandaluyong",
+    start: "2023-09-18T00:00:00.000Z",
+    end: "2027-09-18T00:00:00.000Z",
+    advance: 1,
+    deposit: 1,
+    tenant_price: 14000,
+    owner_income: null,
+    abic_income: null,
+    due: "2024-04-18T00:00:00.000Z",
+    status: "Active",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    c_client: {
+      connectOrCreate: {
+        where: { name: "Antonette Antiola Beran" },
+        create: { name: "Antonette Antiola Beran" },
+      },
+    },
+    property: "Tivoli Garden Res Unit 3004 Iris Tower",
+    location: "Mandaluyong",
+    start: "2023-08-30T00:00:00.000Z",
+    end: "2027-08-30T00:00:00.000Z",
+    advance: 1,
+    deposit: 1,
+    tenant_price: 25000,
+    owner_income: null,
+    abic_income: null,
+    due: "2024-04-30T00:00:00.000Z",
+    status: "Active",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    c_client: {
+      connectOrCreate: {
+        where: { name: "Jiang Huijin" },
+        create: { name: "Jiang Huijin" },
+      },
+    },
+    property: "Acqua Sutherland Unit 2319",
+    location: "Mandaluyong",
+    start: "2024-01-23T00:00:00.000Z",
+    end: "2027-01-23T00:00:00.000Z",
+    advance: 1,
+    deposit: 1,
+    tenant_price: 22000,
+    owner_income: null,
+    abic_income: null,
+    due: "2024-05-23T00:00:00.000Z",
+    status: "Active",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    c_client: {
+      connectOrCreate: {
+        where: { name: "Jacqueline Galvez" },
+        create: { name: "Jacqueline Galvez" },
+      },
+    },
+    property: "Tivoli Garden Helicona 912",
+    location: "Mandaluyong",
+    start: "2024-02-15T00:00:00.000Z",
+    end: "2027-02-15T00:00:00.000Z",
+    advance: 1,
+    deposit: 1,
+    tenant_price: 19000,
+    owner_income: null,
+    abic_income: null,
+    due: "2024-04-15T00:00:00.000Z",
+    status: "Active",
+  },
+
+  // BGC
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    c_client: {
+      connectOrCreate: {
+        where: { name: "Jinchun Yuan" },
+        create: { name: "Jinchun Yuan" },
+      },
+    },
+    property: "Two Serendra Meranti Unit 720",
+    location: "BGC",
+    start: "2023-09-07T00:00:00.000Z",
+    end: "2027-09-07T00:00:00.000Z",
+    advance: 1,
+    deposit: 1,
+    tenant_price: 31500,
+    owner_income: null,
+    abic_income: null,
+    due: "2024-05-07T00:00:00.000Z",
+    status: "Active",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    c_client: {
+      connectOrCreate: {
+        where: { name: "Wu Yue" },
+        create: { name: "Wu Yue" },
+      },
+    },
+    property: "Two Mariedien T2 1902",
+    location: "BGC",
+    start: "2023-05-17T00:00:00.000Z",
+    end: "2027-05-17T00:00:00.000Z",
+    advance: 1,
+    deposit: 1,
+    tenant_price: 130000,
+    owner_income: null,
+    abic_income: null,
+    due: "2024-05-17T00:00:00.000Z",
+    status: "Active",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    c_client: {
+      connectOrCreate: {
+        where: { name: "Wu Yue" },
+        create: { name: "Wu Yue" },
+      },
+    },
+    property: "East Gallery Place 46C",
+    location: "BGC",
+    start: "2023-07-07T00:00:00.000Z",
+    end: "2027-07-07T00:00:00.000Z",
+    advance: 1,
+    deposit: 1,
+    tenant_price: 250000,
+    owner_income: null,
+    abic_income: null,
+    due: "2024-07-07T00:00:00.000Z",
+    status: "Active",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    c_client: {
+      connectOrCreate: {
+        where: { name: "Jiao He" },
+        create: { name: "Jiao He" },
+      },
+    },
+    property: "Venice Luxury Residences TE 11i",
+    location: "BGC",
+    start: "2023-11-14T00:00:00.000Z",
+    end: "2027-11-14T00:00:00.000Z",
+    advance: 1,
+    deposit: 1,
+    tenant_price: 22000,
+    owner_income: null,
+    abic_income: null,
+    due: "2024-05-14T00:00:00.000Z",
+    status: "Active",
+  },
+  {
+    account: {
+      connectOrCreate: {
+        where: { name: accounts[0].name },
+        create: accounts[0],
+      },
+    },
+    c_client: {
+      connectOrCreate: {
+        where: { name: "Jiao He" },
+        create: { name: "Jiao He" },
+      },
+    },
+    property: "Venice Luxury Residences TE 9i",
+    location: "BGC",
+    start: "2023-10-05T00:00:00.000Z",
+    end: "2027-10-05T00:00:00.000Z",
+    advance: 1,
+    deposit: 1,
+    tenant_price: 23000,
+    owner_income: 22000,
+    abic_income: 1000,
+    due: "2024-04-05T00:00:00.000Z",
     status: "Active",
   },
 ];

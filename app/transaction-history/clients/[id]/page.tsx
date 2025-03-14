@@ -76,7 +76,7 @@ const TClient = async ({ params }: { params: Promise<{ id: string }> }) => {
     <>
       <Navbar record={cookies} />
 
-      <div className="max-h-[93vh]">
+      <div className="max-h-screen">
         <DataTable
           baseModel={model}
           model={`${record?.name}'s ${model}`}

@@ -65,7 +65,7 @@ const ViewPDCsModal = ({ record }: Props) => {
         <FaEye size={14} />
       </Button>
 
-      <Modal size="sm" isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal size="md" isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {() => (
             <>

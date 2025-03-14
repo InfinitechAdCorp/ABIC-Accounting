@@ -53,7 +53,7 @@ const TClients = async () => {
     <>
       <Navbar record={cookies} />
 
-      <div className="max-h-[93vh]">
+      <div className="max-h-screen">
         <DataTable
           baseModel={model}
           columns={columns}

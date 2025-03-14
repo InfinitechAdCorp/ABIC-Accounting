@@ -48,6 +48,18 @@ const TransactionClient = async ({
     { key: "actions", name: "ACTIONS", sortable: false },
   ];
 
+  const initialColumns = [
+    "client",
+    "property",
+    "location",
+    "start",
+    "end",
+    "due",
+    "status",
+    "payments",
+    "actions",
+  ];
+
   const records = await displayFormat(columns, record?.collections || []);
 
   const Buttons = (
@@ -60,11 +72,12 @@ const TransactionClient = async ({
     <>
       <Navbar record={cookies} />
 
-      <div className="max-h-[93vh]">
+      <div className="max-h-screen">
         <DataTable
           baseModel={model}
           model={`${record?.name}'s ${model}`}
           columns={columns}
+          initialColumns={initialColumns}
           records={records}
           filterKey="start"
           RenderBody={RenderBody}

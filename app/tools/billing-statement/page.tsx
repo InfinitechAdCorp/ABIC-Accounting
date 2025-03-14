@@ -9,17 +9,17 @@ const BillingStatement = async () => {
   const { record: cookies } = await getCookies();
   const { records } = await getAllBSs();
 
-  const setNumber = (ar: any) => {
+  const setNumber = (number: string | undefined) => {
     let id = 500;
-    if (ar) {
-      id = Number(ar.number.split("-").at(-1)) + 1;
+    if (number) {
+      id = Number(number.split("-").at(-1)) + 1;
     }
     const year = new Date().getFullYear();
     const voucherNumber = `${year}-BS-${id.toString().padStart(5, "0")}`;
     return voucherNumber;
   };
 
-  const number = setNumber(records.at(-1));
+  const number = setNumber(records.at(-1)?.number);
 
   return (
     <>

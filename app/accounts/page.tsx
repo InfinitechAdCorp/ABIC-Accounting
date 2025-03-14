@@ -37,7 +37,7 @@ const Accounts = () => {
         </div>
       </div>
 
-      <div className="max-h-[93vh]">
+      <div className="max-h-screen">
         <Card radius="none" className="py-[0.10rem] px-2">
           <CardBody>
             <div className="flex justify-between items-center">
@@ -46,7 +46,7 @@ const Accounts = () => {
           </CardBody>
         </Card>
 
-        <Card className="m-5 xl:my-7 xl:mx-64 py-3 px-5">
+        <Card className="m-5 xl:my-7 xl:mx-32 2xl:mx-64 py-3 px-5">
           <CardBody>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-5">
               <CreateModal />

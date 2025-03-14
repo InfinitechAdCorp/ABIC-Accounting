@@ -278,7 +278,7 @@ const DataTable = ({
             </TableBody>
           </Table>
 
-          <div className="flex justify-start gap-2 my-3">
+          <div className="flex justify-start gap-2">
             {locations.map((location) => (
               <Button
                 color="primary"

@@ -26,7 +26,7 @@ const BillingStatementForm = ({ number }: Props) => {
     setItems([...items, { qty: 0, price: 0, name: "", purpose: "" }]);
   };
 
-  const computeRowTotal = (price: any): number => {
+  const computeRowTotal = (price: number): number => {
     return parseFloat(String(price)) || 0;
   };
 
