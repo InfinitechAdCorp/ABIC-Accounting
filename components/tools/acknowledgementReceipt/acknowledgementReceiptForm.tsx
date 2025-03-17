@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Card, CardHeader, CardBody, CardFooter } from "@heroui/react";
 import { createAR as action } from "@/components/tools/actions";
 import toast from "react-hot-toast";
@@ -26,14 +26,11 @@ const AcknowledgementReceiptForm = ({ number }: Props) => {
 
   const [items, setItems] = useState([{ name: "Item A", purpose: "1000" }]);
 
-  const addRowBtnRef = useRef<HTMLButtonElement>(null);
-  const printBtnRef = useRef<HTMLButtonElement>(null);
-
   const onChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const key = e.target.name;
-    const value: string = e.target.value
+    const value = e.target.value
     setValues({ ...values, [key]: value });
   };
 
@@ -68,17 +65,16 @@ const AcknowledgementReceiptForm = ({ number }: Props) => {
       }
     });
 
-    addRowBtnRef.current!.style.display = "none";
-    printBtnRef.current!.style.display = "none";
-    document.getElementById("navbar")!.style.display = "none";
-    document.getElementById("headerContent")!.style.display = "none";
-
+    const ids = ["addRowBtn", "printBtn", "navbar", "headerContent"]
+    ids.forEach((id) => {
+      const element = document.getElementById(id)
+      element!.style.display = "none"
+    })
     window.print();
-
-    addRowBtnRef.current!.style.display = "block";
-    printBtnRef.current!.style.display = "block";
-    document.getElementById("navbar")!.style.display = "grid";
-    document.getElementById("headerContent")!.style.display = "grid";
+    ids.forEach((id) => {
+      const element = document.getElementById(id)
+      element!.style.display = "grid"
+    })
   };
 
   return (
@@ -185,7 +181,7 @@ const AcknowledgementReceiptForm = ({ number }: Props) => {
             </table>
 
             <button
-              ref={addRowBtnRef}
+              id="addRowBtn"
               onClick={addItemRow}
               className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition text-sm"
             >
@@ -280,7 +276,7 @@ const AcknowledgementReceiptForm = ({ number }: Props) => {
 
             <div>
               <button
-                ref={printBtnRef}
+                id="printBtn"
                 onClick={handlePrint}
                 className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition text-sm"
               >

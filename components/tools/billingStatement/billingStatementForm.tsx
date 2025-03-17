@@ -12,33 +12,39 @@ type Props = {
 };
 
 const BillingStatementForm = ({ number }: Props) => {
-  const [bSNumber, setbSNumber] = useState(number);
-  const [companyName, setCompanyName] = useState("");
-  const [companyAddress, setCompanyAddress] = useState("");
-  const [companyContact, setCompanyContact] = useState("");
-  const [billingCompanyName, setBillingCompanyName] = useState("");
+  const [values, setValues] = useState({
+    bsNumber: number,
+    companyName: "",
+    companyAddress: "",
+    companyContact: "",
+    billingCompanyName: "",
+  })
 
   const [items, setItems] = useState([
     { qty: 10, price: 500, name: "Item A", purpose: "For Office" },
   ]);
 
+  const onChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const key = e.target.name;
+    const value = e.target.value
+    setValues({ ...values, [key]: value });
+  };
+
   const addItemRow = () => {
     setItems([...items, { qty: 0, price: 0, name: "", purpose: "" }]);
   };
 
-  const computeRowTotal = (price: number): number => {
-    return parseFloat(String(price)) || 0;
-  };
-
   const computeGrandTotal = () => {
     return items.reduce((total, item) => {
-      return total + computeRowTotal(item.price);
+      return total + (item.price || 0);
     }, 0);
   };
 
   const handlePrint = () => {
-    const values = { number: bSNumber };
-    action(values).then((response: ActionResponse) => {
+    const printValues = { number: values.bsNumber };
+    action(printValues).then((response: ActionResponse) => {
       if (response.code == 200) {
         toast.success(response.message);
       } else {
@@ -58,19 +64,16 @@ const BillingStatementForm = ({ number }: Props) => {
       }
     });
 
-    const addRowButton = document.getElementById("addRowButton");
-    const printButton = document.getElementById("printButton");
-    const navbar = document.getElementById("navbar");
-
-    if (addRowButton && printButton) {
-      addRowButton.style.display = "none";
-      printButton.style.display = "none";
-      navbar!.style.display = "none";
-      window.print();
-      addRowButton.style.display = "block";
-      printButton.style.display = "block";
-      navbar!.style.display = "grid";
-    }
+    const ids = ["addRowBtn", "printBtn", "navbar", "headerContent"]
+    ids.forEach((id) => {
+      const element = document.getElementById(id)
+      element!.style.display = "none"
+    })
+    window.print();
+    ids.forEach((id) => {
+      const element = document.getElementById(id)
+      element!.style.display = "grid"
+    })
   };
 
   return (
@@ -81,9 +84,10 @@ const BillingStatementForm = ({ number }: Props) => {
             <div className="flex justify-end">
               <p className="font-semibold text-gray-700">BS Number:</p>
               <input
+                name="bsNumber"
                 type="text"
-                value={number}
-                onChange={(e) => setbSNumber(e.target.value)}
+                value={values.bsNumber}
+                onChange={onChange}
                 className={`focus:outline-none ml-2`}
               />
             </div>
@@ -92,25 +96,28 @@ const BillingStatementForm = ({ number }: Props) => {
               <div className="mt-4">
                 <h1 className="text-xl font-bold">
                   <input
+                    name="companyName"
                     type="text"
                     placeholder="Company Name"
-                    value={companyName}
-                    onChange={(e) => setCompanyName(e.target.value)}
+                    value={values.companyName}
+                    onChange={onChange}
                     className={`w-full overflow-x-auto text-center focus:outline-none`}
                   />
                 </h1>
                 <input
+                  name="companyAddress"
                   type="text"
                   placeholder="Company Address"
-                  value={companyAddress}
-                  onChange={(e) => setCompanyAddress(e.target.value)}
+                  value={values.companyAddress}
+                  onChange={onChange}
                   className={`text-gray-600 focus:outline-none w-full overflow-x-auto text-center`}
                 />
                 <input
+                  name="companyContact"
                   type="text"
                   placeholder="Contact Details"
-                  value={companyContact}
-                  onChange={(e) => setCompanyContact(e.target.value)}
+                  value={values.companyContact}
+                  onChange={onChange}
                   className={`text-gray-600 text-center focus:outline-none`}
                 />
               </div>
@@ -124,10 +131,11 @@ const BillingStatementForm = ({ number }: Props) => {
             <p className="mt-4 text-gray-700">
               This is to certify that{" "}
               <input
+                name="billingCompanyName"
                 type="text"
                 placeholder="Click to add text"
-                value={billingCompanyName}
-                onChange={(e) => setBillingCompanyName(e.target.value)}
+                value={values.billingCompanyName}
+                onChange={onChange}
                 className="focus:outline-none w-full max-w-xs mx-auto text-center"
               />{" "}
               is hereby billed the amount of{" "}
@@ -181,9 +189,9 @@ const BillingStatementForm = ({ number }: Props) => {
                             items.map((itm, idx) =>
                               idx === index
                                 ? {
-                                    ...itm,
-                                    price: parseFloat(e.target.value) || 0,
-                                  }
+                                  ...itm,
+                                  price: parseFloat(e.target.value) || 0,
+                                }
                                 : itm
                             )
                           )
@@ -195,7 +203,7 @@ const BillingStatementForm = ({ number }: Props) => {
                     <td className="border border-gray-300 px-4 py-2">
                       <input
                         type="text"
-                        value={computeRowTotal(item.price)} // Just show the unit price
+                        value={item.price || 0}
                         readOnly
                         className="w-full focus:outline-none"
                       />
@@ -205,7 +213,6 @@ const BillingStatementForm = ({ number }: Props) => {
               </tbody>
             </table>
 
-            {/* Grand Total Row */}
             <div className="mt-4 text-right">
               <p className="font-semibold">
                 Grand Total:{" "}
@@ -220,14 +227,14 @@ const BillingStatementForm = ({ number }: Props) => {
         <CardFooter>
           <div className="w-full mt-6 flex justify-between">
             <button
-              id="addRowButton"
+              id="addRowBtn"
               onClick={addItemRow}
               className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
             >
               Add Row
             </button>
             <button
-              id="printButton"
+              id="printBtn"
               onClick={handlePrint}
               className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-700"
             >
