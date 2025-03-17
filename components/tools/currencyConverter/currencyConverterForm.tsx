@@ -12,12 +12,16 @@ import {
 } from "@heroui/react";
 import { formatNumber } from "@/components/globals/utils";
 
-type Rates = {
-  [key: string]: number;
+type Values = {
+  currencies: { [key: string]: number };
+  amount: number,
+  from: string,
+  to: string,
+  convertedAmount: number,
 };
 
 const CurrencyConverterForm = () => {
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<Values>({
     currencies: {},
     amount: 0,
     from: "PHP",
@@ -41,8 +45,8 @@ const CurrencyConverterForm = () => {
       const response = await fetch(
         `https://api.exchangerate-api.com/v4/latest/${values.from}`
       );
-      const data = await response.json();
-      setValues({ ...values, currencies: data });
+      const { rates: currencies } = await response.json();
+      setValues({ ...values, currencies: currencies });
     };
 
     fetchCurrencies();
