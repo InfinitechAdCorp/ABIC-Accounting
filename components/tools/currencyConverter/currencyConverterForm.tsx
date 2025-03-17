@@ -17,32 +17,45 @@ type Rates = {
 };
 
 const CurrencyConverterForm = () => {
-  const [currencies, setCurrencies] = useState<Rates>({});
-  const [amount, setAmount] = useState(0);
-  const [from, setFrom] = useState("PHP");
-  const [to, setTo] = useState("USD");
-  const [convertedAmount, setConvertedAmount] = useState(0);
+  const [values, setValues] = useState({
+    currencies: {},
+    amount: 0,
+    from: "PHP",
+    to: "USD",
+    convertedAmount: 0
+  })
+
+  const onChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const key = e.target.name;
+    let value: string | number = e.target.value
+    if (["from", "to"].includes(key)) {
+      value = Number(e.target.value);
+    }
+    setValues({ ...values, [key]: value });
+  };
 
   useEffect(() => {
     const fetchCurrencies = async () => {
       const response = await fetch(
-        `https://api.exchangerate-api.com/v4/latest/${from}`
+        `https://api.exchangerate-api.com/v4/latest/${values.from}`
       );
       const data = await response.json();
-      setCurrencies(data.rates);
+      setValues({ ...values, currencies: data });
     };
 
     fetchCurrencies();
-  }, [from]);
+  }, [values.from]);
 
   useEffect(() => {
-    if (currencies) {
-      const converted = amount * currencies[to];
-      setConvertedAmount(converted);
+    if (values.currencies) {
+      const converted = values.amount * values.currencies[values.to];
+      setValues({ ...values, convertedAmount: converted });
     }
-  }, [amount, currencies, to]);
+  }, [values.amount, values.currencies, values.to]);
 
-  const isValid = amount != 0 && from != "" && to != "";
+  const isValid = values.amount != 0 && values.from != "" && values.to != "";
 
   return (
     <>
@@ -65,6 +78,7 @@ const CurrencyConverterForm = () => {
 
         <CardBody>
           <Input
+            name="amount"
             className="mb-3"
             type="number"
             size="md"
@@ -72,43 +86,36 @@ const CurrencyConverterForm = () => {
             label="Amount"
             labelPlacement="outside"
             placeholder="Enter Amount"
-            onChange={(e) => {
-              const value = Number(e.target.value);
-              setAmount(value);
-            }}
+            onChange={onChange}
           />
 
           <Select
+            name="from"
             className="mb-3"
             size="md"
             variant="bordered"
             label="From"
             labelPlacement="outside"
             placeholder="Select Currency to Convert From"
-            defaultSelectedKeys={[from]}
-            onChange={(e) => {
-              const value = e.target.value;
-              setFrom(value);
-            }}
+            defaultSelectedKeys={[values.from]}
+            onChange={onChange}
           >
-            {Object.keys(currencies).map((currency) => (
+            {Object.keys(values.currencies).map((currency) => (
               <SelectItem key={currency}>{currency}</SelectItem>
             ))}
           </Select>
 
           <Select
+            name="to"
             size="md"
             variant="bordered"
             label="To"
             labelPlacement="outside"
             placeholder="Select Currency to Convert To"
-            defaultSelectedKeys={[to]}
-            onChange={(e) => {
-              const value = e.target.value;
-              setTo(value);
-            }}
+            defaultSelectedKeys={[values.to]}
+            onChange={onChange}
           >
-            {Object.keys(currencies).map((currency) => (
+            {Object.keys(values.currencies).map((currency) => (
               <SelectItem key={currency}>{currency}</SelectItem>
             ))}
           </Select>
@@ -124,12 +131,12 @@ const CurrencyConverterForm = () => {
                 <div className="text-white">
                   <h3>
                     Converted Amount:{" "}
-                    <strong>{formatNumber(convertedAmount)}</strong>
+                    <strong>{formatNumber(values.convertedAmount)}</strong>
                   </h3>
                   <h3>
                     Rate:{" "}
                     <strong>
-                      1 {from} = {currencies[to]} {to}
+                      1 {values.from} = {values.currencies[values.to]} {values.to}
                     </strong>
                   </h3>
                 </div>

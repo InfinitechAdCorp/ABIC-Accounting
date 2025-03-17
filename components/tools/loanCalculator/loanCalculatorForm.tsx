@@ -22,7 +22,7 @@ const LoanCalculatorForm = () => {
     total: 0,
   });
 
-  const setter = (
+  const onChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const key = e.target.name;
@@ -74,7 +74,7 @@ const LoanCalculatorForm = () => {
             label="Amount"
             labelPlacement="outside"
             placeholder="Enter Amount"
-            onChange={setter}
+            onChange={onChange}
           />
 
           <div className="grid grid-cols-2 gap-3 mb-3">
@@ -85,7 +85,7 @@ const LoanCalculatorForm = () => {
               label="Years"
               labelPlacement="outside"
               placeholder="Select Years"
-              onChange={setter}
+              onChange={onChange}
             >
               {Array.from({ length: 26 }).map((_, index) => (
                 <SelectItem
@@ -104,7 +104,7 @@ const LoanCalculatorForm = () => {
               label="Months"
               labelPlacement="outside"
               placeholder="Select Months"
-              onChange={setter}
+              onChange={onChange}
             >
               {Array.from({ length: 12 }).map((_, index) => (
                 <SelectItem
@@ -126,7 +126,7 @@ const LoanCalculatorForm = () => {
             label="Interest Rate"
             labelPlacement="outside"
             placeholder="Enter Interest Rate"
-            onChange={setter}
+            onChange={onChange}
           />
         </CardBody>
 
