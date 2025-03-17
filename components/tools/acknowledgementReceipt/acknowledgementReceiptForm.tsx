@@ -12,19 +12,30 @@ type Props = {
 };
 
 const AcknowledgementReceiptForm = ({ number }: Props) => {
-  const [arNumber, setArNumber] = useState(number);
-  const [companyName, setCompanyName] = useState("");
-  const [companyAddress, setCompanyAddress] = useState("");
-  const [companyContact, setCompanyContact] = useState("");
+  const [values, setValues] = useState({
+    arNumber: number,
+    companyName: "",
+    companyAddress: "",
+    companyContact: "",
+    bankDetails: "",
+    accountName: "",
+    accountNumber: "",
+    receivedBy: "",
+    issuedBy: "",
+  })
+
   const [items, setItems] = useState([{ name: "Item A", purpose: "1000" }]);
-  const [bankDetails, setBankDetails] = useState("");
-  const [accountName, setAccountName] = useState("");
-  const [accountNumber, setAccountNumber] = useState("");
-  const [receivedBy, setReceivedBy] = useState("");
-  const [issuedBy, setIssuedBy] = useState("");
 
   const addRowBtnRef = useRef<HTMLButtonElement>(null);
   const printBtnRef = useRef<HTMLButtonElement>(null);
+
+  const onChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const key = e.target.name;
+    const value: string = e.target.value
+    setValues({ ...values, [key]: value });
+  };
 
   const addItemRow = () => {
     setItems([...items, { name: "", purpose: "" }]);
@@ -36,8 +47,8 @@ const AcknowledgementReceiptForm = ({ number }: Props) => {
   );
 
   const handlePrint = () => {
-    const values = { number: arNumber };
-    action(values).then((response: ActionResponse) => {
+    const printValues = { number: values.arNumber };
+    action(printValues).then((response: ActionResponse) => {
       if (response.code == 200) {
         toast.success(response.message);
       } else {
@@ -60,10 +71,14 @@ const AcknowledgementReceiptForm = ({ number }: Props) => {
     addRowBtnRef.current!.style.display = "none";
     printBtnRef.current!.style.display = "none";
     document.getElementById("navbar")!.style.display = "none";
+    document.getElementById("headerContent")!.style.display = "none";
+
     window.print();
+
     addRowBtnRef.current!.style.display = "block";
     printBtnRef.current!.style.display = "block";
     document.getElementById("navbar")!.style.display = "grid";
+    document.getElementById("headerContent")!.style.display = "grid";
   };
 
   return (
@@ -74,9 +89,10 @@ const AcknowledgementReceiptForm = ({ number }: Props) => {
             <div className="flex justify-end">
               <p className="font-semibold">AR Number:</p>
               <input
+                name="arNumber"
                 type="text"
-                value={arNumber}
-                onChange={(e) => setArNumber(e.target.value)}
+                value={values.arNumber}
+                onChange={onChange}
                 className="ml-2 focus:outline-none"
               />
             </div>
@@ -85,25 +101,28 @@ const AcknowledgementReceiptForm = ({ number }: Props) => {
               <div className="mt-4">
                 <h1 className="text-lg font-bold">
                   <input
+                    name="companyName"
                     type="text"
                     placeholder="Company Name"
-                    value={companyName}
-                    onChange={(e) => setCompanyName(e.target.value)}
+                    value={values.companyName}
+                    onChange={onChange}
                     className="w-full text-center focus:outline-none"
                   />
                 </h1>
                 <input
+                  name="companyAddress"
                   type="text"
                   placeholder="Company Address"
-                  value={companyAddress}
-                  onChange={(e) => setCompanyAddress(e.target.value)}
+                  value={values.companyAddress}
+                  onChange={onChange}
                   className="focus:outline-none w-full text-center"
                 />
                 <input
+                  name="companyContact"
                   type="text"
                   placeholder="Contact Details"
-                  value={companyContact}
-                  onChange={(e) => setCompanyContact(e.target.value)}
+                  value={values.companyContact}
+                  onChange={onChange}
                   className="focus:outline-none text-center"
                 />
               </div>
@@ -153,7 +172,7 @@ const AcknowledgementReceiptForm = ({ number }: Props) => {
                     </td>
                   </tr>
                 ))}
-                {/* Total Row */}
+
                 <tr className="bg-gray-200 font-bold">
                   <td className="border border-gray-300 px-4 py-2 text-right">
                     Total:
@@ -174,18 +193,16 @@ const AcknowledgementReceiptForm = ({ number }: Props) => {
             </button>
           </div>
 
-          {/* Payment Instructions */}
           <div className="mt-6 text-sm">
             <p>
               <strong>For check payment,</strong> please make check payable to{" "}
-              <strong>{companyName}</strong>. <br />
+              <strong>{values.companyName}</strong>. <br />
               <strong>For bank deposit,</strong> kindly see below bank account
               details for reference. Once deposited, send us the deposit slip
               for payment reference.
             </p>
           </div>
 
-          {/* Bank Details Table (Left Aligned) */}
           <div className="mt-2 text-sm">
             <table className="w-1/2 border border-gray-300 text-left">
               <tbody>
@@ -195,9 +212,10 @@ const AcknowledgementReceiptForm = ({ number }: Props) => {
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
                     <input
+                      name="bankDetails"
                       type="text"
-                      value={bankDetails}
-                      onChange={(e) => setBankDetails(e.target.value)}
+                      value={values.bankDetails}
+                      onChange={onChange}
                       className="w-full focus:outline-none text-center"
                     />
                   </td>
@@ -208,9 +226,10 @@ const AcknowledgementReceiptForm = ({ number }: Props) => {
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
                     <input
+                      name="accountName"
                       type="text"
-                      value={accountName}
-                      onChange={(e) => setAccountName(e.target.value)}
+                      value={values.accountName}
+                      onChange={onChange}
                       className="w-full focus:outline-none text-center"
                     />
                   </td>
@@ -221,9 +240,10 @@ const AcknowledgementReceiptForm = ({ number }: Props) => {
                   </td>
                   <td className="border border-gray-300 px-4 py-2">
                     <input
+                      name="accountNumber"
                       type="text"
-                      value={accountNumber}
-                      onChange={(e) => setAccountNumber(e.target.value)}
+                      value={values.accountNumber}
+                      onChange={onChange}
                       className="w-full focus:outline-none text-center"
                     />
                   </td>
@@ -239,18 +259,20 @@ const AcknowledgementReceiptForm = ({ number }: Props) => {
               <div className="flex items-center">
                 <p className="font-semibold">Received By:</p>
                 <input
+                  name="receivedBy"
                   type="text"
-                  value={receivedBy}
-                  onChange={(e) => setReceivedBy(e.target.value)}
+                  value={values.receivedBy}
+                  onChange={onChange}
                   className="ml-2 focus:outline-none"
                 />
               </div>
               <div className="flex items-center mt-4">
                 <p className="font-semibold">Issued By:</p>
                 <input
+                  name="issuedBy"
                   type="text"
-                  value={issuedBy}
-                  onChange={(e) => setIssuedBy(e.target.value)}
+                  value={values.issuedBy}
+                  onChange={onChange}
                   className="ml-2 focus:outline-none"
                 />
               </div>

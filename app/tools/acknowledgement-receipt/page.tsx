@@ -25,7 +25,7 @@ const AcknowledgmentReceipt = async () => {
     <>
       <Navbar record={cookies} />
 
-      <Card radius="none" className="py-[0.10rem] px-2">
+      <Card radius="none" className="py-[0.10rem] px-2" id="headerContent">
         <CardBody>
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold">Acknowledgment Receipt</h3>
