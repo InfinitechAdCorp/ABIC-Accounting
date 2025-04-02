@@ -10,8 +10,6 @@ export const onPostSubmit = (
   actions: { resetForm: () => void },
   onClose: () => void
 ) => {
-  console.log(response);
-
   if (response.code == 200) {
     actions.resetForm();
     toast.success(response.message);
